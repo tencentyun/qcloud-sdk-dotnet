@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FC694C68-F0E3-411F-8E6C-2E9F94826016}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>COSXML</RootNamespace>
+    <AssemblyName>COSXML</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Auth\QCloudCredentialProvider.cs" />
+    <Compile Include="Auth\QCloudCredentials.cs" />
+    <Compile Include="Auth\QCloudSigner.cs" />
+    <Compile Include="Common\CosACL.cs" />
+    <Compile Include="Common\CosClientError.cs" />
+    <Compile Include="Common\CosGrantPermission.cs" />
+    <Compile Include="Common\CosMetaDataDirective.cs" />
+    <Compile Include="Common\CosRegion.cs" />
+    <Compile Include="Common\CosRequestHeaderKey.cs" />
+    <Compile Include="Common\CosRequestMethod.cs" />
+    <Compile Include="Common\CosStorageClass.cs" />
+    <Compile Include="Common\CosVersion.cs" />
+    <Compile Include="CosException\CosClientException.cs" />
+    <Compile Include="CosException\CosServerException.cs" />
+    <Compile Include="CosXml.cs" />
+    <Compile Include="CosXmlConfig.cs" />
+    <Compile Include="CosXmlServer.cs" />
+    <Compile Include="Listener\CosCallback.cs" />
+    <Compile Include="Log\FileLogImpl.cs" />
+    <Compile Include="Log\Log.cs" />
+    <Compile Include="Log\LogImpl.cs" />
+    <Compile Include="Log\QLog.cs" />
+    <Compile Include="Model\Bucket\BucketRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketCORSRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketCORSResult.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketLifecycleRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketLifecycleResult.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketPolicyRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketPolicyResult.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketReplicationRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketReplicationResult.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketACLRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketACLResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketCORSRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketCORSResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketLifecycleRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketLifecycleResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketLocationRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketLocationResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketPolicyRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketPolicyResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketReplicationRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketReplicationResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketVersioningRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketVersioningResult.cs" />
+    <Compile Include="Model\Bucket\HeadBucketRequest.cs" />
+    <Compile Include="Model\Bucket\HeadBucketResult.cs" />
+    <Compile Include="Model\Bucket\ListBucketVersionsRequest.cs" />
+    <Compile Include="Model\Bucket\ListBucketVersionsResult.cs" />
+    <Compile Include="Model\Bucket\ListMultiUploadsRequest.cs" />
+    <Compile Include="Model\Bucket\ListMultiUploadsResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketACLRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketACLResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketCORSRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketCORSResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketLifecycleRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketLifecycleResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketPolicyRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketPolicyResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketReplicationRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketReplicationResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketVersioningRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketVersioningResult.cs" />
+    <Compile Include="Model\CosRequest.cs" />
+    <Compile Include="Model\CosResult.cs" />
+    <Compile Include="Model\Object\AbortMultiUploadRequest.cs" />
+    <Compile Include="Model\Object\AbortMultiUploadResult.cs" />
+    <Compile Include="Model\Object\CompleteMultiUploadRequest.cs" />
+    <Compile Include="Model\Object\CompleteMultiUploadResult.cs" />
+    <Compile Include="Model\Object\CopyObjectRequest.cs" />
+    <Compile Include="Model\Object\CopyObjectResult.cs" />
+    <Compile Include="Model\Object\DeleteMultiObjectRequest.cs" />
+    <Compile Include="Model\Object\DeleteMultiObjectResult.cs" />
+    <Compile Include="Model\Object\DeleteObjectRequest.cs" />
+    <Compile Include="Model\Object\DeleteObjectResult.cs" />
+    <Compile Include="Model\Object\GetObjectACLRequest.cs" />
+    <Compile Include="Model\Object\GetObjectACLResult.cs" />
+    <Compile Include="Model\Object\GetObjectRequest.cs" />
+    <Compile Include="Model\Object\GetObjectResult.cs" />
+    <Compile Include="Model\Object\HeadObjectRequest.cs" />
+    <Compile Include="Model\Object\HeadObjectResult.cs" />
+    <Compile Include="Model\Object\InitMultipartUploadRequest.cs" />
+    <Compile Include="Model\Object\InitMultipartUploadResult.cs" />
+    <Compile Include="Model\Object\ListPartsRequest.cs" />
+    <Compile Include="Model\Object\ListPartsResult.cs" />
+    <Compile Include="Model\Object\ObjectRequest.cs" />
+    <Compile Include="Model\Object\OptionObjectRequest.cs" />
+    <Compile Include="Model\Object\OptionObjectResult.cs" />
+    <Compile Include="Model\Object\PostObjectRequest.cs" />
+    <Compile Include="Model\Object\PostObjectResult.cs" />
+    <Compile Include="Model\Object\PutObjectACLRequest.cs" />
+    <Compile Include="Model\Object\PutObjectACLResult.cs" />
+    <Compile Include="Model\Object\PutObjectRequest.cs" />
+    <Compile Include="Model\Object\PutObjectResult.cs" />
+    <Compile Include="Model\Object\RestoreObjectRequest.cs" />
+    <Compile Include="Model\Object\RestoreObjectResult.cs" />
+    <Compile Include="Model\Object\UploadPartCopyRequest.cs" />
+    <Compile Include="Model\Object\UploadPartCopyResult.cs" />
+    <Compile Include="Model\Object\UploadPartRequest.cs" />
+    <Compile Include="Model\Object\UploadPartResult.cs" />
+    <Compile Include="Model\Service\GetServiceRequest.cs" />
+    <Compile Include="Model\Service\GetServiceResult.cs" />
+    <Compile Include="Model\Tag\AccessControlPolicy.cs" />
+    <Compile Include="Model\Tag\CompleteMultipartUpload.cs" />
+    <Compile Include="Model\Tag\CompleteMultipartUploadResult.cs" />
+    <Compile Include="Model\Tag\CopyObject.cs" />
+    <Compile Include="Model\Tag\CopySourceStruct.cs" />
+    <Compile Include="Model\Tag\CORSConfiguration.cs" />
+    <Compile Include="Model\Tag\CosServerError.cs" />
+    <Compile Include="Model\Tag\Delete.cs" />
+    <Compile Include="Model\Tag\DeleteResult.cs" />
+    <Compile Include="Model\Tag\GrantAccount.cs" />
+    <Compile Include="Model\Tag\InitiateMultipartUpload.cs" />
+    <Compile Include="Model\Tag\LifecycleConfiguration.cs" />
+    <Compile Include="Model\Tag\ListAllMyBuckets.cs" />
+    <Compile Include="Model\Tag\ListBucket.cs" />
+    <Compile Include="Model\Tag\ListBucketVersions.cs" />
+    <Compile Include="Model\Tag\ListMultipartUploads.cs" />
+    <Compile Include="Model\Tag\ListParts.cs" />
+    <Compile Include="Model\Tag\LocationConstraint.cs" />
+    <Compile Include="Model\Tag\PostResponse.cs" />
+    <Compile Include="Model\Tag\ReplicationConfiguration.cs" />
+    <Compile Include="Model\Tag\RestoreConfigure.cs" />
+    <Compile Include="Model\Tag\VersioningConfiguration.cs" />
+    <Compile Include="Network\CommandTask.cs" />
+    <Compile Include="Network\HttpClient.cs" />
+    <Compile Include="Network\HttpClientConfig.cs" />
+    <Compile Include="Network\HttpMethod.cs" />
+    <Compile Include="Network\HttpUrl.cs" />
+    <Compile Include="Network\Request.cs" />
+    <Compile Include="Network\RequestBody.cs" />
+    <Compile Include="Network\Response.cs" />
+    <Compile Include="Network\ResponseBody.cs" />
+    <Compile Include="Network\RetryStrategy.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transfer\COSXMLCopyTask.cs" />
+    <Compile Include="Transfer\COSXMLDownloadTask.cs" />
+    <Compile Include="Transfer\COSXMLTask.cs" />
+    <Compile Include="Transfer\COSXMLUploadTask.cs" />
+    <Compile Include="Transfer\TransferManager.cs" />
+    <Compile Include="Transfer\XmlBuilder.cs" />
+    <Compile Include="Transfer\XmlParse.cs" />
+    <Compile Include="Utils\CosValueAttribute.cs" />
+    <Compile Include="Utils\DigestUtils.cs" />
+    <Compile Include="Utils\EnumUtils.cs" />
+    <Compile Include="Utils\HttpDateTimeUtils.cs" />
+    <Compile Include="Utils\StringUtils.cs" />
+    <Compile Include="Utils\TimeUtils.cs" />
+    <Compile Include="Utils\URLEncodeUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\bootstrap-grid.css.map" />
+    <None Include="Content\bootstrap-grid.min.css.map" />
+    <None Include="Content\bootstrap-reboot.css.map" />
+    <None Include="Content\bootstrap-reboot.min.css.map" />
+    <None Include="Content\bootstrap.css.map" />
+    <None Include="Content\bootstrap.min.css.map" />
+    <None Include="packages.config" />
+    <None Include="Scripts\bootstrap.bundle.js.map" />
+    <None Include="Scripts\bootstrap.bundle.min.js.map" />
+    <None Include="Scripts\bootstrap.js.map" />
+    <None Include="Scripts\bootstrap.min.js.map" />
+    <None Include="Scripts\esm\popper-utils.js.map" />
+    <None Include="Scripts\esm\popper-utils.min.js.map" />
+    <None Include="Scripts\esm\popper.js.map" />
+    <None Include="Scripts\esm\popper.min.js.map" />
+    <None Include="Scripts\jquery-3.0.0.min.map" />
+    <None Include="Scripts\jquery-3.0.0.slim.min.map" />
+    <None Include="Scripts\popper-utils.js.map" />
+    <None Include="Scripts\popper-utils.min.js.map" />
+    <None Include="Scripts\popper.js.map" />
+    <None Include="Scripts\popper.min.js.map" />
+    <None Include="Scripts\README.md" />
+    <None Include="Scripts\umd\popper-utils.js.map" />
+    <None Include="Scripts\umd\popper-utils.min.js.map" />
+    <None Include="Scripts\umd\popper.js.map" />
+    <None Include="Scripts\umd\popper.min.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap-reboot.css" />
+    <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Scripts\bootstrap.bundle.js" />
+    <Content Include="Scripts\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\esm\popper-utils.js" />
+    <Content Include="Scripts\esm\popper-utils.min.js" />
+    <Content Include="Scripts\esm\popper.js" />
+    <Content Include="Scripts\esm\popper.min.js" />
+    <Content Include="Scripts\jquery-3.0.0-vsdoc.js" />
+    <Content Include="Scripts\jquery-3.0.0.js" />
+    <Content Include="Scripts\jquery-3.0.0.min.js" />
+    <Content Include="Scripts\jquery-3.0.0.slim.js" />
+    <Content Include="Scripts\jquery-3.0.0.slim.min.js" />
+    <Content Include="Scripts\popper-utils.js" />
+    <Content Include="Scripts\popper-utils.min.js" />
+    <Content Include="Scripts\popper.js" />
+    <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\umd\popper-utils.js" />
+    <Content Include="Scripts\umd\popper-utils.min.js" />
+    <Content Include="Scripts\umd\popper.js" />
+    <Content Include="Scripts\umd\popper.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\index.d.ts" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
