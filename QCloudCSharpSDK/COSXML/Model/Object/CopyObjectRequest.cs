@@ -165,15 +165,15 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
-            base.CheckParameters();
             if (copySourceStruct == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source is null");
             }
-            else 
+            else
             {
                 copySourceStruct.CheckParameters();
             }
+            base.CheckParameters();
         }
 
         protected override void InteranlUpdateHeaders()

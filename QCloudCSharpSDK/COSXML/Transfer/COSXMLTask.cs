@@ -21,6 +21,8 @@ namespace COSXML.Transfer
 
         public OnInternalHandleBeforExcute onInternalHandle;
 
+        public OnState onState;
+
         protected static CosXml cosXmlServer;
 
         protected string bucket;
@@ -30,6 +32,9 @@ namespace COSXML.Transfer
         protected string key;
 
         protected bool isNeedMd5 = true;
+
+        protected TaskState taskState;
+        protected Object syncTaskState = new Object();
 
         public static void InitCosXmlServer(CosXml cosXml)
         {
@@ -43,6 +48,77 @@ namespace COSXML.Transfer
             this.key = key;
         }
 
+        public abstract void Pause();
+
+        public abstract void Cancel();
+
+        public abstract void Resume();
+
+        protected bool UpdateTaskState(TaskState newTaskState)
+        {
+            bool result = false;
+            lock (syncTaskState)
+            {
+                switch (newTaskState)
+                {
+                    case TaskState.WAITTING:
+                        taskState = newTaskState;
+                        if (onState != null) onState(taskState);
+                        result = true;
+                        break;
+                    case TaskState.RUNNING:
+                        if (taskState == TaskState.WAITTING)
+                        {
+                            taskState = newTaskState;
+                            if (onState != null) onState(taskState);
+                            result = true;
+                        }
+                        break;
+                    case TaskState.COMPLETED:
+                        if (taskState == TaskState.RUNNING)
+                        {
+                            taskState = newTaskState;
+                            if (onState != null) onState(taskState);
+                            result = true;
+                        }
+                        break;
+                    case TaskState.FAILED:
+                        if (taskState == TaskState.WAITTING || taskState == TaskState.RUNNING)
+                        {
+                            taskState = newTaskState;
+                            if (onState != null) onState(taskState);
+                            result = true;
+                        }
+                        break;
+                    case TaskState.PAUSE:
+                        if (taskState == TaskState.WAITTING || taskState == TaskState.RUNNING)
+                        {
+                            taskState = newTaskState;
+                            if (onState != null) onState(taskState);
+                            result = true;
+                        }
+                        break;
+                    case TaskState.CANCEL:
+                        if (taskState != TaskState.COMPLETED || taskState != TaskState.CANCEL)
+                        {
+                            taskState = newTaskState;
+                            if (onState != null) onState(taskState);
+                            result = true;
+                        }
+                        break;
+                    case TaskState.RESUME:
+                        if (taskState == TaskState.PAUSE || taskState == TaskState.FAILED)
+                        {
+                            taskState = newTaskState;
+                            if (onState != null) onState(taskState);
+                            result = true;
+                        }
+                        break;
+                }
+            }
+            return result;
+            
+        }
 
     }
 
@@ -58,8 +134,16 @@ namespace COSXML.Transfer
 
     public enum TaskState
     {
-
+        WAITTING = 0,
+        RUNNING,
+        COMPLETED,
+        FAILED,
+        CANCEL,
+        PAUSE,
+        RESUME,
     }
+
+    public delegate void OnState(TaskState taskState);
 
     public delegate void OnInternalHandleBeforExcute(CosRequest cosRequest);
 

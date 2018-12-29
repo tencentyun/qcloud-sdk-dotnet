@@ -84,12 +84,12 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
-            base.CheckParameters();
-            if(srcPath == null && data == null) throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "data source = null");
-            if(srcPath != null)
+            if (srcPath == null && data == null) throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "data source = null");
+            if (srcPath != null)
             {
-                if(!File.Exists(srcPath)) throw  new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "file not exist");
+                if (!File.Exists(srcPath)) throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "file not exist");
             }
+            base.CheckParameters();
         }
 
         public override Network.RequestBody GetRequestBody()

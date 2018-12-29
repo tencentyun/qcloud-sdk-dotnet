@@ -148,6 +148,7 @@
     <Compile Include="Model\Service\GetServiceRequest.cs" />
     <Compile Include="Model\Service\GetServiceResult.cs" />
     <Compile Include="Model\Tag\AccessControlPolicy.cs" />
+    <Compile Include="Model\Tag\CAM.cs" />
     <Compile Include="Model\Tag\CompleteMultipartUpload.cs" />
     <Compile Include="Model\Tag\CompleteMultipartUploadResult.cs" />
     <Compile Include="Model\Tag\CopyObject.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Model\Tag\ListParts.cs" />
     <Compile Include="Model\Tag\LocationConstraint.cs" />
     <Compile Include="Model\Tag\PostResponse.cs" />
+    <Compile Include="Model\Tag\PreSignatureStruct.cs" />
     <Compile Include="Model\Tag\ReplicationConfiguration.cs" />
     <Compile Include="Model\Tag\RestoreConfigure.cs" />
     <Compile Include="Model\Tag\VersioningConfiguration.cs" />

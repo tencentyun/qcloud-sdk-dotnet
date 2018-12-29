@@ -43,6 +43,7 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
+            if (requestUrlWithSign != null) return;
             base.CheckParameters();
             if (uploadId == null)
             {

@@ -1242,7 +1242,7 @@ namespace COSXML.Transfer
                             result.deletedList.Add(deleted);
                             deleted = null;
                         }
-                        else if ("CosError".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        else if ("Error".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
                             result.errorList.Add(error);
                             error = null;

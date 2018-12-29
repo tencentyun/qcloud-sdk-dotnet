@@ -100,7 +100,7 @@ namespace COSXML.Model.Tag
            
             public string GetInfo()
             {
-                StringBuilder stringBuilder = new StringBuilder("{CosError:\n");
+                StringBuilder stringBuilder = new StringBuilder("{Error:\n");
                 stringBuilder.Append("Key:").Append(key).Append("\n");
                 stringBuilder.Append("Code:").Append(code).Append("\n");
                 stringBuilder.Append("Message:").Append(message).Append("\n");

@@ -107,8 +107,8 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
-            base.CheckParameters();
             if (delete.deleteObjects.Count == 0) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "delete keys = null");
+            base.CheckParameters();
         }
 
         public override Network.RequestBody GetRequestBody()

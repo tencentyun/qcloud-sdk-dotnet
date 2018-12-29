@@ -123,6 +123,12 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
+            if (srcPath == null && data == null) throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "data source = null");
+            if (srcPath != null)
+            {
+                if (!File.Exists(srcPath)) throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "file not exist");
+            }
+            if (requestUrlWithSign != null) return;
             base.CheckParameters();
             if (partNumber <= 0)
             {
@@ -131,11 +137,6 @@ namespace COSXML.Model.Object
             if (uploadId == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "uploadId = null");
-            }
-            if (srcPath == null && data == null) throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "data source = null");
-            if (srcPath != null)
-            {
-                if (!File.Exists(srcPath)) throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "file not exist");
             }
         }
 

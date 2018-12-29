@@ -75,8 +75,7 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
-            base.CheckParameters();
-            if(origin == null)
+            if (origin == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "origin = null");
             }
@@ -84,6 +83,7 @@ namespace COSXML.Model.Object
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "accessControlMethod = null");
             }
+            base.CheckParameters();
         }
 
         protected override void InteranlUpdateHeaders()

@@ -78,6 +78,11 @@ namespace COSXML.Model.Bucket
 
         public override void CheckParameters()
         {
+            if (requestUrlWithSign != null) return;
+            //if (appid == null)
+            //{
+            //    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "appid is null");
+            //}
             if (bucket == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "bucket is null");

@@ -104,7 +104,6 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
-            base.CheckParameters();
             if (copySourceStruct == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source = null");
@@ -113,6 +112,8 @@ namespace COSXML.Model.Object
             {
                 copySourceStruct.CheckParameters();
             }
+            if (requestUrlWithSign != null) return;
+            base.CheckParameters();
             if (partNumber <= 0)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "partNumber < 1");
@@ -121,7 +122,6 @@ namespace COSXML.Model.Object
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "uploadID = null");
             }
-
         }
 
         protected override void InternalUpdateQueryParameters()

@@ -36,6 +36,8 @@ namespace COSXML.Network
 
         private string fragment;
 
+
+
         public HttpUrl()
         {
             this.queryParameters = new Dictionary<string, string>();

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using COSXML.CosException;
 using COSXML.Common;
+using COSXML.Utils;
 
 namespace COSXML.Model.Object
 {
@@ -94,6 +95,11 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
+            if (requestUrlWithSign != null) return;
+            //if (appid == null)
+            //{
+            //    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "appid is null");
+            //}
             if (bucket == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "bucket is null");
@@ -106,7 +112,6 @@ namespace COSXML.Model.Object
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "cosPath is null");
             }
-
         }
 
         protected virtual void InternalUpdateQueryParameters() 
@@ -127,6 +132,40 @@ namespace COSXML.Model.Object
             return base.GetRequestHeaders();
         }
 
+        /// <summary>
+        /// cos 服务端加密
+        /// </summary>
+        public void SetCosServerSideEncryption()
+        {
+            SetRequestHeader("x-cos-server-side-encryption", "AES256");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="customerKey"></param>
+        public void SetCosServerSideEncryptionWithCustomerKey(string customerKey)
+        {
+            if (customerKey != null)
+            {
+                SetRequestHeader("x-cos-server-side-encryption-customer-algorithm", "AES256");
+                SetRequestHeader("x-cos-server-side-encryption-customer-key", DigestUtils.GetBase64(customerKey, Encoding.UTF8));
+                SetRequestHeader("x-cos-server-side-encryption-customer-key-MD5", DigestUtils.GetMd5ToBase64(customerKey, Encoding.UTF8));
+            } 
+        }
+
+        public void SetCosServerSideEncryptionWithKMS(string customerKeyID, string json)
+        {
+            SetRequestHeader("x-cos-server-side-encryption", "cos/kms");
+            if (customerKeyID != null)
+            {
+                SetRequestHeader("x-cos-server-side-encryption-cos-kms-key-id", customerKeyID);
+            }
+            if (json != null)
+            {
+                SetRequestHeader("x-cos-server-side-encryption-context", DigestUtils.GetBase64(json, Encoding.UTF8));
+            }
+        }
 
     }
 }

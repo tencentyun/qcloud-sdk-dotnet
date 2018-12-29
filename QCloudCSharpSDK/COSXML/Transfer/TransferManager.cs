@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 /**
 * Copyright (c) 2018 Tencent Cloud. All rights reserved.
 * 11/29/2018 5:09:07 PM

@@ -5,6 +5,7 @@ using System.Text;
 using COSXML.Auth;
 using COSXML.Log;
 using COSXML.Common;
+using System.Net;
 /**
 * Copyright (c) 2018 Tencent Cloud. All rights reserved.
 * 11/2/2018 4:40:14 PM
@@ -23,6 +24,9 @@ namespace COSXML.Network
         private bool isHttps;
         private string userAgent;
         private string host;
+        private string urlString;
+
+        private HttpWebRequest realeHttpRequest;
 
         public Request()
         {
@@ -66,6 +70,19 @@ namespace COSXML.Network
                 if (value == null) throw new ArgumentNullException("httpUrl == null");
                 url = value;
             }
+        }
+
+        public string RequestUrlString
+        {
+            get
+            {
+                if (urlString == null)
+                {
+                    urlString = url.ToString();
+                }
+                return urlString;
+            }
+            set { urlString = value; }
         }
 
         public Dictionary<string, string> Headers
@@ -146,6 +163,19 @@ namespace COSXML.Network
             if (body != null)
             {
                 body.OnNotifyGetResponse();
+            }
+        }
+
+        public void BindHttpWebRequest(HttpWebRequest httpWebRequest)
+        {
+            this.realeHttpRequest = httpWebRequest;
+        }
+
+        public void Cancel()
+        {
+            if (realeHttpRequest != null)
+            {
+                realeHttpRequest.Abort();
             }
         }
 

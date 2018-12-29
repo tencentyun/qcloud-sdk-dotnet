@@ -51,7 +51,10 @@ namespace COSXML.Network
             try
             {
                 //step1: create HttpWebRequest by request.url
-                httpWebRequest = HttpWebRequest.Create(request.Url.ToString()) as HttpWebRequest;
+                httpWebRequest = HttpWebRequest.Create(request.RequestUrlString) as HttpWebRequest;
+
+                //bind webRequest
+                request.BindHttpWebRequest(httpWebRequest);
 
                 // handler request
                 HandleHttpWebRequest(httpWebRequest, request, config);
@@ -158,7 +161,10 @@ namespace COSXML.Network
 
                 requestState.response = response;
 
-                httpWebRequest = WebRequest.Create(request.Url.ToString()) as HttpWebRequest;
+                httpWebRequest = WebRequest.Create(request.RequestUrlString) as HttpWebRequest;
+
+                //bind webRequest
+                request.BindHttpWebRequest(httpWebRequest);
 
                 //handle request header
                 HandleHttpWebRequestHeaders(request, httpWebRequest, config);
@@ -212,10 +218,21 @@ namespace COSXML.Network
                 ////wait for response
                 //httpWebRequest.BeginGetResponse(AsyncResponseCallback, requestState);
 
-                requestState.request.Body.StartHandleRequestBody(requestStream, delegate()
+                requestState.request.Body.StartHandleRequestBody(requestStream, delegate(Exception exception)
                 {
-                    //wait for response
-                    httpWebRequest.BeginGetResponse(AsyncResponseCallback, requestState);
+                    if (exception != null)
+                    {
+                        // handle request body throw exception
+                        requestState.response.OnFinish(false, exception);
+                        //abort
+                        requestState.Clear();
+                        QLog.E(TAG, exception.Message, exception);
+                    }
+                    else
+                    {
+                        //wait for response
+                        httpWebRequest.BeginGetResponse(AsyncResponseCallback, requestState);
+                    }
                 });
 
             }

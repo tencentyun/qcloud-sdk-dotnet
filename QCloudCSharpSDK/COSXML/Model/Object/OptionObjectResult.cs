@@ -32,7 +32,7 @@ namespace COSXML.Model.Object
         /// </summary>
         public List<string> accessControlAllowExposeHeaders;
 
-        internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
+        internal override void InternalParseResponseHeaders()
         {
             List<string> values;
             this.responseHeaders.TryGetValue("Access-Control-Allow-Origin", out values);
@@ -64,7 +64,7 @@ namespace COSXML.Model.Object
 
         public override string GetResultInfo()
         {
-            return base.GetResultInfo();
+            return base.GetResultInfo() + "\n" + accessControlAllowOrigin;
         }
     }
 }

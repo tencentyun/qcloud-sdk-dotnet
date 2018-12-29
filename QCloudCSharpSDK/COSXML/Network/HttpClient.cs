@@ -94,6 +94,7 @@ namespace COSXML.Network
                 {
                     response = new CosResponse(cosResult, null, -1L, null);
                 }
+                cosRequest.BindRequest(request);
                 CommandTask.Excute(request, response, config);
             }
             catch (CosServerException)
@@ -148,6 +149,7 @@ namespace COSXML.Network
                 {
                     response = new CosResponse(cosResult, null, -1L, null,successCallback, failCallback);
                 }
+                cosRequest.BindRequest(request);
                 CommandTask.Schedue(request, response, config);
             }
             catch (CosServerException serverException)
@@ -170,12 +172,28 @@ namespace COSXML.Network
         private Request CreateRequest(CosRequest cosRequest)
         {
             cosRequest.CheckParameters();
+            string requestUrlWithSign = cosRequest.RequestURLWithSign;
             Request request = new Request();
             request.Method = cosRequest.Method;
-            request.IsHttps = (bool)cosRequest.IsHttps;
-            request.Url = CreateUrl(cosRequest);
+            if (requestUrlWithSign != null)
+            {
+                if (requestUrlWithSign.StartsWith("https"))
+                {
+                    request.IsHttps = true;
+                }
+                else
+                {
+                    request.IsHttps = false;
+                }
+                request.RequestUrlString = requestUrlWithSign;
+            }
+            else
+            {
+                request.IsHttps = (bool)cosRequest.IsHttps;
+                request.Url = CreateUrl(cosRequest);
+                request.Host = cosRequest.GetHost();
+            }
             request.UserAgent = config.UserAgnet;
-            request.Host = cosRequest.GetHost();
             Dictionary<string, string> headers = cosRequest.GetRequestHeaders();
             if (headers != null)
             {
@@ -193,7 +211,10 @@ namespace COSXML.Network
             }
 
             //cacluate sign, and add it.
-            CheckSign(cosRequest.GetSignSourceProvider(), request);
+            if (requestUrlWithSign == null)
+            {
+                CheckSign(cosRequest.GetSignSourceProvider(), request);
+            }
             return request;
         }
 

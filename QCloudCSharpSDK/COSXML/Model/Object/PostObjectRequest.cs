@@ -212,8 +212,8 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
-            base.CheckParameters();
             formStruct.CheckParameter();
+            base.CheckParameters();
         }
 
         public override CosXmlSignSourceProvider GetSignSourceProvider()

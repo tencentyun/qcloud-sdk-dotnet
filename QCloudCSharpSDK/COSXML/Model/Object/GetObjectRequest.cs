@@ -167,8 +167,9 @@ namespace COSXML.Model.Object
         
         public override void CheckParameters()
         {
-            base.CheckParameters();
             if (localDir == null) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "localDir = null");
+            if(requestUrlWithSign != null && localFileName == null) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "localFileName = null");
+            base.CheckParameters();
         }
         /// <summary>
         /// 获取本地文件保存路径

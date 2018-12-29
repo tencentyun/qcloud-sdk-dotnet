@@ -10,6 +10,9 @@ using COSXML.Model.Bucket;
 using COSXML.Auth;
 using COSXML.Log;
 using COSXML.Utils;
+using COSXML.CosException;
+using COSXML.Common;
+using COSXML.Model.Tag;
 
 namespace COSXML
 {
@@ -471,33 +474,127 @@ namespace COSXML
             schedue(request, new RestoreObjectResult(), successCallback, failCallback);
         }
 
-        public string GenerateSign(string method, string path, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, string signTime)
+        public string GenerateSign(string method, string key, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, long signDurationSecond)
         {
-            return CosXmlSigner.GenerateSign(method, path, queryParameters, headers,signTime, qcloudCredentailProvider.GetQCloudCredentials());
+            try
+            {
+                string signTime = null;
+                if (signDurationSecond > 0)
+                {
+                    long currentTimeSecond = TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
+                    signTime = String.Format("{0};{1}", currentTimeSecond, currentTimeSecond + signDurationSecond);
+                }
+                return CosXmlSigner.GenerateSign(method, key, queryParameters, headers, signTime, qcloudCredentailProvider.GetQCloudCredentials());
+            }
+            catch (CosClientException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, ex.Message, ex);
+            }
         }
 
-        public string GenerateSignURL(CosRequest request, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, string signTime)
+        public string GenerateSignURL(PreSignatureStruct preSignatureStruct)
         {
-            string url = GetAccessURL(request);
-            string sign = GenerateSign(request.Method, request.RequestPath, queryParameters, headers, signTime);
-            return url + "?sign=" + URLEncodeUtils.Encode(sign);
+            try
+            {
+                if (preSignatureStruct.httpMethod == null)
+                {
+                    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "httpMethod = null");
+                }
+                if (preSignatureStruct.key == null)
+                {
+                    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "key = null");
+                }
+                StringBuilder urlBuilder = new StringBuilder();
+                if (preSignatureStruct.isHttps)
+                {
+                    urlBuilder.Append("https://");
+                }
+                else
+                {
+                    urlBuilder.Append("http://");
+                }
+                if (preSignatureStruct.host == null)
+                {
+                    if (preSignatureStruct.bucket == null)
+                    {
+                        throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "bucket = null");
+                    }
+                    if (preSignatureStruct.bucket.EndsWith("-" + preSignatureStruct.appid))
+                    {
+                        urlBuilder.Append(preSignatureStruct.bucket);
+                    }
+                    else
+                    {
+                        urlBuilder.Append(preSignatureStruct.bucket).Append("-")
+                            .Append(preSignatureStruct.appid);
+                    }
+                    urlBuilder.Append(".cos.")
+                        .Append(preSignatureStruct.region)
+                        .Append(".myqcloud.com");
+                }
+                else
+                {
+                    urlBuilder.Append(preSignatureStruct.host);
+                }
+
+                if (!preSignatureStruct.key.StartsWith("/"))
+                {
+                    preSignatureStruct.key = "/" + preSignatureStruct.key;
+                }
+                urlBuilder.Append(preSignatureStruct.key);
+                string url = urlBuilder.ToString();
+                string sign = GenerateSign(preSignatureStruct.httpMethod, preSignatureStruct.key, preSignatureStruct.queryParameters, preSignatureStruct.headers, preSignatureStruct.signDurationSecond);
+                return url + "?sign=" + URLEncodeUtils.Encode(sign);
+            }
+            catch (CosClientException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, ex.Message, ex);
+            }
         }
 
         public string GetAccessURL(CosRequest request)
         {
-            request.CheckParameters();
-            StringBuilder urlBuilder = new StringBuilder();
-            if (request.IsHttps != null && (bool)request.IsHttps)
+            try
             {
-                urlBuilder.Append("https://");
+                CheckAppidAndRegion(request);
+                request.CheckParameters();
+                StringBuilder urlBuilder = new StringBuilder();
+                if (request.IsHttps != null && (bool)request.IsHttps)
+                {
+                    urlBuilder.Append("https://");
+                }
+                else
+                {
+                    urlBuilder.Append("http://");
+                }
+                urlBuilder.Append(request.GetHost());
+                urlBuilder.Append(request.RequestPath);
+                return urlBuilder.ToString();
             }
-            else
+            catch (CosClientException)
             {
-                urlBuilder.Append("http://");
+                throw;
             }
-            urlBuilder.Append(request.GetHost());
-            urlBuilder.Append(request.RequestPath);
-            return urlBuilder.ToString();
+            catch (Exception ex)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, ex.Message, ex);
+            }
+        }
+
+        public void Cancel(CosRequest cosRequest)
+        {
+            if (cosRequest != null)
+            {
+                cosRequest.Cancel();
+            }
         }
     }
 }

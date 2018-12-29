@@ -247,8 +247,8 @@ namespace COSXML.Transfer
 
             //start to write element
             xmlWriter.WriteStartElement("Delete");
-            
-            if(delete.deleteObjects != null)
+            xmlWriter.WriteElementString("Quiet", delete.quiet ? "true" : "false");
+            if (delete.deleteObjects != null)
             {
                 foreach(Delete.DeleteObject deleteObject in delete.deleteObjects)
                 {

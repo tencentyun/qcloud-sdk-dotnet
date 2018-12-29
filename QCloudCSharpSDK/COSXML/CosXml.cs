@@ -5,6 +5,7 @@ using COSXML.Model.Service;
 using COSXML.Model.Bucket;
 using COSXML.Model.Object;
 using COSXML.Model;
+using COSXML.Model.Tag;
 
 namespace COSXML
 { 
@@ -20,8 +21,8 @@ namespace COSXML
         /// <param name="headers">http header</param>
         /// <param name="signTime">sign time</param>
         /// <returns></returns>
-        string GenerateSign(string method, string path, Dictionary<string, string> queryParameters, Dictionary<string, string> headers,
-            string signTime);
+        string GenerateSign(string method, string key, Dictionary<string, string> queryParameters, Dictionary<string, string> headers,
+            long signDurationSecond);
 
         /// <summary>
         /// 生成预签名URL
@@ -31,8 +32,7 @@ namespace COSXML
         /// <param name="headers"></param>
         /// <param name="signTime"></param>
         /// <returns></returns>
-        string GenerateSignURL(CosRequest request, Dictionary<string, string> queryParameters, Dictionary<string, string> headers,
-            string signTime);
+        string GenerateSignURL(PreSignatureStruct preSignatureStruct);
 
         string GetAccessURL(CosRequest request);
 
@@ -501,5 +501,6 @@ namespace COSXML
 
         void RestoreObject(RestoreObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
+        void Cancel(CosRequest cosRequest);
     }
 }

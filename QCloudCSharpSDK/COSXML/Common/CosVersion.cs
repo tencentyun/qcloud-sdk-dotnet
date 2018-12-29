@@ -21,22 +21,22 @@ namespace COSXML.Common
             return userAgent.ToString();
         }
 
-        public static string GetOsVersion()
-        {
-            try
-            {
-                var os = Environment.OSVersion;
-                return "windows " + os.Version.Major + "." + os.Version.Minor;
-            }
-            catch (InvalidOperationException)
-            {
-                return "Unknown OSVersion";
-            }
-        }
+        //public static string GetOsVersion()
+        //{
+        //    try
+        //    {
+        //        var os = Environment.OSVersion;
+        //        return "windows " + os.Version.Major + "." + os.Version.Minor;
+        //    }
+        //    catch (InvalidOperationException)
+        //    {
+        //        return "Unknown OSVersion";
+        //    }
+        //}
 
-        public static string GetOsArchitecture()
-        {
-            return (IntPtr.Size == 8) ? "x86_64" : "x86";
-        }
+        //public static string GetOsArchitecture()
+        //{
+        //    return (IntPtr.Size == 8) ? "x86_64" : "x86";
+        //}
     }
 }

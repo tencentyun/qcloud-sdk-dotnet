@@ -86,14 +86,15 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
+            if (completeMultipartUpload.parts.Count == 0)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "completeMultipartUpload.parts count = 0");
+            }
+            if (requestUrlWithSign != null) return;
             base.CheckParameters();
             if (uploadId == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "uploadId is null");
-            }
-            if (completeMultipartUpload.parts.Count == 0)
-            {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "completeMultipartUpload.parts count = 0");
             }
         }
 

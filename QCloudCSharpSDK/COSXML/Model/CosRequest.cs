@@ -27,6 +27,8 @@ namespace COSXML.Model
     {
         private static string TAG = typeof(CosRequest).FullName;
 
+        protected Request realRequest;
+
         /// <summary>
         /// isHttps = true, https 请求; isHttps = false, http 请求； default isHttps = false.
         /// </summary>
@@ -66,6 +68,11 @@ namespace COSXML.Model
         /// needMD5 = true, 请求中带上 Content-Md5; needMd5 = false, 请求中不带 Content-Md5; defalut needMd5 = false.
         /// </summary>
         protected bool needMD5 = false;
+
+        /// <summary>
+        /// 请求预签名URL
+        /// </summary>
+        protected string requestUrlWithSign = null;
 
         /// <summary>
         /// http or https for cos request.
@@ -234,6 +241,29 @@ namespace COSXML.Model
         public virtual CosXmlSignSourceProvider GetSignSourceProvider()
         {
             return cosXmlSignSourceProvider;
+        }
+
+        /// <summary>
+        /// 设置预签名URL
+        /// </summary>
+        /// <param name="requestSignURL"></param>
+        public string RequestURLWithSign
+        {
+            get { return requestUrlWithSign; }
+            set { requestUrlWithSign = value; }
+        }
+
+        public void BindRequest(Request request)
+        {
+            this.realRequest = request;
+        }
+
+        public void Cancel()
+        {
+            if (realRequest != null)
+            {
+                realRequest.Cancel();
+            }
         }
     }
 }
