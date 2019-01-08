@@ -252,8 +252,8 @@ namespace COSXML.Auth
         {
             if (request == null) throw new ArgumentNullException("Request == null");
             if (qcloudCredentials == null) throw new ArgumentNullException("QCloudCredentials == null");
+            if(qcloudSignSource == null || !(qcloudSignSource is CosXmlSignSourceProvider)) throw new ArgumentNullException("CosXmlSourceProvider == null");
             CosXmlSignSourceProvider cosXmlSourceProvider = (CosXmlSignSourceProvider)qcloudSignSource;
-            if(cosXmlSourceProvider == null) throw new ArgumentNullException("CosXmlSourceProvider == null");
            
             string signTime = cosXmlSourceProvider.GetSignTime();
             if (signTime == null)

@@ -61,7 +61,7 @@ namespace COSXML.Network
                     throw new ArgumentException("unexpected scheme: " + scheme);
                 }
             }
-            private get{return this.scheme;}
+            get{return this.scheme;}
             
         }
 
@@ -72,17 +72,17 @@ namespace COSXML.Network
                 if (value == null) throw new ArgumentNullException("userName == null");
                 this.userName = value;
             }
-            private get{return this.userName;}
+            get{return this.userName;}
         }
 
         public string UserPassword
         {
              set
             {
-                if (userPwd == null) throw new ArgumentNullException("userPwd == null");
+                if (value == null) throw new ArgumentNullException("userPwd == null");
                 this.userPwd = value;
             }
-            private get{return this.userPwd;}
+            get {return this.userPwd;}
         }
 
         public string Host
@@ -102,7 +102,7 @@ namespace COSXML.Network
                 if (value <= 0 || value >= 65535) throw new ArgumentException("unexpected port: " + port);
                 this.port = value;
             }
-            private get { return this.port; }
+            get { return this.port; }
         }
 
         public string Path
@@ -140,7 +140,7 @@ namespace COSXML.Network
             {
                 this.fragment = value;
             }
-            private get { return this.fragment; }
+            get { return this.fragment; }
             
         }
 

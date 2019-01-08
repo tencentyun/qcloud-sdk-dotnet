@@ -70,7 +70,7 @@ namespace COSXML.Model.Object
         /// 可与 x-cos-copy-source-If-Match 一起使用，与其他条件联合使用返回冲突。
         /// </summary>
         /// <param name="sourceIfUnmodifiedSince"></param>
-        public void SsetCopyIfUnmodifiedSince(string sourceIfUnmodifiedSince)
+        public void SetCopyIfUnmodifiedSince(string sourceIfUnmodifiedSince)
         {
             if (sourceIfUnmodifiedSince != null)
             {

@@ -55,13 +55,13 @@ namespace COSXML.Network
             {
                 return userAgent;
             }
-            private set { } 
+            
         }
 
         public bool AllowAutoRedirect
         {
             get { return allowAutoRedirect; }
-            private set { }
+            
         }
 
         public int ConnectionTimeoutMs
@@ -71,7 +71,7 @@ namespace COSXML.Network
                 return connectionTimeoutMs;
             }
 
-            private set { }
+           
         }
 
         public int ReadWriteTimeoutMs
@@ -81,7 +81,7 @@ namespace COSXML.Network
                 return readWriteTimeoutMs;
             }
 
-            private set { }
+            
         }
 
         public int MaxRery
@@ -90,7 +90,7 @@ namespace COSXML.Network
             {
                 return maxRetry;
             }
-            private set { }
+            
         }
 
         public int ConnectionLimit
@@ -99,7 +99,7 @@ namespace COSXML.Network
             {
                 return connectionLimit;
             }
-            private set { }
+            
         }
 
         public string ProxyHost
@@ -108,7 +108,7 @@ namespace COSXML.Network
             {
                 return proxyHost;
             }
-            private set { }
+            
         }
 
         public int ProxyPort
@@ -117,7 +117,7 @@ namespace COSXML.Network
             {
                 return proxyPort;
             }
-            private set { }
+           
         }
 
         public string ProxyUserName
@@ -126,7 +126,7 @@ namespace COSXML.Network
             {
                 return proxyUserName;
             }
-            private set { }
+            
         }
 
 
@@ -136,7 +136,7 @@ namespace COSXML.Network
             {
                 return proxyUserPassword;
             }
-            private set { }
+           
         }
 
         public string ProxyDomain
@@ -145,7 +145,7 @@ namespace COSXML.Network
             {
                 return proxyDomain;
             }
-            private set { }
+            
         }
 
         public class Builder

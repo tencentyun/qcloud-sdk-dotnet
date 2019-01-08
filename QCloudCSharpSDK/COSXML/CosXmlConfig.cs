@@ -30,31 +30,26 @@ namespace COSXML
         public string Appid
         {
             get { return appid; }
-            private set { }
         }
 
         public string Region
         {
             get { return region; }
-            private set { }
         }
 
         public bool IsHttps
         {
             get { return isHttps; }
-            private set { }
         }
 
         public HttpClientConfig HttpConfig
         {
             get { return httpConfig; }
-            private set { }
         }
 
         public bool IsDebugLog
         {
             get { return isDebug; }
-            private set { }
         }
 
         public sealed class Builder
@@ -150,6 +145,12 @@ namespace COSXML
             public Builder SetProxyDomain(string domain)
             {
                 this.httpClientConfigBuilder.SetProxyDomain(domain);
+                return this;
+            }
+
+            public Builder SetAllowAutoRedirect(bool isAllow)
+            {
+                this.httpClientConfigBuilder.AllowAutoRedirect(isAllow);
                 return this;
             }
 

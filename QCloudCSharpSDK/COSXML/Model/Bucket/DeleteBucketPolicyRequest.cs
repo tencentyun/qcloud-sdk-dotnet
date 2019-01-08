@@ -19,7 +19,7 @@ namespace COSXML.Model.Bucket
             : base(bucket)
         {
             this.method = CosRequestMethod.DELETE;
-            this.queryParameters.Add("policy ", null);
+            this.queryParameters.Add("policy", null);
         }
     }
 }
