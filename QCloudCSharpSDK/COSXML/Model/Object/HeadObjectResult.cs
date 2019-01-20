@@ -31,7 +31,7 @@ namespace COSXML.Model.Object
 
         internal override void InternalParseResponseHeaders()
         {
-            List<string> values = new List<string>();
+            List<string> values;
             this.responseHeaders.TryGetValue("x-cos-object-type", out values);
             if (values != null && values.Count > 0)
             {
