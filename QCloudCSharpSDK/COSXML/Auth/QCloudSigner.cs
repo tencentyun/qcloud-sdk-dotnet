@@ -132,7 +132,8 @@ namespace COSXML.Auth
             {
                 lowerKeySourceParameters.Add(pair.Key.ToLower(), pair.Value);
             }
-            return GenerateSource(request.Method, request.Url.Path, lowerKeySourceParameters, lowerKeySourceHeaders);
+            string path = URLEncodeUtils.Decode(request.Url.Path);
+            return GenerateSource(request.Method, path, lowerKeySourceParameters, lowerKeySourceHeaders);
         }
 
         /// <summary>
@@ -172,7 +173,7 @@ namespace COSXML.Auth
             LowerAndSort(headerKeys);
 
             //计算结果
-            string[] result = Calculate(headerKeys, sourceHeaders);
+            string[] result = Calculate(headerKeys, sourceHeaders, true);
             if (result != null)
             {
                 headerList = result[1];
@@ -189,7 +190,7 @@ namespace COSXML.Auth
             LowerAndSort(parameterKeys);
 
             //计算结果
-            string[] result = Calculate(parameterKeys, sourceQueryParameters);
+            string[] result = Calculate(parameterKeys, sourceQueryParameters, false);
             if (result != null)
             {
                 parameterList = result[1];
@@ -198,7 +199,7 @@ namespace COSXML.Auth
             return null;
         }
 
-        public string[] Calculate(List<string> keys, Dictionary<string, string> dict)
+        public string[] Calculate(List<string> keys, Dictionary<string, string> dict, bool isNeedEncode)
         {
             StringBuilder resultBuilder = new StringBuilder();
             StringBuilder keyResultBuilder = new StringBuilder();
@@ -208,7 +209,8 @@ namespace COSXML.Auth
                 string value = dict[key];
                 if (value != null)
                 {
-                    resultBuilder.Append(key).Append('=').Append(URLEncodeUtils.Encode(value)).Append('&');
+                    if(isNeedEncode)resultBuilder.Append(key).Append('=').Append(URLEncodeUtils.Encode(value)).Append('&');
+                    else resultBuilder.Append(key).Append('=').Append(value).Append('&');
                     keyResultBuilder.Append(key).Append(';');
                 }
             }
