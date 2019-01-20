@@ -34,7 +34,19 @@ namespace COSXML.Model.Bucket
             return body;
         }
 
-        public void setReplicationConfigurationWithRole(string ownerUin, string subUin)
+        public void SetReplicationConfiguration(string ownerUin, string subUin, List<RuleStruct> ruleStructs)
+        {
+            SetReplicationConfigurationWithRole(ownerUin, subUin);
+            if (ruleStructs != null)
+            {
+                foreach (RuleStruct ruleStruct in ruleStructs)
+                {
+                    SetReplicationConfigurationWithRule(ruleStruct);
+                }
+            }
+        }
+        
+        private void SetReplicationConfigurationWithRole(string ownerUin, string subUin)
         {
             if (ownerUin != null && subUin != null)
             {
@@ -43,7 +55,7 @@ namespace COSXML.Model.Bucket
             }
         }
 
-        public void setReplicationConfigurationWithRule(RuleStruct ruleStruct)
+        private void SetReplicationConfigurationWithRule(RuleStruct ruleStruct)
         {
             if (ruleStruct != null)
             {
