@@ -35,6 +35,14 @@ namespace COSXML.Model.Tag
         /// </summary>
         public string versionId;
 
+        /// <summary>
+        /// copy source with versionId
+        /// </summary>
+        /// <param name="appid"></param>
+        /// <param name="bucket"></param>
+        /// <param name="region"></param>
+        /// <param name="key"></param>
+        /// <param name="versionId"></param>
         public CopySourceStruct(string appid, string bucket, string region, string key, string versionId)
         {
             this.appid = appid;
@@ -44,9 +52,19 @@ namespace COSXML.Model.Tag
             this.versionId = versionId;
         }
 
+        /// <summary>
+        /// copy source
+        /// </summary>
+        /// <param name="appid"></param>
+        /// <param name="bucket"></param>
+        /// <param name="region"></param>
+        /// <param name="key"></param>
         public CopySourceStruct(string appid, string bucket, string region, string key)
             : this(appid, bucket, region, key, null) { }
 
+        /// <summary>
+        /// check parameter
+        /// </summary>
         public void CheckParameters()
         {
             if (bucket == null)
@@ -67,13 +85,16 @@ namespace COSXML.Model.Tag
             }
         }
 
+        /// <summary>
+        /// get source with urlEncode
+        /// </summary>
+        /// <returns></returns>
         public string GetCopySouce()
         {
             if (!key.StartsWith("/"))
             {
                 key = "/" + key;
             }
-            //key = URLEncodeUtils.EncodeURL(key);
             StringBuilder copySource = new StringBuilder();
 
             copySource.Append(bucket);
@@ -85,7 +106,7 @@ namespace COSXML.Model.Tag
             copySource.Append(".").Append("cos").Append(".")
                 .Append(region).Append(".")
                 .Append("myqcloud.com")
-                .Append(key);
+                .Append(URLEncodeUtils.EncodePathOfURL(key));
            
             if (versionId != null)
             {

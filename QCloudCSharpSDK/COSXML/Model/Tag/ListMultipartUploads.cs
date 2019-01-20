@@ -63,14 +63,14 @@ namespace COSXML.Model.Tag
         /// 将 prefix 到 delimiter 之间的相同路径归为一类，定义为 Common Prefix
         /// <see cref="CommonPrefixes"/>
         /// </summary>
-        public List<CommonPrefixes> commonPrefixes;
+        public List<CommonPrefixes> commonPrefixesList;
 
 
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{ListMultipartUploads:\n");
             stringBuilder.Append("Bucket:").Append(bucket).Append("\n");
-            stringBuilder.Append("Encoding-Type:").Append(encodingType).Append("\n");
+            stringBuilder.Append("EncodingType:").Append(encodingType).Append("\n");
             stringBuilder.Append("KeyMarker:").Append(keyMarker).Append("\n");
             stringBuilder.Append("UploadIdMarker:").Append(uploadIdMarker).Append("\n");
             stringBuilder.Append("NextKeyMarker:").Append(nextKeyMarker).Append("\n");
@@ -86,9 +86,9 @@ namespace COSXML.Model.Tag
                     if (upload != null) stringBuilder.Append(upload.GetInfo()).Append("\n");
                 }
             }
-            if (commonPrefixes != null)
+            if (commonPrefixesList != null)
             {
-                foreach (CommonPrefixes commonPrefix in commonPrefixes)
+                foreach (CommonPrefixes commonPrefix in commonPrefixesList)
                 {
                     if (commonPrefix != null) stringBuilder.Append(commonPrefix.GetInfo()).Append("\n");
                 }

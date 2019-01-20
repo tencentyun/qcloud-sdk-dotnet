@@ -23,13 +23,17 @@ namespace COSXML.Model.Tag
         /// 返回文件最后修改时间，GMT 格式
         /// </summary>
         public string lastModified;
-
+        /// <summary>
+        /// key 的 versionId
+        /// </summary>
+        public string versionId;
     
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{CopyObject:\n");
             stringBuilder.Append("ETag:").Append(eTag).Append("\n");
             stringBuilder.Append("LastModified:").Append(lastModified).Append("\n");
+            stringBuilder.Append("VersionId:").Append(versionId).Append("\n");
             stringBuilder.Append("}");
             return stringBuilder.ToString();
         }

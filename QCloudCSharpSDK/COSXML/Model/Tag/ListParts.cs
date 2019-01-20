@@ -67,7 +67,7 @@ namespace COSXML.Model.Tag
         {
             StringBuilder stringBuilder = new StringBuilder("{ListParts:\n");
             stringBuilder.Append("Bucket:").Append(bucket).Append("\n");
-            stringBuilder.Append("Encoding-Type:").Append(encodingType).Append("\n");
+            stringBuilder.Append("EncodingType:").Append(encodingType).Append("\n");
             stringBuilder.Append("Key:").Append(key).Append("\n");
             stringBuilder.Append("UploadId:").Append(uploadId).Append("\n");
             if(owner != null)stringBuilder.Append(owner.GetInfo()).Append("\n");

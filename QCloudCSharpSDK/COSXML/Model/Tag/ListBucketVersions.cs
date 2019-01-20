@@ -7,6 +7,7 @@ namespace COSXML.Model.Tag
 {
     public sealed class ListBucketVersions
     {
+        public string encodingType;
         public string name;
         public string prefix;
         public string keyMarker;
@@ -14,14 +15,18 @@ namespace COSXML.Model.Tag
         public long maxKeys;
         public bool isTruncated;
         public string nextKeyMarker;
+        public string delimiter;
         public string nextVersionIdMarker;
         public List<ObjectVersion> objectVersionList;
+        public List<CommonPrefixes> commonPrefixesList;
 
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{ListVersionsResult:\n");
             stringBuilder.Append("Name:").Append(name).Append("\n");
+            stringBuilder.Append("EncodingType:").Append(encodingType).Append("\n");
             stringBuilder.Append("Prefix:").Append(prefix).Append("\n");
+            stringBuilder.Append("Delimiter:").Append(delimiter).Append("\n");
             stringBuilder.Append("KeyMarker:").Append(keyMarker).Append("\n");
             stringBuilder.Append("VersionIdMarker:").Append(versionIdMarker).Append("\n");
             stringBuilder.Append("MaxKeys:").Append(maxKeys).Append("\n");
@@ -32,7 +37,14 @@ namespace COSXML.Model.Tag
             {
                 foreach(ObjectVersion objectVersion in objectVersionList)
                 {
-                    stringBuilder.Append(objectVersion.GetInfo()).Append("\n");
+                   if(objectVersion != null) stringBuilder.Append(objectVersion.GetInfo()).Append("\n");
+                }
+            }
+            if (commonPrefixesList != null)
+            {
+                foreach (CommonPrefixes commonPrefixes in commonPrefixesList)
+                {
+                    if (commonPrefixes != null) stringBuilder.Append(commonPrefixes.GetInfo()).Append("\n");
                 }
             }
             stringBuilder.Append("}");
@@ -80,9 +92,7 @@ namespace COSXML.Model.Tag
                 return stringBuilder.ToString();
             }
         }
-
-
-
+        
         public sealed class Version : ObjectVersion
         {
             public string eTag;
@@ -104,6 +114,21 @@ namespace COSXML.Model.Tag
                 {
                     stringBuilder.Append(owner.GetInfo()).Append("\n");
                 }
+                stringBuilder.Append("}");
+                return stringBuilder.ToString();
+            }
+        }
+
+        public sealed class CommonPrefixes
+        {
+            /// <summary>
+            /// 显示具体的 CommonPrefixes
+            /// </summary>
+            public string prefix;
+            public string GetInfo()
+            {
+                StringBuilder stringBuilder = new StringBuilder("{CommonPrefixes:\n");
+                stringBuilder.Append("Prefix:").Append(prefix).Append("\n");
                 stringBuilder.Append("}");
                 return stringBuilder.ToString();
             }

@@ -12,7 +12,7 @@ namespace COSXML.Model.Tag
     /// <summary>
     /// <see cref="https://cloud.tencent.com/document/product/436/7742"/>
     /// </summary>
-    public sealed class CompleteMultipartUploadResult
+    public sealed class CompleteResult
     {
         /// <summary>
         /// 创建的Object的外网访问域名
