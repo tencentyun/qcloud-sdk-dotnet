@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,10 +32,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\COSXML.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
@@ -111,10 +114,10 @@
     <Compile Include="Model\Bucket\PutBucketVersioningResult.cs" />
     <Compile Include="Model\CosRequest.cs" />
     <Compile Include="Model\CosResult.cs" />
-    <Compile Include="Model\Object\AbortMultiUploadRequest.cs" />
-    <Compile Include="Model\Object\AbortMultiUploadResult.cs" />
-    <Compile Include="Model\Object\CompleteMultiUploadRequest.cs" />
-    <Compile Include="Model\Object\CompleteMultiUploadResult.cs" />
+    <Compile Include="Model\Object\AbortMultipartUploadRequest.cs" />
+    <Compile Include="Model\Object\AbortMultipartUploadResult.cs" />
+    <Compile Include="Model\Object\CompleteMultipartUploadRequest.cs" />
+    <Compile Include="Model\Object\CompleteMultipartUploadResult.cs" />
     <Compile Include="Model\Object\CopyObjectRequest.cs" />
     <Compile Include="Model\Object\CopyObjectResult.cs" />
     <Compile Include="Model\Object\DeleteMultiObjectRequest.cs" />
@@ -151,7 +154,7 @@
     <Compile Include="Model\Tag\AccessControlPolicy.cs" />
     <Compile Include="Model\Tag\CAM.cs" />
     <Compile Include="Model\Tag\CompleteMultipartUpload.cs" />
-    <Compile Include="Model\Tag\CompleteMultipartUploadResult.cs" />
+    <Compile Include="Model\Tag\CompleteResult.cs" />
     <Compile Include="Model\Tag\CopyObject.cs" />
     <Compile Include="Model\Tag\CopySourceStruct.cs" />
     <Compile Include="Model\Tag\CORSConfiguration.cs" />
@@ -199,7 +202,9 @@
     <Compile Include="Utils\URLEncodeUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

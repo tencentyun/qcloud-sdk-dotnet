@@ -1,11 +1,8 @@
-﻿using System;
+﻿using COSXML.Model.Tag;
+using System;
 using System.Collections.Generic;
-
-using System.Text;
-using System.Xml;
 using System.IO;
-using COSXML.Model.Tag;
-using COSXML.Log;
+using System.Xml;
 
 namespace COSXML.Transfer
 {
@@ -133,7 +130,7 @@ namespace COSXML.Transfer
                             xmlReader.Read();
                             result.name = xmlReader.Value;
                         }
-                        else if ("Encoding-Type".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        else if ("EncodingType".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
                             xmlReader.Read();
                             result.encodingType = xmlReader.Value;
@@ -467,7 +464,7 @@ namespace COSXML.Transfer
                             {
                                 int.TryParse(xmlReader.Value, out transition.days);
                             }
-                            else if (rule.expiration != null)
+                            else if (expiration != null)
                             {
                                 int.TryParse(xmlReader.Value, out expiration.days);
                             }
@@ -663,6 +660,8 @@ namespace COSXML.Transfer
         {
             XmlReader xmlReader = XmlReader.Create(inStream);
             result.objectVersionList = new List<ListBucketVersions.ObjectVersion>();
+            result.commonPrefixesList = new List<ListBucketVersions.CommonPrefixes>();
+            ListBucketVersions.CommonPrefixes commonPrefixes = null;
             ListBucketVersions.ObjectVersion objectVersion = null;
             ListBucketVersions.Owner owner = null;
 
@@ -676,10 +675,27 @@ namespace COSXML.Transfer
                             xmlReader.Read();
                             result.name = xmlReader.Value;
                         }
+                        else if ("EncodingType".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            result.encodingType = xmlReader.Value;
+                        }
                         else if ("Prefix".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
                             xmlReader.Read();
-                            result.prefix = xmlReader.Value;
+                            if (commonPrefixes == null)
+                            {
+                                result.prefix = xmlReader.Value;
+                            }
+                            else
+                            {
+                                commonPrefixes.prefix = xmlReader.Value;
+                            }
+                        }
+                        else if ("Delimiter".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            result.delimiter = xmlReader.Value;
                         }
                         else if ("KeyMarker".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
@@ -763,6 +779,10 @@ namespace COSXML.Transfer
                             xmlReader.Read();
                             ((ListBucketVersions.Version)objectVersion).storageClass = xmlReader.Value;
                         }
+                        else if ("CommonPrefixes".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            commonPrefixes = new ListBucketVersions.CommonPrefixes();
+                        }
                         break;
                     case XmlNodeType.EndElement:
                         if ("Owner".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
@@ -780,6 +800,11 @@ namespace COSXML.Transfer
                             result.objectVersionList.Add(objectVersion);
                             objectVersion = null;
                         }
+                        else if ("CommonPrefixes".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            result.commonPrefixesList.Add(commonPrefixes);
+                            commonPrefixes = null;
+                        }
                         break;
                 }
             }
@@ -791,7 +816,7 @@ namespace COSXML.Transfer
             ListMultipartUploads.CommonPrefixes commonPrefixes = null;
             ListMultipartUploads.Upload upload = null;
             result.uploads = new List<ListMultipartUploads.Upload>();
-            result.commonPrefixes = new List<ListMultipartUploads.CommonPrefixes>();
+            result.commonPrefixesList = new List<ListMultipartUploads.CommonPrefixes>();
             ListMultipartUploads.Initiator initiator = null;
             ListMultipartUploads.Owner owner = null;
 
@@ -800,13 +825,12 @@ namespace COSXML.Transfer
                 switch (xmlReader.NodeType)
                 {
                     case XmlNodeType.Element:
-                        //QLog.D("XIAO", xmlReader.Name);
                         if ("Bucket".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
                             xmlReader.Read();
                             result.bucket = xmlReader.Value;
                         }
-                        else if ("Encoding-Type".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        else if ("EncodingType".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
                             xmlReader.Read();
                             result.encodingType = xmlReader.Value;
@@ -924,7 +948,7 @@ namespace COSXML.Transfer
                             xmlReader.Read();
                             upload.initiated = xmlReader.Value;
                         }
-                        else if ("CommonPrefixs".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        else if ("CommonPrefixes".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
                             commonPrefixes = new ListMultipartUploads.CommonPrefixes();
                         }
@@ -935,9 +959,9 @@ namespace COSXML.Transfer
                             result.uploads.Add(upload);
                             upload = null;
                         }
-                        else if ("CommonPrefixs".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        else if ("CommonPrefixes".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
-                            result.commonPrefixes.Add(commonPrefixes);
+                            result.commonPrefixesList.Add(commonPrefixes);
                             commonPrefixes = null;
                         }
                         else if ("Owner".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
@@ -955,7 +979,7 @@ namespace COSXML.Transfer
             }
         }
 
-        public static void ParseCompleteMultipartUploadResult(Stream inStream, CompleteMultipartUploadResult result)
+        public static void ParseCompleteMultipartUploadResult(Stream inStream, CompleteResult result)
         {
             XmlReader xmlReader = XmlReader.Create(inStream);
             while (xmlReader.Read())
@@ -1005,6 +1029,11 @@ namespace COSXML.Transfer
                         {
                             xmlReader.Read();
                             result.lastModified = xmlReader.Value;
+                        }
+                        else if ("VersionId".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            result.versionId = xmlReader.Value;
                         }
                         break;
                 }
@@ -1057,7 +1086,7 @@ namespace COSXML.Transfer
                             xmlReader.Read();
                             result.bucket = xmlReader.Value;
                         }
-                        else if ("Encoding-type".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        else if ("EncodingType".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
                             xmlReader.Read();
                             result.encodingType = xmlReader.Value;

@@ -83,13 +83,12 @@ namespace COSXML.Transfer
                 foreach (LifecycleConfiguration.Rule rule in lifecycleConfiguration.rules)
                 {
                     if (rule == null) continue;
-
                     xmlWriter.WriteStartElement("Rule");
                     xmlWriter.WriteElementString("ID", rule.id);
                     if (rule.filter != null)
                     {
                         xmlWriter.WriteStartElement("Filter");
-                        xmlWriter.WriteElementString("Prefix", rule.filter.prefix);
+                        if(rule.filter.prefix != null) xmlWriter.WriteElementString("Prefix", rule.filter.prefix);
                         xmlWriter.WriteEndElement();
                     }
                     xmlWriter.WriteElementString("Status", rule.status);
@@ -98,7 +97,7 @@ namespace COSXML.Transfer
                         xmlWriter.WriteStartElement("Transition");
                         xmlWriter.WriteElementString("Days", rule.transition.days.ToString());
                         xmlWriter.WriteElementString("StorageClass", rule.transition.storageClass);
-                        xmlWriter.WriteElementString("Date", rule.transition.date);
+                        if (rule.transition.date != null) xmlWriter.WriteElementString("Date", rule.transition.date);
                         xmlWriter.WriteEndElement();
                     }
                     if (rule.expiration != null)
@@ -106,7 +105,7 @@ namespace COSXML.Transfer
                         xmlWriter.WriteStartElement("Expiration");
                         xmlWriter.WriteElementString("Days", rule.expiration.days.ToString());
                         xmlWriter.WriteElementString("ExpiredObjectDeleteMarker", rule.expiration.expiredObjectDeleteMarker);
-                        xmlWriter.WriteElementString("Date", rule.expiration.date);
+                        if (rule.expiration.date != null) xmlWriter.WriteElementString("Date", rule.expiration.date);
                         xmlWriter.WriteEndElement();
                     }
                     if (rule.noncurrentVersionTransition != null)
@@ -167,7 +166,7 @@ namespace COSXML.Transfer
                     if(rule.destination != null){
                         xmlWriter.WriteStartElement("Destination");
                         xmlWriter.WriteElementString("Bucket", rule.destination.bucket);
-                        xmlWriter.WriteElementString("StorageClass", rule.destination.storageClass);
+                        if(rule.destination.storageClass != null) xmlWriter.WriteElementString("StorageClass", rule.destination.storageClass);
                         xmlWriter.WriteEndElement();
                     }
                     xmlWriter.WriteEndElement();
@@ -255,7 +254,7 @@ namespace COSXML.Transfer
                     if(deleteObject == null)continue;
                     xmlWriter.WriteStartElement("Object");
                     xmlWriter.WriteElementString("Key", deleteObject.key);
-                    xmlWriter.WriteElementString("VersionId", deleteObject.versionId);
+                    if(deleteObject.versionId != null) xmlWriter.WriteElementString("VersionId", deleteObject.versionId);
                     xmlWriter.WriteEndElement();
                 }
             }

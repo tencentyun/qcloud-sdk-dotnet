@@ -431,9 +431,9 @@ namespace COSXML
         /// <returns>CompleteMultiUploadResult</returns>
         /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
         /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception>
-        CompleteMultiUploadResult CompleteMultiUpload(CompleteMultiUploadRequest request);
+        CompleteMultipartUploadResult CompleteMultiUpload(CompleteMultipartUploadRequest request);
 
-        void CompleteMultiUpload(CompleteMultiUploadRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+        void CompleteMultiUpload(CompleteMultipartUploadRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
         /// abort has been parts of a object in cos
@@ -442,9 +442,9 @@ namespace COSXML
         /// <returns>AbortMultiUploadResult</returns>
         /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
         /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception>
-        AbortMultiUploadResult AbortMultiUpload(AbortMultiUploadRequest request);
+        AbortMultipartUploadResult AbortMultiUpload(AbortMultipartUploadRequest request);
 
-        void AbortMultiUpload(AbortMultiUploadRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+        void AbortMultiUpload(AbortMultipartUploadRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
         /// copy object to another object for cos

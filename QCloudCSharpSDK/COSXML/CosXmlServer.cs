@@ -404,24 +404,24 @@ namespace COSXML
             schedue(request, new UploadPartResult(), successCallback, failCallback);
         }
 
-        public CompleteMultiUploadResult CompleteMultiUpload(CompleteMultiUploadRequest request)
+        public CompleteMultipartUploadResult CompleteMultiUpload(CompleteMultipartUploadRequest request)
         {
-            return (Model.Object.CompleteMultiUploadResult)excute(request, new Model.Object.CompleteMultiUploadResult());
+            return (Model.Object.CompleteMultipartUploadResult)excute(request, new Model.Object.CompleteMultipartUploadResult());
         }
 
-        public void CompleteMultiUpload(CompleteMultiUploadRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
+        public void CompleteMultiUpload(CompleteMultipartUploadRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
-            schedue(request, new CompleteMultiUploadResult(), successCallback, failCallback);
+            schedue(request, new CompleteMultipartUploadResult(), successCallback, failCallback);
         }
 
-        public AbortMultiUploadResult AbortMultiUpload(AbortMultiUploadRequest request)
+        public AbortMultipartUploadResult AbortMultiUpload(AbortMultipartUploadRequest request)
         {
-            return (Model.Object.AbortMultiUploadResult)excute(request, new Model.Object.AbortMultiUploadResult());
+            return (Model.Object.AbortMultipartUploadResult)excute(request, new Model.Object.AbortMultipartUploadResult());
         }
 
-        public void AbortMultiUpload(AbortMultiUploadRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
+        public void AbortMultiUpload(AbortMultipartUploadRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
-            schedue(request, new AbortMultiUploadResult(), successCallback, failCallback);
+            schedue(request, new AbortMultipartUploadResult(), successCallback, failCallback);
         }
 
         public CopyObjectResult CopyObject(CopyObjectRequest request)

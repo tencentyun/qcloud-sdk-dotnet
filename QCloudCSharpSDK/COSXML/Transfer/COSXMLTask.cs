@@ -151,7 +151,7 @@ namespace COSXML.Transfer
     {
         void OnInit();
         void OnPart();
-        void OnCompleted(CompleteMultiUploadResult result);
+        void OnCompleted(CompleteMultipartUploadResult result);
         void OnFailed(CosClientException clientEx, CosServerException serverEx);
     }
 

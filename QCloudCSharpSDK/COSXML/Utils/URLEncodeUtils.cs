@@ -10,12 +10,31 @@ using System.Globalization;
 */
 namespace COSXML.Utils
 {
+    /**
+     * URL Encode: 
+     * 可分为绝对不需要编码的字符:[a~z][A~A][0~9][._-~] 
+     * 特殊字符需要视情况而言:!*'();:@&=+$,/?#[]
+     * 空字符用+或者%20代替
+     * 汉字绝地需要编码
+     * 因此，针对完整URL则要分块进行编码：path块，query块，fragment块，host块
+     * path块，需要以'/'进行分割，即 '/' 不需要编码，其它均需要编码
+     * query块，需要以'&'分割一对对key=value；key 和 value 需要编码, "="不编码
+     * fragment，全部进行编码
+     * URL Decode:
+     * 不需要判断是否是特殊字符，因为其解码规则很简单，直接根据内容中是否出现%来判断是否需要解码，
+     * 还是直接输出：若出现了%，则连续读出其后两位进行解码；反之，直接输出
+     */
     public sealed class URLEncodeUtils
     {
         //只有字母和数字[0-9a-zA-Z]、一些特殊符号"-_.!*~',以及某些保留字，才可以不经过编码直接用于URL。"
-        public const string URLAllowChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.!*~";
+        public const string URLAllowChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
 
-        public static string EncodeURL(string path)
+        /// <summary>
+        /// 针对 URL 中 path 编码，则需要先将其按照 '/'分割，然后进行逐个块进行 value 编码
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string EncodePathOfURL(string path)
         {
             if (String.IsNullOrEmpty(path)) return String.Empty;
             char separator = '/';
@@ -32,7 +51,7 @@ namespace COSXML.Utils
                 start = index + 1;
                 index = path.IndexOf(separator, start);
             }
-            result.Append(Encode(path.Substring(start)));
+            if(start < length) result.Append(Encode(path.Substring(start)));
             return result.ToString();
         }
 
@@ -42,6 +61,7 @@ namespace COSXML.Utils
         }
 
         /// <summary>
+        /// 针对单个value，则只需满足 URLAllowChars 不需要编码即可.
         /// urlEncode: 转为一个byte -> 转为两个16进制 -> 前面加上 %
         /// </summary>
         /// <param name="value"></param>
@@ -65,6 +85,17 @@ namespace COSXML.Utils
                 }
             }
             return result.ToString();
+        }
+        /// <summary>
+        /// 解码比较统一，此处借用 Uri 来实现
+        /// </summary>
+        /// <param name="valueEncode"></param>
+        /// <returns></returns>
+        public static string Decode(string valueEncode)
+        {
+            if (String.IsNullOrEmpty(valueEncode)) return String.Empty;
+            valueEncode.Replace('+', ' ');
+            return Uri.UnescapeDataString(valueEncode);
         }
     }
 }

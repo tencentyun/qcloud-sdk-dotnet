@@ -43,9 +43,9 @@ namespace COSXML.Transfer
         private long hasReceiveDataLength = 0;
         private object syncProgress = new Object();
 
-        private CompleteMultiUploadRequest completeMultiUploadRequest;
+        private CompleteMultipartUploadRequest completeMultiUploadRequest;
 
-        private AbortMultiUploadRequest abortMultiUploadRequest;
+        private AbortMultipartUploadRequest abortMultiUploadRequest;
 
         public COSXMLUploadTask(string bucket, string region, string key)
             : base(bucket, region, key)
@@ -369,7 +369,7 @@ namespace COSXML.Transfer
 
         private void CompleteMultipartUpload()
         {
-            completeMultiUploadRequest = new CompleteMultiUploadRequest(bucket, key, uploadId);
+            completeMultiUploadRequest = new CompleteMultipartUploadRequest(bucket, key, uploadId);
             foreach (SliceStruct sliceStruct in sliceList)
             {
                 completeMultiUploadRequest.SetPartNumberAndETag(sliceStruct.partNumber, sliceStruct.eTag); // partNumberEtag 有序的
@@ -386,7 +386,7 @@ namespace COSXML.Transfer
                 }
                 if (UpdateTaskState(TaskState.COMPLETED))
                 {
-                    CompleteMultiUploadResult completeMultiUploadResult = result as CompleteMultiUploadResult;
+                    CompleteMultipartUploadResult completeMultiUploadResult = result as CompleteMultipartUploadResult;
                     OnCompleted(completeMultiUploadResult);
                 }
 
@@ -490,7 +490,7 @@ namespace COSXML.Transfer
             CompleteMultipartUpload();
         }
 
-        public void OnCompleted(CompleteMultiUploadResult result)
+        public void OnCompleted(CompleteMultipartUploadResult result)
         {
             UpdateProgress(sendContentLength, sendContentLength, true);
             //lock (syncExit)
@@ -519,7 +519,7 @@ namespace COSXML.Transfer
 
         private void Abort()
         {
-            abortMultiUploadRequest = new AbortMultiUploadRequest(bucket, key, uploadId);
+            abortMultiUploadRequest = new AbortMultipartUploadRequest(bucket, key, uploadId);
             cosXmlServer.AbortMultiUpload(abortMultiUploadRequest, delegate (CosResult cosResult) { },
                 delegate (CosClientException cosClientException, CosServerException cosServerException) { DeleteObject(); });
 
@@ -594,9 +594,9 @@ namespace COSXML.Transfer
                 this.responseHeaders = result.responseHeaders;
             }
 
-            public void SetResult(CompleteMultiUploadResult result)
+            public void SetResult(CompleteMultipartUploadResult result)
             {
-                this.eTag = result.completeMultipartUpload.eTag;
+                this.eTag = result.completeResult.eTag;
                 this.httpCode = result.httpCode;
                 this.httpMessage = result.httpMessage;
                 this.responseHeaders = result.responseHeaders;

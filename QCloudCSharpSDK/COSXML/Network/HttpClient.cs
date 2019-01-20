@@ -13,6 +13,7 @@ using COSXML.Model.Tag;
 using COSXML.Log;
 using System.IO;
 using COSXML.Model.Object;
+using COSXML.Utils;
 /**
 * Copyright (c) 2018 Tencent Cloud. All rights reserved.
 * 11/6/2018 8:52:29 PM
@@ -222,8 +223,8 @@ namespace COSXML.Network
         {
             HttpUrl httpUrl = new HttpUrl();
             httpUrl.Scheme = (bool)cosRequest.IsHttps ? "https" : "http";
-            httpUrl.Host = cosRequest.GetHost(); //"106.39.183.101";//
-            httpUrl.Path = cosRequest.RequestPath;
+            httpUrl.Host = cosRequest.GetHost(); 
+            httpUrl.Path = URLEncodeUtils.EncodePathOfURL(cosRequest.RequestPath);
             httpUrl.SetQueryParameters(cosRequest.GetRequestParamters());
             return httpUrl;
         }

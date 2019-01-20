@@ -6,6 +6,7 @@ using COSXML.Common;
 using COSXML.Network;
 using COSXML.Log;
 using COSXML.Auth;
+using COSXML.Utils;
 /**
 * Copyright (c) 2018 Tencent Cloud. All rights reserved.
 * 11/2/2018 1:05:09 PM
@@ -126,15 +127,31 @@ namespace COSXML.Model
         /// <param name="value"></param>
         public void SetQueryParameter(string key, string value)
         {
+            SetQueryParameter(key, value, true);
+        }
+
+        /// <summary>
+        /// url 部分都统一 url encode
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="isNeedUrlEncode"></param>
+        public void SetQueryParameter(string key, string value, bool isNeedUrlEncode)
+        {
             try
             {
+                if (value == null) value = "";
+                if (isNeedUrlEncode)
+                {
+                    value = URLEncodeUtils.Encode(value);
+                }
                 queryParameters.Add(key, value);
             }
-            catch(ArgumentNullException)
+            catch (ArgumentNullException)
             {
                 QLog.D(TAG, "SetQueryParameter: key ==null");
             }
-            catch(ArgumentException)
+            catch (ArgumentException)
             {
                 queryParameters[key] = value; // cover the current value
             }
@@ -147,8 +164,23 @@ namespace COSXML.Model
         /// <param name="value"> header: value</param>
         public void SetRequestHeader(string key, string value)
         {
+            SetRequestHeader(key, value, false);
+        }
+        /// <summary>
+        /// header 默认不 encode
+        /// </summary>
+        /// <param name="key">不能为null 即不包含空格,即 位于(\u0020, \u007F)，超过这个范围，urlencode</param>
+        /// <param name="value">可以为null，为空，且位于(\u001f，\u007F) 和 '\t',超过这个范围，urlencode</param>
+        /// <param name="isNeedUrlEncode"></param>
+        public void SetRequestHeader(string key, string value, bool isNeedUrlEncode)
+        {
             try
             {
+                if (value == null) value = "";
+                if (isNeedUrlEncode)
+                {
+                    value = URLEncodeUtils.Encode(value);
+                }
                 headers.Add(key, value);
             }
             catch (ArgumentNullException)
