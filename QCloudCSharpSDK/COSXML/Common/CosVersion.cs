@@ -11,13 +11,13 @@ namespace COSXML.Common
 {
     public sealed class CosVersion
     {
-        public static string SDKVersion = typeof(CosVersion).Assembly.GetName().Version.ToString();
+        public static string SDKVersion = "5.4.0.0";
 
         public static string GetUserAgent()
         {
             StringBuilder userAgent = new StringBuilder();
             userAgent.Append("cos-net-sdk").Append('.')
-                .Append(typeof(CosVersion).Assembly.GetName().Version.ToString());
+                .Append(SDKVersion);
             return userAgent.ToString();
         }
 
