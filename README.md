@@ -30,7 +30,7 @@
 
 如果您想要查看每个 API, SDK 是如何调用的，请参考各个产品的开发文档：
 
-* [COS XML SDK](https://cloud.tencent.com/document/product/436/12159)
+* [COS XML SDK](https://github.com/tencentyun/qcloud-sdk-dotnet/blob/master/%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3.md)
 
 ## License
 
