@@ -29,7 +29,7 @@ namespace COSXMLTests
             string secretId = "";
             string secretKey = "";
             
-            appid = Environment.GetEnvironmentVariable("APPID", EnvironmentVariableTarget.Machine);
+            appid = Environment.GetEnvironmentVariable("APPID");
 
 
             CosXmlConfig config = new CosXmlConfig.Builder()
