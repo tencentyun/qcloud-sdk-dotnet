@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COSXML", "COSXML\COSXML.csproj", "{FC694C68-F0E3-411F-8E6C-2E9F94826016}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COSXMLTests", "COSXMLTests\COSXMLTests.csproj", "{32F37FE7-F201-46C7-8697-4F9211045985}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FC694C68-F0E3-411F-8E6C-2E9F94826016}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC694C68-F0E3-411F-8E6C-2E9F94826016}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC694C68-F0E3-411F-8E6C-2E9F94826016}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32F37FE7-F201-46C7-8697-4F9211045985}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32F37FE7-F201-46C7-8697-4F9211045985}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32F37FE7-F201-46C7-8697-4F9211045985}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32F37FE7-F201-46C7-8697-4F9211045985}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

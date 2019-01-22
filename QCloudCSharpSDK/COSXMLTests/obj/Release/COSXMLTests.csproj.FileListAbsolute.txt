@@ -1,0 +1,2 @@
+E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXMLTests\obj\Release\COSXMLTests.csprojAssemblyReference.cache
+E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXMLTests\obj\Release\COSXMLTests.csproj.CoreCompileInputs.cache
