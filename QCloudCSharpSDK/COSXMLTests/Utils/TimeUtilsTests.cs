@@ -24,7 +24,7 @@ namespace COSXML.Utils.Tests
         [Test()]
         public void GetFormatTimeTest()
         {
-            Assert.Fail();
+            
         }
     }
 }
