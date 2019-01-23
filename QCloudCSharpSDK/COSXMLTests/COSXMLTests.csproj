@@ -57,9 +57,12 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="BucketTest.cs" />
     <Compile Include="CosXmlServerTests.cs" />
+    <Compile Include="ObjectTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QCloudServer.cs" />
+    <Compile Include="ServerTest.cs" />
     <Compile Include="Utils\TimeUtilsTests.cs" />
   </ItemGroup>
   <ItemGroup>

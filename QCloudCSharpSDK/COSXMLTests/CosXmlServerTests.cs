@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using COSXMLTests;
+using System.IO;
 
 namespace COSXML.Tests
 {
@@ -12,13 +13,14 @@ namespace COSXML.Tests
     public class CosXmlServerTests
     {
         [Test()]
-        public void GetAppid()
+        public void TestCreateFile()
         {
-            QCloudServer qCloudServer = QCloudServer.Instance();
-            Console.WriteLine(qCloudServer.appid);
-            Assert.AreEqual(123, qCloudServer.appid);
+            string path = QCloudServer.CreateFile("test.txt", 1024 * 1024 * 2);
+            FileInfo fileInfo = new FileInfo(path);
+            DirectoryInfo directoryInfo = fileInfo.Directory;
+            Console.WriteLine(path);
+            Console.WriteLine(directoryInfo.FullName);
         }
-        
     }
 }
 

@@ -1,7 +1,10 @@
 ﻿using COSXML;
 using COSXML.Auth;
+using COSXML.Common;
+using COSXML.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -17,8 +20,8 @@ namespace COSXMLTests
     public class QCloudServer
     {
         internal CosXml cosXml;
-        internal string bucketForBucketAPI;
-        internal string bucketForObjectAPI;
+        internal string bucketForBucketTest;
+        internal string bucketForObjectTest;
         internal string region;
         internal string appid;
 
@@ -26,11 +29,12 @@ namespace COSXMLTests
 
         private QCloudServer()
         {
-            string secretId = "";
-            string secretKey = "";
-            
             appid = Environment.GetEnvironmentVariable("APPID");
-
+            string secretId = Environment.GetEnvironmentVariable("SECRETID");
+            string secretKey = Environment.GetEnvironmentVariable("SECRETKEY");
+            region = Environment.GetEnvironmentVariable("REGION");
+            bucketForBucketTest = Environment.GetEnvironmentVariable("BUCKETONE");
+            bucketForObjectTest = Environment.GetEnvironmentVariable("BUCKETTWO");
 
             CosXmlConfig config = new CosXmlConfig.Builder()
                 .SetAppid(appid)
@@ -57,6 +61,23 @@ namespace COSXMLTests
 
             }
             return instance;
+        }
+
+        public static string CreateFile(string filename, long size)
+        {
+            try
+            {
+                string path = null;
+                FileStream fs = new FileStream(filename, FileMode.Create);
+                fs.SetLength(size);
+                path = fs.Name;
+                fs.Close();
+                return path;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
