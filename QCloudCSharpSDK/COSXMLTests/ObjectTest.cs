@@ -1130,6 +1130,7 @@ namespace COSXMLTests
 
             string key = "objecttest.txt";
             string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 4);
+            Console.WriteLine(srcPath);
             FileInfo fileInfo = new FileInfo(srcPath);
             DirectoryInfo directoryInfo = fileInfo.Directory;
             Console.WriteLine(srcPath);
@@ -1149,6 +1150,7 @@ namespace COSXMLTests
             OptionObject(instance.cosXml, instance.bucketForObjectTest, key);
 
             string localDir = directoryInfo.FullName;
+            Console.WriteLine(localDir);
             GetObject(instance.cosXml, instance.bucketForObjectTest, key, localDir, "download.txt");
 
             DeleteObject(instance.cosXml, instance.bucketForObjectTest, key);

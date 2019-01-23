@@ -36,6 +36,15 @@ namespace COSXMLTests
             bucketForBucketTest = Environment.GetEnvironmentVariable("BUCKETONE");
             bucketForObjectTest = Environment.GetEnvironmentVariable("BUCKETTWO");
 
+            if (appid == null)
+            {
+                appid = Environment.GetEnvironmentVariable("APPID", EnvironmentVariableTarget.Machine);
+                secretId = Environment.GetEnvironmentVariable("SECRETID", EnvironmentVariableTarget.Machine);
+                secretKey = Environment.GetEnvironmentVariable("SECRETKEY", EnvironmentVariableTarget.Machine);
+                region = Environment.GetEnvironmentVariable("REGION", EnvironmentVariableTarget.Machine);
+                bucketForBucketTest = Environment.GetEnvironmentVariable("BUCKETONE", EnvironmentVariableTarget.Machine);
+                bucketForObjectTest = Environment.GetEnvironmentVariable("BUCKETTWO", EnvironmentVariableTarget.Machine);
+            }
             CosXmlConfig config = new CosXmlConfig.Builder()
                 .SetAppid(appid)
                 .SetRegion(region)

@@ -50,10 +50,15 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                if (serverEx.statusCode != 409)
+                {
+                    Assert.Fail();
+                }
             }
         }
 
@@ -92,10 +97,15 @@ namespace COSXMLTests
                 if (clientEx != null)
                 {
                     Console.WriteLine("CosClientException: " + clientEx.Message);
+                    Assert.Fail();
                 }
                 if (serverEx != null)
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                    if (serverEx.statusCode != 409)
+                    {
+                        Assert.Fail();
+                    }
                 }
                 
                 manualResetEvent.Set();
@@ -118,10 +128,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -150,7 +162,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
 
@@ -186,10 +198,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -225,7 +239,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
 
@@ -246,10 +260,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -278,7 +294,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -314,10 +330,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
         }
 
@@ -360,7 +378,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -379,10 +397,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.StackTrace);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
         }
 
@@ -410,7 +430,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -455,10 +475,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -512,7 +534,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -533,10 +555,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -565,7 +589,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -584,10 +608,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -616,7 +642,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -650,10 +676,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -698,7 +726,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -719,10 +747,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -751,7 +781,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -772,10 +802,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -804,7 +836,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -839,10 +871,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                //Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                //Assert.Fail();
             }
 
         }
@@ -883,7 +917,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+               // Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -898,15 +932,18 @@ namespace COSXMLTests
                 //执行请求
                 GetBucketReplicationResult result = cosXml.GetBucketReplication(request);
 
+
                 Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                //Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+               // Assert.Fail();
             }
 
         }
@@ -936,7 +973,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                //Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -956,10 +993,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -989,7 +1028,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -1014,10 +1053,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -1050,7 +1091,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -1070,10 +1111,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -1102,7 +1145,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -1123,10 +1166,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -1155,7 +1200,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -1176,10 +1221,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -1208,7 +1255,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
         }
@@ -1228,10 +1275,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -1260,6 +1309,7 @@ namespace COSXMLTests
                     {
                         Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                     }
+                    Assert.Fail();
                     manualResetEvent.Set();
                 });
         }
@@ -1279,10 +1329,12 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
 
         }
@@ -1311,7 +1363,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-
+                Assert.Fail();
                 manualResetEvent.Set();
             });
 
@@ -1418,6 +1470,7 @@ namespace COSXMLTests
             AsyncDeleteBucket(instance.cosXml, instance.bucketForBucketTest);
 
             manualResetEvent.WaitOne();
+            Assert.Pass();
         }
 
        
