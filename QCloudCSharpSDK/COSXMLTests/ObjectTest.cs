@@ -19,7 +19,7 @@ namespace COSXMLTests
     [TestFixture()]
     public class ObjectTest
     {
-        ManualResetEvent manualResetEvent;
+        ManualResetEvent manualResetEvent = null;
 
         public void PutObjectWithAES256(COSXML.CosXml cosXml, string bucket, string key, string srcPath)
         {
