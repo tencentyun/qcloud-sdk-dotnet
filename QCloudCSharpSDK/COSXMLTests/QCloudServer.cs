@@ -45,6 +45,7 @@ namespace COSXMLTests
                 bucketForBucketTest = Environment.GetEnvironmentVariable("BUCKETONE", EnvironmentVariableTarget.Machine);
                 bucketForObjectTest = Environment.GetEnvironmentVariable("BUCKETTWO", EnvironmentVariableTarget.Machine);
             }
+           
             CosXmlConfig config = new CosXmlConfig.Builder()
                 .SetAppid(appid)
                 .SetRegion(region)
