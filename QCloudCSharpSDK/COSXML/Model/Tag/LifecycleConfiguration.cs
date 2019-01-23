@@ -91,10 +91,13 @@ namespace COSXML.Model.Tag
             /// </summary>
             public string prefix;
 
+            public FilterAnd filterAnd;
+
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Filter:\n");
                 stringBuilder.Append("Prefix:").Append(prefix).Append("\n");
+                if(filterAnd != null)stringBuilder.Append(filterAnd.GetInfo()).Append("\n");
                 stringBuilder.Append("}");
                 return stringBuilder.ToString();
             }
@@ -102,7 +105,14 @@ namespace COSXML.Model.Tag
 
         public sealed class FilterAnd
         {
- 
+            public string prefix;
+            public string GetInfo()
+            {
+                StringBuilder stringBuilder = new StringBuilder("{And:\n");
+                stringBuilder.Append("Prefix:").Append(prefix).Append("\n");
+                stringBuilder.Append("}");
+                return stringBuilder.ToString();
+            }
         }
 
         public sealed class Transition
@@ -145,7 +155,7 @@ namespace COSXML.Model.Tag
             /// <summary>
             /// 删除过期对象删除标记，取值为 true，false
             /// </summary>
-            public string expiredObjectDeleteMarker;
+            public bool? expiredObjectDeleteMarker;
 
             public string GetInfo()
             {

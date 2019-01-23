@@ -84,47 +84,63 @@ namespace COSXML.Transfer
                 {
                     if (rule == null) continue;
                     xmlWriter.WriteStartElement("Rule");
-                    xmlWriter.WriteElementString("ID", rule.id);
+                    if(rule.id != null) xmlWriter.WriteElementString("ID", rule.id);
                     if (rule.filter != null)
                     {
                         xmlWriter.WriteStartElement("Filter");
                         if(rule.filter.prefix != null) xmlWriter.WriteElementString("Prefix", rule.filter.prefix);
+                        if (rule.filter.filterAnd != null)
+                        {
+                            xmlWriter.WriteStartElement("And");
+                            if (rule.filter.filterAnd.prefix != null) xmlWriter.WriteElementString("Prefix", rule.filter.filterAnd.prefix);
+                            xmlWriter.WriteEndElement();
+                        }
                         xmlWriter.WriteEndElement();
                     }
-                    xmlWriter.WriteElementString("Status", rule.status);
+                    if(rule.status != null) xmlWriter.WriteElementString("Status", rule.status);
                     if (rule.transition != null)
                     {
                         xmlWriter.WriteStartElement("Transition");
-                        xmlWriter.WriteElementString("Days", rule.transition.days.ToString());
-                        xmlWriter.WriteElementString("StorageClass", rule.transition.storageClass);
+                        if(rule.transition.days > 0) xmlWriter.WriteElementString("Days", rule.transition.days.ToString());
+                        if (rule.transition.storageClass != null) xmlWriter.WriteElementString("StorageClass", rule.transition.storageClass);
                         if (rule.transition.date != null) xmlWriter.WriteElementString("Date", rule.transition.date);
                         xmlWriter.WriteEndElement();
                     }
                     if (rule.expiration != null)
                     {
                         xmlWriter.WriteStartElement("Expiration");
-                        xmlWriter.WriteElementString("Days", rule.expiration.days.ToString());
-                        xmlWriter.WriteElementString("ExpiredObjectDeleteMarker", rule.expiration.expiredObjectDeleteMarker);
+                        if (rule.expiration.days > 0) xmlWriter.WriteElementString("Days", rule.expiration.days.ToString());
+                        if (rule.expiration.expiredObjectDeleteMarker != null)
+                        {
+                            if ((bool)rule.expiration.expiredObjectDeleteMarker)
+                            {
+                                xmlWriter.WriteElementString("ExpiredObjectDeleteMarker", "true");
+                            }
+                            else
+                            {
+                                xmlWriter.WriteElementString("ExpiredObjectDeleteMarker", "false");
+                            }
+                        } 
                         if (rule.expiration.date != null) xmlWriter.WriteElementString("Date", rule.expiration.date);
                         xmlWriter.WriteEndElement();
                     }
                     if (rule.noncurrentVersionTransition != null)
                     {
                         xmlWriter.WriteStartElement("NoncurrentVersionTransition");
-                        xmlWriter.WriteElementString("NoncurrentDays", rule.noncurrentVersionTransition.noncurrentDays.ToString());
-                        xmlWriter.WriteElementString("StorageClass", rule.noncurrentVersionTransition.storageClass);
+                        if(rule.noncurrentVersionTransition.noncurrentDays > 0) xmlWriter.WriteElementString("NoncurrentDays", rule.noncurrentVersionTransition.noncurrentDays.ToString());
+                        if(rule.noncurrentVersionTransition.storageClass != null) xmlWriter.WriteElementString("StorageClass", rule.noncurrentVersionTransition.storageClass);
                         xmlWriter.WriteEndElement();
                     }
                     if (rule.noncurrentVersionExpiration != null)
                     {
                         xmlWriter.WriteStartElement("NoncurrentVersionExpiration");
-                        xmlWriter.WriteElementString("NoncurrentDays", rule.noncurrentVersionExpiration.noncurrentDays.ToString());
+                        if(rule.noncurrentVersionExpiration.noncurrentDays > 0) xmlWriter.WriteElementString("NoncurrentDays", rule.noncurrentVersionExpiration.noncurrentDays.ToString());
                         xmlWriter.WriteEndElement();
                     }
                     if (rule.abortIncompleteMultiUpload != null)
                     {
                         xmlWriter.WriteStartElement("AbortIncompleteMultipartUpload");
-                        xmlWriter.WriteElementString("DaysAfterInitiation", rule.abortIncompleteMultiUpload.daysAfterInitiation.ToString());
+                        if (rule.abortIncompleteMultiUpload.daysAfterInitiation > 0) xmlWriter.WriteElementString("DaysAfterInitiation", rule.abortIncompleteMultiUpload.daysAfterInitiation.ToString());
                         xmlWriter.WriteEndElement();
                     }
                 }

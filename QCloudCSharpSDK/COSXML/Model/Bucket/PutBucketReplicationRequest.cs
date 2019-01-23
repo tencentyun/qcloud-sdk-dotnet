@@ -65,9 +65,14 @@ namespace COSXML.Model.Bucket
                 rule.prefix = ruleStruct.prefix;
                 ReplicationConfiguration.Destination destination = new ReplicationConfiguration.Destination();
                 destination.storageClass = ruleStruct.storageClass;
+                string bucketName = ruleStruct.bucket;
+                if (ruleStruct.bucket.EndsWith("-" + ruleStruct.appid))
+                {
+                    bucketName = ruleStruct.bucket.Replace("-" + ruleStruct.appid, "");
+                }
                 StringBuilder bucket = new StringBuilder();
                 bucket.Append("qcs:id/0:cos:").Append(ruleStruct.region).Append(":appid/")
-                        .Append(ruleStruct.appid).Append(":").Append(ruleStruct.bucket);
+                        .Append(ruleStruct.appid).Append(":").Append(bucketName);
                 destination.bucket = bucket.ToString();
                 rule.destination = destination;
                 replicationConfiguration.rules.Add(rule);

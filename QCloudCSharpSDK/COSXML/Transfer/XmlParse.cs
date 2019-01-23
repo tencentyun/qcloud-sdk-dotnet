@@ -484,7 +484,11 @@ namespace COSXML.Transfer
                         else if ("ExpiredObjectDeleteMarker".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
                             xmlReader.Read();
-                            expiration.expiredObjectDeleteMarker = xmlReader.Value;
+                            bool expiredObjectDeleteMarker = false;
+                            if (bool.TryParse(xmlReader.Value, out expiredObjectDeleteMarker))
+                            {
+                                expiration.expiredObjectDeleteMarker = expiredObjectDeleteMarker;
+                            }
                         }
                         else if ("AbortIncompleteMultipartUpload".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
