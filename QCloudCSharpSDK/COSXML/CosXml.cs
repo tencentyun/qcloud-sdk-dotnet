@@ -2657,6 +2657,32 @@ namespace COSXML
 
         /// <summary>
         /// restore object for cos
+        ///    try
+        ///    {
+        ///    	string bucket = "test-1253960454"; //存储桶，格式：bucketname-appid
+        ///    	string key = "test.txt"; //对象在存储桶中的位置，即称对象键.
+        ///    	RestoreObjectRequest request = new RestoreObjectRequest(bucket, key);
+        ///    	//设置签名有效时长
+        ///    	request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+        ///    	//恢复时间
+        ///    	request.SetExpireDays(3);
+        ///    	request.SetTier(COSXML.Model.Tag.RestoreConfigure.Tier.Bulk);
+        ///    
+        ///    	//执行请求
+        ///    	RestoreObjectResult result = cosXml.RestoreObject(request);
+        ///    	//请求成功
+        ///        Console.WriteLine(result.GetResultInfo());
+        ///    }
+        ///    catch (COSXML.CosException.CosClientException clientEx)
+        ///    {	
+        ///    	//请求失败
+        ///    	Console.WriteLine("CosClientException: " + clientEx.Message);
+        ///    }
+        ///    catch (COSXML.CosException.CosServerException serverEx)
+        ///    {
+        ///    	//请求失败
+        ///    	Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+        ///    }
         /// </summary>
         /// <param name="request">RestoreObjectRequest</param>
         /// <returns>RestoreObjectResult</returns>
@@ -2664,6 +2690,42 @@ namespace COSXML
         /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception>
         RestoreObjectResult RestoreObject(RestoreObjectRequest request);
 
+        /// <summary>
+        /// restore object for cos
+        ///    //异步方法
+        ///    string bucket = "test-1253960454"; //存储桶，格式：bucketname-appid
+        ///    string key = "test.txt"; //对象在存储桶中的位置，即称对象键.
+        ///    RestoreObjectRequest request = new RestoreObjectRequest(bucket, key);
+        ///    //设置签名有效时长
+        ///    request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+        ///    //恢复时间
+        ///    request.SetExpireDays(3);
+        ///    request.SetTier(COSXML.Model.Tag.RestoreConfigure.Tier.Bulk);
+        ///    //执行请求
+        ///    cosXml.RestoreObject(request,
+        ///    	delegate(COSXML.Model.CosResult cosResult)
+        ///    	{
+        ///    		//请求成功
+        ///    		RestoreObjectResult result = cosResult as RestoreObjectResult;
+        ///    		Console.WriteLine(result.GetResultInfo());
+        ///    
+        ///    	}, 
+        ///    	delegate(COSXML.CosException.CosClientException clientEx, COSXML.CosException.CosServerException serverEx)
+        ///    	{	
+        ///    		//请求失败
+        ///    		if (clientEx != null)
+        ///    		{
+        ///    			Console.WriteLine("CosClientException: " + clientEx.Message);
+        ///    		}
+        ///    		else if (serverEx != null)
+        ///    		{
+        ///    			Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+        ///    		}
+        ///    });
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="successCallback"></param>
+        /// <param name="failCallback"></param>
         void RestoreObject(RestoreObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         void Cancel(CosRequest cosRequest);

@@ -484,7 +484,16 @@ namespace COSXML
                     long currentTimeSecond = TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
                     signTime = String.Format("{0};{1}", currentTimeSecond, currentTimeSecond + signDurationSecond);
                 }
-                return CosXmlSigner.GenerateSign(method, key, queryParameters, headers, signTime, qcloudCredentailProvider.GetQCloudCredentials());
+                Dictionary<string, string> encodeQuery = null;
+                if (queryParameters != null)
+                {
+                    encodeQuery = new Dictionary<string, string>(queryParameters.Count);
+                    foreach (KeyValuePair<string, string> keyValuePair in queryParameters)
+                    {
+                        encodeQuery[keyValuePair.Key] = URLEncodeUtils.Encode(keyValuePair.Value);
+                    }
+                }
+                return CosXmlSigner.GenerateSign(method, key, encodeQuery, headers, signTime, qcloudCredentailProvider.GetQCloudCredentials());
             }
             catch (CosClientException)
             {
@@ -546,9 +555,22 @@ namespace COSXML
                     preSignatureStruct.key = "/" + preSignatureStruct.key;
                 }
                 urlBuilder.Append(preSignatureStruct.key);
-                string url = urlBuilder.ToString();
-                string sign = GenerateSign(preSignatureStruct.httpMethod, preSignatureStruct.key, preSignatureStruct.queryParameters, preSignatureStruct.headers, preSignatureStruct.signDurationSecond);
-                return url + "?sign=" + URLEncodeUtils.Encode(sign);
+
+                string sign = GenerateSign(preSignatureStruct.httpMethod, preSignatureStruct.key, 
+                    preSignatureStruct.queryParameters, preSignatureStruct.headers, preSignatureStruct.signDurationSecond);
+
+                StringBuilder queryBuilder = new StringBuilder();
+                if (preSignatureStruct.queryParameters != null && preSignatureStruct.queryParameters.Count > 0)
+                {
+                    foreach (KeyValuePair<string, string> keyValuePair in preSignatureStruct.queryParameters)
+                    {
+                        queryBuilder.Append(keyValuePair.Key).Append('=').Append(URLEncodeUtils.Encode(keyValuePair.Value));
+                        queryBuilder.Append('&');
+                    }
+                }
+                queryBuilder.Append(sign);
+                urlBuilder.Append("?").Append(queryBuilder.ToString());
+                return urlBuilder.ToString();
             }
             catch (CosClientException)
             {

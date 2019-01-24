@@ -58,6 +58,11 @@ namespace COSXML.Transfer
             this.sliceSize = sliceSize;
         }
 
+        public void SetSrcPath(string srcPath)
+        {
+            SetSrcPath(srcPath, -1L, -1L);
+        }
+
         public void SetSrcPath(string srcPath, long fileOffset, long contentLength)
         {
             this.srcPath = srcPath;
