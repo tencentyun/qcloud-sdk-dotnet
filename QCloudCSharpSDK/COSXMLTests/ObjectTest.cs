@@ -1126,14 +1126,18 @@ namespace COSXMLTests
         [Test()]
         public void testObject()
         {
+
             QCloudServer instance = QCloudServer.Instance();
 
             string key = "objecttest.txt";
-            string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 4);
-            Console.WriteLine(srcPath);
+            string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 1);
             FileInfo fileInfo = new FileInfo(srcPath);
             DirectoryInfo directoryInfo = fileInfo.Directory;
+            QCloudServer.DeleteAllFile(directoryInfo.FullName, "*.txt");
             Console.WriteLine(srcPath);
+            srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 1);
+            fileInfo = new FileInfo(srcPath);
+            directoryInfo = fileInfo.Directory;
             PutObject(instance.cosXml, instance.bucketForObjectTest, key, @srcPath);
 
             PutObjectWithAES256(instance.cosXml, instance.bucketForObjectTest, "aes256_" + key, @srcPath);
@@ -1153,6 +1157,8 @@ namespace COSXMLTests
             Console.WriteLine(localDir);
             GetObject(instance.cosXml, instance.bucketForObjectTest, key, localDir, "download.txt");
 
+            QCloudServer.DeleteFile(localDir + Path.DirectorySeparatorChar + "download.txt");
+
             DeleteObject(instance.cosXml, instance.bucketForObjectTest, key);
 
             key = "multiObjecttest.txt";
@@ -1169,9 +1175,9 @@ namespace COSXMLTests
             key = "copy_" + key;
             CopyObject(instance.cosXml, instance.bucketForObjectTest, key, copySource);
 
-            
+
             DeleteObject(instance.cosXml, instance.bucketForObjectTest, key);
-            
+
             key = "multi_" + key;
             PartCopyObject(instance.cosXml, instance.bucketForObjectTest, key, copySource);
             DeleteObject(instance.cosXml, instance.bucketForObjectTest, key);
@@ -1182,6 +1188,8 @@ namespace COSXMLTests
             List<string> keys = new List<string>();
             keys.Add(key);
             MultiDeleteObject(instance.cosXml, instance.bucketForObjectTest, keys);
+
+            QCloudServer.DeleteFile(srcPath);
 
             Assert.Pass();
 

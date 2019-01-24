@@ -89,5 +89,31 @@ namespace COSXMLTests
                 throw;
             }
         }
+
+        public static void DeleteFile(string path)
+        {
+            FileInfo fileInfo = new FileInfo(path);
+            if (fileInfo.Exists)
+            {
+                fileInfo.Delete();
+            }
+        }
+
+        public static void DeleteAllFile(string dirPath, string regix)
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(dirPath);
+            if (directoryInfo.Exists)
+            {
+                FileInfo[] files = directoryInfo.GetFiles(regix);
+                if (files != null && files.Length > 0)
+                {
+                    for (int i = 0, count = files.Length; i < count; i++)
+                    {
+                        Console.WriteLine(files[i].Name);
+                        files[i].Delete();
+                    }
+                }
+            }
+        }
     }
 }
