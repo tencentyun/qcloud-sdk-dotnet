@@ -1,3 +1,7 @@
+# qcloud-sdk-dotnet
+
+![Github](https://img.shields.io/github/release/tencentyun/qcloud-sdk-dotnet.svg)
+
 腾讯云 .NET SDK 发布仓库
 
 ## 产品列表
