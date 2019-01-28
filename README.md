@@ -1,6 +1,6 @@
 # qcloud-sdk-dotnet
 
-![Github](https://img.shields.io/github/release/tencentyun/qcloud-sdk-dotnet.svg)
+![Github](https://img.shields.io/github/release/tencentyun/qcloud-sdk-dotnet.svg)  ![TravisCI](https://travis-ci.org/tencentyun/qcloud-sdk-dotnet.svg?branch=master)
 
 腾讯云 .NET SDK 发布仓库
 
