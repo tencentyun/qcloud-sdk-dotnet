@@ -7,4 +7,3 @@ E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\obj\Debug\COSXML.cspro
 E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\obj\Debug\COSXML.csproj.CopyComplete
 E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\obj\Debug\COSXML.dll
 E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\obj\Debug\COSXML.pdb
-E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\obj\Debug\COSXML.csprojAssemblyReference.cache

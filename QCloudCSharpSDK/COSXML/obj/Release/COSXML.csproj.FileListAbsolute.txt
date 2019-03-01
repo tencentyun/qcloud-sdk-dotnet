@@ -1,0 +1,10 @@
+E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\bin\Release\COSXML.xml
+E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\bin\Release\COSXML.dll
+E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\bin\Release\COSXML.pdb
+E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\bin\Release\Newtonsoft.Json.dll
+E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\bin\Release\Newtonsoft.Json.pdb
+E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\bin\Release\Newtonsoft.Json.xml
+E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\obj\Release\COSXML.csproj.CoreCompileInputs.cache
+E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\obj\Release\COSXML.csproj.CopyComplete
+E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\obj\Release\COSXML.dll
+E:\COS_SDK\COSXML\qcloud-sdk-donet\QCloudCSharpSDK\COSXML\obj\Release\COSXML.pdb
