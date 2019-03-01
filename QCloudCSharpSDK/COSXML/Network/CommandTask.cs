@@ -53,6 +53,8 @@ namespace COSXML.Network
                 //step1: create HttpWebRequest by request.url
                 httpWebRequest = HttpWebRequest.Create(request.RequestUrlString) as HttpWebRequest;
 
+                //httpWebRequest.AllowWriteStreamBuffering = false;
+
                 //bind webRequest
                 request.BindHttpWebRequest(httpWebRequest);
 
@@ -82,14 +84,14 @@ namespace COSXML.Network
                 }
                 else
                 {
-                    QLog.E(TAG, webEx.Message, webEx);
+                    //QLog.E(TAG, webEx.Message, webEx);
                     throw;
                 }
                 
             }
             catch (Exception ex)
             {
-                QLog.E(TAG, ex.Message, ex);
+                //QLog.E(TAG, ex.Message, ex);
                 throw;
             }
             finally
@@ -102,11 +104,9 @@ namespace COSXML.Network
                 }
                 if (httpWebRequest != null)
                 {
-                    //print log
-                    PrintReqeustInfo(httpWebRequest);
                     httpWebRequest.Abort();
                 }
-                QLog.D(TAG, "close");
+                //QLog.D(TAG, "close");
             }
  
         }
@@ -120,6 +120,10 @@ namespace COSXML.Network
         private static void HandleHttpWebRequest(HttpWebRequest httpWebRequest, Request request, HttpClientConfig config)
         {
             HandleHttpWebRequestHeaders(request, httpWebRequest, config);
+
+            //print request start log
+            PrintReqeustInfo(httpWebRequest);
+
             //setp5: send request content: body
             if (request.Body != null)
             {
@@ -162,6 +166,8 @@ namespace COSXML.Network
                 requestState.response = response;
 
                 httpWebRequest = WebRequest.Create(request.RequestUrlString) as HttpWebRequest;
+
+                httpWebRequest.AllowWriteStreamBuffering = false;
 
                 //bind webRequest
                 request.BindHttpWebRequest(httpWebRequest);
@@ -505,7 +511,8 @@ namespace COSXML.Network
                     // Specify the internal method name for adding headers
                     // mono: AddWithoutValidate
                     // win: AddInternal
-                    var internalMethodName = (isMonoPlatform == false) ? "AddWithoutValidate" : "AddInternal";
+                    //var internalMethodName = (isMonoPlatform == false) ? "AddWithoutValidate" : "AddInternal";
+                    var internalMethodName = "AddWithoutValidate";
                     QLog.D(TAG, internalMethodName.ToString());
                     var method = typeof(WebHeaderCollection).GetMethod(
                         internalMethodName,

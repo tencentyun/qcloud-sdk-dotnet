@@ -22,10 +22,9 @@ namespace COSXML.Model.Object
         private Delete delete;
 
         public DeleteMultiObjectRequest(string bucket)
-            : base(bucket, null)
+            : base(bucket, "/")
         {
             this.method = CosRequestMethod.POST;
-            this.path = "/";
             this.needMD5 = true;
             this.queryParameters.Add("delete", null);
             delete = new Delete();
@@ -61,7 +60,7 @@ namespace COSXML.Model.Object
         /// <param name="versionId"></param>
         public void SetDeleteKey(string key, string versionId)
         {
-            if (key != null)
+            if (!String.IsNullOrEmpty(key))
             {
                 if (key.StartsWith("/"))
                 {
@@ -75,6 +74,7 @@ namespace COSXML.Model.Object
                 }
                 delete.deleteObjects.Add(deleteObject);
             }
+            
         }
         /// <summary>
         /// 删除对象
@@ -107,7 +107,7 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
-            if (delete.deleteObjects.Count == 0) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "delete keys = null");
+            if (delete.deleteObjects.Count == 0) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "delete keys（null or empty) is invalid");
             base.CheckParameters();
         }
 

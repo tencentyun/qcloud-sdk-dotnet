@@ -23,7 +23,7 @@ namespace COSXML.Transfer
 
         public OnState onState;
 
-        protected static CosXml cosXmlServer;
+        protected CosXml cosXmlServer;
 
         protected string bucket;
 
@@ -36,10 +36,11 @@ namespace COSXML.Transfer
         protected TaskState taskState;
         protected Object syncTaskState = new Object();
 
-        public static void InitCosXmlServer(CosXml cosXml)
+        public void InitCosXmlServer(CosXml cosXml)
         {
             cosXmlServer = cosXml;
         }
+
 
         public COSXMLTask(string bucket, string region, string key)
         {

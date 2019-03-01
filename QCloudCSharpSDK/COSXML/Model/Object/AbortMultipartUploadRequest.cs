@@ -18,7 +18,8 @@ namespace COSXML.Model.Object
         /// </summary>
         private string uploadId;
 
-        public AbortMultipartUploadRequest(string bucket, string key, string uploadId) : base(bucket, key)
+        public AbortMultipartUploadRequest(string bucket, string key, string uploadId) 
+            : base(bucket, key)
         {
             this.uploadId = uploadId;
             this.method = CosRequestMethod.DELETE;

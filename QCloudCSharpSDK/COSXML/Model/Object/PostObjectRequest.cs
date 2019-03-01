@@ -353,7 +353,7 @@ namespace COSXML.Model.Object
 
             public void CheckParameter()
             {
-                if (key == null) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "FormStruct.key = null");
+                if (String.IsNullOrEmpty(key)) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "FormStruct.key(null or empty) is invalid");
                 if (srcPath == null && data == null)
                 {
                     throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "data source = null");

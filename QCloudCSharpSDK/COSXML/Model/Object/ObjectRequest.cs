@@ -25,7 +25,7 @@ namespace COSXML.Model.Object
         public ObjectRequest(string bucket, string key)
         {
             this.bucket = bucket;
-            if (key != null && !key.StartsWith("/"))
+            if (!String.IsNullOrEmpty(key) && !key.StartsWith("/"))
             {
                 this.path = "/" + key;
             }
@@ -100,17 +100,17 @@ namespace COSXML.Model.Object
             //{
             //    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "appid is null");
             //}
-            if (bucket == null)
+            if (bucket == null || bucket.Length < 1)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "bucket is null");
             }
-            if (region == null)
+            if (region == null || region.Length < 1)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "region is null");
             }
-            if (path == null)
+            if (path == null || path.Length < 1)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "cosPath is null");
+                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "cosPath(null or empty)is invalid");
             }
         }
 
