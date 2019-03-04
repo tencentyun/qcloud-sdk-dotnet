@@ -3,8 +3,8 @@
 *.user
 
 #folder
-./QCloudCSharpSDK/COSXML/bin
-./QCloudCSharpSDK/COSXML/obj
-./QCloudCSharpSDK/COSXMLTests/obj
-./QCloudCSharpSDK/COSXMLTests/bin
+QCloudCSharpSDK/COSXML/bin
+QCloudCSharpSDK/COSXML/obj
+QCloudCSharpSDK/COSXMLTests/obj
+QCloudCSharpSDK/COSXMLTests/bin
 *.vs

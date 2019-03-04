@@ -53,8 +53,6 @@ namespace COSXML.Network
                 //step1: create HttpWebRequest by request.url
                 httpWebRequest = HttpWebRequest.Create(request.RequestUrlString) as HttpWebRequest;
 
-                //httpWebRequest.AllowWriteStreamBuffering = false;
-
                 //bind webRequest
                 request.BindHttpWebRequest(httpWebRequest);
 
@@ -166,8 +164,6 @@ namespace COSXML.Network
                 requestState.response = response;
 
                 httpWebRequest = WebRequest.Create(request.RequestUrlString) as HttpWebRequest;
-
-                httpWebRequest.AllowWriteStreamBuffering = false;
 
                 //bind webRequest
                 request.BindHttpWebRequest(httpWebRequest);
