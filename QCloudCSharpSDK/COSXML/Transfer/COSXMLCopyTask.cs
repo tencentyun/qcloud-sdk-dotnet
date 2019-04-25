@@ -17,8 +17,8 @@ namespace COSXML.Transfer
 {
     public sealed class COSXMLCopyTask : COSXMLTask, OnMultipartUploadStateListener
     {
-        private int divisionSize;
-        private int sliceSize;
+        private long divisionSize;
+        private long sliceSize;
         private CopySourceStruct copySource;
 
         private HeadObjectRequest headObjectRequest;
@@ -51,7 +51,7 @@ namespace COSXML.Transfer
             this.copySource = copySource;
         }
 
-        internal void SetDivision(int divisionSize, int sliceSize)
+        internal void SetDivision(long divisionSize, long sliceSize)
         {
             this.divisionSize = divisionSize;
             this.sliceSize = sliceSize;
@@ -83,7 +83,6 @@ namespace COSXML.Transfer
             }
             headObjectRequest = new HeadObjectRequest(copySource.bucket, copySource.key);
             headObjectRequest.Region = copySource.region;
-            headObjectRequest.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
             cosXmlServer.HeadObject(headObjectRequest, delegate(CosResult cosResult)
             {
                 lock (syncExit)
@@ -134,7 +133,6 @@ namespace COSXML.Transfer
         {
             copyObjectRequest = new CopyObjectRequest(bucket, key);
             copyObjectRequest.SetCopyMetaDataDirective(Common.CosMetaDataDirective.COPY);
-            copyObjectRequest.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
             copyObjectRequest.SetCopySource(copySource);
             cosXmlServer.CopyObject(copyObjectRequest, delegate(CosResult cosResult)
             {
@@ -197,7 +195,6 @@ namespace COSXML.Transfer
         private void InitMultiUploadPart()
         {
             initMultiUploadRequest = new InitMultipartUploadRequest(bucket, key);
-            initMultiUploadRequest.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
             cosXmlServer.InitMultipartUpload(initMultiUploadRequest, delegate(CosResult cosResult)
             {
                 lock (syncExit)
@@ -234,7 +231,6 @@ namespace COSXML.Transfer
         private void ListParts()
         {
             listPartsRequest = new ListPartsRequest(bucket, key, uploadId);
-            listPartsRequest.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
             cosXmlServer.ListParts(listPartsRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
@@ -279,7 +275,6 @@ namespace COSXML.Transfer
                 if (!sliceStruct.isAlreadyUpload)
                 {
                     UploadPartCopyRequest uploadPartCopyRequest = new UploadPartCopyRequest(bucket, key, sliceStruct.partNumber, uploadId);
-                    uploadPartCopyRequest.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
                     uploadPartCopyRequest.SetCopySource(copySource);
                     uploadPartCopyRequest.SetCopyRange(sliceStruct.sliceStart, sliceStruct.sliceEnd);
                     uploadCopyCopyRequestList.Add(uploadPartCopyRequest);
@@ -404,7 +399,6 @@ namespace COSXML.Transfer
             {
                 completeMultiUploadRequest.SetPartNumberAndETag(sliceStruct.partNumber, sliceStruct.eTag); // partNumberEtag 有序的
             }
-            completeMultiUploadRequest.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
             cosXmlServer.CompleteMultiUpload(completeMultiUploadRequest, delegate(CosResult result)
             {
                 lock (syncExit)

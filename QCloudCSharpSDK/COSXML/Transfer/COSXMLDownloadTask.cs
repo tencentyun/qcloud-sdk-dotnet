@@ -51,7 +51,6 @@ namespace COSXML.Transfer
             UpdateTaskState(TaskState.WAITTING);
             //对象是否存在
             headObjectRequest = new HeadObjectRequest(bucket, key);
-            headObjectRequest.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
             cosXmlServer.HeadObject(headObjectRequest, delegate(CosResult cosResult)
             {
                 lock (syncExit)
@@ -94,7 +93,6 @@ namespace COSXML.Transfer
         private void GetObject()
         {
             getObjectRequest = new GetObjectRequest(bucket, key, localDir, localFileName);
-            getObjectRequest.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
             if (progressCallback != null)
             {
                 getObjectRequest.SetCosProgressCallback(progressCallback);
