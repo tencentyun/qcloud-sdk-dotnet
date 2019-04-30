@@ -8,6 +8,7 @@ using COSXML.Common;
 using COSXML.Utils;
 using COSXML.Model.Tag;
 using COSXML.Log;
+using System.Threading;
 /**
 * Copyright (c) 2018 Tencent Cloud. All rights reserved.
 * 11/29/2018 4:58:32 PM
@@ -19,6 +20,9 @@ namespace COSXML.Transfer
     {
         private long divisionSize;
         private long sliceSize;
+
+        private const int MAX_ACTIVIE_TASKS = 2;
+        private volatile int activieTasks = 0;
 
         private long sendOffset = 0L;
         private long sendContentLength = -1L; // 实际要发送的总长度，类似于content-length
@@ -259,6 +263,7 @@ namespace COSXML.Transfer
 
         private void UploadPart()
         {
+            activieTasks = 0;
             int size = sliceList.Count;
             sliceCount = size;
             uploadPartRequestMap = new Dictionary<UploadPartRequest, long>(size);
@@ -273,6 +278,10 @@ namespace COSXML.Transfer
                     }
                 }
                 SliceStruct sliceStruct = sliceList[i];
+                while (activieTasks > MAX_ACTIVIE_TASKS)
+                {
+                    Thread.Sleep(5);
+                }
                 if (!sliceStruct.isAlreadyUpload)
                 {
                     UploadPartRequest uploadPartRequest = new UploadPartRequest(bucket, key, sliceStruct.partNumber, uploadId, srcPath, sliceStruct.sliceStart,
@@ -293,6 +302,9 @@ namespace COSXML.Transfer
                     uploadPartRequestMap.Add(uploadPartRequest, 0);
                     uploadPartRequestList.Add(uploadPartRequest);
 
+
+                    activieTasks++;
+
                     cosXmlServer.UploadPart(uploadPartRequest, delegate (CosResult result)
                     {
                         lock (syncExit)
@@ -302,6 +314,7 @@ namespace COSXML.Transfer
                                 return;
                             }
                         }
+                        activieTasks--;
                         UploadPartResult uploadPartResult = result as UploadPartResult;
                         sliceStruct.eTag = uploadPartResult.eTag;
                         lock (syncPartCopyCount)
@@ -323,6 +336,7 @@ namespace COSXML.Transfer
                                 return;
                             }
                         }
+                        activieTasks--;
                         if (UpdateTaskState(TaskState.FAILED))
                         {
                             OnFailed(clientEx, serverEx);

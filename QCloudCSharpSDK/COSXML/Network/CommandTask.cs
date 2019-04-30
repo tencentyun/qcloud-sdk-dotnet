@@ -99,12 +99,14 @@ namespace COSXML.Network
                     // print log
                     PrintResponseInfo(httpWebResponse);
                     httpWebResponse.Close();
+                    QLog.D("XIAO", "response close");
                 }
                 if (httpWebRequest != null)
                 {
                     httpWebRequest.Abort();
+                    QLog.D("XIAO", "request close");
                 }
-                //QLog.D(TAG, "close");
+                QLog.D(TAG, "close");
             }
  
         }

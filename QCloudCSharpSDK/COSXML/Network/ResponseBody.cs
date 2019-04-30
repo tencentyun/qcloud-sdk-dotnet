@@ -91,8 +91,16 @@ namespace COSXML.Network
             }
             finally
             {
-                if (inputStream != null) inputStream.Close();
-                if (fileStream != null) fileStream.Close();
+                if (inputStream != null)
+                {
+                    inputStream.Close();
+                    inputStream.Dispose();
+                }
+                if (fileStream != null)
+                {
+                    fileStream.Close();
+                    fileStream.Dispose();
+                }
                 //if (memoryStream != null) memoryStream.Close();
             }
         }
@@ -125,8 +133,16 @@ namespace COSXML.Network
             {
                 responseBodyState.endResponseBody(false, ex);
                 responseBodyState.Clear();
-                if (fileStream != null) fileStream.Close();
-                if (memoryStream != null) memoryStream.Close();
+                if (fileStream != null)
+                {
+                    fileStream.Close();
+                    fileStream.Dispose();
+                }
+                if (memoryStream != null)
+                {
+                    memoryStream.Close();
+                    memoryStream.Dispose();
+                }
                 QLog.E("ResponseBody", ex.Message, ex);
             }
             
@@ -162,7 +178,6 @@ namespace COSXML.Network
                     if (isDownload)
                     {
                         fileStream.Flush();
-                        fileStream.Close();
                     }
                     else
                     {
@@ -172,16 +187,32 @@ namespace COSXML.Network
 
                     responseBodyState.endResponseBody(true, null);
                     responseBodyState.Clear();
-                    if (fileStream != null) fileStream.Close();
-                    if (memoryStream != null) memoryStream.Close();
+                    if (fileStream != null)
+                    {
+                        fileStream.Close();
+                        fileStream.Dispose();
+                    }
+                    if (memoryStream != null)
+                    {
+                        memoryStream.Close();
+                        memoryStream.Dispose();
+                    }
                 }
             }
             catch (Exception ex)
             {
                 responseBodyState.endResponseBody(false, ex);
                 responseBodyState.Clear();
-                if (fileStream != null) fileStream.Close();
-                if (memoryStream != null) memoryStream.Close();
+                if (fileStream != null)
+                {
+                    fileStream.Close();
+                    fileStream.Dispose();
+                }
+                if (memoryStream != null)
+                {
+                    memoryStream.Close();
+                    memoryStream.Dispose();
+                }
                 QLog.E("ResponseBody", ex.Message, ex);
             }
 

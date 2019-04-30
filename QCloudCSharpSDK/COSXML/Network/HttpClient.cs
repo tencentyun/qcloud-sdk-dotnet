@@ -14,6 +14,8 @@ using COSXML.Log;
 using System.IO;
 using COSXML.Model.Object;
 using COSXML.Utils;
+using Tencent.QCloud.Cos.Sdk.Network;
+using System.Threading;
 /**
 * Copyright (c) 2018 Tencent Cloud. All rights reserved.
 * 11/6/2018 8:52:29 PM
@@ -33,6 +35,9 @@ namespace COSXML.Network
         private static HttpClient instance;
         private static Object sync = new Object();
         private static Object syncInstance = new Object();
+        private TaskManager taskManager = TaskManager.getInstance();
+        private const int MAX_ACTIVIE_TASKS = 5;
+        private volatile int activieTasks = 0;
 
         public static HttpClient GetInstance()
         {
@@ -78,6 +83,61 @@ namespace COSXML.Network
         /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception>
         /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
         public void Excute(CosRequest cosRequest, CosResult cosResult)
+        {
+            //HttpTask httpTask = new HttpTask();
+            //httpTask.cosRequest = cosRequest;
+            //httpTask.cosResult = cosResult;
+            //httpTask.isSchedue = false;
+            InternalExcute(cosRequest, cosResult);
+        }
+
+
+        public void Schedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback,
+            COSXML.Callback.OnFailedCallback failCallback)
+        {
+            //HttpTask httpTask = new HttpTask();
+            //httpTask.cosRequest = cosRequest;
+            //httpTask.cosResult = cosResult;
+            //httpTask.isSchedue = true;
+            //httpTask.successCallback = successCallback;
+            //httpTask.failCallback = failCallback;
+            InternalSchedue(cosRequest, cosResult, successCallback, failCallback);
+        }
+
+        private void run()
+        {
+            while (true)
+            {
+                if (activieTasks <= MAX_ACTIVIE_TASKS)
+                {
+                    HttpTask httpTask = taskManager.Dequeue();
+                    if (httpTask != null)
+                    {
+                        activieTasks++;
+                        if (httpTask.isSchedue)
+                        {
+
+                        }
+                        else
+                        {
+                        }
+                    }
+                }
+                else
+                {
+                    Thread.Sleep(5);
+                }
+            }
+        }
+
+        /// <summary>
+        /// excute request
+        /// </summary>
+        /// <param name="cosRequest"></param>
+        /// <param name="cosResult"></param>
+        /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception>
+        /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
+        public void InternalExcute(CosRequest cosRequest, CosResult cosResult)
         {
             try
             {
@@ -133,7 +193,7 @@ namespace COSXML.Network
             }
         }
 
-        public void Schedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, 
+        public void InternalSchedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, 
             COSXML.Callback.OnFailedCallback failCallback)
         {
             try
