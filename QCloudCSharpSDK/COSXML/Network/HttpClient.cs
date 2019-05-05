@@ -14,7 +14,6 @@ using COSXML.Log;
 using System.IO;
 using COSXML.Model.Object;
 using COSXML.Utils;
-using Tencent.QCloud.Cos.Sdk.Network;
 using System.Threading;
 /**
 * Copyright (c) 2018 Tencent Cloud. All rights reserved.
@@ -35,7 +34,6 @@ namespace COSXML.Network
         private static HttpClient instance;
         private static Object sync = new Object();
         private static Object syncInstance = new Object();
-        private TaskManager taskManager = TaskManager.getInstance();
         private const int MAX_ACTIVIE_TASKS = 5;
         private volatile int activieTasks = 0;
 
@@ -102,32 +100,6 @@ namespace COSXML.Network
             //httpTask.successCallback = successCallback;
             //httpTask.failCallback = failCallback;
             InternalSchedue(cosRequest, cosResult, successCallback, failCallback);
-        }
-
-        private void run()
-        {
-            while (true)
-            {
-                if (activieTasks <= MAX_ACTIVIE_TASKS)
-                {
-                    HttpTask httpTask = taskManager.Dequeue();
-                    if (httpTask != null)
-                    {
-                        activieTasks++;
-                        if (httpTask.isSchedue)
-                        {
-
-                        }
-                        else
-                        {
-                        }
-                    }
-                }
-                else
-                {
-                    Thread.Sleep(5);
-                }
-            }
         }
 
         /// <summary>
