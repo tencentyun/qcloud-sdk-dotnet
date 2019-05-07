@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>COSXML</name>
+        <name>Tencent.QCloud.Cos.Sdk.NetCore</name>
     </assembly>
     <members>
         <member name="T:COSXML.Auth.DefaultQCloudCredentialProvider">
@@ -5969,6 +5969,15 @@
             </summary>
         </member>
         <member name="M:COSXML.Network.HttpClient.Excute(COSXML.Model.CosRequest,COSXML.Model.CosResult)">
+            <summary>
+            excute request
+            </summary>
+            <param name="cosRequest"></param>
+            <param name="cosResult"></param>
+            <exception cref="T:COSXML.CosException.CosClientException">CosClientException</exception>
+            <exception cref="T:COSXML.CosException.CosServerException">CosServerException</exception>
+        </member>
+        <member name="M:COSXML.Network.HttpClient.InternalExcute(COSXML.Model.CosRequest,COSXML.Model.CosResult)">
             <summary>
             excute request
             </summary>

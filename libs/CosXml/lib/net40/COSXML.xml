@@ -5977,6 +5977,15 @@
             <exception cref="T:COSXML.CosException.CosClientException">CosClientException</exception>
             <exception cref="T:COSXML.CosException.CosServerException">CosServerException</exception>
         </member>
+        <member name="M:COSXML.Network.HttpClient.InternalExcute(COSXML.Model.CosRequest,COSXML.Model.CosResult)">
+            <summary>
+            excute request
+            </summary>
+            <param name="cosRequest"></param>
+            <param name="cosResult"></param>
+            <exception cref="T:COSXML.CosException.CosClientException">CosClientException</exception>
+            <exception cref="T:COSXML.CosException.CosServerException">CosServerException</exception>
+        </member>
         <member name="M:COSXML.Network.HttpClient.CheckSign(COSXML.Auth.QCloudSignSource,COSXML.Network.Request)">
             <summary>
             add authorization

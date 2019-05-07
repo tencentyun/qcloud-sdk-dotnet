@@ -179,12 +179,14 @@
     <Compile Include="Network\HttpClient.cs" />
     <Compile Include="Network\HttpClientConfig.cs" />
     <Compile Include="Network\HttpMethod.cs" />
+    <Compile Include="Network\HttpTask.cs" />
     <Compile Include="Network\HttpUrl.cs" />
     <Compile Include="Network\Request.cs" />
     <Compile Include="Network\RequestBody.cs" />
     <Compile Include="Network\Response.cs" />
     <Compile Include="Network\ResponseBody.cs" />
     <Compile Include="Network\RetryStrategy.cs" />
+    <Compile Include="Network\TaskManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transfer\COSXMLCopyTask.cs" />
     <Compile Include="Transfer\COSXMLDownloadTask.cs" />

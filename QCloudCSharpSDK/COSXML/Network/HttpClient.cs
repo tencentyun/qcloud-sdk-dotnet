@@ -14,7 +14,6 @@ using COSXML.Log;
 using System.IO;
 using COSXML.Model.Object;
 using COSXML.Utils;
-using System.Threading;
 /**
 * Copyright (c) 2018 Tencent Cloud. All rights reserved.
 * 11/6/2018 8:52:29 PM
@@ -101,6 +100,7 @@ namespace COSXML.Network
             //httpTask.failCallback = failCallback;
             InternalSchedue(cosRequest, cosResult, successCallback, failCallback);
         }
+
 
         /// <summary>
         /// excute request

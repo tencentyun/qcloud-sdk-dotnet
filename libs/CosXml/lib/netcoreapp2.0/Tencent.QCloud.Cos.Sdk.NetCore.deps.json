@@ -6,12 +6,12 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.0": {
-      "COSXML/1.0.0": {
+      "Tencent.QCloud.Cos.Sdk.NetCore/1.0.0": {
         "dependencies": {
           "Newtonsoft.Json": "12.0.1"
         },
         "runtime": {
-          "COSXML.dll": {}
+          "Tencent.QCloud.Cos.Sdk.NetCore.dll": {}
         }
       },
       "Newtonsoft.Json/12.0.1": {
@@ -25,7 +25,7 @@
     }
   },
   "libraries": {
-    "COSXML/1.0.0": {
+    "Tencent.QCloud.Cos.Sdk.NetCore/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
