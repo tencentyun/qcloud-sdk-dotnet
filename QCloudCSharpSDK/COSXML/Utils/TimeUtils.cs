@@ -11,10 +11,11 @@ namespace COSXML.Utils
 {
     public sealed class TimeUtils
     {
+        private static readonly long epochTicks = (new DateTime(1970, 1, 1)).Ticks;
 
         public static long GetCurrentTime(TimeUnit timeUnit)
         {
-            TimeSpan timeSpan = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.UtcNow) - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+            var timeSpan = TimeSpan.FromTicks(DateTime.UtcNow.Ticks - epochTicks);
             long result = -1L;
             switch (timeUnit)
             {
