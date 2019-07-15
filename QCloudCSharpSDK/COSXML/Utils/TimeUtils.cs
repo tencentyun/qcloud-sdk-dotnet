@@ -11,10 +11,15 @@ namespace COSXML.Utils
 {
     public sealed class TimeUtils
     {
+        // utc start time
+        public static readonly DateTime UTC_START_TIME = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
+        /**
+         * 根据UTC时间戳的含义= UTC时间 - UTC起始时间
+         */
         public static long GetCurrentTime(TimeUnit timeUnit)
         {
-            TimeSpan timeSpan = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.UtcNow) - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+            TimeSpan timeSpan = DateTime.UtcNow - UTC_START_TIME;
             long result = -1L;
             switch (timeUnit)
             {
@@ -37,10 +42,13 @@ namespace COSXML.Utils
             return result;
         }
 
+        /**
+         * 先获取 对应的 UTC -> 转为 当前时区的时间
+         */
         public static string GetFormatTime(string format, long time, TimeUnit timeUnit)
         {
             DateTime end = DateTime.MinValue;
-            DateTime start = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+            DateTime start = UTC_START_TIME;
             switch (timeUnit)
             {
                 case TimeUnit.DAYS:
@@ -59,6 +67,7 @@ namespace COSXML.Utils
                     end = start.AddMilliseconds(time);
                     break;
             }
+            end = TimeZone.CurrentTimeZone.ToLocalTime(end);
             return end.ToString(format);
         }
     }
