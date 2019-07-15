@@ -93,7 +93,7 @@ namespace COSXML.Transfer
                             xmlReader.Read();
                             bucket.location = xmlReader.Value;
                         }
-                        else if ("CreateDate".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        else if ("CreationDate".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
                             xmlReader.Read();
                             bucket.createDate = xmlReader.Value;
