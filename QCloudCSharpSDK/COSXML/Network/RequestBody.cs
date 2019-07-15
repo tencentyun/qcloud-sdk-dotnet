@@ -138,7 +138,14 @@ namespace COSXML.Network
             }
             finally
             {
-                if(outputStream != null)outputStream.Close();
+                if (outputStream != null)
+                {
+                    outputStream.Flush();
+                    outputStream.Close();
+                    outputStream.Dispose();
+                    //QLog.D("XIAO", "stream close");
+                    outputStream = null;
+                }
             }
         }
 
@@ -149,23 +156,47 @@ namespace COSXML.Network
 
         public override void StartHandleRequestBody(Stream outputStream, EndRequestBody endRequestBody)
         {
-            RequestBodyState requestBodyState = new RequestBodyState();
-            requestBodyState.endRequestBody = endRequestBody;
-            requestBodyState.outputStream = outputStream;
-            requestBodyState.buffer = data;
-            int count = (int)(contentLength > SEGMENT_SIZE ? SEGMENT_SIZE : contentLength);
             try
             {
-                requestBodyState.complete = count;
-                outputStream.BeginWrite(requestBodyState.buffer, 0, count, AsyncStreamCallback, requestBodyState);
+                int completed = 0;
+                while (completed + SEGMENT_SIZE < contentLength)
+                {
+                    outputStream.Write(data, completed, SEGMENT_SIZE);
+                    outputStream.Flush();
+                    completed += SEGMENT_SIZE;
+                    if (progressCallback != null)
+                    {
+                        UpdateProgress(completed, contentLength);
+                    }
+                }
+                if (completed < contentLength)
+                {
+                    outputStream.Write(data, completed, (int)(contentLength - completed));//包括本身
+                    outputStream.Flush();
+                    if (progressCallback != null)
+                    {
+                        UpdateProgress(contentLength, contentLength);
+                    }
+                }
+                endRequestBody(null);
             }
             catch (Exception ex)
             {
-                if (outputStream != null) outputStream.Close();
-                QLog.E(TAG, ex.Message, ex);
-                requestBodyState.endRequestBody(ex);
-                requestBodyState = null;
+                endRequestBody(ex);
             }
+            finally
+            {
+               
+                if (outputStream != null)
+                {
+                    outputStream.Flush();
+                    outputStream.Close();
+                    outputStream.Dispose();
+                    //QLog.D("XIAO", "stream close");
+                    outputStream = null;
+                }
+            }
+
         }
 
         private void AsyncStreamCallback(IAsyncResult ar)
@@ -264,7 +295,7 @@ namespace COSXML.Network
             }
             finally
             {
-                
+
                 if (fileStream != null)
                 {
                     fileStream.Close();
@@ -305,40 +336,64 @@ namespace COSXML.Network
 
         public override void StartHandleRequestBody(Stream outputStream, EndRequestBody endRequestBody)
         {
-            RequestBodyState requestBodyState = new RequestBodyState();
-            requestBodyState.endRequestBody = endRequestBody;
-            requestBodyState.outputStream = outputStream;
-            requestBodyState.complete = 0;
-            int size = (int)(contentLength > SEGMENT_SIZE ? SEGMENT_SIZE : contentLength);
-            fileStream = new FileStream(srcPath, FileMode.Open, FileAccess.Read);
-            fileStream.Seek(fileOffset, SeekOrigin.Begin);
+            FileStream fileStream = null;
             try
             {
-                requestBodyState.buffer = new byte[size];// 4kb
-                long remain = contentLength - requestBodyState.complete;
+                byte[] buffer = new byte[SEGMENT_SIZE];
+                int bytesRead = 0;
+                long completed = bytesRead;
+                fileStream = new FileStream(srcPath, FileMode.Open, FileAccess.Read);
+                fileStream.Seek(fileOffset, SeekOrigin.Begin);//seek to designated position
+                long remain = contentLength - completed;
                 if (remain > 0)
                 {
-                    int count = fileStream.Read(requestBodyState.buffer, 0, (int)(requestBodyState.buffer.Length > remain ? remain : requestBodyState.buffer.Length));
-                    requestBodyState.complete = count;
-                    outputStream.BeginWrite(requestBodyState.buffer, 0, count, AsyncStreamCallback, requestBodyState);
+                    while ((bytesRead = fileStream.Read(buffer, 0, (int)(buffer.Length > remain ? remain : buffer.Length))) != 0)
+                    {
+                        outputStream.Write(buffer, 0, bytesRead);
+                        outputStream.Flush();
+                        completed += bytesRead;
+                        if (progressCallback != null)
+                        {
+                            UpdateProgress(completed, contentLength);
+                        }
+                        remain = contentLength - completed;
+                        if (remain == 0) break;
+                    }
                 }
                 else
                 {
-                    if (fileStream != null) fileStream.Close();
-                    if (outputStream != null) outputStream.Close();
-                    //write over
-                    requestBodyState.endRequestBody(null);
-                    requestBodyState = null;
+                    if (progressCallback != null)
+                    {
+                        UpdateProgress(completed, contentLength);
+                    }
                 }
 
+                buffer = null;
+                endRequestBody(null);
             }
             catch (Exception ex)
             {
-                if (fileStream != null) fileStream.Close();
-                if (outputStream != null) outputStream.Close();
                 QLog.E(TAG, ex.Message, ex);
-                requestBodyState.endRequestBody(ex);
-                requestBodyState = null;
+                endRequestBody(ex);
+            }
+            finally
+            {
+
+                if (fileStream != null)
+                {
+                    fileStream.Close();
+                    fileStream.Dispose();
+                    //QLog.D("XIAO", "stream close");
+                    fileStream = null;
+                }
+                if (outputStream != null)
+                {
+                    outputStream.Flush();
+                    outputStream.Close();
+                    outputStream.Dispose();
+                    //QLog.D("XIAO", "stream close");
+                    outputStream = null;
+                }
             }
 
         }
@@ -636,8 +691,21 @@ namespace COSXML.Network
             }
             finally
             {
-                if (fileStream != null) fileStream.Close();
-                if (outputStream != null) outputStream.Close();
+                if (fileStream != null)
+                {
+                    fileStream.Close();
+                    fileStream.Dispose();
+                    //QLog.D("XIAO", "stream close");
+                    fileStream = null;
+                }
+                if (outputStream != null)
+                {
+                    outputStream.Flush();
+                    outputStream.Close();
+                    outputStream.Dispose();
+                    //QLog.D("XIAO", "stream close");
+                    outputStream = null;
+                }
             }
            
         }
@@ -649,10 +717,6 @@ namespace COSXML.Network
 
         public override void StartHandleRequestBody(Stream outputStream, EndRequestBody endRequestBody)
         {
-            requestBodyState = new RequestBodyState();
-            requestBodyState.endRequestBody = endRequestBody;
-            requestBodyState.outputStream = outputStream;
-            requestBodyState.complete = 0;
 
             //write paramters
             WriteParameters(outputStream);
@@ -662,54 +726,93 @@ namespace COSXML.Network
 
             outputStream.Flush();
 
-
-            int size = (int)(realContentLength > SEGMENT_SIZE ? SEGMENT_SIZE : realContentLength);
-
-            if (srcPath != null)
+            //wrtie content: file or bintary
+            try
             {
-                try
+                if (data != null)
                 {
+                    int completed = 0;
+                    while (completed + SEGMENT_SIZE < realContentLength)
+                    {
+                        outputStream.Write(data, completed, SEGMENT_SIZE);
+                        outputStream.Flush();
+                        completed += SEGMENT_SIZE;
+                        if (progressCallback != null)
+                        {
+                            UpdateProgress(completed, realContentLength);
+                        }
+                    }
+
+                    if (completed < realContentLength)
+                    {
+                        outputStream.Write(data, completed, (int)(realContentLength - completed));//包括本身
+                        if (progressCallback != null)
+                        {
+                            UpdateProgress(realContentLength, realContentLength);
+                        }
+                    }
+
+                    WriteEndLine(outputStream);
+                    outputStream.Flush();
+                }
+                else if (srcPath != null)
+                {
+                    byte[] buffer = new byte[SEGMENT_SIZE]; // 64kb
+                    int bytesRead = 0;
+                    long completed = bytesRead;
                     fileStream = new FileStream(srcPath, FileMode.Open, FileAccess.Read);
                     fileStream.Seek(fileOffset, SeekOrigin.Begin);
-                    requestBodyState.buffer = new byte[size];// 64kb
-                    long remain = realContentLength - requestBodyState.complete;
+                    long remain = realContentLength - completed;
                     if (remain > 0)
                     {
-                        int count = fileStream.Read(requestBodyState.buffer, 0, (int)(requestBodyState.buffer.Length > remain ? remain : requestBodyState.buffer.Length));
-                        requestBodyState.complete = count;
-                        outputStream.BeginWrite(requestBodyState.buffer, 0, count, AsyncStreamCallback, requestBodyState);
+                        while ((bytesRead = fileStream.Read(buffer, 0, (int)(buffer.Length > remain ? remain : buffer.Length))) != 0)
+                        {
+                            outputStream.Write(buffer, 0, bytesRead);
+                            outputStream.Flush();
+                            completed += bytesRead;
+                            if (progressCallback != null)
+                            {
+                                UpdateProgress(completed, realContentLength);
+                            }
+                            remain = realContentLength - completed;
+                            if (remain == 0) break;
+                        }
                     }
                     else
                     {
-                        WriteEndLine(outputStream);
-                        outputStream.Flush();
-                        if (fileStream != null) fileStream.Close();
-                        if (outputStream != null) outputStream.Close();
-                        //write over
-                        requestBodyState.endRequestBody(null);
+                        if (progressCallback != null)
+                        {
+                            completed += bytesRead;
+                            UpdateProgress(completed, realContentLength);
+                        }
                     }
+
+                    WriteEndLine(outputStream);
+                    outputStream.Flush();
                 }
-                catch (Exception ex)
-                {
-                    if (fileStream != null) fileStream.Close();
-                    if (outputStream != null) outputStream.Close();
-                    QLog.E(TAG, ex.Message, ex);
-                    requestBodyState.endRequestBody(ex) ;
-                }
+
+                endRequestBody(null);
             }
-            else if (data != null)
+            catch (Exception ex)
             {
-                requestBodyState.buffer = data;
-                try
+                endRequestBody(ex);
+            }
+            finally
+            {
+                if (fileStream != null)
                 {
-                    requestBodyState.complete = size;
-                    outputStream.BeginWrite(requestBodyState.buffer, 0, size, AsyncStreamCallback, requestBodyState);
+                    fileStream.Close();
+                    fileStream.Dispose();
+                    //QLog.D("XIAO", "stream close");
+                    fileStream = null;
                 }
-                catch (Exception ex)
+                if (outputStream != null)
                 {
-                    if (outputStream != null) outputStream.Close();
-                    QLog.E(TAG, ex.Message, ex);
-                    requestBodyState.endRequestBody(ex) ;
+                    outputStream.Flush();
+                    outputStream.Close();
+                    outputStream.Dispose();
+                    //QLog.D("XIAO", "stream close");
+                    outputStream = null;
                 }
             }
 
