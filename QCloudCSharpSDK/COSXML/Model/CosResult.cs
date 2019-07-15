@@ -33,6 +33,12 @@ namespace COSXML.Model
         public Dictionary<string, List<string>> responseHeaders;
 
         /// <summary>
+        /// exchange infor between request and result
+        /// </summary>
+        /// <param name="cosRequest"></param>
+        internal virtual void ExternInfo(CosRequest cosRequest) { }
+
+        /// <summary>
         /// parse status line and headers
         /// </summary>
         /// <param name="response"> <see cref="COSXML.Network.Response"/></param>

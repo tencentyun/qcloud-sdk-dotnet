@@ -13,6 +13,7 @@ using COSXML.Utils;
 using COSXML.CosException;
 using COSXML.Common;
 using COSXML.Model.Tag;
+using COSXML.Callback;
 
 namespace COSXML
 {
@@ -617,6 +618,16 @@ namespace COSXML
             {
                 cosRequest.Cancel();
             }
+        }
+
+        public GetObjectBytesResult GetObject(GetObjectBytesRequest request)
+        {
+            return (Model.Object.GetObjectBytesResult)excute(request, new Model.Object.GetObjectBytesResult());
+        }
+
+        public void GetObject(GetObjectBytesRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new GetObjectBytesResult(), successCallback, failCallback);
         }
     }
 }

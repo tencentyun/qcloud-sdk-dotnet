@@ -1679,6 +1679,15 @@ namespace COSXML
         void GetObject(GetObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
+        /// get object bytes
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        GetObjectBytesResult GetObject(GetObjectBytesRequest request);
+
+        void GetObject(GetObjectBytesRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        /// <summary>
         /// put object acl for cos
         ///    try
         ///    {
