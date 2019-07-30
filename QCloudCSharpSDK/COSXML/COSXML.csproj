@@ -126,6 +126,8 @@
     <Compile Include="Model\Object\DeleteObjectResult.cs" />
     <Compile Include="Model\Object\GetObjectACLRequest.cs" />
     <Compile Include="Model\Object\GetObjectACLResult.cs" />
+    <Compile Include="Model\Object\GetObjectBytesRequest.cs" />
+    <Compile Include="Model\Object\GetObjectBytesResult.cs" />
     <Compile Include="Model\Object\GetObjectRequest.cs" />
     <Compile Include="Model\Object\GetObjectResult.cs" />
     <Compile Include="Model\Object\HeadObjectRequest.cs" />
