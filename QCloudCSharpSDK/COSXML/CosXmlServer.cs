@@ -629,5 +629,95 @@ namespace COSXML
         {
             schedue(request, new GetObjectBytesResult(), successCallback, failCallback);
         }
+
+        public PutBucketWebsiteResult putBucketWebsite(PutBucketWebsiteRequest request)
+        {
+            return (Model.Bucket.PutBucketWebsiteResult)excute(request, new Model.Bucket.PutBucketWebsiteResult()); 
+        }
+
+        public void putBucketWebsiteAsync(PutBucketWebsiteRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new Model.Bucket.PutBucketWebsiteResult(), successCallback, failCallback);
+        }
+
+        public GetBucketWebsiteResult getBucketWebsite(GetBucketWebsiteRequest request)
+        {
+            return (Model.Bucket.GetBucketWebsiteResult)excute(request, new Model.Bucket.GetBucketWebsiteResult());
+        }
+
+        public void getBucketWebsiteAsync(GetBucketWebsiteRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new Model.Bucket.GetBucketWebsiteResult(), successCallback, failCallback);
+        }
+
+        public DeleteBucketWebsiteResult deleteBucketWebsite(DeleteBucketWebsiteRequest request)
+        {
+            return (Model.Bucket.DeleteBucketWebsiteResult)excute(request, new Model.Bucket.DeleteBucketWebsiteResult()); 
+        }
+
+        public void deleteBucketWebsiteAsync(DeleteBucketWebsiteRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new Model.Bucket.DeleteBucketWebsiteResult(), successCallback, failCallback);
+        }
+
+        public PutBucketLoggingResult putBucketLogging(PutBucketLoggingRequest request)
+        {
+            return (Model.Bucket.PutBucketLoggingResult)excute(request, new Model.Bucket.PutBucketLoggingResult());
+        }
+
+        public void putBucketLoggingAsync(PutBucketLoggingRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new Model.Bucket.PutBucketLoggingResult(), successCallback, failCallback);
+        }
+
+        public GetBucketLoggingResult getBucketLogging(GetBucketLocationRequest request)
+        {
+            return (Model.Bucket.GetBucketLoggingResult)excute(request, new Model.Bucket.GetBucketLoggingResult());
+        }
+
+        public void getBucketLoggingAsync(GetBucketLoggingRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new Model.Bucket.GetBucketLoggingResult(), successCallback, failCallback);
+        }
+
+        public PutBucketInventoryResult putBucketInventory(PutBucketInventoryRequest request)
+        {
+            return (Model.Bucket.PutBucketInventoryResult)excute(request, new Model.Bucket.PutBucketInventoryResult());
+        }
+
+        public void putBucketInventoryAsync(PutBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new Model.Bucket.PutBucketInventoryResult(), successCallback, failCallback);
+        }
+
+        public GetBucketInventoryResult getBucketInventory(GetBucketInventoryRequest request)
+        {
+            return (Model.Bucket.GetBucketInventoryResult)excute(request, new Model.Bucket.GetBucketInventoryResult());
+        }
+
+        public void getBucketInventoryAsync(GetBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new Model.Bucket.GetBucketInventoryResult(), successCallback, failCallback);
+        }
+
+        public DeleteBucketInventoryResult deleteBucketInventory(DeleteBucketInventoryRequest request)
+        {
+            return (Model.Bucket.DeleteBucketInventoryResult)excute(request, new Model.Bucket.DeleteBucketInventoryResult());
+        }
+
+        public void deleteInventoryAsync(DeleteBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new Model.Bucket.DeleteBucketInventoryResult(), successCallback, failCallback);
+        }
+
+        public ListBucketInventoryResult listBucketInventory(ListBucketInventoryRequest request)
+        {
+            return (Model.Bucket.ListBucketInventoryResult)excute(request, new Model.Bucket.ListBucketInventoryResult());
+        }
+
+        public void listBucketInventoryAsync(ListBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new Model.Bucket.ListBucketInventoryResult(), successCallback, failCallback);
+        }
     }
 }

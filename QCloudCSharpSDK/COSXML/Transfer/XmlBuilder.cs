@@ -66,6 +66,11 @@ namespace COSXML.Transfer
             return RemoveXMLHeader(stringWriter.ToString());
         }
 
+        internal static string BuildWebsiteConfiguration(BucketLoggingStatus bucketLoggingStatus)
+        {
+            throw new NotImplementedException();
+        }
+
         public static string BuildLifecycleConfiguration(LifecycleConfiguration lifecycleConfiguration)
         {
             StringWriter stringWriter = new StringWriter();
@@ -311,6 +316,171 @@ namespace COSXML.Transfer
             return RemoveXMLHeader(stringWriter.ToString());
         }
 
+        public static string BuildWebsiteConfiguration(WebsiteConfiguration websiteConfiguration)
+        {
+            StringWriter stringWriter = new StringWriter();
+            XmlWriterSettings xmlWriterSetting = new XmlWriterSettings();
+            xmlWriterSetting.Indent = true;
+
+            XmlWriter xmlWriter = XmlWriter.Create(stringWriter, xmlWriterSetting);
+            xmlWriter.WriteStartDocument();
+
+            if (websiteConfiguration.indexDocument != null)
+            {
+                xmlWriter.WriteStartElement("IndexDocument");
+                xmlWriter.WriteElementString("Suffix", websiteConfiguration.indexDocument.suffix);
+                xmlWriter.WriteEndElement();
+            }
+
+            if (websiteConfiguration.errorDocument != null)
+            {
+                xmlWriter.WriteStartElement("ErrorDocument");
+                xmlWriter.WriteElementString("Key", websiteConfiguration.errorDocument.key);
+                xmlWriter.WriteEndElement();
+            }
+
+            if (websiteConfiguration.redirectAllRequestTo != null)
+            {
+                xmlWriter.WriteStartElement("RedirectAllRequestTo");
+                xmlWriter.WriteElementString("Protocol", websiteConfiguration.redirectAllRequestTo.protocol);
+                xmlWriter.WriteEndElement();
+            }
+
+            if (websiteConfiguration.routingRules != null && websiteConfiguration.routingRules.Count > 0)
+            {
+                xmlWriter.WriteStartElement("RoutingRules");
+                foreach (WebsiteConfiguration.RoutingRule routingRule in websiteConfiguration.routingRules)
+                {
+                    xmlWriter.WriteStartElement("RoutingRule");
+                    if (routingRule.contidion != null)
+                    {
+                        xmlWriter.WriteStartElement("Condition");
+                        xmlWriter.WriteElementString("HttpErrorCodeReturnedEquals", routingRule.contidion.httpErrorCodeReturnedEquals.ToString());
+                        xmlWriter.WriteElementString("KeyPrefixEquals", routingRule.contidion.keyPrefixEquals);
+                        xmlWriter.WriteEndElement();
+                    }
+                    if (routingRule.redirect != null)
+                    {
+                        xmlWriter.WriteStartElement("Redirect");
+                        xmlWriter.WriteElementString("Protocol", routingRule.redirect.protocol);
+                        xmlWriter.WriteElementString("ReplaceKeyPrefixWith", routingRule.redirect.replaceKeyPrefixWith);
+                        xmlWriter.WriteElementString("ReplaceKeyWith", routingRule.redirect.replaceKeyWith);
+                        xmlWriter.WriteEndElement();
+                    }
+                    xmlWriter.WriteEndElement();
+                }
+                xmlWriter.WriteEndElement();
+            }
+            // end to element
+            xmlWriter.WriteEndElement();
+
+            xmlWriter.WriteEndDocument();
+            xmlWriter.Flush();
+            return RemoveXMLHeader(stringWriter.ToString());
+        }
+
+        public static string BuildBucketLogging(BucketLoggingStatus bucketLoggingStatus)
+        {
+            StringWriter stringWriter = new StringWriter();
+            XmlWriterSettings xmlWriterSetting = new XmlWriterSettings();
+            xmlWriterSetting.Indent = true;
+
+            XmlWriter xmlWriter = XmlWriter.Create(stringWriter, xmlWriterSetting);
+            xmlWriter.WriteStartDocument();
+
+            //start to write element
+            xmlWriter.WriteStartElement("BucketLoggingStatus");
+            if (bucketLoggingStatus.loggingEnabled != null)
+            {
+                xmlWriter.WriteStartElement("LoggingEnabled");
+                if(bucketLoggingStatus.loggingEnabled.targetBucket != null)
+                    xmlWriter.WriteElementString("TargetBucket", bucketLoggingStatus.loggingEnabled.targetBucket);
+                if(bucketLoggingStatus.loggingEnabled.targetPrefix != null)
+                    xmlWriter.WriteElementString("TargetPrefix", bucketLoggingStatus.loggingEnabled.targetPrefix);
+                xmlWriter.WriteEndElement();
+            }
+          
+            // end to element
+            xmlWriter.WriteEndElement();
+
+            xmlWriter.WriteEndDocument();
+            xmlWriter.Flush();
+            return RemoveXMLHeader(stringWriter.ToString());
+        }
+
+        public static string BuildInventoryConfiguration(InventoryConfiguration inventoryConfiguration)
+        {
+            StringWriter stringWriter = new StringWriter();
+            XmlWriterSettings xmlWriterSetting = new XmlWriterSettings();
+            xmlWriterSetting.Indent = true;
+
+            XmlWriter xmlWriter = XmlWriter.Create(stringWriter, xmlWriterSetting);
+            xmlWriter.WriteStartDocument();
+            xmlWriter.WriteStartElement("InventoryConfiguration");
+
+            if (inventoryConfiguration.id != null)
+                xmlWriter.WriteElementString( "Id", inventoryConfiguration.id);
+            xmlWriter.WriteElementString("IsEnabled", inventoryConfiguration.isEnabled ? "True" : "False");
+            if (inventoryConfiguration.destination != null)
+            {
+                xmlWriter.WriteStartElement("Destination");
+                if (inventoryConfiguration.destination.cosBucketDestination != null)
+                {
+                    xmlWriter.WriteStartElement("COSBucketDestination");
+                    if (inventoryConfiguration.destination.cosBucketDestination.format != null)
+                        xmlWriter.WriteElementString("Format", inventoryConfiguration.destination.cosBucketDestination.format);
+                    if (inventoryConfiguration.destination.cosBucketDestination.accountId != null)
+                        xmlWriter.WriteElementString("AccountId", inventoryConfiguration.destination.cosBucketDestination.accountId);
+                    if (inventoryConfiguration.destination.cosBucketDestination.bucket != null)
+                        xmlWriter.WriteElementString("Bucket", inventoryConfiguration.destination.cosBucketDestination.bucket);
+                    if (inventoryConfiguration.destination.cosBucketDestination.prefix != null)
+                    {
+                        xmlWriter.WriteElementString("Prefix", inventoryConfiguration.destination.cosBucketDestination.prefix);
+                    }
+                    if (inventoryConfiguration.destination.cosBucketDestination.encryption != null)
+                    {
+                        xmlWriter.WriteStartElement("Encryption");
+                        xmlWriter.WriteElementString("SSE-COS", inventoryConfiguration.destination.cosBucketDestination.encryption.sSECOS);
+                        xmlWriter.WriteEndElement();
+                    }
+                    xmlWriter.WriteEndElement();
+                }
+                xmlWriter.WriteEndElement();
+            }
+            if (inventoryConfiguration.schedule != null && inventoryConfiguration.schedule.frequency != null)
+            {
+                xmlWriter.WriteStartElement("Schedule");
+                xmlWriter.WriteElementString("Frequency", inventoryConfiguration.schedule.frequency);
+                xmlWriter.WriteEndElement();
+            }
+            if (inventoryConfiguration.filter != null && inventoryConfiguration.filter.prefix != null)
+            {
+                xmlWriter.WriteStartElement("Filter");
+                xmlWriter.WriteElementString("Prefix", inventoryConfiguration.filter.prefix);
+                xmlWriter.WriteEndElement();
+            }
+            if (inventoryConfiguration.includedObjectVersions != null)
+            {
+                xmlWriter.WriteElementString("IncludeObjectVersions", inventoryConfiguration.includedObjectVersions);
+            }
+            if (inventoryConfiguration.optionalFields != null && inventoryConfiguration.optionalFields.fields != null)
+            {
+                xmlWriter.WriteStartElement("OptionalFields");
+                foreach (string field in inventoryConfiguration.optionalFields.fields)
+                {
+                    xmlWriter.WriteElementString("Field", field);
+                }
+                xmlWriter.WriteEndElement();
+            }
+
+            // end to element
+            xmlWriter.WriteEndElement();
+
+            xmlWriter.WriteEndDocument();
+            xmlWriter.Flush();
+            return RemoveXMLHeader(stringWriter.ToString());
+
+        }
 
         private static string RemoveXMLHeader(string xmlContent)
         {

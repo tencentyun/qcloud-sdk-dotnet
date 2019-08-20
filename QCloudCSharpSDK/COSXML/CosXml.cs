@@ -2737,6 +2737,42 @@ namespace COSXML
         /// <param name="failCallback"></param>
         void RestoreObject(RestoreObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
+
+        PutBucketWebsiteResult putBucketWebsite(PutBucketWebsiteRequest request);
+
+        void putBucketWebsiteAsync(PutBucketWebsiteRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        GetBucketWebsiteResult getBucketWebsite(GetBucketWebsiteRequest request);
+
+        void getBucketWebsiteAsync(GetBucketWebsiteRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        DeleteBucketWebsiteResult deleteBucketWebsite(DeleteBucketWebsiteRequest request);
+
+        void deleteBucketWebsiteAsync(DeleteBucketWebsiteRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        PutBucketLoggingResult putBucketLogging(PutBucketLoggingRequest request);
+        void putBucketLoggingAsync(PutBucketLoggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        GetBucketLoggingResult getBucketLogging(GetBucketLocationRequest request);
+
+        void getBucketLoggingAsync(GetBucketLoggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        PutBucketInventoryResult putBucketInventory(PutBucketInventoryRequest request);
+
+        void putBucketInventoryAsync(PutBucketInventoryRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        GetBucketInventoryResult getBucketInventory(GetBucketInventoryRequest request);
+
+        void getBucketInventoryAsync(GetBucketInventoryRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        DeleteBucketInventoryResult deleteBucketInventory(DeleteBucketInventoryRequest request);
+
+        void deleteInventoryAsync(DeleteBucketInventoryRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        ListBucketInventoryResult listBucketInventory(ListBucketInventoryRequest request);
+
+        void listBucketInventoryAsync(ListBucketInventoryRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
         void Cancel(CosRequest cosRequest);
     }
 }

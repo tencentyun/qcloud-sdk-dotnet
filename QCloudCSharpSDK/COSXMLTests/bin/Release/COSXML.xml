@@ -1898,6 +1898,13 @@
             <param name="successCallback"></param>
             <param name="failCallback"></param>
         </member>
+        <member name="M:COSXML.CosXml.GetObject(COSXML.Model.Object.GetObjectBytesRequest)">
+            <summary>
+            get object bytes
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:COSXML.CosXml.PutObjectACL(COSXML.Model.Object.PutObjectACLRequest)">
             <summary>
             put object acl for cos
@@ -3643,6 +3650,12 @@
             http response headers
             </summary>
         </member>
+        <member name="M:COSXML.Model.CosResult.ExternInfo(COSXML.Model.CosRequest)">
+            <summary>
+            exchange infor between request and result
+            </summary>
+            <param name="cosRequest"></param>
+        </member>
         <member name="M:COSXML.Model.CosResult.InternalParseResponseHeaders">
             <summary>
             parse status line and headers
@@ -3946,6 +3959,72 @@
             访问权限信息
             <see cref="T:COSXML.Model.Tag.AccessControlPolicy"/>
             </summary>
+        </member>
+        <member name="F:COSXML.Model.Object.GetObjectBytesRequest.progressCallback">
+            <summary>
+            下载进度回调
+            </summary>
+        </member>
+        <member name="M:COSXML.Model.Object.GetObjectBytesRequest.SetCosProgressCallback(COSXML.Callback.OnProgressCallback)">
+            <summary>
+            下载进度回调
+            </summary>
+            <param name="progressCallback"></param>
+        </member>
+        <member name="M:COSXML.Model.Object.GetObjectBytesRequest.SetRange(System.Int64,System.Int64)">
+            <summary>
+            下载内容范围
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+        </member>
+        <member name="M:COSXML.Model.Object.GetObjectBytesRequest.SetRange(System.Int64)">
+            <summary>
+            下载内容的起始偏移量
+            </summary>
+            <param name="start"></param>
+        </member>
+        <member name="M:COSXML.Model.Object.GetObjectBytesRequest.SetVersionId(System.String)">
+            <summary>
+            下载特定版本的对象
+            </summary>
+            <param name="versionId"></param>
+        </member>
+        <member name="M:COSXML.Model.Object.GetObjectBytesRequest.SetResponseContentType(System.String)">
+            <summary>
+            响应头部中的 Content-Type 参数
+            </summary>
+            <param name="responseContentType"></param>
+        </member>
+        <member name="M:COSXML.Model.Object.GetObjectBytesRequest.SetResponseContentLanguage(System.String)">
+            <summary>
+            响应头部中的 Content-Language 参数
+            </summary>
+            <param name="responseContentLanguage"></param>
+        </member>
+        <member name="M:COSXML.Model.Object.GetObjectBytesRequest.SetResponseCacheControl(System.String)">
+            <summary>
+            响应头部中的 Cache-Control 参数
+            </summary>
+            <param name="responseCacheControl"></param>
+        </member>
+        <member name="M:COSXML.Model.Object.GetObjectBytesRequest.SetResponseContentDisposition(System.String)">
+            <summary>
+            响应头部中的 Content-Disposition 参数
+            </summary>
+            <param name="responseDisposition"></param>
+        </member>
+        <member name="M:COSXML.Model.Object.GetObjectBytesRequest.SetResponseContentEncoding(System.String)">
+            <summary>
+            响应头部中的 Content-Encoding 参数
+            </summary>
+            <param name="responseContentEncoding"></param>
+        </member>
+        <member name="M:COSXML.Model.Object.GetObjectBytesRequest.SetResponseExpires(System.String)">
+            <summary>
+            响应头部中的 Content-Expires 参数
+            </summary>
+            <param name="responseExpires"></param>
         </member>
         <member name="T:COSXML.Model.Object.GetObjectRequest">
             <summary>
@@ -5272,6 +5351,27 @@
             在后续上传中使用的 ID
             </summary>
         </member>
+        <member name="F:COSXML.Model.Tag.InventoryConfiguration.id">
+            清单的名称，与请求参数中的 id 对应 
+        </member>
+        <member name="F:COSXML.Model.Tag.InventoryConfiguration.isEnabled">
+            清单是否启用的标识。如果设置为 True，清单功能将生效；如果设置为 False，将不生成任何清单 
+        </member>
+        <member name="F:COSXML.Model.Tag.InventoryConfiguration.includedObjectVersions">
+            是否在清单中包含对象版本 
+        </member>
+        <member name="F:COSXML.Model.Tag.InventoryConfiguration.filter">
+            筛选待分析对象。清单功能将分析符合 Filter 中设置的前缀的对象 
+        </member>
+        <member name="F:COSXML.Model.Tag.InventoryConfiguration.optionalFields">
+            设置清单结果中应包含的分析项目 
+        </member>
+        <member name="F:COSXML.Model.Tag.InventoryConfiguration.schedule">
+            配置清单任务周期 
+        </member>
+        <member name="F:COSXML.Model.Tag.InventoryConfiguration.destination">
+            描述存放清单结果的信息 
+        </member>
         <member name="F:COSXML.Model.Tag.LifecycleConfiguration.rules">
             <summary>
             规则描述
@@ -5977,6 +6077,15 @@
             <exception cref="T:COSXML.CosException.CosClientException">CosClientException</exception>
             <exception cref="T:COSXML.CosException.CosServerException">CosServerException</exception>
         </member>
+        <member name="M:COSXML.Network.HttpClient.InternalExcute(COSXML.Model.CosRequest,COSXML.Model.CosResult)">
+            <summary>
+            excute request
+            </summary>
+            <param name="cosRequest"></param>
+            <param name="cosResult"></param>
+            <exception cref="T:COSXML.CosException.CosClientException">CosClientException</exception>
+            <exception cref="T:COSXML.CosException.CosServerException">CosServerException</exception>
+        </member>
         <member name="M:COSXML.Network.HttpClient.CheckSign(COSXML.Auth.QCloudSignSource,COSXML.Network.Request)">
             <summary>
             add authorization
@@ -6080,6 +6189,12 @@
             <param name="inputStream"></param>
             <exception cref="!:CosServerException"> throw CosServerException </exception>
             <exception cref="T:System.Exception">throw Exception</exception>
+        </member>
+        <member name="M:COSXML.Utils.TimeUtils.GetCurrentTime(COSXML.Utils.TimeUnit)">
+            根据UTC时间戳的含义= UTC时间 - UTC起始时间
+        </member>
+        <member name="M:COSXML.Utils.TimeUtils.GetFormatTime(System.String,System.Int64,COSXML.Utils.TimeUnit)">
+            先获取 对应的 UTC -> 转为 当前时区的时间
         </member>
         <!-- 对于成员“T:COSXML.Utils.URLEncodeUtils”忽略有格式错误的 XML 注释 -->
         <member name="M:COSXML.Utils.URLEncodeUtils.EncodePathOfURL(System.String)">

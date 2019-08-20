@@ -115,7 +115,8 @@ namespace COSXML.Network
             {
                 Request request = CreateRequest(cosRequest);
                 //extern informations exchange
-                //cosResult.ExternInfo(cosRequest);
+                cosResult.ExternInfo(cosRequest);
+
                 Response response;
                 if (cosRequest is GetObjectRequest)
                 {
@@ -127,6 +128,7 @@ namespace COSXML.Network
                 {
                     response = new CosResponse(cosResult, null, -1L, null);
                 }
+                
                 cosRequest.BindRequest(request);
                 CommandTask.Excute(request, response, config);
             }
@@ -362,7 +364,7 @@ namespace COSXML.Network
                 cosServerException.requestId = (values != null && values.Count > 0) ? values[0] : null;
                 Headers.TryGetValue("x-cos-trace-id", out values);
                 cosServerException.traceId = (values != null && values.Count > 0) ? values[0] : null;
-                if (inputStream != null && contentLength > 0)
+                if (inputStream != null)
                 {
                     CosServerError cosServerError = new CosServerError();
                     try

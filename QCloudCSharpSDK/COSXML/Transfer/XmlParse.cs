@@ -1318,5 +1318,405 @@ namespace COSXML.Transfer
             }
         }
 
+
+        public static void ParseWebsiteConfig(Stream inStream, WebsiteConfiguration result)
+        {
+            XmlReader xmlReader = XmlReader.Create(inStream);
+            result.routingRules = new List<WebsiteConfiguration.RoutingRule>();
+            WebsiteConfiguration.RoutingRule routingRule = null;
+            WebsiteConfiguration.IndexDocument indexDocument = null;
+            WebsiteConfiguration.ErrorDocument errorDocument = null;
+            WebsiteConfiguration.RedirectAllRequestTo redirectAllRequestTo = null;
+
+            while (xmlReader.Read())
+            {
+                switch (xmlReader.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        if ("IndexDocument".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            indexDocument = new WebsiteConfiguration.IndexDocument();
+                        }
+                        else if ("Suffix".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            indexDocument.suffix = xmlReader.Value;
+                        }
+                        else if ("ErrorDocument".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            errorDocument = new WebsiteConfiguration.ErrorDocument();
+                        }
+                        else if ("Key".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            errorDocument.key = xmlReader.Value;
+                        }
+                        else if ("Suffix".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            indexDocument.suffix = xmlReader.Value;
+                        }
+                        else if ("RedirectAllRequestsTo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            redirectAllRequestTo = new WebsiteConfiguration.RedirectAllRequestTo();
+                        }
+                        else if ("Protocol".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            if (redirectAllRequestTo != null)
+                            {
+                                redirectAllRequestTo.protocol = xmlReader.Value;
+                            }
+                            else
+                            {
+                                routingRule.redirect.protocol = xmlReader.Value;
+                            }
+                        }
+                        else if ("RoutingRule".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            routingRule = new WebsiteConfiguration.RoutingRule();
+                        }
+                        else if ("Condition".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            routingRule.contidion = new WebsiteConfiguration.Contidion();
+                        }
+                        else if ("HttpErrorCodeReturnedEquals".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                           int.TryParse(xmlReader.Value, out routingRule.contidion.httpErrorCodeReturnedEquals);
+                        }
+                        else if ("KeyPrefixEquals".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            routingRule.contidion.keyPrefixEquals = xmlReader.Value;
+                        }
+                        else if ("Redirect".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            routingRule.redirect = new WebsiteConfiguration.Redirect();
+                        }
+                        else if ("ReplaceKeyPrefixWith".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            routingRule.redirect.replaceKeyPrefixWith = xmlReader.Value;
+                        }
+                        else if ("ReplaceKeyWith".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            routingRule.redirect.replaceKeyWith = xmlReader.Value;
+                        }
+                        break;
+                    case XmlNodeType.EndElement:
+                        if ("IndexDocument".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            result.indexDocument = indexDocument;
+                            indexDocument = null;
+                        }
+                        else if ("ErrorDocument".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            result.errorDocument = errorDocument;
+                            errorDocument = null;
+                        }
+                        else if ("RedirectAllRequestsTo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            result.redirectAllRequestTo = redirectAllRequestTo;
+                            redirectAllRequestTo = null;
+                        }
+                        else if ("RoutingRule".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            result.routingRules.Add(routingRule);
+                            routingRule = null;
+                        }
+                        break;
+                }
+            }
+        }
+
+        public static void ParseBucketLoggingStatus(Stream inStream, BucketLoggingStatus result)
+        {
+            XmlReader xmlReader = XmlReader.Create(inStream);
+            while (xmlReader.Read())
+            {
+                switch (xmlReader.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        if ("LoggingEnabled".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            result.loggingEnabled = new BucketLoggingStatus.LoggingEnabled();
+                        }
+                        else if ("TargetBucket".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            result.loggingEnabled.targetBucket = xmlReader.Value;
+                        }
+                        else if ("TargetPrefix".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            result.loggingEnabled.targetPrefix = xmlReader.Value;
+                        }
+                        break;
+                }
+            }
+        }
+
+        public static void ParseInventoryConfiguration(Stream inStream, InventoryConfiguration result)
+        {
+            XmlReader xmlReader = XmlReader.Create(inStream);
+            InventoryConfiguration.Schedule schedule = null;
+            InventoryConfiguration.Filter filter = null;
+            InventoryConfiguration.OptionalFields optionalFields = null;
+            InventoryConfiguration.COSBucketDestination cosBucketDestination = null;
+            while (xmlReader.Read())
+            {
+                switch (xmlReader.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        if ("Id".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            result.id = xmlReader.Value;
+                        }
+                        else if ("IsEnabled".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            bool.TryParse(xmlReader.Value, out result.isEnabled);
+                        }
+                        else if ("COSBucketDestination".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            cosBucketDestination = new InventoryConfiguration.COSBucketDestination();
+                        }
+                        else if ("Format".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            cosBucketDestination.format = xmlReader.Value;
+                        }
+                        else if ("AccountId".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            cosBucketDestination.accountId = xmlReader.Value;
+                        }
+                        else if ("Bucket".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            cosBucketDestination.bucket = xmlReader.Value;
+                        }
+                        else if ("Prefix".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            if (cosBucketDestination != null)
+                            {
+                                cosBucketDestination.prefix = xmlReader.Value;
+                            }
+                            else if (filter != null)
+                            {
+                                filter.prefix = xmlReader.Value;
+                            }
+                        }
+                        else if ("Encryption".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            cosBucketDestination.encryption = new InventoryConfiguration.Encryption();
+                        }
+                        else if ("SSE-COS".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            cosBucketDestination.encryption.sSECOS = xmlReader.Value;
+                        }
+                        else if ("Schedule".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            schedule = new InventoryConfiguration.Schedule();
+                        }
+                        else if ("Frequency".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            schedule.frequency = xmlReader.Value;
+                        }
+                        else if ("Filter".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            filter = new InventoryConfiguration.Filter();
+                        }
+                        else if ("IncludedObjectVersions".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            result.includedObjectVersions = xmlReader.Value;
+                        }
+                        else if ("OptionalFields".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            optionalFields = new InventoryConfiguration.OptionalFields();
+                        }
+                        else if ("Field".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            optionalFields.fields.Add(xmlReader.Value);
+                        }
+                        break;
+                    case XmlNodeType.EndElement:
+                        if ("COSBucketDestination".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            result.destination = new InventoryConfiguration.Destination();
+                            result.destination.cosBucketDestination = cosBucketDestination;
+                            cosBucketDestination = null;
+                        }
+                        else if ("OptionalFields".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            result.optionalFields = optionalFields;
+                            optionalFields = null;
+                        }
+                        else if ("Filter".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            result.filter = filter;
+                            filter = null;
+                        }
+                        else if ("Schedule".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            result.schedule = schedule;
+                            schedule = null;
+                        }
+                        break;
+                }
+            }
+        }
+
+        public static void ParseListInventoryConfiguration(Stream inStream, ListInventoryConfiguration result)
+        {
+            XmlReader xmlReader = XmlReader.Create(inStream);
+            InventoryConfiguration inventoryConfiguration = null;
+            InventoryConfiguration.Schedule schedule = null;
+            InventoryConfiguration.Filter filter = null;
+            InventoryConfiguration.OptionalFields optionalFields = null;
+            InventoryConfiguration.COSBucketDestination cosBucketDestination = null;
+            result.inventoryConfigurations = new List<InventoryConfiguration>(20);
+            while (xmlReader.Read())
+            {
+                switch (xmlReader.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        if ("IsTruncated".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            bool.TryParse(xmlReader.Value, out result.isTruncated);
+                        }
+                        else if ("TargetBucket".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            result.continuationToken = xmlReader.Value;
+                        }
+                        else if ("TargetPrefix".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            result.nextContinuationToken = xmlReader.Value;
+                        }
+                        else if ("InventoryConfiguration".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            inventoryConfiguration = new InventoryConfiguration();
+                        }
+                        if ("Id".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            inventoryConfiguration.id = xmlReader.Value;
+                        }
+                        else if ("IsEnabled".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            bool.TryParse(xmlReader.Value, out inventoryConfiguration.isEnabled);
+                        }
+                        else if ("COSBucketDestination".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            cosBucketDestination = new InventoryConfiguration.COSBucketDestination();
+                        }
+                        else if ("Format".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            cosBucketDestination.format = xmlReader.Value;
+                        }
+                        else if ("AccountId".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            cosBucketDestination.accountId = xmlReader.Value;
+                        }
+                        else if ("Bucket".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            cosBucketDestination.bucket = xmlReader.Value;
+                        }
+                        else if ("Prefix".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            if (cosBucketDestination != null)
+                            {
+                                cosBucketDestination.prefix = xmlReader.Value;
+                            }
+                            else if (filter != null)
+                            {
+                                filter.prefix = xmlReader.Value;
+                            }
+                        }
+                        else if ("Encryption".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            cosBucketDestination.encryption = new InventoryConfiguration.Encryption();
+                        }
+                        else if ("SSE-COS".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            cosBucketDestination.encryption.sSECOS = xmlReader.Value;
+                        }
+                        else if ("Schedule".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            schedule = new InventoryConfiguration.Schedule();
+                        }
+                        else if ("Frequency".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            schedule.frequency = xmlReader.Value;
+                        }
+                        else if ("Filter".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            filter = new InventoryConfiguration.Filter();
+                        }
+                        else if ("IncludedObjectVersions".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            inventoryConfiguration.includedObjectVersions = xmlReader.Value;
+                        }
+                        else if ("OptionalFields".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            optionalFields = new InventoryConfiguration.OptionalFields();
+                        }
+                        else if ("Field".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            optionalFields.fields.Add(xmlReader.Value);
+                        }
+                        break;
+                    case XmlNodeType.EndElement:
+                        if ("COSBucketDestination".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            inventoryConfiguration.destination = new InventoryConfiguration.Destination();
+                            inventoryConfiguration.destination.cosBucketDestination = cosBucketDestination;
+                            cosBucketDestination = null;
+                        }
+                        else if ("OptionalFields".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            inventoryConfiguration.optionalFields = optionalFields;
+                            optionalFields = null;
+                        }
+                        else if ("Filter".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            inventoryConfiguration.filter = filter;
+                            filter = null;
+                        }
+                        else if ("Schedule".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            inventoryConfiguration.schedule = schedule;
+                            schedule = null;
+                        }
+                        else if ("InventoryConfiguration".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            result.inventoryConfigurations.Add(inventoryConfiguration);
+                            inventoryConfiguration = null;
+                        }
+                        break;
+                }
+            }
+        }
+
     }
 }
