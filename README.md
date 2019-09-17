@@ -1,44 +1,36 @@
 # qcloud-sdk-dotnet
 
-![Github](https://img.shields.io/github/release/tencentyun/qcloud-sdk-dotnet.svg)  ![TravisCI](https://travis-ci.org/tencentyun/qcloud-sdk-dotnet.svg?branch=master)
+![Github](https://img.shields.io/github/release/tencentyun/qcloud-sdk-dotnet.svg) ![TravisCI](https://travis-ci.org/tencentyun/qcloud-sdk-dotnet.svg?branch=master)
 
-腾讯云 .NET SDK 发布仓库
-
-## 产品列表
-
-当前仓库内提供的 SDK 有:
-
-* COSXML.Dll- [腾讯云COS XML](https://cloud.tencent.com/document/product/436)
-
-## 示例工程
-
-我们提供了完整的示例工程，您可以下载体验，也可以参考代码进行编写。如果想要查看，可以点击 [这里](https://github.com/tencentyun/qcloud-sdk-dotnet-demo) 。
+腾讯云 COS XML .NET SDK 发布仓库
 
 ## 添加 SDK
-- SDK 包含的 DLL 库文件如下
 
-	COSXML.dll
+我们提供 Nuget 的集成方式，您可以在工程的 csproj 文件里添加：
 
-	Newtonsoft.Json.dll
+```
+<PackageReference Include="Tencent.QCloud.Cos.Sdk" Version="5.4.5" />
+```
 
-- DLL 引用方式安装
+如果是用 .Net CLI，请使用如下命令安装：
 
-	从[此处](https://github.com/tencentyun/qcloud-sdk-dotnet/tree/master/libs) 获取 SDK 开发包，获取其中的DLL文件，导入工程中.
+```
+dotnet add package Tencent.QCloud.Cos.Sdk --version 5.4.5
+```
 
-- 项目引入方式安装
+您也可以在 [Releases 里面](https://github.com/tencentyun/qcloud-sdk-dotnet/releases) 手动下载我们的SDK。
 
-	从[此处](https://github.com/tencentyun/qcloud-sdk-dotnet/tree/master/QCloudCSharpSDK) 获取源码，将其作为项目导入.
+### 其他依赖
 
-- Nuget 引用方法安装
-	
-	在 Nuget 包管理器中搜索 Tencent.QCloud.Cos.Sdk, 找到 Tencent.QCloud.Cos.Sdk 并点击安装.
+我们使用了 Newtonsoft.Json 作为第三方依赖，如果您本地没有自动拉取，可以在 csproj 文件里手动添加：
 
+```
+<PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+```
 
 ## 开发文档
 
-如果您想要查看每个 API, SDK 是如何调用的，请参考各个产品的开发文档：
-
-* [COS XML SDK](https://github.com/tencentyun/qcloud-sdk-dotnet/blob/master/%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3.md)
+如果您想要查看每个 API, SDK 是如何调用的，请参考 [腾讯云官网文档](https://cloud.tencent.com/document/product/436/32819)。
 
 ## License
 

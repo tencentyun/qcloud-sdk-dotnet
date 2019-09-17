@@ -29,21 +29,19 @@ namespace COSXMLTests
 
         private QCloudServer()
         {
-            appid = Environment.GetEnvironmentVariable("APPID");
-            string secretId = Environment.GetEnvironmentVariable("SECRETID");
-            string secretKey = Environment.GetEnvironmentVariable("SECRETKEY");
-            region = Environment.GetEnvironmentVariable("REGION");
-            bucketForBucketTest = Environment.GetEnvironmentVariable("BUCKETONE");
-            bucketForObjectTest = Environment.GetEnvironmentVariable("BUCKETTWO");
+            appid = Environment.GetEnvironmentVariable("COS_APPID");
+            string secretId = Environment.GetEnvironmentVariable("COS_KEY");
+            string secretKey = Environment.GetEnvironmentVariable("COS_SECRET");
+            region = Environment.GetEnvironmentVariable("COS_REGION");
+            bucketForBucketTest = "bucket-4-csharp-test";
+            bucketForObjectTest = "bucket-4-csharp-obj-test";
 
             if (appid == null)
             {
-                appid = Environment.GetEnvironmentVariable("APPID", EnvironmentVariableTarget.Machine);
-                secretId = Environment.GetEnvironmentVariable("SECRETID", EnvironmentVariableTarget.Machine);
-                secretKey = Environment.GetEnvironmentVariable("SECRETKEY", EnvironmentVariableTarget.Machine);
-                region = Environment.GetEnvironmentVariable("REGION", EnvironmentVariableTarget.Machine);
-                bucketForBucketTest = Environment.GetEnvironmentVariable("BUCKETONE", EnvironmentVariableTarget.Machine);
-                bucketForObjectTest = Environment.GetEnvironmentVariable("BUCKETTWO", EnvironmentVariableTarget.Machine);
+                appid = Environment.GetEnvironmentVariable("COS_APPID", EnvironmentVariableTarget.Machine);
+                secretId = Environment.GetEnvironmentVariable("COS_KEY", EnvironmentVariableTarget.Machine);
+                secretKey = Environment.GetEnvironmentVariable("COS_SECRET", EnvironmentVariableTarget.Machine);
+                region = Environment.GetEnvironmentVariable("COS_REGION", EnvironmentVariableTarget.Machine);
             }
            
             CosXmlConfig config = new CosXmlConfig.Builder()
