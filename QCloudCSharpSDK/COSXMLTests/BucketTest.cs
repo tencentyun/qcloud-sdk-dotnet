@@ -2,6 +2,7 @@
 using COSXML.CosException;
 using COSXML.Model;
 using COSXML.Model.Bucket;
+using COSXML.Model.Tag;
 using COSXML.Utils;
 using NUnit.Framework;
 using System;
@@ -1424,13 +1425,73 @@ namespace COSXMLTests
 
         }
 
+        [SetUp()]
+        public void setup() {
+            QCloudServer instance = QCloudServer.Instance();
+            PutBucket(instance.cosXml, instance.bucketForBucketTest);
+        }
+
+        [TearDown()]
+        public void clear() {
+            QCloudServer instance = QCloudServer.Instance();
+            DeleteBucket(instance.cosXml, instance.bucketForBucketTest);
+        }
+        
+        [Test()]
+        public void testBucketTagging() {
+            QCloudServer instance = QCloudServer.Instance();
+            try
+            {
+                // 设置 tag
+                PutBucketTaggingRequest request = new PutBucketTaggingRequest(
+                    instance.bucketForBucketTest);
+                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+
+                string akey = "aTagKey";
+                string avalue = "aTagValue";
+                string bkey = "bTagKey";
+                string bvalue = "bTagValue";
+
+                request.AddTag(akey, avalue);
+                request.AddTag(bkey, bvalue);
+
+                PutBucketTaggingResult result = instance.cosXml.putBucketTagging(request);
+
+                // 获取 tag
+                GetBucketTaggingRequest getRequest = new GetBucketTaggingRequest(
+                    instance.bucketForBucketTest);
+                getRequest.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                GetBucketTaggingResult getResult = instance.cosXml.getBucketTagging(getRequest);
+
+                Tagging tagging =  getResult.tagging;
+                Assert.AreEqual(tagging.tagSet.tags.Count, 2);
+                foreach (Tagging.Tag tag in tagging.tagSet.tags) {
+                    if (tag.key.Equals(akey)) {
+                        Assert.AreEqual(avalue, tag.value);
+                    } else if (tag.key.Equals(bkey)) {
+                        Assert.AreEqual(bvalue, tag.value);
+                    } else {
+                        Assert.Fail();
+                    }
+                }
+
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
 
         [Test()]
         public void testBucket()
         {
             QCloudServer instance = QCloudServer.Instance();
-
-            PutBucket(instance.cosXml, instance.bucketForBucketTest);
 
             HeadBucket(instance.cosXml, instance.bucketForBucketTest);
 
@@ -1464,7 +1525,6 @@ namespace COSXMLTests
 
             DeleteBucketPolicy(instance.cosXml, instance.bucketForBucketTest);
 
-            DeleteBucket(instance.cosXml, instance.bucketForBucketTest);
 
             Assert.True(true);
 
