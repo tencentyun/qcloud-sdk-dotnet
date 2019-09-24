@@ -482,35 +482,6 @@ namespace COSXML.Transfer
 
         }
 
-        public static string BuildTagging(Tagging tagging) {
-            StringWriter stringWriter = new StringWriter();
-            XmlWriterSettings xmlWriterSetting = new XmlWriterSettings();
-            xmlWriterSetting.Indent = true;
-
-            XmlWriter xmlWriter = XmlWriter.Create(stringWriter, xmlWriterSetting);
-            xmlWriter.WriteStartDocument();
-
-            //start to write element
-            xmlWriter.WriteStartElement("Tagging");
-            xmlWriter.WriteStartElement("TagSet");
-            if (tagging.tagSet.tags.Count > 0) {
-                foreach (Tagging.Tag tag in tagging.tagSet.tags) {
-                    xmlWriter.WriteStartElement("Tag");
-                    xmlWriter.WriteElementString("Key", tag.key);
-                    xmlWriter.WriteElementString("Value", tag.value);
-                    xmlWriter.WriteEndElement();
-                }
-            }
-          
-            // end to element
-            xmlWriter.WriteEndElement();
-            xmlWriter.WriteEndElement();
-
-            xmlWriter.WriteEndDocument();
-            xmlWriter.Flush();
-            return RemoveXMLHeader(stringWriter.ToString());
-        }
-
         private static string RemoveXMLHeader(string xmlContent)
         {
             if (xmlContent != null)

@@ -719,21 +719,5 @@ namespace COSXML
         {
             schedue(request, new Model.Bucket.ListBucketInventoryResult(), successCallback, failCallback);
         }
-
-        public PutBucketTaggingResult putBucketTagging(PutBucketTaggingRequest request) {
-            return (Model.Bucket.PutBucketTaggingResult)excute(request, new Model.Bucket.PutBucketTaggingResult());
-        }
-
-        public void putBucketTaggingAsync(PutBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback) {
-            schedue(request, new Model.Bucket.PutBucketTaggingResult(), successCallback, failCallback);
-        }
-
-        public GetBucketTaggingResult getBucketTagging(GetBucketTaggingRequest request) {
-            return (Model.Bucket.GetBucketTaggingResult)excute(request, new Model.Bucket.GetBucketTaggingResult());
-        }
-
-        public void getBucketTaggingAsync(GetBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback) {
-            schedue(request, new Model.Bucket.GetBucketTaggingResult(), successCallback, failCallback);
-        }
     }
 }

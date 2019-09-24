@@ -2773,14 +2773,6 @@ namespace COSXML
 
         void listBucketInventoryAsync(ListBucketInventoryRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
-        PutBucketTaggingResult putBucketTagging(PutBucketTaggingRequest request);
-
-        void putBucketTaggingAsync(PutBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
-
-        GetBucketTaggingResult getBucketTagging(GetBucketTaggingRequest request);
-
-        void getBucketTaggingAsync(GetBucketTaggingRequest request,COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
-
         void Cancel(CosRequest cosRequest);
     }
 }
