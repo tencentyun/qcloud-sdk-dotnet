@@ -2781,6 +2781,10 @@ namespace COSXML
 
         void getBucketTaggingAsync(GetBucketTaggingRequest request,COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
+        DeleteBucketTaggingResult deleteBucketTagging(DeleteBucketTaggingRequest request);
+
+        void deleteBucketTaggingAsync(DeleteBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
         void Cancel(CosRequest cosRequest);
     }
 }

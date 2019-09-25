@@ -735,5 +735,13 @@ namespace COSXML
         public void getBucketTaggingAsync(GetBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback) {
             schedue(request, new Model.Bucket.GetBucketTaggingResult(), successCallback, failCallback);
         }
+
+        public DeleteBucketTaggingResult deleteBucketTagging(DeleteBucketTaggingRequest request) {
+            return (Model.Bucket.DeleteBucketTaggingResult)excute(request, new Model.Bucket.DeleteBucketTaggingResult());
+        }
+
+        public void deleteBucketTaggingAsync(DeleteBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback) {
+            schedue(request, new Model.Bucket.DeleteBucketTaggingResult(), successCallback, failCallback);
+        }
     }
 }

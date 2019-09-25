@@ -1475,6 +1475,10 @@ namespace COSXMLTests
                     }
                 }
 
+                // 删除 tag
+                DeleteBucketTaggingRequest deleteRequest = new DeleteBucketTaggingRequest(instance.bucketForBucketTest);
+                DeleteBucketTaggingResult deleteResult = instance.cosXml.deleteBucketTagging(deleteRequest);
+
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -1485,6 +1489,23 @@ namespace COSXMLTests
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 Assert.Fail();
+            }
+
+            try {
+                // 验证删除成功
+                GetBucketTaggingRequest getRequest = new GetBucketTaggingRequest(
+                    instance.bucketForBucketTest);
+                GetBucketTaggingResult getResult = instance.cosXml.getBucketTagging(getRequest);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Assert.AreEqual(serverEx.statusCode, 404);
             }
         }
 
