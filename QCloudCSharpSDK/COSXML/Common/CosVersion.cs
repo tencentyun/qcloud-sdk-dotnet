@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Diagnostics;
 
 using System.Text;
 /**
@@ -11,10 +13,16 @@ namespace COSXML.Common
 {
     public sealed class CosVersion
     {
-        public static string SDKVersion = "5.4.2.0";
+        public static string SDKVersion;
 
         public static string GetUserAgent()
         {
+            if (SDKVersion == null) {
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+                SDKVersion = fileVersionInfo.ProductVersion;
+            }
+
             StringBuilder userAgent = new StringBuilder();
             userAgent.Append("cos-net-sdk").Append('.')
                 .Append(SDKVersion);
