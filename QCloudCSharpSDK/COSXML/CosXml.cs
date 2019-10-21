@@ -2750,6 +2750,14 @@ namespace COSXML
 
         void deleteBucketWebsiteAsync(DeleteBucketWebsiteRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
+        PutBucketDomainResult putBucketDomain(PutBucketDomainRequest request);
+
+        void putBucketDomainAsync(PutBucketDomainRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        GetBucketDomainResult getBucketDomain(GetBucketDomainRequest request);
+
+        void getBucketDomainAsync(GetBucketDomainRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
         PutBucketLoggingResult putBucketLogging(PutBucketLoggingRequest request);
         void putBucketLoggingAsync(PutBucketLoggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 

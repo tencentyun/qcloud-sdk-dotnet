@@ -1510,6 +1510,42 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public void testBucketDomain()
+        {
+            QCloudServer instance = QCloudServer.Instance();
+            try {
+                GetBucketDomainResult getResult = instance.cosXml.getBucketDomain(
+                    new GetBucketDomainRequest(instance.bucketForBucketTest));
+                Assert.IsNotNull(getResult.domainConfiguration.rule);
+                Assert.IsNull(getResult.domainConfiguration.rule.Name);
+
+                DomainConfiguration domain = new DomainConfiguration();
+                domain.rule = new DomainConfiguration.DomainRule();
+                domain.rule.Name = "www.qq.com";
+                domain.rule.Status = "ENABLED";
+                domain.rule.Type = "WEBSITE";
+                
+
+                PutBucketDomainResult result = instance.cosXml.putBucketDomain(new PutBucketDomainRequest(
+                    instance.bucketForBucketTest, domain));
+
+                
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                if (serverEx.statusCode != 409 && serverEx.statusCode != 451) {
+                Assert.Fail();
+                }
+            }
+        }
+
+        [Test()]
         public void testBucket()
         {
             QCloudServer instance = QCloudServer.Instance();

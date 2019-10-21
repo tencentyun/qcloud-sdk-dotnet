@@ -511,6 +511,37 @@ namespace COSXML.Transfer
             return RemoveXMLHeader(stringWriter.ToString());
         }
 
+        public static string BuildDomain(DomainConfiguration domain) {
+            StringWriter stringWriter = new StringWriter();
+            XmlWriterSettings xmlWriterSetting = new XmlWriterSettings();
+            xmlWriterSetting.Indent = true;
+
+            XmlWriter xmlWriter = XmlWriter.Create(stringWriter, xmlWriterSetting);
+            xmlWriter.WriteStartDocument();
+
+            //start to write element
+            xmlWriter.WriteStartElement("DomainConfiguration");
+            xmlWriter.WriteStartElement("DomainRule");
+
+            if (domain.rule != null) {
+
+                xmlWriter.WriteElementString("Status", domain.rule.Status);
+                xmlWriter.WriteElementString("Name", domain.rule.Name);
+                xmlWriter.WriteElementString("Type", domain.rule.Type);
+                if (domain.rule.Replace != null) {
+                    xmlWriter.WriteElementString("Replace", domain.rule.Replace);
+                }
+            }
+          
+            // end to element
+            xmlWriter.WriteEndElement();
+            xmlWriter.WriteEndElement();
+
+            xmlWriter.WriteEndDocument();
+            xmlWriter.Flush();
+            return RemoveXMLHeader(stringWriter.ToString());
+        }
+
         private static string RemoveXMLHeader(string xmlContent)
         {
             if (xmlContent != null)
