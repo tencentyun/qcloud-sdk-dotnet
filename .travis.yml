@@ -3,5 +3,6 @@ solution: "./QCloudCSharpSDK/QCloudCSharpSDK.sln"
 mono: none
 dotnet: 2.1.502
 script:
+  - cd QCloudCSharpSDK/COSXMLTests
   - dotnet restore
   - dotnet test
