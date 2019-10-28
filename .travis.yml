@@ -1,5 +1,4 @@
 language: csharp
-solution: "./QCloudCSharpSDK/QCloudCSharpSDK.sln"
 mono: none
 dotnet: 2.1.502
 script:
