@@ -1441,13 +1441,14 @@ namespace COSXMLTests
             PutBucketACL(instance.cosXml, instance.bucketForBucketTest);
             GetBucketACL(instance.cosXml, instance.bucketForBucketTest);
 
+            DeleteBucketCORS(instance.cosXml, instance.bucketForBucketTest);
+            Thread.Sleep(300);
             PutBucketCORS(instance.cosXml, instance.bucketForBucketTest);
             Thread.Sleep(300);
             GetBucketCORS(instance.cosXml, instance.bucketForBucketTest);
-            DeleteBucketCORS(instance.cosXml, instance.bucketForBucketTest);
 
             PutBucketLifeCycle(instance.cosXml, instance.bucketForBucketTest);
-            Thread.Sleep(100);
+            Thread.Sleep(1000);
             GetBucketLifeCycle(instance.cosXml, instance.bucketForBucketTest);
             DeleteBucketLifeCycle(instance.cosXml, instance.bucketForBucketTest);
 
@@ -1464,7 +1465,7 @@ namespace COSXMLTests
 
             DeleteBucketPolicy(instance.cosXml, instance.bucketForBucketTest);
 
-            DeleteBucket(instance.cosXml, instance.bucketForBucketTest);
+            // DeleteBucket(instance.cosXml, instance.bucketForBucketTest);
 
             Assert.True(true);
 

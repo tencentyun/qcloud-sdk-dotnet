@@ -1128,9 +1128,9 @@ namespace COSXMLTests
             QCloudServer instance = QCloudServer.Instance();
 
             string key = "test.pdf";
-            // string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 2);
+            string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 2);
 
-            // PutObject(instance.cosXml, instance.bucketForObjectTest, key, @srcPath);
+            PutObject(instance.cosXml, instance.bucketForObjectTest, key, @srcPath);
 
             try
             {
@@ -1186,7 +1186,7 @@ namespace COSXMLTests
 
             PutObjectWithCustomerKey(instance.cosXml, instance.bucketForObjectTest, "customerKey_" + key, @srcPath);
 
-            PutObjectWithKMS(instance.cosXml, instance.bucketForObjectTest, "KMS" + key, @srcPath);
+            // PutObjectWithKMS(instance.cosXml, instance.bucketForObjectTest, "KMS" + key, @srcPath);
 
             HeadObject(instance.cosXml, instance.bucketForObjectTest, key);
 
