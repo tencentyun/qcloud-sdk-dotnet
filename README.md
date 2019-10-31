@@ -9,13 +9,13 @@
 我们提供 Nuget 的集成方式，您可以在工程的 csproj 文件里添加：
 
 ```
-<PackageReference Include="Tencent.QCloud.Cos.Sdk" Version="5.4.6" />
+<PackageReference Include="Tencent.QCloud.Cos.Sdk" Version="5.4.7" />
 ```
 
 如果是用 .Net CLI，请使用如下命令安装：
 
 ```
-dotnet add package Tencent.QCloud.Cos.Sdk --version 5.4.6
+dotnet add package Tencent.QCloud.Cos.Sdk --version 5.4.7
 ```
 
 您也可以在 [Releases 里面](https://github.com/tencentyun/qcloud-sdk-dotnet/releases) 手动下载我们的SDK。
