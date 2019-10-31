@@ -20,14 +20,6 @@ dotnet add package Tencent.QCloud.Cos.Sdk --version 5.4.6
 
 您也可以在 [Releases 里面](https://github.com/tencentyun/qcloud-sdk-dotnet/releases) 手动下载我们的SDK。
 
-### 其他依赖
-
-我们使用了 Newtonsoft.Json 作为第三方依赖，如果您本地没有自动拉取，可以在 csproj 文件里手动添加：
-
-```
-<PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-```
-
 ## 开发文档
 
 如果您想要查看每个 API, SDK 是如何调用的，请参考 [腾讯云官网文档](https://cloud.tencent.com/document/product/436/32819)。

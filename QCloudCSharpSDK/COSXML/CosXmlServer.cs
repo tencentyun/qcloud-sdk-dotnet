@@ -763,5 +763,15 @@ namespace COSXML
         {
             schedue(request, new Model.Bucket.GetBucketDomainResult(), successCallback, failCallback);
         }
-  }
+
+        SelectObjectResult CosXml.selectObject(SelectObjectRequest request)
+        {
+            return (Model.Object.SelectObjectResult)excute(request, new Model.Object.SelectObjectResult());
+        }
+
+        void CosXml.selectObjectAsync(SelectObjectRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new Model.Object.SelectObjectResult(), successCallback, failCallback);
+        }
+    }
 }

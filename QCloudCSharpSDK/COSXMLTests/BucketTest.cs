@@ -1434,7 +1434,7 @@ namespace COSXMLTests
         [TearDown()]
         public void clear() {
             QCloudServer instance = QCloudServer.Instance();
-            DeleteBucket(instance.cosXml, instance.bucketForBucketTest);
+            // DeleteBucket(instance.cosXml, instance.bucketForBucketTest);
         }
         
         [Test()]

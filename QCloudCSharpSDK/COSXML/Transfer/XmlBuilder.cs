@@ -542,6 +542,76 @@ namespace COSXML.Transfer
             return RemoveXMLHeader(stringWriter.ToString());
         }
 
+        public static string BuildSelection(string expression, string expressionType,
+            ObjectSelectionFormat inputFormat, ObjectSelectionFormat outputFormat, bool notifyProgress) {
+            StringWriter stringWriter = new StringWriter();
+            XmlWriterSettings xmlWriterSetting = new XmlWriterSettings();
+            xmlWriterSetting.Indent = true;
+
+            XmlWriter xmlWriter = XmlWriter.Create(stringWriter, xmlWriterSetting);
+            xmlWriter.WriteStartDocument();
+
+            //start to write element
+            xmlWriter.WriteStartElement("SelectRequest");
+            xmlWriter.WriteElementString("Expression", expression);
+            xmlWriter.WriteElementString("ExpressionType", expressionType);
+
+            if (inputFormat != null) {
+                xmlWriter.WriteStartElement("InputSerialization");
+                writeStringIfValuePresent(xmlWriter, "CompressionType", inputFormat.CompressionType);
+                if (inputFormat.csvFormat != null) {
+                    xmlWriter.WriteStartElement("CSV");
+                    writeStringIfValuePresent(xmlWriter, "FileHeaderInfo", inputFormat.csvFormat.FileHeaderInfo);
+                    writeStringIfValuePresent(xmlWriter, "RecordDelimiter", inputFormat.csvFormat.RecordDelimiter);
+                    writeStringIfValuePresent(xmlWriter, "FieldDelimiter", inputFormat.csvFormat.FieldDelimiter);
+                    writeStringIfValuePresent(xmlWriter, "QuoteCharacter", inputFormat.csvFormat.QuoteCharacter);
+                    writeStringIfValuePresent(xmlWriter, "QuoteEscapeCharacter", inputFormat.csvFormat.QuoteEscapeCharacter);
+                    writeStringIfValuePresent(xmlWriter, "Comments", inputFormat.csvFormat.Comments);
+                    writeStringIfValuePresent(xmlWriter, "AllowQuotedRecordDelimiter", 
+                        inputFormat.csvFormat.AllowQuotedRecordDelimiter ? "TRUE" : "FALSE");
+                    xmlWriter.WriteEndElement();
+                } else if (inputFormat.jsonFormat != null) {
+                    xmlWriter.WriteStartElement("JSON");
+                    writeStringIfValuePresent(xmlWriter, "Type", inputFormat.jsonFormat.Type);
+                    xmlWriter.WriteEndElement();
+                }
+                xmlWriter.WriteEndElement();
+            }
+
+            if (outputFormat != null) {
+                xmlWriter.WriteStartElement("OutputSerialization");
+                if (outputFormat.csvFormat != null) {
+                    xmlWriter.WriteStartElement("CSV");
+                    writeStringIfValuePresent(xmlWriter, "QuoteFields", outputFormat.csvFormat.QuoteFields);
+                    writeStringIfValuePresent(xmlWriter, "RecordDelimiter", outputFormat.csvFormat.RecordDelimiter);
+                    writeStringIfValuePresent(xmlWriter, "FieldDelimiter", outputFormat.csvFormat.FieldDelimiter);
+                    writeStringIfValuePresent(xmlWriter, "QuoteCharacter", outputFormat.csvFormat.QuoteCharacter);
+                    writeStringIfValuePresent(xmlWriter, "QuoteEscapeCharacter", outputFormat.csvFormat.QuoteEscapeCharacter);
+                    xmlWriter.WriteEndElement();
+                } else if (outputFormat.jsonFormat != null) {
+                    xmlWriter.WriteStartElement("JSON");
+                    writeStringIfValuePresent(xmlWriter, "RecordDelimiter", outputFormat.jsonFormat.RecordDelimiter);
+                    xmlWriter.WriteEndElement();
+                }
+                xmlWriter.WriteEndElement();
+            }
+
+            xmlWriter.WriteStartElement("RequestProgress");
+            xmlWriter.WriteElementString("Enabled", notifyProgress ? "TRUE" : "FALSE");
+            xmlWriter.WriteEndElement();
+
+            xmlWriter.WriteEndDocument();
+            xmlWriter.Flush();
+            return RemoveXMLHeader(stringWriter.ToString());
+        }
+
+        private static void writeStringIfValuePresent(XmlWriter xmlWriter, String elementName,
+            String elementValue) {
+            if (elementValue != null && elementValue.Length > 0) {
+                xmlWriter.WriteElementString(elementName, elementValue);
+            }
+        }
+
         private static string RemoveXMLHeader(string xmlContent)
         {
             if (xmlContent != null)

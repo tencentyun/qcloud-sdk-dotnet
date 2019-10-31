@@ -44,7 +44,7 @@ namespace COSXMLTests
             }
             catch (CosClientException clientEx)
             {
-                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Console.WriteLine("CosClientException: " + clientEx.StackTrace);
                 Assert.True(false);
             }
             catch (CosServerException serverEx)
@@ -1156,6 +1156,90 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.StackTrace);
+                Assert.True(false);
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.True(false);
+            }
+        }
+
+        [Test()]
+        public void testSelectObjectToFile() {
+            try
+            {
+                QCloudServer instance = QCloudServer.Instance();
+                string key = "select_target.json";
+
+                SelectObjectRequest request = new SelectObjectRequest(instance.bucketForObjectTest, key);
+
+                ObjectSelectionFormat.JSONFormat jSONFormat = new ObjectSelectionFormat.JSONFormat();
+                jSONFormat.Type = "DOCUMENT";
+                jSONFormat.RecordDelimiter = "\n";
+                
+                string outputFile = "select_local_file.json";
+
+                request.setExpression("Select * from COSObject")
+                        .setInputFormat(new ObjectSelectionFormat(null, jSONFormat))
+                        .setOutputFormat(new ObjectSelectionFormat(null, jSONFormat))
+                        .SetCosProgressCallback(delegate (long progress, long total) {
+                            Console.WriteLine("OnProgress : " + progress + "," + total);
+                        })
+                        .outputToFile(outputFile)
+                        ;
+
+                SelectObjectResult selectObjectResult =  instance.cosXml.selectObject(request);
+
+                Console.WriteLine(selectObjectResult.stat);
+                
+                Assert.AreEqual(selectObjectResult.stat.BytesReturned, new FileInfo(outputFile).Length);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.StackTrace);
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.True(false);
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.True(false);
+            }
+        }
+
+        [Test()]
+        public void testSelectObjectInMemory() {
+            try
+            {
+                QCloudServer instance = QCloudServer.Instance();
+                string key = "select_target.json";
+
+                SelectObjectRequest request = new SelectObjectRequest(instance.bucketForObjectTest, key);
+
+                ObjectSelectionFormat.JSONFormat jSONFormat = new ObjectSelectionFormat.JSONFormat();
+                jSONFormat.Type = "DOCUMENT";
+                jSONFormat.RecordDelimiter = "\n";
+
+                request.setExpression("Select * from COSObject")
+                        .setInputFormat(new ObjectSelectionFormat(null, jSONFormat))
+                        .setOutputFormat(new ObjectSelectionFormat(null, jSONFormat))
+                        .SetCosProgressCallback(delegate (long progress, long total) {
+                            Console.WriteLine("OnProgress : " + progress + "," + total);
+                        })
+                        ;
+
+                SelectObjectResult selectObjectResult =  instance.cosXml.selectObject(request);
+
+                Console.WriteLine(selectObjectResult.stat);
+
+                Assert.AreEqual(selectObjectResult.stat.BytesReturned, Encoding.UTF8.GetByteCount(
+                    selectObjectResult.searchContent));
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.StackTrace);
+                Console.WriteLine("CosClientException: " + clientEx.Message);
                 Assert.True(false);
             }
             catch (COSXML.CosException.CosServerException serverEx)
