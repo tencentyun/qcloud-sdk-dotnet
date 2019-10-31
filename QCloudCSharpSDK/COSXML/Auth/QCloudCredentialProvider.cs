@@ -29,35 +29,24 @@ namespace COSXML.Auth
 
         private string secretKey;
 
-        private string keyTime;
+        private long keyTimDuration;
 
         public DefaultQCloudCredentialProvider(string secretId, string secretKey, long keyDurationSecond)
-            : this(secretId, secretKey, TimeUtils.GetCurrentTime(TimeUnit.SECONDS), keyDurationSecond)
-        {}
-
-        public DefaultQCloudCredentialProvider(string secretId, string secretKey, long keyStartTimeSecond, long keyDurationSecond)
         {
             this.secretId = secretId;
             this.secretKey = secretKey;
-            long keyEndTime = keyStartTimeSecond + keyDurationSecond;
-            this.keyTime = String.Format("{0};{1}", keyStartTimeSecond, keyEndTime);
+            this.keyTimDuration = keyDurationSecond;
         }
 
         public override QCloudCredentials GetQCloudCredentials()
         {
-            if (IsNeedUpdateNow()) Refresh();
+            long keyStartTime = TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
+            long keyEndTime = keyStartTime + keyTimDuration;
+            string keyTime = String.Format("{0};{1}", keyStartTime, keyEndTime);
             if (secretId == null) throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretId == null");
             if (secretKey == null) throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretKey == null");
-            if (keyTime == null) throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "keyTime == null");
             string signKey = DigestUtils.GetHamcSha1ToHexString(keyTime, Encoding.UTF8, secretKey, Encoding.UTF8);
             return new QCloudCredentials(secretId, signKey, keyTime);
-        }
-
-        public void SetSetQCloudCredential(string secretId, string secretKey, string keyTime)
-        {
-            this.secretId = secretId;
-            this.secretKey = secretKey;
-            this.keyTime = keyTime;
         }
 
         public override void Refresh()
@@ -65,20 +54,6 @@ namespace COSXML.Auth
             //TODO update value
             QLog.D("DefaultQCloudCredentialProvider", "need to update QCloudCredentials");
             //invoke SetSetQCloudCredential(string secretId, string secretKey, string keyTime)
-        }
-
-        public bool IsNeedUpdateNow() 
-        {
-            if (String.IsNullOrEmpty(keyTime) || String.IsNullOrEmpty(secretId) || String.IsNullOrEmpty(secretKey))
-            {
-                return true;
-            }
-            int index = keyTime.IndexOf(';');
-            long endTime = -1L;
-            long.TryParse(keyTime.Substring(index + 1), out endTime);
-            long nowTime = TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
-            if (endTime <= nowTime) return true;
-            return false;
         }
     }
 
