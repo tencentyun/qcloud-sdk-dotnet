@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Diagnostics;
 
 using System.Text;
 /**
@@ -11,7 +13,7 @@ namespace COSXML.Common
 {
     public sealed class CosVersion
     {
-        public static string SDKVersion = "5.4.2.0";
+        private static string SDKVersion = "5.4.6.0";
 
         public static string GetUserAgent()
         {

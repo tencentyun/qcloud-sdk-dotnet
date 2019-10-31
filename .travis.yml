@@ -1,8 +1,7 @@
 language: csharp
-solution: "./QCloudCSharpSDK/QCloudCSharpSDK.sln"
-install:
-  - nuget restore ./QCloudCSharpSDK/QCloudCSharpSDK.sln
-  - nuget install  NUnit.Console -Version 3.9.0 -OutputDirectory testrunner
+mono: none
+dotnet: 2.2.402
 script:
-  - msbuild /p:Configuration=Debug ./QCloudCSharpSDK/QCloudCSharpSDK.sln
-  - ./testrunner/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe ./QCloudCSharpSDK/COSXMLTests/bin/Debug/COSXMLTests.dll
+  - cd QCloudCSharpSDK/COSXMLTests
+  - dotnet restore
+  - dotnet test

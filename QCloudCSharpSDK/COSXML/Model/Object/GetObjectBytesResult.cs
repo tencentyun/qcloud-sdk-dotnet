@@ -33,17 +33,22 @@ namespace COSXML.Model.Object
 
         internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength)
         {
-            content = new byte[contentLength];
-            int recvLen = inputStream.Read(content, 0, content.Length);
-            int completed = 0;
-            while (recvLen != 0)
+            // content = new byte[contentLength];
+            // int recvLen = inputStream.Read(content, 0, content.Length);
+            // int completed = 0;
+            // while (recvLen != 0)
+            // {
+            //     completed += recvLen;
+            //     if (progressCallback != null)
+            //     {
+            //         progressCallback(completed, content.Length);
+            //     }
+            //     recvLen = inputStream.Read(content, recvLen, content.Length - completed);
+            // }
+            using(var memoryStream = new MemoryStream())
             {
-                completed += recvLen;
-                if (progressCallback != null)
-                {
-                    progressCallback(completed, content.Length);
-                }
-                recvLen = inputStream.Read(content, recvLen, content.Length - completed);
+                inputStream.CopyTo(memoryStream);
+                content = memoryStream.ToArray();
             }
            
         }

@@ -33,8 +33,11 @@ namespace COSXMLTests
             string secretId = Environment.GetEnvironmentVariable("COS_KEY");
             string secretKey = Environment.GetEnvironmentVariable("COS_SECRET");
             region = Environment.GetEnvironmentVariable("COS_REGION");
-            bucketForBucketTest = "bucket-4-csharp-test";
-            bucketForObjectTest = "bucket-4-csharp-obj-test";
+            bucketForBucketTest = Environment.GetEnvironmentVariable("COS_BUCKET");
+            if (bucketForBucketTest == null) {
+                bucketForBucketTest = "bucket-4-csharp-test";
+            }
+            bucketForObjectTest = bucketForBucketTest;
 
             if (appid == null)
             {

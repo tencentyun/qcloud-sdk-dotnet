@@ -1124,6 +1124,48 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public void testGetObjectByte() {
+            QCloudServer instance = QCloudServer.Instance();
+
+            string key = "test.pdf";
+            string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 2);
+
+            PutObject(instance.cosXml, instance.bucketForObjectTest, key, @srcPath);
+
+            try
+            {
+                HeadObjectRequest request = new HeadObjectRequest(instance.bucketForObjectTest, key);
+                //设置签名有效时长
+                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+
+                //执行请求
+                HeadObjectResult result = instance.cosXml.HeadObject(request);
+
+                long contentLength = Int64.Parse(result.responseHeaders["Content-Length"][0]);
+
+                GetObjectBytesRequest getObjectBytesRequest = new GetObjectBytesRequest(instance.bucketForObjectTest, key);
+                //设置签名有效时长
+                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+
+                GetObjectBytesResult getObjectBytesResult = instance.cosXml.GetObject(getObjectBytesRequest);
+
+                byte[] content = getObjectBytesResult.content;
+
+                File.WriteAllBytes(key, content);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.StackTrace);
+                Assert.True(false);
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.True(false);
+            }
+        }
+
+        [Test()]
         public void testObject()
         {
 
@@ -1144,7 +1186,7 @@ namespace COSXMLTests
 
             PutObjectWithCustomerKey(instance.cosXml, instance.bucketForObjectTest, "customerKey_" + key, @srcPath);
 
-            PutObjectWithKMS(instance.cosXml, instance.bucketForObjectTest, "KMS" + key, @srcPath);
+            // PutObjectWithKMS(instance.cosXml, instance.bucketForObjectTest, "KMS" + key, @srcPath);
 
             HeadObject(instance.cosXml, instance.bucketForObjectTest, key);
 
