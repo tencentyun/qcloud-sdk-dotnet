@@ -34,7 +34,7 @@ namespace COSXML.Network
         /// <param name="config"></param>
         public static void Init(HttpClientConfig config)
         {
-            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.Expect100Continue = false;
             ServicePointManager.DefaultConnectionLimit = config.ConnectionLimit;
         }
 
