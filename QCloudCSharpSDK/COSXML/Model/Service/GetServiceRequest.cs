@@ -16,15 +16,18 @@ namespace COSXML.Model.Service
     /// </summary>
     public sealed class GetServiceRequest : CosRequest
     {
+        public string host {get; set;}
+
         public GetServiceRequest()
         {
             method = CosRequestMethod.GET;
             path = "/";
+            host = "service.cos.myqcloud.com";
         }
 
         public override string GetHost()
         {
-            return "service.cos.myqcloud.com";
+            return host;
         }
 
         public override Network.RequestBody GetRequestBody()

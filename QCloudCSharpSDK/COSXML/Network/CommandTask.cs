@@ -34,7 +34,7 @@ namespace COSXML.Network
         /// <param name="config"></param>
         public static void Init(HttpClientConfig config)
         {
-            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.Expect100Continue = false;
             ServicePointManager.DefaultConnectionLimit = config.ConnectionLimit;
         }
 
@@ -272,11 +272,10 @@ namespace COSXML.Network
 
                 requestState.response.Body.StartHandleResponseBody(responseStream, delegate(bool isSuccess, Exception ex)
                     {
+                        PrintResponseInfo(httpWebResponse);
                         requestState.response.OnFinish(isSuccess,ex);
                         requestState.Clear();
                     });
-                //pring log
-                PrintResponseInfo(httpWebResponse);
             }
             catch (WebException webEx)
             {
@@ -297,12 +296,10 @@ namespace COSXML.Network
 
                     requestState.response.Body.StartHandleResponseBody(responseStream, delegate(bool isSuccess, Exception ex)
                     {
+                        PrintResponseInfo(httpWebResponse);
                         requestState.response.OnFinish(isSuccess,ex);
                         requestState.Clear();
                     });
-
-                    //pring log
-                    PrintResponseInfo(httpWebResponse);
                 }
                 else
                 {

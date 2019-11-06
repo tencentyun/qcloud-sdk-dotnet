@@ -4,6 +4,7 @@ using COSXML.Model;
 using COSXML.Model.Object;
 using COSXML.Model.Tag;
 using COSXML.Utils;
+using COSXML.Transfer;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -1163,6 +1164,56 @@ namespace COSXMLTests
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 Assert.True(false);
             }
+        }
+
+        [Test()]
+        public void testUploadTask() {
+            QCloudServer instance = QCloudServer.Instance();
+            string key = "uploadTaskTest.txt";
+            string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 10);
+
+            TransferManager transferManager = new TransferManager(instance.cosXml, new TransferConfig());
+            COSXMLUploadTask uploadTask = new COSXMLUploadTask(instance.bucketForObjectTest, instance.region, key);
+            uploadTask.SetSrcPath(srcPath);
+
+            var autoEvent = new AutoResetEvent(false);
+            string eTag = null;
+
+            uploadTask.progressCallback = delegate (long completed, long total)
+            {
+                Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+            };
+            uploadTask.successCallback = delegate (CosResult cosResult) 
+            {
+                COSXML.Transfer.COSXMLUploadTask.UploadTaskResult result = cosResult as COSXML.Transfer.COSXMLUploadTask.UploadTaskResult;
+                Console.WriteLine(result.GetResultInfo());
+                autoEvent.Set();
+                eTag = result.eTag;
+            };
+            uploadTask.failCallback = delegate (CosClientException clientEx, CosServerException serverEx) 
+            {
+                if (clientEx != null)
+                {
+                    Console.WriteLine("CosClientException: " + clientEx);
+                }
+                if (serverEx != null)
+                {
+                    Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                }
+                autoEvent.Set();
+            };
+            transferManager.Upload(uploadTask);
+            autoEvent.WaitOne();
+            Assert.NotNull(eTag);
+        }
+
+        [Test()]
+        public void testSimpleUpload() {
+            QCloudServer instance = QCloudServer.Instance();
+            string key = @"simpleUploadBigFile.txt";
+            string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 10);
+
+            PutObject(instance.cosXml, instance.bucketForObjectTest, key, @srcPath);
         }
 
         [Test()]

@@ -268,8 +268,15 @@ namespace COSXML.Transfer
             sliceCount = size;
             uploadPartRequestMap = new Dictionary<UploadPartRequest, long>(size);
             uploadPartRequestList = new List<UploadPartRequest>(size);
+
+            AutoResetEvent resetEvent = new AutoResetEvent(false);
+            
             for (int i = 0; i < size; i++)
             {
+                if (activieTasks > MAX_ACTIVIE_TASKS)
+                {
+                    resetEvent.WaitOne();
+                }
                 lock (syncExit)
                 {
                     if (isExit)
@@ -278,10 +285,6 @@ namespace COSXML.Transfer
                     }
                 }
                 SliceStruct sliceStruct = sliceList[i];
-                while (activieTasks > MAX_ACTIVIE_TASKS)
-                {
-                    Thread.Sleep(5);
-                }
                 if (!sliceStruct.isAlreadyUpload)
                 {
                     UploadPartRequest uploadPartRequest = new UploadPartRequest(bucket, key, sliceStruct.partNumber, uploadId, srcPath, sliceStruct.sliceStart,
@@ -303,18 +306,11 @@ namespace COSXML.Transfer
                     uploadPartRequestList.Add(uploadPartRequest);
 
 
-                    activieTasks++;
-
+                    Interlocked.Increment(ref activieTasks);
+    
                     cosXmlServer.UploadPart(uploadPartRequest, delegate (CosResult result)
                     {
-                        lock (syncExit)
-                        {
-                            if (isExit)
-                            {
-                                return;
-                            }
-                        }
-                        activieTasks--;
+                        Interlocked.Decrement(ref activieTasks);
                         UploadPartResult uploadPartResult = result as UploadPartResult;
                         sliceStruct.eTag = uploadPartResult.eTag;
                         lock (syncPartCopyCount)
@@ -323,25 +319,18 @@ namespace COSXML.Transfer
                             if (sliceCount == 0)
                             {
                                 OnPart();
-                                return;
                             }
                         }
+                        resetEvent.Set();
 
                     }, delegate (CosClientException clientEx, CosServerException serverEx)
                     {
-                        lock (syncExit)
-                        {
-                            if (isExit)
-                            {
-                                return;
-                            }
-                        }
-                        activieTasks--;
+                        Interlocked.Decrement(ref activieTasks);
                         if (UpdateTaskState(TaskState.FAILED))
                         {
                             OnFailed(clientEx, serverEx);
                         }
-                        return;
+                        resetEvent.Set();
                     });
 
                 }

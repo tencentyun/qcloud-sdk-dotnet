@@ -17,6 +17,7 @@ namespace COSXML
         private string region;
         private bool isHttps;
         private bool isDebug;
+        public string endpointSuffix {get;}
 
         private CosXmlConfig(Builder builder)
         {
@@ -25,6 +26,7 @@ namespace COSXML
             this.isHttps = builder.isHttps;
             this.httpConfig = builder.httpClientConfigBuilder.Build();
             this.isDebug = builder.isDebug;
+            this.endpointSuffix = builder.endpointSuffix;
         }
 
         public string Appid
@@ -59,6 +61,7 @@ namespace COSXML
             internal bool isHttps = false;
             internal HttpClientConfig.Builder httpClientConfigBuilder;
             internal bool isDebug = false;
+            internal string endpointSuffix;
             public Builder() 
             {
                 httpClientConfigBuilder = new HttpClientConfig.Builder();
@@ -157,6 +160,11 @@ namespace COSXML
             public Builder SetDebugLog(bool isDebug)
             {
                 this.isDebug = isDebug;
+                return this;
+            }
+
+            public Builder setEndpointSuffix(string suffix) {
+                this.endpointSuffix = suffix;
                 return this;
             }
 

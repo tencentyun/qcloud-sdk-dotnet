@@ -61,18 +61,20 @@ namespace COSXML.Model.Bucket
         public override string GetHost()
         {
             StringBuilder hostBuilder = new StringBuilder();
-            if (bucket.EndsWith("-" + appid))
+            hostBuilder.Append(bucket);
+            if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
             {
-                hostBuilder.Append(bucket);
-            }
-            else
-            {
-                hostBuilder.Append(bucket).Append("-")
+                hostBuilder.Append("-")
                     .Append(appid);
             }
-            hostBuilder.Append(".cos.")
-                .Append(region)
-                .Append(".myqcloud.com");
+            if (serviceConfig.endpointSuffix != null) {
+                hostBuilder.Append(".")
+                    .Append(serviceConfig.endpointSuffix);
+            } else {
+                hostBuilder.Append(".cos.")
+                    .Append(region)
+                    .Append(".myqcloud.com");
+            }
             return hostBuilder.ToString();
         }
 
