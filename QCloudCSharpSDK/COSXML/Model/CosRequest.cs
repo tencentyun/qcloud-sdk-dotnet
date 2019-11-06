@@ -75,6 +75,8 @@ namespace COSXML.Model
         /// </summary>
         protected string requestUrlWithSign = null;
 
+        public CosXmlConfig serviceConfig {get; set;}
+
         /// <summary>
         /// http or https for cos request.
         /// </summary>

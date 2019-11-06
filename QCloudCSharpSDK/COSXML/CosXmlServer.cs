@@ -46,6 +46,7 @@ namespace COSXML
 
         private void CheckAppidAndRegion(CosRequest request)
         {
+            request.serviceConfig = config;
             if (request.IsHttps == null)
             {
                 request.IsHttps = config.IsHttps;
