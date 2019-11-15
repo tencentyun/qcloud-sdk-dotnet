@@ -126,8 +126,9 @@ namespace COSXML.Log
                 .Append(Thread.CurrentThread.ManagedThreadId)
                 .Append("-")
                 .Append(currentProcess.Id)
-                .Append("/")
-                .Append(currentProcess.ProcessName)
+                // OSX 系统上不支持
+                // .Append("/")
+                // .Append(currentProcess.ProcessName)
                 .Append(" ")
                 .Append(level.ToString())
                 .Append("/")

@@ -2,7 +2,6 @@
 using COSXML;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using COSXMLTests;
 using System.IO;

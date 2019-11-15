@@ -9,11 +9,8 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace COSXMLTests
 {
@@ -1128,10 +1125,14 @@ namespace COSXMLTests
         public void testGetObjectByte() {
             QCloudServer instance = QCloudServer.Instance();
 
-            string key = "test.pdf";
-            string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 2);
+            string key = "testGetObjectBytes.MOV";
 
-            PutObject(instance.cosXml, instance.bucketForObjectTest, key, @srcPath);
+            HeadObjectResult headResult = instance.cosXml.HeadObject(new HeadObjectRequest(instance.bucketForObjectTest, key));
+            if (headResult.eTag == null) {
+                long fileLength = 1024 * 1024 * 10;
+                string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".docx", fileLength);
+                PutObject(instance.cosXml, instance.bucketForObjectTest, key, @srcPath);
+            }
 
             try
             {
@@ -1148,15 +1149,21 @@ namespace COSXMLTests
                 //设置签名有效时长
                 request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
 
+                getObjectBytesRequest.SetCosProgressCallback(delegate (long completed, long total)
+                {
+                    Console.WriteLine(String.Format("{0} progress = {1} / {2} : {3:##.##}%", DateTime.Now.ToString(), completed, total, completed * 100.0 / total));
+                });
+
                 GetObjectBytesResult getObjectBytesResult = instance.cosXml.GetObject(getObjectBytesRequest);
 
                 byte[] content = getObjectBytesResult.content;
 
                 File.WriteAllBytes(key, content);
+
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
-                Console.WriteLine("CosClientException: " + clientEx.StackTrace);
+                Console.WriteLine("CosClientException: " + clientEx);
                 Assert.True(false);
             }
             catch (COSXML.CosException.CosServerException serverEx)
