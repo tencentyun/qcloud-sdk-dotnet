@@ -1127,11 +1127,18 @@ namespace COSXMLTests
 
             string key = "testGetObjectBytes.MOV";
 
-            HeadObjectResult headResult = instance.cosXml.HeadObject(new HeadObjectRequest(instance.bucketForObjectTest, key));
-            if (headResult.eTag == null) {
-                long fileLength = 1024 * 1024 * 10;
-                string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".docx", fileLength);
-                PutObject(instance.cosXml, instance.bucketForObjectTest, key, @srcPath);
+            try
+            {
+                HeadObjectResult headResult = instance.cosXml.HeadObject(new HeadObjectRequest(instance.bucketForObjectTest, key));
+                
+            } 
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                if (serverEx.statusCode == 404) {
+                    long fileLength = 1024 * 1024 * 10;
+                    string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".docx", fileLength);
+                    PutObject(instance.cosXml, instance.bucketForObjectTest, key, @srcPath);
+                }
             }
 
             try
