@@ -2761,7 +2761,7 @@ namespace COSXML
         PutBucketLoggingResult putBucketLogging(PutBucketLoggingRequest request);
         void putBucketLoggingAsync(PutBucketLoggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
-        GetBucketLoggingResult getBucketLogging(GetBucketLocationRequest request);
+        GetBucketLoggingResult getBucketLogging(GetBucketLoggingRequest request);
 
         void getBucketLoggingAsync(GetBucketLoggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 

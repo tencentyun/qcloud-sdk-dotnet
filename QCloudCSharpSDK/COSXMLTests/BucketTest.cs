@@ -1546,6 +1546,114 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public void testBucketLogging()
+        {
+            QCloudServer instance = QCloudServer.Instance();
+            try {
+                PutBucketLoggingRequest request = new PutBucketLoggingRequest(instance.bucketForBucketTest);
+                request.SetTarget("targetbucket-1250000000", "/abc");
+                PutBucketLoggingResult putResult = instance.cosXml.putBucketLogging(request);
+                
+                Assert.IsTrue(putResult.httpCode == 200);
+
+                GetBucketLoggingResult getResult = instance.cosXml.getBucketLogging(
+                    new GetBucketLoggingRequest(instance.bucketForBucketTest));
+                BucketLoggingStatus status = getResult.bucketLoggingStatus;
+                if (status != null && status.loggingEnabled != null) {
+                    string targetBucket = status.loggingEnabled.targetBucket;
+                    string targetPrefix = status.loggingEnabled.targetPrefix;
+                    Assert.NotNull(targetBucket);
+                }
+                
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                if (serverEx.statusCode != 409 && serverEx.statusCode != 451) {
+                Assert.Fail();
+                }
+            }
+        }
+
+        [Test()]
+        public void testBucketWebsite()
+        {
+            QCloudServer instance = QCloudServer.Instance();
+            try {
+                PutBucketWebsiteRequest putRequest = new PutBucketWebsiteRequest(instance.bucketForBucketTest);
+                putRequest.SetIndexDocument("index.html");
+                putRequest.SetErrorDocument("eroror.html");
+                putRequest.SetRedirectAllRequestTo("index.html");
+                PutBucketWebsiteResult putResult = instance.cosXml.putBucketWebsite(putRequest);
+                Assert.IsTrue(putResult.httpCode == 200);
+
+                GetBucketWebsiteRequest getRequest = new GetBucketWebsiteRequest(instance.bucketForBucketTest);
+                GetBucketWebsiteResult getResult = instance.cosXml.getBucketWebsite(getRequest);
+                WebsiteConfiguration configuration = getResult.websiteConfiguration;
+                Assert.NotNull(configuration);
+                
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                if (serverEx.statusCode != 409 && serverEx.statusCode != 451) {
+                Assert.Fail();
+                }
+            }
+        }
+
+        [Test()]
+        public void testBucketInventory()
+        {
+            QCloudServer instance = QCloudServer.Instance();
+            try {
+                string inventoryId = "aInventoryId";
+
+                PutBucketInventoryRequest putRequest = new PutBucketInventoryRequest(instance.bucketForBucketTest);
+                putRequest.SetInventoryId(inventoryId);
+                putRequest.SetDestination("CSV", "100000000001", "examplebucket-1250000000", "ap-guangzhou","list1");
+                putRequest.IsEnable(true);
+                putRequest.SetScheduleFrequency("Daily");
+                PutBucketInventoryResult putResult = instance.cosXml.putBucketInventory(putRequest);
+                Assert.IsTrue(putResult.httpCode == 200);
+
+                GetBucketInventoryRequest getRequest = new GetBucketInventoryRequest(instance.bucketForBucketTest);
+                getRequest.SetInventoryId(inventoryId);
+                GetBucketInventoryResult getResult = instance.cosXml.getBucketInventory(getRequest);
+                InventoryConfiguration configuration = getResult.inventoryConfiguration;
+                Assert.NotNull(configuration);
+
+                DeleteBucketInventoryRequest deleteRequest = new DeleteBucketInventoryRequest(instance.bucketForBucketTest);
+                deleteRequest.SetInventoryId(inventoryId);
+                DeleteBucketInventoryResult deleteResult = instance.cosXml.deleteBucketInventory(deleteRequest);
+                Assert.IsTrue(putResult.httpCode == 200);
+                
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                if (serverEx.statusCode != 409 && serverEx.statusCode != 451) {
+                Assert.Fail();
+                }
+            }
+        }
+
+        [Test()]
         public void testBucket()
         {
             QCloudServer instance = QCloudServer.Instance();
