@@ -671,7 +671,7 @@ namespace COSXML
             schedue(request, new Model.Bucket.PutBucketLoggingResult(), successCallback, failCallback);
         }
 
-        public GetBucketLoggingResult getBucketLogging(GetBucketLocationRequest request)
+        public GetBucketLoggingResult getBucketLogging(GetBucketLoggingRequest request)
         {
             return (Model.Bucket.GetBucketLoggingResult)excute(request, new Model.Bucket.GetBucketLoggingResult());
         }
