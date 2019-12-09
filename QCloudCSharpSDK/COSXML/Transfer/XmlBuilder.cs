@@ -421,7 +421,7 @@ namespace COSXML.Transfer
 
             if (inventoryConfiguration.id != null)
                 xmlWriter.WriteElementString( "Id", inventoryConfiguration.id);
-            xmlWriter.WriteElementString("IsEnabled", inventoryConfiguration.isEnabled ? "True" : "False");
+            xmlWriter.WriteElementString("IsEnabled", inventoryConfiguration.isEnabled ? "true" : "false");
             if (inventoryConfiguration.destination != null)
             {
                 xmlWriter.WriteStartElement("Destination");
@@ -462,7 +462,7 @@ namespace COSXML.Transfer
             }
             if (inventoryConfiguration.includedObjectVersions != null)
             {
-                xmlWriter.WriteElementString("IncludeObjectVersions", inventoryConfiguration.includedObjectVersions);
+                xmlWriter.WriteElementString("IncludedObjectVersions", inventoryConfiguration.includedObjectVersions);
             }
             if (inventoryConfiguration.optionalFields != null && inventoryConfiguration.optionalFields.fields != null)
             {

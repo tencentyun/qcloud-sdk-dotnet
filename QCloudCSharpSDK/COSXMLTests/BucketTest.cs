@@ -1620,13 +1620,13 @@ namespace COSXMLTests
         {
             QCloudServer instance = QCloudServer.Instance();
             try {
-                string inventoryId = "aInventoryId";
+                string inventoryId = "id1";
 
-                PutBucketInventoryRequest putRequest = new PutBucketInventoryRequest(instance.bucketForBucketTest);
-                putRequest.SetInventoryId(inventoryId);
-                putRequest.SetDestination("CSV", "100000000001", "examplebucket-1250000000", "ap-guangzhou","list1");
+                PutBucketInventoryRequest putRequest = new PutBucketInventoryRequest(instance.bucketForBucketTest, inventoryId);
+                putRequest.SetDestination("CSV", "1278687956", "bucket-cssg-test-1253653367", instance.region, "list1");
                 putRequest.IsEnable(true);
                 putRequest.SetScheduleFrequency("Daily");
+                putRequest.SetIncludedObjectVersions("All");
                 PutBucketInventoryResult putResult = instance.cosXml.putBucketInventory(putRequest);
                 Assert.IsTrue(putResult.httpCode == 200);
 
