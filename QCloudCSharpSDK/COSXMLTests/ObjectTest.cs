@@ -1125,6 +1125,33 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public void testCreateDirectory() {
+            QCloudServer instance = QCloudServer.Instance();
+            try
+            {
+                PutObjectRequest request = new PutObjectRequest(instance.bucketForObjectTest, 
+                    "dir/", new byte[0]);
+                //设置签名有效时长
+                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+
+                //执行请求
+                PutObjectResult result = instance.cosXml.PutObject(request);
+
+                Console.WriteLine(result.GetResultInfo());
+            }
+            catch (CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.True(false);
+            }
+            catch (CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.True(false);
+            }
+        }
+
+        [Test()]
         public void testGetObjectByte() {
             QCloudServer instance = QCloudServer.Instance();
 
