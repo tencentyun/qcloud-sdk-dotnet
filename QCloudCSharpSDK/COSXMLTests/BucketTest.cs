@@ -1588,7 +1588,7 @@ namespace COSXMLTests
                 PutBucketWebsiteRequest putRequest = new PutBucketWebsiteRequest(instance.bucketForBucketTest);
                 putRequest.SetIndexDocument("index.html");
                 putRequest.SetErrorDocument("eroror.html");
-                putRequest.SetRedirectAllRequestTo("index.html");
+                putRequest.SetRedirectAllRequestTo("https");
                 PutBucketWebsiteResult putResult = instance.cosXml.putBucketWebsite(putRequest);
                 Assert.IsTrue(putResult.httpCode == 200);
 
@@ -1596,6 +1596,11 @@ namespace COSXMLTests
                 GetBucketWebsiteResult getResult = instance.cosXml.getBucketWebsite(getRequest);
                 WebsiteConfiguration configuration = getResult.websiteConfiguration;
                 Assert.NotNull(configuration);
+
+                DeleteBucketWebsiteRequest deleteRequest = new DeleteBucketWebsiteRequest(instance.bucketForBucketTest);
+                DeleteBucketWebsiteResult deleteResult = instance.cosXml.deleteBucketWebsite(deleteRequest);
+                Console.WriteLine(deleteResult.GetResultInfo());
+                Assert.NotNull(deleteResult.GetResultInfo());
                 
             }
             catch (COSXML.CosException.CosClientException clientEx)
@@ -1606,9 +1611,7 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                if (serverEx.statusCode != 409 && serverEx.statusCode != 451) {
                 Assert.Fail();
-                }
             }
         }
 

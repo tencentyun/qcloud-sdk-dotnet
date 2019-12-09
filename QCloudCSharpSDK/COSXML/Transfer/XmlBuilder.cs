@@ -324,6 +324,7 @@ namespace COSXML.Transfer
 
             XmlWriter xmlWriter = XmlWriter.Create(stringWriter, xmlWriterSetting);
             xmlWriter.WriteStartDocument();
+            xmlWriter.WriteStartElement("WebsiteConfiguration");
 
             if (websiteConfiguration.indexDocument != null)
             {
