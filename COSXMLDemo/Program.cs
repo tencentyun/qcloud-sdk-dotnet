@@ -33,9 +33,10 @@ namespace COSXMLDemo
             
             // TCE 初始化方式
             // string domain = "your.domain";  // 替换成您的 Domain
-            // string endpoint = String.format("cos.%s.%s", region, domain);
+            // string endpoint = String.Format("cos.{0}.{1}", region, domain);
             // CosXmlConfig config = new CosXmlConfig.Builder()
             //     .setEndpointSuffix(endpoint)
+            //     .SetRegion(region)
             //     .SetDebugLog(true)
             //     .Build();
 
