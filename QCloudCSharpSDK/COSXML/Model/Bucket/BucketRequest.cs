@@ -61,19 +61,23 @@ namespace COSXML.Model.Bucket
         public override string GetHost()
         {
             StringBuilder hostBuilder = new StringBuilder();
-            hostBuilder.Append(bucket);
-            if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
-            {
-                hostBuilder.Append("-")
-                    .Append(appid);
-            }
-            if (serviceConfig.endpointSuffix != null) {
-                hostBuilder.Append(".")
-                    .Append(serviceConfig.endpointSuffix);
+            if (!String.IsNullOrEmpty(serviceConfig.host)) {
+                hostBuilder.Append(serviceConfig.host);
             } else {
-                hostBuilder.Append(".cos.")
-                    .Append(region)
-                    .Append(".myqcloud.com");
+                hostBuilder.Append(bucket);
+                if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
+                {
+                    hostBuilder.Append("-")
+                        .Append(appid);
+                }
+                if (serviceConfig.endpointSuffix != null) {
+                    hostBuilder.Append(".")
+                        .Append(serviceConfig.endpointSuffix);
+                } else {
+                    hostBuilder.Append(".cos.")
+                        .Append(region)
+                        .Append(".myqcloud.com");
+                }
             }
             return hostBuilder.ToString();
         }
@@ -89,10 +93,10 @@ namespace COSXML.Model.Bucket
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "bucket is null");
             }
-            if (region == null)
-            {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "region is null");
-            }
+            // if (region == null)
+            // {
+            //     throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "region is null");
+            // }
         }
 
     }

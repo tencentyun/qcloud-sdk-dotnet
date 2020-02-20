@@ -19,6 +19,8 @@ namespace COSXML
         private bool isDebug;
         public string endpointSuffix {get;}
 
+        public string host {get;}
+
         private CosXmlConfig(Builder builder)
         {
             this.appid = builder.appid;
@@ -27,6 +29,7 @@ namespace COSXML
             this.httpConfig = builder.httpClientConfigBuilder.Build();
             this.isDebug = builder.isDebug;
             this.endpointSuffix = builder.endpointSuffix;
+            this.host = builder.host;
         }
 
         public string Appid
@@ -62,6 +65,7 @@ namespace COSXML
             internal HttpClientConfig.Builder httpClientConfigBuilder;
             internal bool isDebug = false;
             internal string endpointSuffix;
+            internal string host;
             public Builder() 
             {
                 httpClientConfigBuilder = new HttpClientConfig.Builder();
@@ -165,6 +169,11 @@ namespace COSXML
 
             public Builder setEndpointSuffix(string suffix) {
                 this.endpointSuffix = suffix;
+                return this;
+            }
+
+            public Builder setHost(string host) {
+                this.host = host;
                 return this;
             }
 
