@@ -10,22 +10,18 @@ namespace COSXML.Model.Bucket
     public sealed class PutBucketInventoryRequest : BucketRequest
     {
         private InventoryConfiguration inventoryConfiguration;
-        public PutBucketInventoryRequest(string bucket) : base(bucket)
+        public PutBucketInventoryRequest(string bucket, string id) : base(bucket)
         {
             this.method = CosRequestMethod.PUT;
             this.queryParameters.Add("inventory", null);
+            this.queryParameters.Add("id", id);
             this.IsNeedMD5 = true;
             inventoryConfiguration = new InventoryConfiguration();
             inventoryConfiguration.isEnabled = true;
-            inventoryConfiguration.id = "None";
+            inventoryConfiguration.id = id;
             inventoryConfiguration.schedule = new InventoryConfiguration.Schedule();
             inventoryConfiguration.destination = new InventoryConfiguration.Destination();
             inventoryConfiguration.destination.cosBucketDestination = new InventoryConfiguration.COSBucketDestination();
-        }
-
-        public void SetInventoryId(string inventoryId)
-        {
-            inventoryConfiguration.id = inventoryId;
         }
 
         public void IsEnable(bool isEnabled)
@@ -52,6 +48,9 @@ namespace COSXML.Model.Bucket
                         + "::" + bucket;
             }
             if (prefix != null) inventoryConfiguration.destination.cosBucketDestination.prefix = prefix;
+        }
+
+        public void enableSSE() {
             inventoryConfiguration.destination.cosBucketDestination.encryption = new InventoryConfiguration.Encryption();
             inventoryConfiguration.destination.cosBucketDestination.encryption.sSECOS = ""; //默认不填
         }

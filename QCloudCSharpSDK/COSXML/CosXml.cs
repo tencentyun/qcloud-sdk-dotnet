@@ -2750,10 +2750,18 @@ namespace COSXML
 
         void deleteBucketWebsiteAsync(DeleteBucketWebsiteRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
+        PutBucketDomainResult putBucketDomain(PutBucketDomainRequest request);
+
+        void putBucketDomainAsync(PutBucketDomainRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        GetBucketDomainResult getBucketDomain(GetBucketDomainRequest request);
+
+        void getBucketDomainAsync(GetBucketDomainRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
         PutBucketLoggingResult putBucketLogging(PutBucketLoggingRequest request);
         void putBucketLoggingAsync(PutBucketLoggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
-        GetBucketLoggingResult getBucketLogging(GetBucketLocationRequest request);
+        GetBucketLoggingResult getBucketLogging(GetBucketLoggingRequest request);
 
         void getBucketLoggingAsync(GetBucketLoggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
@@ -2772,6 +2780,22 @@ namespace COSXML
         ListBucketInventoryResult listBucketInventory(ListBucketInventoryRequest request);
 
         void listBucketInventoryAsync(ListBucketInventoryRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        PutBucketTaggingResult putBucketTagging(PutBucketTaggingRequest request);
+
+        void putBucketTaggingAsync(PutBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        GetBucketTaggingResult getBucketTagging(GetBucketTaggingRequest request);
+
+        void getBucketTaggingAsync(GetBucketTaggingRequest request,COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        DeleteBucketTaggingResult deleteBucketTagging(DeleteBucketTaggingRequest request);
+
+        void deleteBucketTaggingAsync(DeleteBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        SelectObjectResult selectObject(SelectObjectRequest request);
+
+        void selectObjectAsync(SelectObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         void Cancel(CosRequest cosRequest);
     }

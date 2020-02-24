@@ -26,6 +26,7 @@ namespace COSXML.Common
         public const string X_COS_COPY_SOURCE_IF_NONE_MATCH = "x-cos-copy-source-If-None-Match";
         public const string X_COS_STORAGE_CLASS_ = "x-cos-storage-class";
         public const string X_COS_COPY_SOURCE_RANGE = "x-cos-copy-source-range";
+        public const string X_COS_TRAFFIC_LIMIT = "x-cos-traffic-limit";    // 限速
         public const string ORIGIN = "Origin";
         public const string ACCESS_CONTROL_REQUEST_METHOD = "Access-Control-Request-Method";
         public const string ACCESS_CONTROL_REQUEST_HEADERS = "Access-Control-Request-Headers";

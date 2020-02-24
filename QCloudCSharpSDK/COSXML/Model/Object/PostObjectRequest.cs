@@ -177,6 +177,14 @@ namespace COSXML.Model.Object
         }
 
         /// <summary>
+        /// 最大上传速度，单位是 bit/s
+        /// </summary>
+        /// <param name="start"></param>
+        public void LimitTraffic(long rate) {
+            formStruct.xCOSTrafficLimit = rate.ToString();
+        }
+
+        /// <summary>
         /// 若设置优先生效，返回 303 并提供 Location 头部，
         /// 会在 URL 尾部加上 bucket={bucket}&key={key}&etag={%22etag%22} 参数。
         /// </summary>
@@ -283,6 +291,10 @@ namespace COSXML.Model.Object
             /// </summary>
             public string xCosStorageClass;
             /// <summary>
+            /// 速度限制
+            /// </summary>
+            public string xCOSTrafficLimit;
+            /// <summary>
             /// 签名串
             /// </summary>
             public string sign;
@@ -340,6 +352,9 @@ namespace COSXML.Model.Object
                 }
                 if(xCosStorageClass != null){
                     formParameters.Add("x-cos-storage-class", xCosStorageClass);
+                }
+                if(xCOSTrafficLimit != null) {
+                    formParameters.Add(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, xCOSTrafficLimit);
                 }
                 if (sign != null)
                 {

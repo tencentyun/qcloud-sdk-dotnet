@@ -112,6 +112,14 @@ namespace COSXML.Model.Object
         {
             this.uploadId = uploadId;
         }
+
+        /// <summary>
+        /// 最大上传速度，单位是 bit/s
+        /// </summary>
+        /// <param name="start"></param>
+        public void LimitTraffic(long rate) {
+            SetRequestHeader(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, rate.ToString());
+        }
         /// <summary>
         /// 设置回调
         /// </summary>

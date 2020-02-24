@@ -34,7 +34,7 @@ namespace COSXMLTests
             region = Environment.GetEnvironmentVariable("COS_REGION");
             bucketForBucketTest = Environment.GetEnvironmentVariable("COS_BUCKET");
             if (bucketForBucketTest == null) {
-                bucketForBucketTest = "bucket-4-csharp-test";
+                bucketForBucketTest = "bucket-4-csharp-test-1253653367";
             }
             bucketForObjectTest = bucketForBucketTest;
 

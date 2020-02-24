@@ -42,7 +42,7 @@ namespace COSXMLTests
             }
             catch (CosClientException clientEx)
             {
-                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Console.WriteLine("CosClientException: " + clientEx.StackTrace);
                 Assert.True(false);
             }
             catch (CosServerException serverEx)
@@ -1122,6 +1122,33 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public void testCreateDirectory() {
+            QCloudServer instance = QCloudServer.Instance();
+            try
+            {
+                PutObjectRequest request = new PutObjectRequest(instance.bucketForObjectTest, 
+                    "dir/", new byte[0]);
+                //设置签名有效时长
+                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+
+                //执行请求
+                PutObjectResult result = instance.cosXml.PutObject(request);
+
+                Console.WriteLine(result.GetResultInfo());
+            }
+            catch (CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.True(false);
+            }
+            catch (CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.True(false);
+            }
+        }
+
+        [Test()]
         public void testGetObjectByte() {
             QCloudServer instance = QCloudServer.Instance();
 
@@ -1181,6 +1208,88 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public void testSelectObjectToFile() {
+            try
+            {
+                QCloudServer instance = QCloudServer.Instance();
+                string key = "select_target.json";
+
+                SelectObjectRequest request = new SelectObjectRequest(instance.bucketForObjectTest, key);
+
+                ObjectSelectionFormat.JSONFormat jSONFormat = new ObjectSelectionFormat.JSONFormat();
+                jSONFormat.Type = "DOCUMENT";
+                jSONFormat.RecordDelimiter = "\n";
+                
+                string outputFile = "select_local_file.json";
+
+                request.setExpression("Select * from COSObject")
+                        .setInputFormat(new ObjectSelectionFormat(null, jSONFormat))
+                        .setOutputFormat(new ObjectSelectionFormat(null, jSONFormat))
+                        .SetCosProgressCallback(delegate (long progress, long total) {
+                            Console.WriteLine("OnProgress : " + progress + "," + total);
+                        })
+                        .outputToFile(outputFile)
+                        ;
+
+                SelectObjectResult selectObjectResult =  instance.cosXml.selectObject(request);
+
+                Console.WriteLine(selectObjectResult.stat);
+                
+                Assert.AreEqual(selectObjectResult.stat.BytesReturned, new FileInfo(outputFile).Length);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.StackTrace);
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.True(false);
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.True(false);
+            }
+        }
+
+        [Test()]
+        public void testSelectObjectInMemory() {
+            try
+            {
+                QCloudServer instance = QCloudServer.Instance();
+                string key = "select_target.json";
+
+                SelectObjectRequest request = new SelectObjectRequest(instance.bucketForObjectTest, key);
+
+                ObjectSelectionFormat.JSONFormat jSONFormat = new ObjectSelectionFormat.JSONFormat();
+                jSONFormat.Type = "DOCUMENT";
+                jSONFormat.RecordDelimiter = "\n";
+
+                request.setExpression("Select * from COSObject")
+                        .setInputFormat(new ObjectSelectionFormat(null, jSONFormat))
+                        .setOutputFormat(new ObjectSelectionFormat(null, jSONFormat))
+                        .SetCosProgressCallback(delegate (long progress, long total) {
+                            Console.WriteLine("OnProgress : " + progress + "," + total);
+                        })
+                        ;
+
+                SelectObjectResult selectObjectResult =  instance.cosXml.selectObject(request);
+
+                Console.WriteLine(selectObjectResult.stat);
+
+                Assert.AreEqual(selectObjectResult.stat.BytesReturned, Encoding.UTF8.GetByteCount(
+                    selectObjectResult.searchContent));
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.StackTrace);
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.True(false);
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.True(false);
+            }
+        }
         public void testUploadTask() {
             QCloudServer instance = QCloudServer.Instance();
             string key = "uploadTaskTest.txt";
@@ -1228,6 +1337,174 @@ namespace COSXMLTests
             string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 10);
 
             PutObject(instance.cosXml, instance.bucketForObjectTest, key, @srcPath);
+        }
+
+        [Test()]
+        public void testDownloadTrafficLimit() {
+            QCloudServer instance = QCloudServer.Instance();
+            string key = @"simpleUploadBigFile.txt";
+            string filePath = @"localTempFile";
+            FileInfo fileInfo = new FileInfo(filePath);
+
+            try
+            {
+                long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
+                GetObjectRequest request = new GetObjectRequest(instance.bucketForObjectTest, 
+                    key, fileInfo.Directory.FullName, filePath);
+                
+                request.LimitTraffic(8 * 1000 * 1024);
+                //执行请求
+                GetObjectResult result = instance.cosXml.GetObject(request);
+                long costTime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() - now;
+
+                Console.WriteLine("costTime = " + costTime + "ms");
+                Console.WriteLine(result.GetResultInfo());
+
+                Assert.True(result.httpCode == 200);
+                Assert.True(costTime > 8000 && costTime < 14000);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.True(false);
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.True(false);
+            }
+        }
+
+        [Test()]
+        public void testUploadTrafficLimit() {
+            QCloudServer instance = QCloudServer.Instance();
+            string key = @"simpleUploadBigFile.txt";
+            string filePath = @"localTempFile";
+            FileInfo fileInfo = new FileInfo(filePath);
+
+            try
+            {
+                long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
+                PutObjectRequest request = new PutObjectRequest(instance.bucketForObjectTest, 
+                    key, fileInfo.FullName);
+                
+                request.LimitTraffic(8 * 1000 * 1024);
+                //执行请求
+                PutObjectResult result = instance.cosXml.PutObject(request);
+                long costTime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() - now;
+                
+                Console.WriteLine("costTime = " + costTime + "ms");
+                Console.WriteLine(result.GetResultInfo());
+
+                Assert.True(result.httpCode == 200);
+                Assert.True(costTime > 8000 && costTime < 14000);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.True(false);
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.True(false);
+            }
+
+        }
+
+        [Test()]
+        public void testPutObjectTrafficLimit() {
+            QCloudServer instance = QCloudServer.Instance();
+            string key = @"simpleUploadBigFile.txt";
+            string filePath = @"localTempFile";
+            FileInfo fileInfo = new FileInfo(filePath);
+
+            try
+            {
+                long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
+                PostObjectRequest request = new PostObjectRequest(instance.bucketForObjectTest, 
+                    key, fileInfo.FullName);
+                
+                request.LimitTraffic(8 * 1000 * 1024);
+                //执行请求
+                PostObjectResult result = instance.cosXml.PostObject(request);
+                long costTime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() - now;
+                
+                Console.WriteLine("costTime = " + costTime + "ms");
+                Console.WriteLine(result.GetResultInfo());
+
+                Assert.True(result.httpCode == 204);
+                Assert.True(costTime > 8000 && costTime < 14000);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.True(false);
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.True(false);
+            }
+        }
+
+        [Test()]
+        public void testMultiUploadTrafficLimit()
+        {
+            QCloudServer instance = QCloudServer.Instance();
+            string key = @"simpleUploadBigFile.txt";
+            string filePath = @"localTempFile";
+            FileInfo fileInfo = new FileInfo(filePath);
+            string bucket = instance.bucketForObjectTest;
+
+            try
+            {
+                InitMultipartUploadRequest initMultipartUploadRequest = new InitMultipartUploadRequest(bucket, key);
+
+                //执行请求
+                InitMultipartUploadResult initMultipartUploadResult = instance.cosXml.InitMultipartUpload(initMultipartUploadRequest);
+
+                Console.WriteLine(initMultipartUploadResult.GetResultInfo());
+
+                string uploadId = initMultipartUploadResult.initMultipartUpload.uploadId;
+
+                CompleteMultipartUploadRequest completeMultiUploadRequest = new CompleteMultipartUploadRequest(bucket, key, uploadId);
+
+                const int partCount = 2;
+                long partLength = fileInfo.Length / partCount;
+                for (int partNumber = 1; partNumber < 3; partNumber++) {
+                    UploadPartRequest uploadPartRequest = new UploadPartRequest(bucket, key, partNumber, uploadId, filePath,
+                        partLength * (partNumber - 1), partLength);
+                    uploadPartRequest.LimitTraffic(8 * 500 * 1024);
+                    
+                    long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
+                    UploadPartResult uploadPartResult = instance.cosXml.UploadPart(uploadPartRequest);
+                    long costTime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() - now;
+                    
+                    Console.WriteLine("costTime = " + costTime + "ms");
+                    Console.WriteLine(uploadPartResult.GetResultInfo());
+                    Assert.True(costTime > 8000 && costTime < 14000);
+                    
+                    string eTag = uploadPartResult.eTag;
+                    completeMultiUploadRequest.SetPartNumberAndETag(partNumber, eTag);
+                }
+
+                //执行请求
+                CompleteMultipartUploadResult completeMultiUploadResult = instance.cosXml.CompleteMultiUpload(completeMultiUploadRequest);
+
+                Console.WriteLine(completeMultiUploadResult.GetResultInfo());
+
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.StackTrace);
+                Assert.True(false);
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.True(false);
+            }
         }
 
         [Test()]

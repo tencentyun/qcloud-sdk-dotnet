@@ -2,6 +2,7 @@
 using COSXML.CosException;
 using COSXML.Model;
 using COSXML.Model.Bucket;
+using COSXML.Model.Tag;
 using COSXML.Utils;
 using NUnit.Framework;
 using System;
@@ -1422,13 +1423,241 @@ namespace COSXMLTests
 
         }
 
+        [SetUp()]
+        public void setup() {
+            QCloudServer instance = QCloudServer.Instance();
+            PutBucket(instance.cosXml, instance.bucketForBucketTest);
+        }
+
+        [TearDown()]
+        public void clear() {
+            QCloudServer instance = QCloudServer.Instance();
+            // DeleteBucket(instance.cosXml, instance.bucketForBucketTest);
+        }
+        
+        [Test()]
+        public void testBucketTagging() {
+            QCloudServer instance = QCloudServer.Instance();
+            try
+            {
+                // 设置 tag
+                PutBucketTaggingRequest request = new PutBucketTaggingRequest(
+                    instance.bucketForBucketTest);
+                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+
+                string akey = "aTagKey";
+                string avalue = "aTagValue";
+                string bkey = "bTagKey";
+                string bvalue = "bTagValue";
+
+                request.AddTag(akey, avalue);
+                request.AddTag(bkey, bvalue);
+
+                PutBucketTaggingResult result = instance.cosXml.putBucketTagging(request);
+
+                // 获取 tag
+                GetBucketTaggingRequest getRequest = new GetBucketTaggingRequest(
+                    instance.bucketForBucketTest);
+                getRequest.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                GetBucketTaggingResult getResult = instance.cosXml.getBucketTagging(getRequest);
+
+                Tagging tagging =  getResult.tagging;
+                Assert.AreEqual(tagging.tagSet.tags.Count, 2);
+                foreach (Tagging.Tag tag in tagging.tagSet.tags) {
+                    if (tag.key.Equals(akey)) {
+                        Assert.AreEqual(avalue, tag.value);
+                    } else if (tag.key.Equals(bkey)) {
+                        Assert.AreEqual(bvalue, tag.value);
+                    } else {
+                        Assert.Fail();
+                    }
+                }
+
+                // 删除 tag
+                DeleteBucketTaggingRequest deleteRequest = new DeleteBucketTaggingRequest(instance.bucketForBucketTest);
+                DeleteBucketTaggingResult deleteResult = instance.cosXml.deleteBucketTagging(deleteRequest);
+
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+
+            try {
+                // 验证删除成功
+                GetBucketTaggingRequest getRequest = new GetBucketTaggingRequest(
+                    instance.bucketForBucketTest);
+                GetBucketTaggingResult getResult = instance.cosXml.getBucketTagging(getRequest);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Assert.AreEqual(serverEx.statusCode, 404);
+            }
+        }
+
+        [Test()]
+        public void testBucketDomain()
+        {
+            QCloudServer instance = QCloudServer.Instance();
+            try {
+                GetBucketDomainResult getResult = instance.cosXml.getBucketDomain(
+                    new GetBucketDomainRequest(instance.bucketForBucketTest));
+                Assert.IsNotNull(getResult.domainConfiguration.rule);
+                Assert.IsNull(getResult.domainConfiguration.rule.Name);
+
+                DomainConfiguration domain = new DomainConfiguration();
+                domain.rule = new DomainConfiguration.DomainRule();
+                domain.rule.Name = "www.qq.com";
+                domain.rule.Status = "ENABLED";
+                domain.rule.Type = "WEBSITE";
+                
+
+                PutBucketDomainResult result = instance.cosXml.putBucketDomain(new PutBucketDomainRequest(
+                    instance.bucketForBucketTest, domain));
+
+                
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                if (serverEx.statusCode != 409 && serverEx.statusCode != 451) {
+                Assert.Fail();
+                }
+            }
+        }
+
+        [Test()]
+        public void testBucketLogging()
+        {
+            QCloudServer instance = QCloudServer.Instance();
+            try {
+                PutBucketLoggingRequest request = new PutBucketLoggingRequest(instance.bucketForBucketTest);
+                request.SetTarget("targetbucket-1250000000", "/abc");
+                PutBucketLoggingResult putResult = instance.cosXml.putBucketLogging(request);
+                
+                Assert.IsTrue(putResult.httpCode == 200);
+
+                GetBucketLoggingResult getResult = instance.cosXml.getBucketLogging(
+                    new GetBucketLoggingRequest(instance.bucketForBucketTest));
+                BucketLoggingStatus status = getResult.bucketLoggingStatus;
+                if (status != null && status.loggingEnabled != null) {
+                    string targetBucket = status.loggingEnabled.targetBucket;
+                    string targetPrefix = status.loggingEnabled.targetPrefix;
+                    Assert.NotNull(targetBucket);
+                }
+                
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                if (serverEx.statusCode != 409 && serverEx.statusCode != 451) {
+                Assert.Fail();
+                }
+            }
+        }
+
+        [Test()]
+        public void testBucketWebsite()
+        {
+            QCloudServer instance = QCloudServer.Instance();
+            try {
+                PutBucketWebsiteRequest putRequest = new PutBucketWebsiteRequest(instance.bucketForBucketTest);
+                putRequest.SetIndexDocument("index.html");
+                putRequest.SetErrorDocument("eroror.html");
+                putRequest.SetRedirectAllRequestTo("https");
+                PutBucketWebsiteResult putResult = instance.cosXml.putBucketWebsite(putRequest);
+                Assert.IsTrue(putResult.httpCode == 200);
+
+                GetBucketWebsiteRequest getRequest = new GetBucketWebsiteRequest(instance.bucketForBucketTest);
+                GetBucketWebsiteResult getResult = instance.cosXml.getBucketWebsite(getRequest);
+                WebsiteConfiguration configuration = getResult.websiteConfiguration;
+                Assert.NotNull(configuration);
+
+                DeleteBucketWebsiteRequest deleteRequest = new DeleteBucketWebsiteRequest(instance.bucketForBucketTest);
+                DeleteBucketWebsiteResult deleteResult = instance.cosXml.deleteBucketWebsite(deleteRequest);
+                Console.WriteLine(deleteResult.GetResultInfo());
+                Assert.NotNull(deleteResult.GetResultInfo());
+                
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test()]
+        public void testBucketInventory()
+        {
+            QCloudServer instance = QCloudServer.Instance();
+            try {
+                string inventoryId = "id1";
+
+                PutBucketInventoryRequest putRequest = new PutBucketInventoryRequest(instance.bucketForBucketTest, inventoryId);
+                putRequest.SetDestination("CSV", "1278687956", "bucket-cssg-test-1253653367", instance.region, "list1");
+                putRequest.IsEnable(true);
+                putRequest.SetScheduleFrequency("Daily");
+                putRequest.SetIncludedObjectVersions("All");
+                PutBucketInventoryResult putResult = instance.cosXml.putBucketInventory(putRequest);
+                Assert.IsTrue(putResult.httpCode == 200);
+
+                GetBucketInventoryRequest getRequest = new GetBucketInventoryRequest(instance.bucketForBucketTest);
+                getRequest.SetInventoryId(inventoryId);
+                GetBucketInventoryResult getResult = instance.cosXml.getBucketInventory(getRequest);
+                InventoryConfiguration configuration = getResult.inventoryConfiguration;
+                Assert.NotNull(configuration);
+
+                DeleteBucketInventoryRequest deleteRequest = new DeleteBucketInventoryRequest(instance.bucketForBucketTest);
+                deleteRequest.SetInventoryId(inventoryId);
+                DeleteBucketInventoryResult deleteResult = instance.cosXml.deleteBucketInventory(deleteRequest);
+                Assert.IsTrue(putResult.httpCode == 200);
+                
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                if (serverEx.statusCode != 409 && serverEx.statusCode != 451) {
+                Assert.Fail();
+                }
+            }
+        }
 
         [Test()]
         public void testBucket()
         {
             QCloudServer instance = QCloudServer.Instance();
-
-            PutBucket(instance.cosXml, instance.bucketForBucketTest);
 
             HeadBucket(instance.cosXml, instance.bucketForBucketTest);
 

@@ -671,7 +671,7 @@ namespace COSXML
             schedue(request, new Model.Bucket.PutBucketLoggingResult(), successCallback, failCallback);
         }
 
-        public GetBucketLoggingResult getBucketLogging(GetBucketLocationRequest request)
+        public GetBucketLoggingResult getBucketLogging(GetBucketLoggingRequest request)
         {
             return (Model.Bucket.GetBucketLoggingResult)excute(request, new Model.Bucket.GetBucketLoggingResult());
         }
@@ -719,6 +719,60 @@ namespace COSXML
         public void listBucketInventoryAsync(ListBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.ListBucketInventoryResult(), successCallback, failCallback);
+        }
+
+        public PutBucketTaggingResult putBucketTagging(PutBucketTaggingRequest request) {
+            return (Model.Bucket.PutBucketTaggingResult)excute(request, new Model.Bucket.PutBucketTaggingResult());
+        }
+
+        public void putBucketTaggingAsync(PutBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback) {
+            schedue(request, new Model.Bucket.PutBucketTaggingResult(), successCallback, failCallback);
+        }
+
+        public GetBucketTaggingResult getBucketTagging(GetBucketTaggingRequest request) {
+            return (Model.Bucket.GetBucketTaggingResult)excute(request, new Model.Bucket.GetBucketTaggingResult());
+        }
+
+        public void getBucketTaggingAsync(GetBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback) {
+            schedue(request, new Model.Bucket.GetBucketTaggingResult(), successCallback, failCallback);
+        }
+
+        public DeleteBucketTaggingResult deleteBucketTagging(DeleteBucketTaggingRequest request) {
+            return (Model.Bucket.DeleteBucketTaggingResult)excute(request, new Model.Bucket.DeleteBucketTaggingResult());
+        }
+
+        public void deleteBucketTaggingAsync(DeleteBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback) {
+            schedue(request, new Model.Bucket.DeleteBucketTaggingResult(), successCallback, failCallback);
+        }
+
+        public PutBucketDomainResult putBucketDomain(PutBucketDomainRequest request)
+        {
+            return (Model.Bucket.PutBucketDomainResult)excute(request, new Model.Bucket.PutBucketDomainResult());
+        }
+
+        public void putBucketDomainAsync(PutBucketDomainRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new Model.Bucket.PutBucketDomainResult(), successCallback, failCallback);
+        }
+
+        public GetBucketDomainResult getBucketDomain(GetBucketDomainRequest request)
+        {
+            return (Model.Bucket.GetBucketDomainResult)excute(request, new Model.Bucket.GetBucketDomainResult());
+        }
+
+        public void getBucketDomainAsync(GetBucketDomainRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new Model.Bucket.GetBucketDomainResult(), successCallback, failCallback);
+        }
+
+        SelectObjectResult CosXml.selectObject(SelectObjectRequest request)
+        {
+            return (Model.Object.SelectObjectResult)excute(request, new Model.Object.SelectObjectResult());
+        }
+
+        void CosXml.selectObjectAsync(SelectObjectRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        {
+            schedue(request, new Model.Object.SelectObjectResult(), successCallback, failCallback);
         }
     }
 }

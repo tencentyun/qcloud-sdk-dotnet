@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using System.Text;
 using COSXML.Utils;
 using COSXML.CosException;
 using COSXML.Common;
-using COSXML.Network;
 using COSXML.Log;
 using System.IO;
 /**

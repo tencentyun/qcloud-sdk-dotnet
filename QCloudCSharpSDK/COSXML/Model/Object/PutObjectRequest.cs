@@ -124,6 +124,14 @@ namespace COSXML.Model.Object
                 SetRequestHeader(CosRequestHeaderKey.X_COS_ACL, cosACL);
             }
         }
+
+        /// <summary>
+        /// 最大上传速度，单位是 bit/s
+        /// </summary>
+        /// <param name="start"></param>
+        public void LimitTraffic(long rate) {
+            SetRequestHeader(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, rate.ToString());
+        }
         /// <summary>
         /// 定义 Object 的 acl 属性。有效值：private，public-read-write，public-read；默认值：private
         /// <see cref="Common.CosACL"/>

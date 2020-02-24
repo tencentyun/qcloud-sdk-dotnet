@@ -660,6 +660,66 @@ namespace COSXML.Transfer
             }
         }
 
+        public static void ParseTagging(Stream inStream, Tagging tagging) {
+            XmlReader xmlReader = XmlReader.Create(inStream);
+            string key = null, value = null;
+            while (xmlReader.Read())
+            {
+                switch (xmlReader.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        if ("Key".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            key = xmlReader.Value;
+                        }
+                        else if ("Value".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            value = xmlReader.Value;
+                        }
+                        if (key != null && value != null) {
+                            tagging.AddTag(key, value);
+                            key = null;
+                            value = null;
+                        }
+                        break;
+                }
+            }
+        }
+
+        public static void ParseBucketDomain(Stream inStream, DomainConfiguration domainConfiguration) {
+            XmlReader xmlReader = XmlReader.Create(inStream);
+            domainConfiguration.rule = new DomainConfiguration.DomainRule();
+            try {
+                while (xmlReader.Read())
+                {
+                    switch (xmlReader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            if ("Status".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                domainConfiguration.rule.Status = xmlReader.Value;
+                            }
+                            else if ("Type".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                domainConfiguration.rule.Type = xmlReader.Value;
+                            }
+                            else if ("Name".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                domainConfiguration.rule.Name = xmlReader.Value;
+                            }
+                            break;
+                    }
+                }
+            } catch (XmlException e) {
+                Console.WriteLine(e.StackTrace);
+            }
+    }
+
         public static void ParseListBucketVersions(Stream inStream, ListBucketVersions result)
         {
             XmlReader xmlReader = XmlReader.Create(inStream);

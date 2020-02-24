@@ -88,6 +88,13 @@ namespace COSXML.Model.Object
             SetRange(start, -1);
         }
         /// <summary>
+        /// 最大下载速度，单位是 bit/s
+        /// </summary>
+        /// <param name="start"></param>
+        public void LimitTraffic(long rate) {
+            SetRequestHeader(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, rate.ToString());
+        }
+        /// <summary>
         /// 下载特定版本的对象
         /// </summary>
         /// <param name="versionId"></param>

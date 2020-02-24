@@ -14,6 +14,7 @@ namespace COSXML.Model.Bucket
         {
             this.method = CosRequestMethod.PUT;
             this.queryParameters.Add("logging", null);
+            this.bucketLoggingStatus = new BucketLoggingStatus();
         }
 
         public void SetTarget(string targetBucket, string targetPrefix)
