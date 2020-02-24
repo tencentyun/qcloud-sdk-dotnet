@@ -75,10 +75,10 @@ namespace COSXML.Model.Tag
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source cosPath = null");
             }
-            if (appid == null)
-            {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source appid = null");
-            }
+            // if (appid == null)
+            // {
+            //     throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source appid = null");
+            // }
             if (region == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source region = null");
@@ -98,7 +98,7 @@ namespace COSXML.Model.Tag
             StringBuilder copySource = new StringBuilder();
 
             copySource.Append(bucket);
-            if (!bucket.EndsWith("-" + appid))
+            if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
             {
                 copySource.Append("-")
                         .Append(appid);

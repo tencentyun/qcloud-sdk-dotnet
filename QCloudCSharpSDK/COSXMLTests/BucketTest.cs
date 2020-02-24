@@ -1549,7 +1549,7 @@ namespace COSXMLTests
             QCloudServer instance = QCloudServer.Instance();
             try {
                 PutBucketLoggingRequest request = new PutBucketLoggingRequest(instance.bucketForBucketTest);
-                request.SetTarget("targetbucket-1250000000", "/abc");
+                request.SetTarget("bucket-cssg-source-1253653367", "/abc");
                 PutBucketLoggingResult putResult = instance.cosXml.putBucketLogging(request);
                 
                 Assert.IsTrue(putResult.httpCode == 200);
@@ -1621,7 +1621,7 @@ namespace COSXMLTests
                 string inventoryId = "id1";
 
                 PutBucketInventoryRequest putRequest = new PutBucketInventoryRequest(instance.bucketForBucketTest, inventoryId);
-                putRequest.SetDestination("CSV", "1278687956", "bucket-cssg-test-1253653367", instance.region, "list1");
+                putRequest.SetDestination("CSV", "1278687956", "bucket-cssg-source-1253653367", instance.region, "list1");
                 putRequest.IsEnable(true);
                 putRequest.SetScheduleFrequency("Daily");
                 putRequest.SetIncludedObjectVersions("All");

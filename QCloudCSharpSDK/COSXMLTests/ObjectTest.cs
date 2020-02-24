@@ -1552,9 +1552,9 @@ namespace COSXMLTests
             AbortMultiUpload(instance.cosXml, instance.bucketForObjectTest, key, srcPath);
 
             string sourceAppid = instance.appid;
-            string sourceBucket = instance.bucketForObjectTest;
+            string sourceBucket = "bucket-cssg-source-1253653367";
             string sourceRegion = instance.region;
-            string sourceKey = key;
+            string sourceKey = "sourceObject";
             CopySourceStruct copySource = new CopySourceStruct(sourceAppid, sourceBucket, sourceRegion, sourceKey);
             key = "copy_" + key;
             CopyObject(instance.cosXml, instance.bucketForObjectTest, key, copySource);
