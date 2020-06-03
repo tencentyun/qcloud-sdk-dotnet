@@ -244,6 +244,11 @@ namespace COSXML.Network
             {
                 request.AddHeader(CosRequestHeaderKey.CONTENT_MD5, request.Body.GetMD5());
             }
+            // content type header
+            if(request.Body != null && request.Body.ContentType != null && 
+                    !request.Headers.ContainsKey(CosRequestHeaderKey.CONTENT_TYPE)) {
+                request.AddHeader(CosRequestHeaderKey.CONTENT_TYPE, request.Body.ContentType);
+            }
 
             //cacluate sign, and add it.
             if (requestUrlWithSign == null)

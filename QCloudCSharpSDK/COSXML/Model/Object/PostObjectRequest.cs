@@ -32,6 +32,7 @@ namespace COSXML.Model.Object
             formStruct = new FormStruct();
             formStruct.key = key;
             this.headers.Add(CosRequestHeaderKey.CONTENT_TYPE, "multipart/form-data; boundary=" + MultipartRequestBody.BOUNDARY);
+            this.needMD5 = false;
         }
         /// <summary>
         /// 上传文件
@@ -228,6 +229,7 @@ namespace COSXML.Model.Object
         {
             if (this.cosXmlSignSourceProvider != null)
             {
+                this.cosXmlSignSourceProvider.setSignAll(false);
                 this.cosXmlSignSourceProvider.onGetSign = delegate(Request request, string sign)
                 {
                     //添加参数 sign

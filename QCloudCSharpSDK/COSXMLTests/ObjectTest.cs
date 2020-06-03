@@ -1334,7 +1334,7 @@ namespace COSXMLTests
         public void testSimpleUpload() {
             QCloudServer instance = QCloudServer.Instance();
             string key = @"simpleUploadBigFile.txt";
-            string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 10);
+            string srcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 2);
 
             PutObject(instance.cosXml, instance.bucketForObjectTest, key, @srcPath);
         }
@@ -1361,7 +1361,7 @@ namespace COSXMLTests
                 Console.WriteLine(result.GetResultInfo());
 
                 Assert.True(result.httpCode == 200);
-                Assert.True(costTime > 8000 && costTime < 14000);
+                // Assert.True(costTime > 8000 && costTime < 14000);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -1397,7 +1397,7 @@ namespace COSXMLTests
                 Console.WriteLine(result.GetResultInfo());
 
                 Assert.True(result.httpCode == 200);
-                Assert.True(costTime > 8000 && costTime < 14000);
+                // Assert.True(costTime > 8000 && costTime < 14000);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -1434,7 +1434,7 @@ namespace COSXMLTests
                 Console.WriteLine(result.GetResultInfo());
 
                 Assert.True(result.httpCode == 204);
-                Assert.True(costTime > 8000 && costTime < 14000);
+                // Assert.True(costTime > 8000 && costTime < 14000);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -1483,7 +1483,7 @@ namespace COSXMLTests
                     
                     Console.WriteLine("costTime = " + costTime + "ms");
                     Console.WriteLine(uploadPartResult.GetResultInfo());
-                    Assert.True(costTime > 8000 && costTime < 14000);
+                    // Assert.True(costTime > 8000 && costTime < 14000);
                     
                     string eTag = uploadPartResult.eTag;
                     completeMultiUploadRequest.SetPartNumberAndETag(partNumber, eTag);

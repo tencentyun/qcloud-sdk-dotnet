@@ -30,18 +30,25 @@ namespace COSXML.Auth
 
     public sealed class CosXmlSignSourceProvider : QCloudSignSource
     {
-        private List<string> parameterKeys;
-        private List<string> headerKeys;
+        private HashSet<string> parameterKeys;
+        private HashSet<string> headerKeys;
         private string signTime;
         private string headerList;
         private string parameterList;
+
+        private Boolean signAll;
 
         public OnGetSign onGetSign;
 
         public CosXmlSignSourceProvider()
         {
-            parameterKeys = new List<string>();
-            headerKeys = new List<string>();
+            parameterKeys = new HashSet<string>();
+            headerKeys = new HashSet<string>();
+            this.signAll = true;
+        }
+
+        public void setSignAll(Boolean signAll) {
+            this.signAll = signAll;
         }
 
         public void AddParameterKey(string key)
@@ -56,7 +63,9 @@ namespace COSXML.Auth
         {
             if (keys != null)
             {
-                this.parameterKeys.AddRange(keys);
+                foreach (string key in keys) {
+                    this.parameterKeys.Add(key.ToLower());
+                }
             }
         }
 
@@ -72,7 +81,9 @@ namespace COSXML.Auth
         {
             if (keys != null)
             {
-                this.headerKeys.AddRange(keys);
+                foreach (string key in keys) {
+                    this.headerKeys.Add(key.ToLower());
+                }
             }
         }
 
@@ -106,15 +117,20 @@ namespace COSXML.Auth
 
         public string Source(Request request)
         {
+            
             Dictionary<string, string> sourceHeaders = request.Headers;
             Dictionary<string, string> lowerKeySourceHeaders = new Dictionary<string, string>(sourceHeaders.Count);
             foreach (KeyValuePair<string, string> pair in sourceHeaders)
             {
                 lowerKeySourceHeaders.Add(pair.Key.ToLower(), pair.Value);
+                if (signAll) {
+                    headerKeys.Add(pair.Key.ToLower());
+                }
             }
             try
             {
                 lowerKeySourceHeaders.Add("host", request.Host);
+                headerKeys.Add("host");
             }
             catch (Exception)
             {
@@ -123,14 +139,30 @@ namespace COSXML.Auth
             try
             {
                 lowerKeySourceHeaders.Add("user-agent", request.UserAgent);
+                headerKeys.Add("user-agent");
             }
             catch (Exception)
             { }
+            if (signAll) {
+                try
+                {
+                    long contentLength = 0;
+                    if (request.Body != null) {
+                        contentLength = request.Body.ContentLength;
+                    }
+                    lowerKeySourceHeaders.Add("content-length", contentLength.ToString());
+                    headerKeys.Add("content-length");
+                }
+                catch (Exception) {}
+            }
             Dictionary<string, string> sourceParameters = request.Url.GetQueryParameters();
             Dictionary<string, string> lowerKeySourceParameters = new Dictionary<string, string>(sourceParameters.Count);
             foreach (KeyValuePair<string, string> pair in sourceParameters)
             {
                 lowerKeySourceParameters.Add(pair.Key.ToLower(), pair.Value);
+                if (signAll) {
+                    parameterKeys.Add(pair.Key.ToLower());
+                }
             }
             string path = URLEncodeUtils.Decode(request.Url.Path);
             return GenerateSource(request.Method, path, lowerKeySourceParameters, lowerKeySourceHeaders);
@@ -170,10 +202,11 @@ namespace COSXML.Auth
             if (sourceHeaders == null) return null;
 
             //将指定的headers 小写且排序
-            LowerAndSort(headerKeys);
+            List<String> keys = new List<String>(headerKeys);
+            LowerAndSort(keys);
 
             //计算结果
-            string[] result = Calculate(headerKeys, sourceHeaders, true);
+            string[] result = Calculate(keys, sourceHeaders, true);
             if (result != null)
             {
                 headerList = result[1];
@@ -187,10 +220,11 @@ namespace COSXML.Auth
             if (sourceQueryParameters == null) return null;
 
             //将指定的parameter key 小写 且 排序
-            LowerAndSort(parameterKeys);
+            List<String> keys = new List<String>(parameterKeys);
+            LowerAndSort(keys);
 
             //计算结果
-            string[] result = Calculate(parameterKeys, sourceQueryParameters, false);
+            string[] result = Calculate(keys, sourceQueryParameters, false);
             if (result != null)
             {
                 parameterList = result[1];

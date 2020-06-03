@@ -68,7 +68,7 @@ namespace COSXML.Model
         /// <summary>
         /// needMD5 = true, 请求中带上 Content-Md5; needMd5 = false, 请求中不带 Content-Md5; defalut needMd5 = false.
         /// </summary>
-        protected bool needMD5 = false;
+        protected bool needMD5 = true;
 
         /// <summary>
         /// 请求预签名URL

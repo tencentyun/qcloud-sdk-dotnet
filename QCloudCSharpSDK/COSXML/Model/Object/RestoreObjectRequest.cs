@@ -47,6 +47,13 @@ namespace COSXML.Model.Object
         {
             restoreConfigure.casJobParameters.tier = tier;
         }
+        public void SetVersionId(string versionId)
+        {
+            if (versionId != null)
+            {
+                SetQueryParameter(CosRequestHeaderKey.VERSION_ID, versionId);
+            }
+        }
 
         public override Network.RequestBody GetRequestBody()
         {
