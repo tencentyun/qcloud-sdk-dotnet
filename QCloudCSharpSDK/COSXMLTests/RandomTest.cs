@@ -40,7 +40,7 @@ namespace COSXMLTests
       catch (COSXML.CosException.CosServerException serverEx)
       {
         Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-        Assert.True(false);
+        Assert.True(serverEx.statusCode == 404);
       }
     }
   }

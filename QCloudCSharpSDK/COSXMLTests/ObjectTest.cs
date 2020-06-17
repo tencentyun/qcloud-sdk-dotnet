@@ -1508,6 +1508,22 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public void generateSignUrl() {
+            QCloudServer instance = QCloudServer.Instance();
+            string key = "multiObjecttest.txt";
+            PreSignatureStruct signatureStruct = new PreSignatureStruct();
+            signatureStruct.bucket = instance.bucketForObjectTest;
+            signatureStruct.appid = instance.appid;
+            signatureStruct.region = instance.region;
+            signatureStruct.key = key;
+            signatureStruct.httpMethod = "GET";
+            signatureStruct.headers = new Dictionary<string, string>();
+            string url = instance.cosXml.GenerateSignURL(signatureStruct);
+            Console.WriteLine(url);
+            Assert.NotNull(url);
+        }
+
+        [Test()]
         public void testObject()
         {
 

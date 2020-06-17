@@ -38,6 +38,8 @@ namespace COSXML.Auth
 
         private Boolean signAll;
 
+        private String cosHost;
+
         public OnGetSign onGetSign;
 
         public CosXmlSignSourceProvider()
@@ -115,6 +117,10 @@ namespace COSXML.Auth
             return parameterList;
         }
 
+        public void setCosHost(string host) {
+            cosHost = host;
+        }
+
         public string Source(Request request)
         {
             
@@ -129,20 +135,13 @@ namespace COSXML.Auth
             }
             try
             {
-                lowerKeySourceHeaders.Add("host", request.Host);
+                lowerKeySourceHeaders.Add("host", cosHost);
                 headerKeys.Add("host");
             }
             catch (Exception)
             {
                 
             }
-            try
-            {
-                lowerKeySourceHeaders.Add("user-agent", request.UserAgent);
-                headerKeys.Add("user-agent");
-            }
-            catch (Exception)
-            { }
             if (signAll) {
                 try
                 {
@@ -150,8 +149,10 @@ namespace COSXML.Auth
                     if (request.Body != null) {
                         contentLength = request.Body.ContentLength;
                     }
-                    lowerKeySourceHeaders.Add("content-length", contentLength.ToString());
-                    headerKeys.Add("content-length");
+                    if (contentLength > 0) {
+                        lowerKeySourceHeaders.Add("content-length", contentLength.ToString());
+                        headerKeys.Add("content-length");
+                    }
                 }
                 catch (Exception) {}
             }

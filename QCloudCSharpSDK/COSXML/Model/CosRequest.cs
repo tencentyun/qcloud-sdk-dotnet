@@ -218,6 +218,12 @@ namespace COSXML.Model
         /// return the host for cos request
         /// </summary>
         /// <returns>host(string)</returns>
+        public abstract string GetCOSHost();
+
+        /// <summary>
+        /// return the host for cos request
+        /// </summary>
+        /// <returns>host(string)</returns>
         public abstract string GetHost();
 
         /// <summary>
