@@ -11,7 +11,7 @@ using COSXML.Model.Tag;
 namespace COSXML.CosException
 {
     /// <summary>
-    /// CosServerException for cos server error.
+    /// 服务器异常，通常是一个非正确的服务器响应，例如权限错误、服务不可用等。
     /// <see cref="Model.Tag.CosServerError"/>
     /// </summary>
     [Serializable]

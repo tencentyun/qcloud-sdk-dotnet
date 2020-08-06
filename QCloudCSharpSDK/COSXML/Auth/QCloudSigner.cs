@@ -16,7 +16,7 @@ namespace COSXML.Auth
     public delegate void OnGetSign(Request request, string sign);
 
     /// <summary>
-    /// sign caculation
+    /// 计算请求签名
     /// </summary>
     public interface QCloudSigner
     {

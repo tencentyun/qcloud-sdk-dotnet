@@ -22,7 +22,7 @@ namespace COSXML.Auth
     }
 
     /// <summary>
-    /// 通过 云 api
+    /// 直接通过永久密钥初始化
     /// </summary>
     public class DefaultQCloudCredentialProvider : QCloudCredentialProvider
     {
@@ -59,7 +59,7 @@ namespace COSXML.Auth
     }
 
     /// <summary>
-    /// 通过 临时密钥
+    /// 通过腾讯云临时密钥初始化
     /// </summary>
     public class DefaultSessionQCloudCredentialProvider : QCloudCredentialProvider
     {
@@ -113,7 +113,7 @@ namespace COSXML.Auth
         }
 
         /// <summary>
-        /// 直接复制临时密钥信息
+        /// 直接设置临时密钥信息
         /// </summary>
         /// <param name="tmpSecretId">临时安全证书 Id</param>
         /// <param name="tmpSecretKey">临时安全证书 Key</param>

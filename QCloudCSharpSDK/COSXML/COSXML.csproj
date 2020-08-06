@@ -40,6 +40,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>bin\COSXML.XML</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
   </ItemGroup>
 </Project>

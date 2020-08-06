@@ -72,6 +72,9 @@ namespace COSXML.Common
         [CosValue("eu-frankfurt")]
         EU_Frankfurt,
 
+        /// <summary>
+        /// 重庆
+        /// </summary>
         [CosValue("ap-chongqing")]
         AP_Chongqing,
 

@@ -255,62 +255,6 @@ namespace COSXMLTests
         }
 
 
-        public void GetBuckeLocation(COSXML.CosXml cosXml, string bucket)
-        {
-            try
-            {
-                GetBucketLocationRequest request = new GetBucketLocationRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
-                //执行请求
-                GetBucketLocationResult result = cosXml.GetBucketLocation(request);
-                Console.WriteLine(result.GetResultInfo());
-            }
-            catch (COSXML.CosException.CosClientException clientEx)
-            {
-                Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.Fail();
-            }
-            catch (COSXML.CosException.CosServerException serverEx)
-            {
-                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.Fail();
-            }
-
-        }
-
-        public  void AsyncGetBuckeLocation(COSXML.CosXml cosXml, string bucket)
-        {
-            ManualResetEvent manualResetEvent = new ManualResetEvent(false);
-
-            GetBucketLocationRequest request = new GetBucketLocationRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
-
-            ///执行请求
-            cosXml.GetBucketLocation(request,
-                delegate (CosResult cosResult)
-                {
-                    GetBucketLocationResult result = cosResult as GetBucketLocationResult;
-                    Console.WriteLine(result.GetResultInfo());
-                    manualResetEvent.Set();
-                },
-            delegate (CosClientException clientEx, CosServerException serverEx)
-            {
-                if (clientEx != null)
-                {
-                    Console.WriteLine("CosClientException: " + clientEx.Message);
-                }
-                if (serverEx != null)
-                {
-                    Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                }
-                Assert.Fail();
-                manualResetEvent.Set();
-            });
-        }
-
-
         public void PutBucketACL(COSXML.CosXml cosXml, string bucket)
         {
             try
@@ -1309,62 +1253,6 @@ namespace COSXMLTests
             });
         }
 
-        public void DeleteBucketPolicy(COSXML.CosXml cosXml, string bucket)
-        {
-            try
-            {
-                DeleteBucketPolicyRequest request = new DeleteBucketPolicyRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
-                //执行请求
-                DeleteBucketPolicyResult result = cosXml.DeleteBucketPolicy(request);
-
-                Console.WriteLine(result.GetResultInfo());
-            }
-            catch (COSXML.CosException.CosClientException clientEx)
-            {
-                Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.Fail();
-            }
-            catch (COSXML.CosException.CosServerException serverEx)
-            {
-                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.Fail();
-            }
-
-        }
-
-        public void AsynDeleteBucketPolicy(COSXML.CosXml cosXml, string bucket)
-        {
-            ManualResetEvent manualResetEvent = new ManualResetEvent(false);
-
-            DeleteBucketPolicyRequest request = new DeleteBucketPolicyRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
-
-            //执行请求
-            cosXml.DeleteBucketPolicy(request,
-                delegate (CosResult cosResult)
-                {
-                    DeleteBucketPolicyResult result = cosResult as DeleteBucketPolicyResult;
-                    Console.WriteLine(result.GetResultInfo());
-                    manualResetEvent.Set();
-                },
-                delegate (CosClientException clientEx, CosServerException serverEx)
-                {
-                    if (clientEx != null)
-                    {
-                        Console.WriteLine("CosClientException: " + clientEx.Message);
-                    }
-                    if (serverEx != null)
-                    {
-                        Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                    }
-                    Assert.Fail();
-                    manualResetEvent.Set();
-                });
-        }
-
         public void DeleteBucket(COSXML.CosXml cosXml, string bucket)
         {
             try
@@ -1661,8 +1549,6 @@ namespace COSXMLTests
 
             HeadBucket(instance.cosXml, instance.bucketForBucketTest);
 
-            GetBuckeLocation(instance.cosXml, instance.bucketForBucketTest);
-
             GetBucket(instance.cosXml, instance.bucketForBucketTest);
 
             PutBucketACL(instance.cosXml, instance.bucketForBucketTest);
@@ -1690,8 +1576,6 @@ namespace COSXMLTests
 
             ListMultiUploads(instance.cosXml, instance.bucketForBucketTest);
 
-            DeleteBucketPolicy(instance.cosXml, instance.bucketForBucketTest);
-
             // DeleteBucket(instance.cosXml, instance.bucketForBucketTest);
 
             Assert.True(true);
@@ -1702,8 +1586,6 @@ namespace COSXMLTests
             //AsyncPutBucket(instance.cosXml, instance.bucketForBucketTest);
 
             //AsyncHeadBucket(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncGetBuckeLocation(instance.cosXml, instance.bucketForBucketTest);
 
             //AsyncGetBucket(instance.cosXml, instance.bucketForBucketTest);
 
@@ -1736,8 +1618,6 @@ namespace COSXMLTests
             //AsyncListBucketVersions(instance.cosXml, instance.bucketForBucketTest);
 
             //AsyncListMultiUploads(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsynDeleteBucketPolicy(instance.cosXml, instance.bucketForBucketTest);
 
             //AsyncDeleteBucket(instance.cosXml, instance.bucketForBucketTest);
 

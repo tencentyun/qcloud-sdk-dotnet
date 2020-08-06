@@ -12,19 +12,19 @@ using System.IO;
 namespace COSXML.Callback
 {
     /// <summary>
-    /// progress
+    /// 上传、下载进度回调
     /// </summary>
     /// <param name="completed"></param>
     /// <param name="total"></param>
     public delegate void OnProgressCallback(long completed, long total);
 
     /// <summary>
-    /// notify has been got response
+    /// 获取结果的回调
     /// </summary>
     public delegate void OnNotifyGetResponse();
 
     /// <summary>
-    /// success
+    /// 请求成功回调
     /// </summary>
     /// <typeparam name="T1"></typeparam>
     /// <typeparam name="T2"></typeparam>
@@ -34,7 +34,7 @@ namespace COSXML.Callback
         where T : CosResult;
      
     /// <summary>
-    /// failed
+    /// 请求失败回调
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="cosRequest"></param>
@@ -43,7 +43,7 @@ namespace COSXML.Callback
     public delegate void OnFailedCallback (CosClientException clientException, CosServerException serverException);
 
     /// <summary>
-    /// parse stream
+    /// 解析流回调
     /// </summary>
     /// <param name="inputStream"></param>
     /// <param name="contentType"></param>

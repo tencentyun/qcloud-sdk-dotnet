@@ -8,10 +8,6 @@ using System.Text;
 */
 namespace COSXML.Auth
 {
-    /// <summary>
-    /// cos 业务认证: secretId, signKey, keyTime
-    /// signKey be calculated by secretKey and keyTime
-    /// </summary>
     public class QCloudCredentials
     {
         public QCloudCredentials(string secretId, string signKey, string keyTime)

@@ -18,11 +18,12 @@ using System.Net.Cache;
 namespace COSXML.Network
 {
     /// <summary>
-    /// network request and response
-    /// type1: command request
-    /// type2: upload file
-    /// type3: download file
-    /// difference: body progress
+    /// network request and response.
+    /// <list type="bullet">
+    /// <item><term>type1: command request</term></item>
+    /// <item><term>type2: upload file</term></item>
+    /// <item><term>type3: download file</term></item>
+    /// </list>
     /// </summary>
     public sealed class CommandTask
     {

@@ -1524,6 +1524,15 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public void testGetObject() {
+            QCloudServer instance = QCloudServer.Instance();
+
+            string key = "test.txt";
+            GetObject(instance.cosXml, instance.bucketForObjectTest, key, 
+                System.IO.Path.GetTempPath(), key);
+        }
+
+        [Test()]
         public void testObject()
         {
 
