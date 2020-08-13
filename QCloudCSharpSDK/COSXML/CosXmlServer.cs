@@ -40,7 +40,7 @@ namespace COSXML
                 QLog.AddLogAdapter(new LogImpl());
             }
             this.qcloudCredentailProvider = qcloudCredentailProvider;
-            HttpClient.Init(this.config.HttpConfig, this.qcloudCredentailProvider);
+            HttpClient.Init(this.config.HttpConfig);
             httpClient = HttpClient.GetInstance();
         }
 
@@ -75,14 +75,14 @@ namespace COSXML
         private CosResult excute(CosRequest request, CosResult result)
         {
             CheckAppidAndRegion(request);
-            httpClient.Excute(request, result);
+            httpClient.Excute(request, result,this.qcloudCredentailProvider);
             return result;
         }
 
         private void schedue(CosRequest request, CosResult result, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
             CheckAppidAndRegion(request);
-            httpClient.Schedue(request, result, successCallback, failCallback);
+            httpClient.Schedue(request, result, successCallback, failCallback,this.qcloudCredentailProvider);
         }
 
         public Model.Service.GetServiceResult GetService(Model.Service.GetServiceRequest request)

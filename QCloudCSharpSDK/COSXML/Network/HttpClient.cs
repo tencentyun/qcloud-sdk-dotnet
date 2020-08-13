@@ -29,7 +29,6 @@ namespace COSXML.Network
         private static string TAG = "HttpClient";
 
         private static HttpClientConfig config;
-        private static QCloudCredentialProvider credentialsProvider;
         private static HttpClient instance;
         private static Object sync = new Object();
         private static Object syncInstance = new Object();
@@ -48,7 +47,7 @@ namespace COSXML.Network
             return instance;
         }
 
-        public static void Init(HttpClientConfig config, QCloudCredentialProvider credentialsProvider)
+        public static void Init(HttpClientConfig config)
         {
             lock (sync)
             {
@@ -57,7 +56,6 @@ namespace COSXML.Network
                     throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "HttpClientConfig = null");
                 }
                 HttpClient.config = config;
-                HttpClient.credentialsProvider = credentialsProvider;
                 // init grobal httpwebreqeust
                 CommandTask.Init(HttpClient.config);
             }
@@ -79,18 +77,18 @@ namespace COSXML.Network
         /// <param name="cosResult"></param>
         /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception>
         /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
-        public void Excute(CosRequest cosRequest, CosResult cosResult)
+        public void Excute(CosRequest cosRequest, CosResult cosResult,QCloudCredentialProvider qCloudCredentialProvider)
         {
             //HttpTask httpTask = new HttpTask();
             //httpTask.cosRequest = cosRequest;
             //httpTask.cosResult = cosResult;
             //httpTask.isSchedue = false;
-            InternalExcute(cosRequest, cosResult);
+            InternalExcute(cosRequest, cosResult,qCloudCredentialProvider);
         }
 
 
         public void Schedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback,
-            COSXML.Callback.OnFailedCallback failCallback)
+            COSXML.Callback.OnFailedCallback failCallback,QCloudCredentialProvider qCloudCredentialProvider)
         {
             //HttpTask httpTask = new HttpTask();
             //httpTask.cosRequest = cosRequest;
@@ -98,7 +96,7 @@ namespace COSXML.Network
             //httpTask.isSchedue = true;
             //httpTask.successCallback = successCallback;
             //httpTask.failCallback = failCallback;
-            InternalSchedue(cosRequest, cosResult, successCallback, failCallback);
+            InternalSchedue(cosRequest, cosResult, successCallback, failCallback,qCloudCredentialProvider);
         }
 
 
@@ -109,11 +107,11 @@ namespace COSXML.Network
         /// <param name="cosResult"></param>
         /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception>
         /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
-        public void InternalExcute(CosRequest cosRequest, CosResult cosResult)
+        public void InternalExcute(CosRequest cosRequest, CosResult cosResult,QCloudCredentialProvider qCloudCredentialProvider)
         {
             try
             {
-                Request request = CreateRequest(cosRequest);
+                Request request = CreateRequest(cosRequest,qCloudCredentialProvider);
                 //extern informations exchange
                 cosResult.ExternInfo(cosRequest);
 
@@ -168,11 +166,11 @@ namespace COSXML.Network
         }
 
         public void InternalSchedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, 
-            COSXML.Callback.OnFailedCallback failCallback)
+            COSXML.Callback.OnFailedCallback failCallback,QCloudCredentialProvider qCloudCredentialProvider)
         {
             try
             {
-                Request request = CreateRequest(cosRequest);
+                Request request = CreateRequest(cosRequest,qCloudCredentialProvider);
                 Response response;
                 if (cosRequest is GetObjectRequest)
                 {
@@ -204,7 +202,7 @@ namespace COSXML.Network
             }
         }
 
-        private Request CreateRequest(CosRequest cosRequest)
+        private Request CreateRequest(CosRequest cosRequest,QCloudCredentialProvider qCloudCredentialProvider)
         {
             cosRequest.CheckParameters();
             string requestUrlWithSign = cosRequest.RequestURLWithSign;
@@ -254,7 +252,7 @@ namespace COSXML.Network
             if (requestUrlWithSign == null)
             {
                 cosRequest.GetSignSourceProvider().setCosHost(cosRequest.GetCOSHost());
-                CheckSign(cosRequest.GetSignSourceProvider(), request);
+                CheckSign(cosRequest.GetSignSourceProvider(), request,qCloudCredentialProvider);
             }
             return request;
         }
@@ -274,7 +272,7 @@ namespace COSXML.Network
         /// </summary>
         /// <param name="qcloudSignSource">QCloudSignSource</param>
         /// <param name="request"></param>
-        private void CheckSign(QCloudSignSource qcloudSignSource, Request request)
+        private void CheckSign(QCloudSignSource qcloudSignSource, Request request,QCloudCredentialProvider qCloudCredentialProvider)
         {
             // has authorizaiton, notice: using request.Headers， otherwise, error
             if (request.Headers.ContainsKey(CosRequestHeaderKey.AUTHORIZAIION))
@@ -290,10 +288,10 @@ namespace COSXML.Network
                 return;
             }
 
-            if (credentialsProvider == null) throw new ArgumentNullException("credentialsProvider == null");
+            if (qCloudCredentialProvider == null) throw new ArgumentNullException("credentialsProvider == null");
 
             CosXmlSigner signer = new CosXmlSigner();
-            signer.Sign(request, qcloudSignSource, credentialsProvider.GetQCloudCredentials());
+            signer.Sign(request, qcloudSignSource, qCloudCredentialProvider.GetQCloudCredentials());
         }
 
         private bool CheckNeedMd5(Request request, bool isNeedMd5)
