@@ -33,14 +33,18 @@ namespace COSXML.Transfer
 
         protected bool isNeedMd5 = true;
 
+        protected Dictionary<string, string> customHeaders;
+
         protected TaskState taskState;
         protected Object syncTaskState = new Object();
 
         public void InitCosXmlServer(CosXml cosXml)
         {
             cosXmlServer = cosXml;
+            if (this.region == null) {
+                this.region = cosXml.GetConfig().Region;
+            }
         }
-
 
         public COSXMLTask(string bucket, string region, string key)
         {
@@ -49,11 +53,22 @@ namespace COSXML.Transfer
             this.key = key;
         }
 
+
+        public COSXMLTask(string bucket, string key)
+        {
+            this.bucket = bucket;
+            this.key = key;
+        }
+
         public abstract void Pause();
 
         public abstract void Cancel();
 
         public abstract void Resume();
+
+        protected void setHeaders(Dictionary<string, string> headers) {
+            this.customHeaders = headers;
+        }
 
         protected bool UpdateTaskState(TaskState newTaskState)
         {

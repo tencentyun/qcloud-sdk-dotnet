@@ -28,11 +28,24 @@ namespace COSXML.Transfer
         private Object syncExit = new Object();
         private bool isExit = false;
 
+        public COSXMLDownloadTask(string bucket, string key, string localDir, string localFileName)
+            : base(bucket, key)
+        {
+            this.localDir = localDir;
+            this.localFileName = localFileName;
+        }
+
         public COSXMLDownloadTask(string bucket, string region, string key, string localDir, string localFileName)
             : base(bucket, region, key)
         {
             this.localDir = localDir;
             this.localFileName = localFileName;
+        }
+
+        public COSXMLDownloadTask(GetObjectRequest request)
+            : base(request.Bucket, request.Key)
+        {
+            this.getObjectRequest = request;
         }
 
         public void SetRange(long rangeStart, long rangeEnd)
@@ -92,7 +105,9 @@ namespace COSXML.Transfer
 
         private void GetObject()
         {
-            getObjectRequest = new GetObjectRequest(bucket, key, localDir, localFileName);
+            if (getObjectRequest == null) {
+                getObjectRequest = new GetObjectRequest(bucket, key, localDir, localFileName);
+            }
             if (progressCallback != null)
             {
                 getObjectRequest.SetCosProgressCallback(progressCallback);

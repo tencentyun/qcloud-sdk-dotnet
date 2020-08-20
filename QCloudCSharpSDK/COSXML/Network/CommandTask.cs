@@ -476,7 +476,7 @@ namespace COSXML.Network
         /// <param name="httpWebResponse"></param>
         private static void PrintResponseInfo(HttpWebResponse httpWebResponse)
         { 
-            StringBuilder responseLog = new StringBuilder("--->");
+            StringBuilder responseLog = new StringBuilder("<---");
             responseLog.Append(httpWebResponse.Method).Append(' ').Append(httpWebResponse.ResponseUri.AbsoluteUri).Append('\n');
             responseLog.Append((int)httpWebResponse.StatusCode).Append(' ').Append(httpWebResponse.StatusDescription).Append('\n'); ;
             int count = httpWebResponse.Headers.Count;

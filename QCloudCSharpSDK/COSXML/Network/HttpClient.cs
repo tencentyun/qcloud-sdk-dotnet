@@ -253,7 +253,6 @@ namespace COSXML.Network
             //cacluate sign, and add it.
             if (requestUrlWithSign == null)
             {
-                cosRequest.GetSignSourceProvider().setCosHost(cosRequest.GetCOSHost());
                 CheckSign(cosRequest.GetSignSourceProvider(), request);
             }
             return request;

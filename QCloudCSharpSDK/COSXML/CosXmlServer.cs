@@ -44,6 +44,10 @@ namespace COSXML
             httpClient = HttpClient.GetInstance();
         }
 
+        public CosXmlConfig GetConfig() {
+            return config;
+        }
+
         private void CheckAppidAndRegion(CosRequest request)
         {
             request.serviceConfig = config;
@@ -72,14 +76,14 @@ namespace COSXML
 
         }
 
-        private CosResult excute(CosRequest request, CosResult result)
+        public CosResult excute(CosRequest request, CosResult result)
         {
             CheckAppidAndRegion(request);
             httpClient.Excute(request, result);
             return result;
         }
 
-        private void schedue(CosRequest request, CosResult result, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
+        public void schedue(CosRequest request, CosResult result, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
             CheckAppidAndRegion(request);
             httpClient.Schedue(request, result, successCallback, failCallback);

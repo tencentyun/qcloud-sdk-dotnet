@@ -92,7 +92,7 @@ namespace COSXML.Model
         public string Method
         {
             get { return method; }
-            private set { }
+            set { this.method = value; }
         }
 
         /// <summary>
@@ -167,6 +167,17 @@ namespace COSXML.Model
         public void SetRequestHeader(string key, string value)
         {
             SetRequestHeader(key, value, false);
+        }
+        /// <summary>
+        /// add headers for cos request, and cover the current value, if it exists with the key.
+        /// </summary>
+        /// <param name="headers"></param>
+        public void SetRequestHeaders(Dictionary<string, string> headers)
+        {
+            foreach(KeyValuePair<string, string> entry in headers)
+            {
+                SetRequestHeader(entry.Key, entry.Value);
+            }
         }
         /// <summary>
         /// header 默认不 encode

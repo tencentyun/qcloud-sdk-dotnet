@@ -22,8 +22,6 @@ namespace COSXMLTests
             try
             {
                 PutBucketRequest request = new PutBucketRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
 
                 // 添加acl
                 request.SetCosACL(CosACL.PUBLIC_READ);
@@ -65,8 +63,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             PutBucketRequest request = new PutBucketRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             // 添加acl
             request.SetCosACL("public-read");
@@ -120,8 +118,7 @@ namespace COSXMLTests
             try
             {
                 HeadBucketRequest request = new HeadBucketRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
                 //执行请求
                 HeadBucketResult result = cosXml.HeadBucket(request);
                 Console.WriteLine(result.GetResultInfo());
@@ -144,8 +141,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             HeadBucketRequest request = new HeadBucketRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             ///执行请求
             cosXml.HeadBucket(request,
@@ -180,8 +177,8 @@ namespace COSXMLTests
             {
                 GetBucketRequest request = new GetBucketRequest(bucket);
 
-                //设置签名有效时长
-                //request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
+                //
 
                 request.SetPrefix("a/中文/d");
 
@@ -192,8 +189,6 @@ namespace COSXMLTests
                 List<string> queryParameters = new List<string>();
                 queryParameters.Add("prefix");
                 queryParameters.Add("max-keys");
-
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600, headerKeys, queryParameters);
 
 
                 //执行请求
@@ -222,10 +217,6 @@ namespace COSXMLTests
             List<string> queryParameters = new List<string>();
             queryParameters.Add("prefix");
             queryParameters.Add("max-keys");
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600, null, queryParameters);
-            ////设置签名有效时长
-            //request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
 
 
             ///执行请求
@@ -260,8 +251,7 @@ namespace COSXMLTests
             try
             {
                 PutBucketACLRequest request = new PutBucketACLRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
 
                 //添加acl
                 request.SetCosACL(CosACL.PUBLIC_READ);
@@ -299,8 +289,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             PutBucketACLRequest request = new PutBucketACLRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             //添加acl
             request.SetCosACL("private");
@@ -347,8 +337,7 @@ namespace COSXMLTests
             try
             {
                 GetBucketACLRequest request = new GetBucketACLRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
                 //执行请求
                 GetBucketACLResult result = cosXml.GetBucketACL(request);
                 Console.WriteLine(result.GetResultInfo());
@@ -370,8 +359,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             GetBucketACLRequest request = new GetBucketACLRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             ///执行请求
             cosXml.GetBucketACL(request,
@@ -404,8 +393,7 @@ namespace COSXMLTests
             try
             {
                 PutBucketCORSRequest request = new PutBucketCORSRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
 
                 //设置cors
                 COSXML.Model.Tag.CORSConfiguration.CORSRule corsRule = new COSXML.Model.Tag.CORSConfiguration.CORSRule();
@@ -453,8 +441,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             PutBucketCORSRequest request = new PutBucketCORSRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             //设置cors
             COSXML.Model.Tag.CORSConfiguration.CORSRule corsRule = new COSXML.Model.Tag.CORSConfiguration.CORSRule();
@@ -512,8 +500,7 @@ namespace COSXMLTests
             try
             {
                 GetBucketCORSRequest request = new GetBucketCORSRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
                 //执行请求
                 GetBucketCORSResult result = cosXml.GetBucketCORS(request);
 
@@ -537,8 +524,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             GetBucketCORSRequest request = new GetBucketCORSRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             ///执行请求
             cosXml.GetBucketCORS(request,
@@ -569,8 +556,7 @@ namespace COSXMLTests
             try
             {
                 DeleteBucketCORSRequest request = new DeleteBucketCORSRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
                 //执行请求
                 DeleteBucketCORSResult result = cosXml.DeleteBucketCORS(request);
 
@@ -594,8 +580,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             DeleteBucketCORSRequest request = new DeleteBucketCORSRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             ///执行请求
             cosXml.DeleteBucketCORS(request,
@@ -625,8 +611,7 @@ namespace COSXMLTests
             try
             {
                 PutBucketLifecycleRequest request = new PutBucketLifecycleRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
 
                 //设置 lifecycle
                 COSXML.Model.Tag.LifecycleConfiguration.Rule rule = new COSXML.Model.Tag.LifecycleConfiguration.Rule();
@@ -664,8 +649,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             PutBucketLifecycleRequest request = new PutBucketLifecycleRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             //设置 lifecycle
             COSXML.Model.Tag.LifecycleConfiguration.Rule rule = new COSXML.Model.Tag.LifecycleConfiguration.Rule();
@@ -712,8 +697,7 @@ namespace COSXMLTests
             try
             {
                 GetBucketLifecycleRequest request = new GetBucketLifecycleRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
                 //执行请求
                 GetBucketLifecycleResult result = cosXml.GetBucketLifecycle(request);
 
@@ -737,8 +721,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             GetBucketLifecycleRequest request = new GetBucketLifecycleRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             ///执行请求
             cosXml.GetBucketLifecycle(request,
@@ -769,8 +753,7 @@ namespace COSXMLTests
             try
             {
                 DeleteBucketLifecycleRequest request = new DeleteBucketLifecycleRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
                 //执行请求
                 DeleteBucketLifecycleResult result = cosXml.DeleteBucketLifecycle(request);
 
@@ -794,8 +777,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             DeleteBucketLifecycleRequest request = new DeleteBucketLifecycleRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             ///执行请求
             cosXml.DeleteBucketLifecycle(request,
@@ -826,8 +809,7 @@ namespace COSXMLTests
             try
             {
                 PutBucketReplicationRequest request = new PutBucketReplicationRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
 
                 //设置replication
                 PutBucketReplicationRequest.RuleStruct ruleStruct = new PutBucketReplicationRequest.RuleStruct();
@@ -865,8 +847,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             PutBucketReplicationRequest request = new PutBucketReplicationRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
             //设置replication
       
             PutBucketReplicationRequest.RuleStruct ruleStruct = new PutBucketReplicationRequest.RuleStruct();
@@ -908,8 +890,7 @@ namespace COSXMLTests
             try
             {
                 GetBucketReplicationRequest request = new GetBucketReplicationRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
                 //执行请求
                 GetBucketReplicationResult result = cosXml.GetBucketReplication(request);
 
@@ -934,8 +915,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             GetBucketReplicationRequest request = new GetBucketReplicationRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
 
             ///执行请求
@@ -966,8 +947,7 @@ namespace COSXMLTests
             try
             {
                 DeleteBucketReplicationRequest request = new DeleteBucketReplicationRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
                 //执行请求
                 DeleteBucketReplicationResult result = cosXml.DeleteBucketReplication(request);
 
@@ -991,8 +971,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             DeleteBucketReplicationRequest request = new DeleteBucketReplicationRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
 
             ///执行请求
@@ -1024,8 +1004,7 @@ namespace COSXMLTests
             try
             {
                 PutBucketVersioningRequest request = new PutBucketVersioningRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
 
                 //开启版本控制
                 request.IsEnableVersionConfig(true);
@@ -1053,8 +1032,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             PutBucketVersioningRequest request = new PutBucketVersioningRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             //开启版本控制
             request.IsEnableVersionConfig(true);
@@ -1088,8 +1067,7 @@ namespace COSXMLTests
             try
             {
                 GetBucketVersioningRequest request = new GetBucketVersioningRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
                 //执行请求
                 GetBucketVersioningResult result = cosXml.GetBucketVersioning(request);
 
@@ -1113,8 +1091,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             GetBucketVersioningRequest request = new GetBucketVersioningRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             //执行请求
             cosXml.GetBucketVersioning(request,
@@ -1145,8 +1123,7 @@ namespace COSXMLTests
             try
             {
                 ListBucketVersionsRequest request = new ListBucketVersionsRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
                 //执行请求
                 ListBucketVersionsResult result = cosXml.ListBucketVersions(request);
 
@@ -1170,8 +1147,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             ListBucketVersionsRequest request = new ListBucketVersionsRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             //执行请求
             cosXml.ListBucketVersions(request,
@@ -1202,8 +1179,7 @@ namespace COSXMLTests
             try
             {
                 ListMultiUploadsRequest request = new ListMultiUploadsRequest(bucket);
-                //设置签名有效时长
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
                 //执行请求
                 ListMultiUploadsResult result = cosXml.ListMultiUploads(request);
 
@@ -1227,8 +1203,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             ListMultiUploadsRequest request = new ListMultiUploadsRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             //执行请求
             cosXml.ListMultiUploads(request,
@@ -1258,8 +1234,8 @@ namespace COSXMLTests
             try
             {
                 DeleteBucketRequest request = new DeleteBucketRequest(bucket);
-                //设置签名有效时长
-                //request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
+                //
                 //执行请求
                 DeleteBucketResult result = cosXml.DeleteBucket(request);
 
@@ -1283,8 +1259,8 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             DeleteBucketRequest request = new DeleteBucketRequest(bucket);
-            //设置签名有效时长
-            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+            
+            
 
             ///执行请求
             cosXml.DeleteBucket(request,
@@ -1331,7 +1307,7 @@ namespace COSXMLTests
                 // 设置 tag
                 PutBucketTaggingRequest request = new PutBucketTaggingRequest(
                     instance.bucketForBucketTest);
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
+                
 
                 string akey = "aTagKey";
                 string avalue = "aTagValue";
@@ -1346,7 +1322,6 @@ namespace COSXMLTests
                 // 获取 tag
                 GetBucketTaggingRequest getRequest = new GetBucketTaggingRequest(
                     instance.bucketForBucketTest);
-                getRequest.SetSign(TimeUtils.GetCurrentTime(TimeUnit.SECONDS), 600);
                 GetBucketTaggingResult getResult = instance.cosXml.getBucketTagging(getRequest);
 
                 Tagging tagging =  getResult.tagging;
@@ -1575,51 +1550,6 @@ namespace COSXMLTests
             ListBucketVersions(instance.cosXml, instance.bucketForBucketTest);
 
             ListMultiUploads(instance.cosXml, instance.bucketForBucketTest);
-
-            // DeleteBucket(instance.cosXml, instance.bucketForBucketTest);
-
-            Assert.True(true);
-
-
-
-
-            //AsyncPutBucket(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncHeadBucket(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncGetBucket(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncPutBucketACL(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncGetBucketACL(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncPutBucketCORS(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncGetBucketCORS(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncDeleteBucketCORS(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncPutBucketLifeCycle(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncGetBucketLifeCycle(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncDeleteBucketLifeCycle(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncPutBucketReplication(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncGetBucketReplication(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncDeleteBucketReplication(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncPutBucketVersioning(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncGetBucketVersioning(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncListBucketVersions(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncListMultiUploads(instance.cosXml, instance.bucketForBucketTest);
-
-            //AsyncDeleteBucket(instance.cosXml, instance.bucketForBucketTest);
 
 
         }

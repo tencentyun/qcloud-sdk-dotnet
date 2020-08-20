@@ -38,8 +38,6 @@ namespace COSXML.Auth
 
         private Boolean signAll;
 
-        private String cosHost;
-
         public OnGetSign onGetSign;
 
         public CosXmlSignSourceProvider()
@@ -117,10 +115,6 @@ namespace COSXML.Auth
             return parameterList;
         }
 
-        public void setCosHost(string host) {
-            cosHost = host;
-        }
-
         public string Source(Request request)
         {
             
@@ -135,7 +129,7 @@ namespace COSXML.Auth
             }
             try
             {
-                lowerKeySourceHeaders.Add("host", cosHost);
+                lowerKeySourceHeaders.Add("host", request.Host);
                 headerKeys.Add("host");
             }
             catch (Exception)

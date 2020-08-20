@@ -56,6 +56,17 @@ namespace COSXML.Transfer
         {
         }
 
+        public COSXMLUploadTask(string bucket, string key)
+            : base(bucket, key)
+        {
+        }
+
+        public COSXMLUploadTask(PutObjectRequest request)
+            : base(request.Bucket, request.Region, request.Key)
+        {
+            setHeaders(request.GetRequestHeaders());
+        }
+
         internal void SetDivision(long divisionSize, long sliceSize)
         {
             this.divisionSize = divisionSize;
@@ -130,6 +141,9 @@ namespace COSXML.Transfer
         private void SimpleUpload()
         {
             putObjectRequest = new PutObjectRequest(bucket, key, srcPath, sendOffset, sendContentLength);
+            if (customHeaders != null) {
+                putObjectRequest.SetRequestHeaders(customHeaders);
+            }
             if (progressCallback != null)
             {
                 putObjectRequest.SetCosProgressCallback(progressCallback);
@@ -194,6 +208,9 @@ namespace COSXML.Transfer
         private void InitMultiUploadPart()
         {
             initMultiUploadRequest = new InitMultipartUploadRequest(bucket, key);
+            if (customHeaders != null) {
+                initMultiUploadRequest.SetRequestHeaders(customHeaders);
+            }
             cosXmlServer.InitMultipartUpload(initMultiUploadRequest, delegate(CosResult cosResult)
             {
                 lock (syncExit)
@@ -287,8 +304,12 @@ namespace COSXML.Transfer
                 SliceStruct sliceStruct = sliceList[i];
                 if (!sliceStruct.isAlreadyUpload)
                 {
-                    UploadPartRequest uploadPartRequest = new UploadPartRequest(bucket, key, sliceStruct.partNumber, uploadId, srcPath, sliceStruct.sliceStart,
-                        sliceStruct.sliceLength);
+                    UploadPartRequest uploadPartRequest = new UploadPartRequest(bucket, key, sliceStruct.partNumber, uploadId, srcPath, 
+                        sliceStruct.sliceStart, sliceStruct.sliceLength);
+                    if(customHeaders.ContainsKey(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT)) {
+                        string trafficLimit = customHeaders[CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT];
+                        uploadPartRequest.LimitTraffic(Convert.ToInt64(trafficLimit));
+                    }
 
                     //打印进度
                     uploadPartRequest.SetCosProgressCallback(delegate (long completed, long total)
