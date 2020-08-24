@@ -104,7 +104,6 @@ namespace COSXML.Network
         {
             this.data = data;
             contentLength = data.Length;
-            contentType = CosRequestHeaderKey.APPLICATION_XML;
         }
 
         public override void OnWrite(Stream outputStream)

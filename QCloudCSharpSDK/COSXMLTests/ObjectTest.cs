@@ -164,6 +164,31 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public void PutObjectBytes()
+        {
+            try
+            {
+                byte[] data = File.ReadAllBytes(smallFileSrcPath);
+                PutObjectRequest request = new PutObjectRequest(bucket, commonKey, data);
+
+                //执行请求
+                PutObjectResult result = cosXml.PutObject(request);
+
+                Console.WriteLine(result.GetResultInfo());
+            }
+            catch (CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.True(false);
+            }
+            catch (CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.True(false);
+            }
+        }
+
+        [Test()]
         public void AsynPutObject()
         {
             AutoResetEvent resetEvent = new AutoResetEvent(false);
