@@ -8,7 +8,7 @@ using COSXML.Utils;
 
 namespace COSXML.Model.Object
 {
-    public abstract class ObjectRequest : CosRequest
+    public class ObjectRequest : CosRequest
     {
         /// <summary>
         /// 存储桶名称(Bucket)
@@ -22,9 +22,15 @@ namespace COSXML.Model.Object
         /// </summary>
         protected string region;
 
+        /// <summary>
+        /// 对象键
+        /// </summary>
+        protected string key;
+
         public ObjectRequest(string bucket, string key)
         {
             this.bucket = bucket;
+            this.key = key;
             if (!String.IsNullOrEmpty(key) && !key.StartsWith("/"))
             {
                 this.path = "/" + key;
@@ -57,7 +63,12 @@ namespace COSXML.Model.Object
         /// <summary>
         /// object 名称，对象键
         /// </summary>
-        /// <param name="key"></param>
+        public string Key
+        {
+            get { return this.key; }
+            set { this.key = value; }
+        }
+
         public virtual void SetCosPath(string key)
         {
             if (key != null && !key.StartsWith("/"))

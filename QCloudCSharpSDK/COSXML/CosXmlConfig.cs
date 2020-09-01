@@ -61,7 +61,7 @@ namespace COSXML
         {
             internal string appid;
             internal string region;
-            internal bool isHttps = false;
+            internal bool isHttps = true;
             internal HttpClientConfig.Builder httpClientConfigBuilder;
             internal bool isDebug = false;
             internal string endpointSuffix;

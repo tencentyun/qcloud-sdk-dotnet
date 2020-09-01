@@ -16,6 +16,12 @@ namespace COSXML
     public interface CosXml
     {
         /// <summary>
+        /// 获取配置项
+        /// </summary>
+        /// <returns></returns>
+        CosXmlConfig GetConfig();
+
+        /// <summary>
         /// 生成签名串
         /// </summary>
         /// <param name="method">http method</param>
@@ -906,5 +912,22 @@ namespace COSXML
         /// </summary>
         /// <param name="cosRequest"></param>
         void Cancel(CosRequest cosRequest);
+
+        /// <summary>
+        /// 同步执行请求
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        CosResult excute(CosRequest request, CosResult result);
+
+        /// <summary>
+        /// 异步执行请求
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="result"></param>
+        /// <param name="successCallback"></param>
+        /// <param name="failCallback"></param>
+        void schedue(CosRequest request, CosResult result, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
     }
 }

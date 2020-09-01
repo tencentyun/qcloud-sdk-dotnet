@@ -11,7 +11,7 @@
     <Deterministic>true</Deterministic>
 
     <PackageId>Tencent.QCloud.Cos.Sdk</PackageId>
-    <Version>5.4.11.0</Version>
+    <Version>5.4.13.0</Version>
     <Authors>Tencent</Authors>
     <Company>Tencent</Company>
     <description>Tencent Cloud COS(Cloud Object Service) .Net SDK</description>

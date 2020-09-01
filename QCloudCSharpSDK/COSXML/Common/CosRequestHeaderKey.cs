@@ -34,7 +34,6 @@ namespace COSXML.Common
         public const string IF_UNMODIFIED_SINCE = "If-Unmodified-Since";
         public const string IF_MATCH = "If-Match";
         public const string IF_NONE_MATCH = "If-None-Match";
-        public const string APPLICATION_XML = "application/xml";
         public const string TEXT_PLAIN = "text/plain";
         public const string APPLICATION_OCTET_STREAM = "application/octet-stream";
         public const string RANGE = "Range";

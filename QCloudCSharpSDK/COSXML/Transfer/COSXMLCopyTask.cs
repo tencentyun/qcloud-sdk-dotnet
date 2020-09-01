@@ -44,6 +44,11 @@ namespace COSXML.Transfer
 
         private AbortMultipartUploadRequest abortMultiUploadRequest;
 
+        public COSXMLCopyTask(string bucket, string key, CopySourceStruct copySource)
+            :base(bucket, key)
+        {
+            this.copySource = copySource;
+        }
 
         public COSXMLCopyTask(string bucket, string region, string key, CopySourceStruct copySource)
             :base(bucket, region, key)
