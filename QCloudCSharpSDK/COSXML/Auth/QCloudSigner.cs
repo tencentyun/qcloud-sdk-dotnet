@@ -124,7 +124,11 @@ namespace COSXML.Auth
             {
                 lowerKeySourceHeaders.Add(pair.Key.ToLower(), pair.Value);
                 if (signAll) {
-                    headerKeys.Add(pair.Key.ToLower());
+                    if (pair.Key.Equals("content-type", StringComparison.OrdinalIgnoreCase) ||
+                        pair.Key.Equals("content-md5", StringComparison.OrdinalIgnoreCase) ||
+                        pair.Key.StartsWith("x-cos-")) {
+                            headerKeys.Add(pair.Key.ToLower());
+                        } 
                 }
             }
             try

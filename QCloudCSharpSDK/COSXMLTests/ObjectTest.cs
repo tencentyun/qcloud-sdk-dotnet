@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace COSXMLTests
 {
@@ -815,7 +816,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testUploadTask() {
+        public async Task testUploadTask() {
             string key = multiKey;
 
             PutObjectRequest request = new PutObjectRequest(bucket, key, bigFileSrcPath);
@@ -824,39 +825,20 @@ namespace COSXMLTests
             COSXMLUploadTask uploadTask = new COSXMLUploadTask(request);
             uploadTask.SetSrcPath(bigFileSrcPath);
 
-            var autoEvent = new AutoResetEvent(false);
             string eTag = null;
 
             uploadTask.progressCallback = delegate (long completed, long total)
             {
                 Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
             };
-            uploadTask.successCallback = delegate (CosResult cosResult) 
-            {
-                COSXML.Transfer.COSXMLUploadTask.UploadTaskResult result = cosResult as COSXML.Transfer.COSXMLUploadTask.UploadTaskResult;
-                Console.WriteLine(result.GetResultInfo());
-                autoEvent.Set();
-                eTag = result.eTag;
-            };
-            uploadTask.failCallback = delegate (CosClientException clientEx, CosServerException serverEx) 
-            {
-                if (clientEx != null)
-                {
-                    Console.WriteLine("CosClientException: " + clientEx);
-                }
-                if (serverEx != null)
-                {
-                    Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                }
-                autoEvent.Set();
-            };
-            transferManager.Upload(uploadTask);
-            autoEvent.WaitOne();
+
+            COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
+            eTag = result.eTag;
             Assert.NotNull(eTag);
         }
 
         [Test()]
-        public void testDownloadTask() {
+        public async Task testDownloadTask() {
             long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
             GetObjectRequest request = new GetObjectRequest(bucket, 
                 commonKey, localDir, localFileName);
@@ -865,43 +847,19 @@ namespace COSXMLTests
             //执行请求
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
 
-            var autoEvent = new AutoResetEvent(false);
-
             downloadTask.progressCallback = delegate (long completed, long total)
             {
                 Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
             };
 
-            downloadTask.successCallback = delegate (CosResult cosResult) 
-            {
-                COSXML.Transfer.COSXMLDownloadTask.DownloadTaskResult result = cosResult as COSXML.Transfer.COSXMLDownloadTask.DownloadTaskResult;
-                Console.WriteLine(result.GetResultInfo());
-                autoEvent.Set();
-                Assert.True(cosResult.httpCode == 200);
-            };
-
-            downloadTask.failCallback = delegate (CosClientException clientEx, CosServerException serverEx) 
-            {
-                if (clientEx != null)
-                {
-                    Console.WriteLine("CosClientException: " + clientEx);
-                }
-                if (serverEx != null)
-                {
-                    Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                }
-                autoEvent.Set();
-                Assert.True(false);
-            };
-
             long costTime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() - now;
 
-            transferManager.Download(downloadTask);
-            autoEvent.WaitOne();
+            COSXMLDownloadTask.DownloadTaskResult result = await transferManager.DownloadAsync(downloadTask);
+            Assert.True(result.httpCode == 200);
         }
 
         [Test()]
-        public void testCopyTask() {
+        public async Task testCopyTask() {
             CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid, 
                     bucket, QCloudServer.Instance().region, copykey);
             
@@ -914,30 +872,8 @@ namespace COSXMLTests
                 Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
             };
 
-            copyTask.successCallback = delegate (CosResult cosResult) 
-            {
-                COSXML.Transfer.COSXMLCopyTask.CopyTaskResult result = cosResult as COSXML.Transfer.COSXMLCopyTask.CopyTaskResult;
-                Console.WriteLine(result.GetResultInfo());
-                autoEvent.Set();
-                Assert.True(cosResult.httpCode == 200);
-            };
-
-            copyTask.failCallback = delegate (CosClientException clientEx, CosServerException serverEx) 
-            {
-                if (clientEx != null)
-                {
-                    Console.WriteLine("CosClientException: " + clientEx);
-                }
-                if (serverEx != null)
-                {
-                    Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                }
-                autoEvent.Set();
-                Assert.True(false);
-            };
-
-            transferManager.Copy(copyTask);
-            autoEvent.WaitOne();
+            COSXMLCopyTask.CopyTaskResult result = await transferManager.CopyAsync(copyTask);
+            Assert.True(result.httpCode == 200);
         }
 
         [Test()]
@@ -1017,6 +953,15 @@ namespace COSXMLTests
             string url = instance.cosXml.GenerateSignURL(signatureStruct);
             Console.WriteLine(url);
             Assert.NotNull(url);
+        }
+
+        [Test()]
+        public async Task asyncPutObject() {
+            PutObjectRequest request = new PutObjectRequest(bucket, commonKey, smallFileSrcPath);
+
+            PutObjectResult result = await cosXml.executeAsync<PutObjectResult>(request);
+
+            Assert.NotNull(result.GetResultInfo());
         }
     }
 }

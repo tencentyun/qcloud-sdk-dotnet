@@ -6,6 +6,7 @@ using COSXML.Model.Bucket;
 using COSXML.Model.Object;
 using COSXML.Model;
 using COSXML.Model.Tag;
+using System.Threading.Tasks;
 
 namespace COSXML
 { 
@@ -929,5 +930,12 @@ namespace COSXML
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
         void schedue(CosRequest request, CosResult result, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        /// <summary>
+        /// 异步执行请求
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<T> executeAsync<T>(CosRequest request) where T : CosResult;
     }
 }

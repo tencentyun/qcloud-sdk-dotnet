@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using System.Threading.Tasks;
 using System.Text;
 using COSXML.Network;
 using COSXML.Model;
@@ -74,6 +75,26 @@ namespace COSXML
                 return;
             }
 
+        }
+
+        public Task<T> executeAsync<T>(CosRequest request) where T : CosResult {
+            T result = Activator.CreateInstance<T>();
+            
+            CheckAppidAndRegion(request);
+
+            var t = new TaskCompletionSource<T>();
+
+            schedue(request, result, delegate(CosResult cosResult) {
+                t.TrySetResult(result as T);
+            }, delegate(CosClientException clientException, CosServerException serverException) {
+                if (clientException != null) {
+                    t.TrySetException(clientException);
+                } else {
+                    t.TrySetException(serverException);
+                }
+            });
+
+            return t.Task;
         }
 
         public CosResult excute(CosRequest request, CosResult result)

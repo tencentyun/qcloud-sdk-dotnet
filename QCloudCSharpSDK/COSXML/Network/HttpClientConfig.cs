@@ -182,7 +182,7 @@ namespace COSXML.Network
 
             public Builder SetConnectionLimit(int connectionLimit)
             {
-                if (connectionLimit > 2) 
+                if (connectionLimit > 0) 
                 {
                     this.connectionLimit = connectionLimit;
                 }
@@ -200,7 +200,7 @@ namespace COSXML.Network
 
             public Builder SetConnectionTimeoutMs(int connectionTimeoutMs)
             {
-                if (connectionTimeoutMs > 10000)
+                if (connectionTimeoutMs > 0)
                 {
                     this.connectionTimeoutMs = connectionTimeoutMs;
                 }
@@ -209,7 +209,7 @@ namespace COSXML.Network
 
             public Builder SetReadWriteTimeoutMs(int readWriteTimeoutMs)
             {
-                if (readWriteTimeoutMs > 10000)
+                if (readWriteTimeoutMs > 0)
                 {
                     this.readWriteTimeoutMs = readWriteTimeoutMs;
                 }

@@ -40,10 +40,10 @@ namespace COSXMLTests
               .Build();
 
           QCloudCredentialProvider qCloudCredentialProvider = new DefaultSessionQCloudCredentialProvider(
-              "AKIDLT2qvPSOSRq5eM2TR11daHYBfT1rl8fuWgAJhtbo3eFwcbpFnZHAYkgpaFrzvtq4",
-              "i19oUWRIvvpqGpiUgwqa3wufzSbDPyaxv0JYArSQFMc=",
+              "secretId",
+              "secretKey",
               1597907089,
-              "YiPWtzGhVPG5HQlOLQdxZrxHOitu1JXL903fda3a64f28616997f861116b2d7d1EyG_RmvCKqArCLtOXxKv9MGtugt4lPcUbESOTHdhmhEyMYgnPpJSLpbQoKPYzg7WwwvjjXqOKQvs_I9iCHyaBXJu_LToqeuQfO4NFpos8I_NWBKxg23xFpvuXHXJ7kDuyudwu7qInonvJpoXAnb_J-7rMY94aVWSg6kolryvO-x5_C3cBa1fIiKTrwkRP4keh0g3_asIwP99DA-WASJ147C_NsZl9fdTlWEBnIeQqB7uRHAZkF-_f03-fBYJofeYGe7FArrfai4_AO57QbTwacfzHk2s-43WuCIhoLud_-k"
+              "sessionToken"
           );
 
           cosXml = new CosXmlServer(config, qCloudCredentialProvider);
@@ -78,12 +78,10 @@ namespace COSXMLTests
           catch (CosClientException clientEx)
           {
               Console.WriteLine("CosClientException: " + clientEx.Message);
-              Assert.True(false);
           }
           catch (CosServerException serverEx)
           {
               Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-              Assert.True(false);
           }
         }
     }

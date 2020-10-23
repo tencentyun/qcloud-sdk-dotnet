@@ -8,3 +8,4 @@ QCloudCSharpSDK/COSXML/obj
 QCloudCSharpSDK/COSXMLTests/obj
 QCloudCSharpSDK/COSXMLTests/bin
 *.vs
+.vscode

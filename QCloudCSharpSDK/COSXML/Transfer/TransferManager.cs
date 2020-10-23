@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using COSXML.Model;
+using COSXML.CosException;
+
 /**
 * Copyright (c) 2018 Tencent Cloud. All rights reserved.
 * 11/29/2018 5:09:07 PM
@@ -81,6 +85,17 @@ namespace COSXML.Transfer
         }
 
         /// <summary>
+        /// 异步上传对象，封装了简单上传、分片上传功能。
+        /// </summary>
+        /// <param name="uploader"></param>
+        /// <returns></returns>
+        public Task<COSXMLUploadTask.UploadTaskResult> UploadAsync(COSXMLUploadTask uploader) {
+            var t = newTaskCompletion<COSXMLUploadTask.UploadTaskResult>(uploader);
+            Upload(uploader);
+            return t.Task;
+        }
+
+        /// <summary>
         /// 下载对象
         /// </summary>
         /// <param name="downloader"></param>
@@ -88,6 +103,17 @@ namespace COSXML.Transfer
         {
             downloader.InitCosXmlServer(cosXml);
             downloader.Download();
+        }
+
+        /// <summary>
+        /// 异步下载对象
+        /// </summary>
+        /// <param name="downloader"></param>
+        /// <returns></returns>
+        public Task<COSXMLDownloadTask.DownloadTaskResult> DownloadAsync(COSXMLDownloadTask downloader) {
+            var t = newTaskCompletion<COSXMLDownloadTask.DownloadTaskResult>(downloader);
+            Download(downloader);
+            return t.Task;
         }
 
         /// <summary>
@@ -99,6 +125,35 @@ namespace COSXML.Transfer
             copy.InitCosXmlServer(cosXml);
             copy.SetDivision(transferConfig.DdivisionForCopy, transferConfig.sliceSizeForCopy);
             copy.Copy();
+        }
+
+        /// <summary>
+        /// 异步拷贝对象，封装了简单拷贝、分片拷贝功能。
+        /// </summary>
+        /// <param name="copyTask"></param>
+        /// <returns></returns>
+        public Task<COSXMLCopyTask.CopyTaskResult> CopyAsync(COSXMLCopyTask copyTask) {
+            var t = newTaskCompletion<COSXMLCopyTask.CopyTaskResult>(copyTask);
+            Copy(copyTask);
+            return t.Task;
+        }
+
+        private TaskCompletionSource<T> newTaskCompletion<T>(COSXMLTask task) where T: CosResult {
+            var t = new TaskCompletionSource<T>();
+
+            task.successCallback = delegate(CosResult cosResult) {
+                t.TrySetResult(cosResult as T);
+            };
+
+            task.failCallback = delegate(CosClientException clientException, CosServerException serverException) {
+                if (clientException != null) {
+                    t.TrySetException(clientException);
+                } else {
+                    t.TrySetException(serverException);
+                }
+            };
+
+            return t;
         }
     }
 }
