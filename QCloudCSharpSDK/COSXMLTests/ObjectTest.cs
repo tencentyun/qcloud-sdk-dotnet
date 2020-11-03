@@ -190,49 +190,6 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void AsynPutObject()
-        {
-            AutoResetEvent resetEvent = new AutoResetEvent(false);
-            PutObjectRequest request = new PutObjectRequest(bucket, commonKey, smallFileSrcPath);
-            
-            //添加acl
-            request.SetCosACL(CosACL.PRIVATE);
-
-            COSXML.Model.Tag.GrantAccount readAccount = new COSXML.Model.Tag.GrantAccount();
-            readAccount.AddGrantAccount("1131975903", "1131975903");
-            request.SetXCosGrantRead(readAccount);
-
-            COSXML.Model.Tag.GrantAccount writeAccount = new COSXML.Model.Tag.GrantAccount();
-            writeAccount.AddGrantAccount("1131975903", "1131975903");
-            request.SetXCosGrantWrite(writeAccount);
-
-            COSXML.Model.Tag.GrantAccount fullAccount = new COSXML.Model.Tag.GrantAccount();
-            fullAccount.AddGrantAccount("2832742109", "2832742109");
-            request.SetXCosReadWrite(fullAccount);
-            cosXml.PutObject(request,
-                delegate (CosResult cosResult)
-                {
-                    PutObjectResult result = cosResult as PutObjectResult;
-                    Console.WriteLine(result.GetResultInfo());
-                    resetEvent.Set();
-                },
-            delegate (CosClientException clientEx, CosServerException serverEx)
-            {
-                if (clientEx != null)
-                {
-                    Console.WriteLine("CosClientException: " + clientEx.Message);
-                }
-                if (serverEx != null)
-                {
-                    Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                }
-
-                resetEvent.Set();
-            });
-            resetEvent.WaitOne();
-        }
-
-        [Test()]
         public void HeadObject()
         {
             try
@@ -962,6 +919,24 @@ namespace COSXMLTests
             PutObjectResult result = await cosXml.executeAsync<PutObjectResult>(request);
 
             Assert.NotNull(result.GetResultInfo());
+        }
+
+        [Test()]
+        public async Task testUploadTaskWithError() {
+            string key = multiKey;
+
+            PutObjectRequest request = new PutObjectRequest("3838" + bucket, key, bigFileSrcPath);
+
+            COSXMLUploadTask uploadTask = new COSXMLUploadTask(request);
+            uploadTask.SetSrcPath(bigFileSrcPath);
+
+            try {
+                COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
+                Assert.Fail();
+            } catch (Exception e) {
+                Console.WriteLine("CosException: " + e);
+                Assert.NotNull(e);
+            }
         }
     }
 }

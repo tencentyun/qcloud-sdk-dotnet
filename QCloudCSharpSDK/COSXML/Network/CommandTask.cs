@@ -145,6 +145,8 @@ namespace COSXML.Network
             //handle body
             response.Body.HandleResponseBody(httpWebResponse.GetResponseStream());
 
+            response.OnFinish(response.Code >= 200 && response.Code < 300, null);
+
             // close 
             //httpWebResponse.Close();
         }
@@ -398,7 +400,7 @@ namespace COSXML.Network
             if (response.Body != null)
             {
                 response.Body.ContentLength = httpWebResponse.ContentLength;
-                response.ContentType = httpWebResponse.ContentType;
+                response.Body.ContentType = httpWebResponse.ContentType;
             }
 
             //handle header

@@ -15,7 +15,7 @@ namespace COSXML.Model
      * this class for cos result.
      * 
      */
-    public abstract class CosResult
+    public class CosResult
     {
         /// <summary>
         /// http code
@@ -31,6 +31,16 @@ namespace COSXML.Model
         /// http response headers
         /// </summary>
         public Dictionary<string, List<string>> responseHeaders;
+
+        /// <summary>
+        /// raw http response body
+        /// </summary>
+        public string rawContentBodyString {set; private get;}
+
+        /// <summary>
+        /// raw http response body
+        /// </summary>
+        public string GetRawContentBodyString() { return rawContentBodyString;}
 
         /// <summary>
         /// exchange infor between request and result

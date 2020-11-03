@@ -103,7 +103,16 @@ namespace COSXML.Model.Object
         /// <param name="cosStorageClass"></param>
         public void SetCosStorageClass(CosStorageClass cosStorageClass)
         {
-            SetRequestHeader(CosRequestHeaderKey.X_COS_STORAGE_CLASS_, EnumUtils.GetValue(cosStorageClass));
+            SetRequestHeader(CosRequestHeaderKey.X_COS_STORAGE_CLASS, EnumUtils.GetValue(cosStorageClass));
+        }
+        /// <summary>
+        /// 设置 Object 的存储级别
+        /// <see cref="Common.CosStorageClass"/>
+        /// </summary>
+        /// <param name="cosStorageClass"></param>
+        public void SetCosStorageClass(string cosStorageClass)
+        {
+            SetRequestHeader(CosRequestHeaderKey.X_COS_STORAGE_CLASS, cosStorageClass);
         }
         /// <summary>
         /// 定义 Object 的 ACL 属性。有效值：private，public-read-write，public-read；默认值：private

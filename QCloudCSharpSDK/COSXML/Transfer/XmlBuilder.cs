@@ -606,6 +606,46 @@ namespace COSXML.Transfer
             return RemoveXMLHeader(stringWriter.ToString());
         }
 
+        /// <summary>
+        /// 智能分层
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static string BuildIntelligentTieringConfiguration(IntelligentTieringConfiguration configuration) {
+            (StringWriter stringWriter, XmlWriter xmlWriter) = InitWriter();
+
+            //start to write element
+            xmlWriter.WriteStartElement("IntelligentTieringConfiguration");
+            xmlWriter.WriteElementString("Status", configuration.Status);
+            if (configuration.Days > 0) {
+                xmlWriter.WriteStartElement("Transition");
+                xmlWriter.WriteElementString("Days", configuration.Days.ToString());
+                xmlWriter.WriteElementString("RequestFrequent", configuration.RequestFrequent.ToString());
+                xmlWriter.WriteEndElement();
+            }
+            xmlWriter.WriteEndElement();
+
+            return endWriter(stringWriter, xmlWriter);
+        }
+
+        private static (StringWriter, XmlWriter) InitWriter() {
+            StringWriter stringWriter = new StringWriter();
+            XmlWriterSettings xmlWriterSetting = new XmlWriterSettings();
+            xmlWriterSetting.Indent = true;
+
+            XmlWriter xmlWriter = XmlWriter.Create(stringWriter, xmlWriterSetting);
+            xmlWriter.WriteStartDocument();
+
+            return (stringWriter, xmlWriter);
+        }
+
+        private static string endWriter(StringWriter stringWriter, XmlWriter xmlWriter) {
+            xmlWriter.WriteEndDocument();
+
+            xmlWriter.Flush();
+            return RemoveXMLHeader(stringWriter.ToString());
+        }
+
         private static void writeStringIfValuePresent(XmlWriter xmlWriter, String elementName,
             String elementValue) {
             if (elementValue != null && elementValue.Length > 0) {

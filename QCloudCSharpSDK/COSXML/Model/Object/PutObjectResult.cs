@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 
 using System.Text;
+using System.IO;
+using COSXML.Model.Tag;
+using COSXML.Transfer;
 
 namespace COSXML.Model.Object
 {
@@ -16,6 +19,11 @@ namespace COSXML.Model.Object
         /// </summary>
         public string eTag;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public PicOperationUploadResult uploadResult;
+
         internal override void InternalParseResponseHeaders()
         {
             List<string> values;
@@ -23,6 +31,13 @@ namespace COSXML.Model.Object
             if (values != null && values.Count > 0)
             {
                 eTag = values[0];
+            }
+        }
+
+        internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength) {
+            if (contentLength > 0) {
+                // 图片处理会返回 body
+                uploadResult = XmlParse.ParsePicOpeartionResult(inputStream);
             }
         }
     }

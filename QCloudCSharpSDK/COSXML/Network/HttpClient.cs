@@ -396,8 +396,12 @@ namespace COSXML.Network
             /// <param name="ex"></param>
             public override void OnFinish(bool isSuccess, Exception ex)
             {
-                if (isSuccess) successCallback(cosResult);
-                else
+                cosResult.rawContentBodyString = Body.rawContentBodyString;
+                
+                if (isSuccess && successCallback != null) {
+                    successCallback(cosResult);
+                }
+                else if (faileCallback != null)
                 {
                     if (ex is CosClientException) faileCallback(ex as CosClientException, null);
                     else if (ex is CosServerException) faileCallback(null, ex as CosServerException);

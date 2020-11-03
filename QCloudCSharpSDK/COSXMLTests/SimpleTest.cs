@@ -58,7 +58,7 @@ namespace COSXMLTests
           localFileName = "local.txt";
         }
 
-        [Test()]
+        // [Test()]
         public void PutObject()
         {
           init();

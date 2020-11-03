@@ -24,7 +24,7 @@ namespace COSXML.Common
         public const string X_COS_COPY_SOURCE_IF_UNMODIFIED_SINCE = "x-cos-copy-source-If-Unmodified-Since";
         public const string X_COS_COPY_SOURCE_IF_MATCH = "x-cos-copy-source-If-Match";
         public const string X_COS_COPY_SOURCE_IF_NONE_MATCH = "x-cos-copy-source-If-None-Match";
-        public const string X_COS_STORAGE_CLASS_ = "x-cos-storage-class";
+        public const string X_COS_STORAGE_CLASS = "x-cos-storage-class";
         public const string X_COS_COPY_SOURCE_RANGE = "x-cos-copy-source-range";
         public const string X_COS_TRAFFIC_LIMIT = "x-cos-traffic-limit";    // 限速
         public const string ORIGIN = "Origin";

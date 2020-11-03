@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using COSXML.Common;
 using COSXML.Log;
 /**
 * Copyright (c) 2018 Tencent Cloud. All rights reserved.
@@ -28,7 +25,6 @@ namespace COSXML.Network
 
         private MemoryStream memoryStream;
 
-
         public long ContentLength { get { return contentLength; } set { contentLength = value; } }
 
         public string ContentType { get { return contentType; } set { contentType = value; } }
@@ -37,6 +33,7 @@ namespace COSXML.Network
 
         public COSXML.Callback.OnParseStream ParseStream { get { return parseStream; } set { parseStream = value; } }
 
+        public string rawContentBodyString {get; private set;}
 
         public ResponseBody()
         { }
@@ -78,6 +75,16 @@ namespace COSXML.Network
                 }
                 else
                 {
+                    if ("application/xml".Equals(contentType, StringComparison.OrdinalIgnoreCase) && 
+                        contentLength > 0 && contentLength < 10 * 1000) {
+                        // save raw content
+                        memoryStream = new MemoryStream((int) contentLength);
+                        inputStream.CopyTo(memoryStream);
+                        rawContentBodyString = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
+
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+                        inputStream = memoryStream;
+                    }
                     if (parseStream != null)
                     {
                         parseStream(inputStream, contentType, contentLength);
@@ -181,6 +188,11 @@ namespace COSXML.Network
                     }
                     else
                     {
+                        if ("application/xml".Equals(contentType, StringComparison.OrdinalIgnoreCase) && 
+                            memoryStream.Length > 0 && memoryStream.Length < 10 * 1000) {
+                            memoryStream.Seek(0, SeekOrigin.Begin);
+                            rawContentBodyString = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
+                        }
                         memoryStream.Seek(0, SeekOrigin.Begin);
                         parseStream(memoryStream, contentType, responseBodyState.completed);
                     }

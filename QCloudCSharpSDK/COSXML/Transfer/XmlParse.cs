@@ -1778,5 +1778,278 @@ namespace COSXML.Transfer
             }
         }
 
+        public static IntelligentTieringConfiguration ParseBucketIntelligentTiering(Stream inStream) {
+            XmlReader xmlReader = XmlReader.Create(inStream);
+            IntelligentTieringConfiguration configuration = new IntelligentTieringConfiguration();
+            try {
+                while (xmlReader.Read())
+                {
+                    switch (xmlReader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            if ("Status".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                configuration.Status = xmlReader.Value;
+                            }
+                            else if ("Days".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                Int32.TryParse(xmlReader.Value, out configuration.Days);
+                            }
+                            else if ("RequestFrequent".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                Int32.TryParse(xmlReader.Value, out configuration.RequestFrequent);
+                            }
+                            break;
+                    }
+                }
+            } catch (XmlException e) {
+                Console.WriteLine(e.StackTrace);
+            }
+            return configuration;
+        }
+
+        public static PicOperationUploadResult ParsePicOpeartionResult(Stream inStream) {
+            XmlReader xmlReader = XmlReader.Create(inStream);
+            PicOperationUploadResult uploadResult = new PicOperationUploadResult();
+            var originalInfo = new PicOperationUploadResult.OriginalInfo();
+            var imageInfo = new PicOperationUploadResult.ImageInfo();
+            uploadResult.processResults = new PicOperationUploadResult.ProcessResults();
+            var aProcessResult = new PicOperationUploadResult.ProcessResult();
+            var parentNode = 0; // 1: originalInfo, 2: imageInfo, 3: processResult
+
+            try {
+                while (xmlReader.Read())
+                {
+                    switch (xmlReader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            // parent node type
+                            if ("OriginalInfo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                parentNode = 1;
+                            }
+                            else if ("ImageInfo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                parentNode = 2;
+                            }
+                            else if ("Object".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                parentNode = 3;
+                            }
+
+                            // value node type
+                            else if ("Key".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                if (parentNode == 1) {
+                                    originalInfo.Key = xmlReader.Value;
+                                } else if (parentNode == 3) {
+                                    aProcessResult.Key = xmlReader.Value;
+                                }
+                            }
+                            else if ("Location".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                if (parentNode == 1) {
+                                    originalInfo.Location = xmlReader.Value;
+                                } else if (parentNode == 3) {
+                                    aProcessResult.Location = xmlReader.Value;
+                                }
+                            }
+                            else if ("ETag".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                if (parentNode == 1) {
+                                    originalInfo.ETag = xmlReader.Value;
+                                } else if (parentNode == 3) {
+                                    aProcessResult.ETag = xmlReader.Value;
+                                }
+                            }
+                            else if ("Format".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                if (parentNode == 2) {
+                                    imageInfo.Format = xmlReader.Value;
+                                } else if (parentNode == 3) {
+                                    aProcessResult.Format = xmlReader.Value;
+                                }
+                            }
+                            else if ("Width".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                if (parentNode == 2) {
+                                     Int32.TryParse(xmlReader.Value, out imageInfo.Width);
+                                } else if (parentNode == 3) {
+                                    Int32.TryParse(xmlReader.Value, out aProcessResult.Width);
+                                }
+                            }
+                            else if ("Height".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                if (parentNode == 2) {
+                                     Int32.TryParse(xmlReader.Value, out imageInfo.Height);
+                                } else if (parentNode == 3) {
+                                    Int32.TryParse(xmlReader.Value, out aProcessResult.Height);
+                                }
+                            }
+                            else if ("Quality".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                if (parentNode == 2) {
+                                     Int32.TryParse(xmlReader.Value, out imageInfo.Quality);
+                                } else if (parentNode == 3) {
+                                    Int32.TryParse(xmlReader.Value, out aProcessResult.Quality);
+                                }
+                            }
+                            else if ("Orientation".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                if (parentNode == 2) {
+                                     Int32.TryParse(xmlReader.Value, out imageInfo.Orientation);
+                                }
+                            }
+                            else if ("Size".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                if (parentNode == 3) {
+                                     Int32.TryParse(xmlReader.Value, out aProcessResult.Size);
+                                }
+                            }
+                            else if ("Ave".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                if (parentNode == 2) {
+                                     imageInfo.Ave = xmlReader.Value;
+                                }
+                            }
+                            else if ("WatermarkStatus".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                if (parentNode == 3) {
+                                     Int32.TryParse(xmlReader.Value, out aProcessResult.WatermarkStatus);
+                                }
+                            }
+                            break;
+                        case XmlNodeType.EndElement:
+                            if ("OriginalInfo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                uploadResult.originalInfo = originalInfo;
+                                parentNode = 0;
+                            } 
+                            else if ("ImageInfo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                originalInfo.imageInfo = imageInfo;
+                                parentNode = 0;
+                            }
+                            else if ("Object".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                uploadResult.processResults.results.Add(aProcessResult);
+                                aProcessResult = new PicOperationUploadResult.ProcessResult();
+                                parentNode = 0;
+                            }
+                            break;
+                    }
+                }
+            } catch (XmlException e) {
+                Console.WriteLine(e.StackTrace);
+            }
+            return uploadResult;
+        }
+
+        public static SensitiveRecognitionResult ParseSensitiveRecognitionResult(Stream inStream) {
+            XmlReader xmlReader = XmlReader.Create(inStream);
+            SensitiveRecognitionResult recognitionResult = new SensitiveRecognitionResult();
+            var parentNode = 0; // 1: PornInfo, 2: PoliticsInfo, 3: TerroristInfo, 4: AdsInfo
+            var recognitionInfo = new SensitiveRecognitionResult.RecognitionInfo();
+
+            try {
+                while (xmlReader.Read())
+                {
+                    switch (xmlReader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            // parent node type
+                            if ("PornInfo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                parentNode = 1;
+                            }
+                            else if ("PoliticsInfo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                parentNode = 2;
+                            }
+                            else if ("TerroristInfo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                parentNode = 3;
+                            }
+                            else if ("AdsInfo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                parentNode = 4;
+                            }
+
+                            // value node type
+                            else if ("Code".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                Int32.TryParse(xmlReader.Value, out recognitionInfo.Code);
+                            }
+                            else if ("Msg".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                recognitionInfo.Msg = xmlReader.Value;
+                            }
+                            else if ("HitFlag".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                Int32.TryParse(xmlReader.Value, out recognitionInfo.HitFlag);
+                            }
+                            else if ("Score".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                Int32.TryParse(xmlReader.Value, out recognitionInfo.Score);
+                            }
+                            else if ("Label".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                recognitionInfo.Label = xmlReader.Value;
+                            }
+                            else if ("Count".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            {
+                                xmlReader.Read();
+                                Int32.TryParse(xmlReader.Value, out recognitionInfo.Count);
+                            }
+                            break;
+                        case XmlNodeType.EndElement:
+                            // 1: PornInfo, 2: PoliticsInfo, 3: TerroristInfo, 4: AdsInfo
+                            switch (parentNode)
+                            {
+                                case 1:
+                                    recognitionResult.PornInfo = recognitionInfo;
+                                    break;
+                                case 2:
+                                    recognitionResult.PoliticsInfo = recognitionInfo;
+                                    break;
+                                case 3:
+                                    recognitionResult.TerroristInfo = recognitionInfo;
+                                    break;
+                                case 4:
+                                    recognitionResult.AdsInfo = recognitionInfo;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            parentNode = 0;
+                            recognitionInfo = new SensitiveRecognitionResult.RecognitionInfo();
+                            break;
+                    }
+                }
+            } catch (XmlException e) {
+                Console.WriteLine(e.StackTrace);
+            }
+            return recognitionResult;
+        }
+
     }
 }

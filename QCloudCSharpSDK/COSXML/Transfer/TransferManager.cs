@@ -77,6 +77,7 @@ namespace COSXML.Transfer
         /// 上传对象，封装了简单上传、分片上传功能。
         /// </summary>
         /// <param name="uploader"></param>
+        [Obsolete("方法已废弃，请使用 UploadAsync 方法实现异步调用。")]
         public void Upload(COSXMLUploadTask uploader)
         {
             uploader.InitCosXmlServer(cosXml);
@@ -99,6 +100,7 @@ namespace COSXML.Transfer
         /// 下载对象
         /// </summary>
         /// <param name="downloader"></param>
+        [Obsolete("方法已废弃，请使用 DownloadAsync 方法实现异步调用。")]
         public void Download(COSXMLDownloadTask downloader)
         {
             downloader.InitCosXmlServer(cosXml);
@@ -120,6 +122,7 @@ namespace COSXML.Transfer
         /// 拷贝对象，封装了简单拷贝、分片拷贝功能。
         /// </summary>
         /// <param name="copy"></param>
+        [Obsolete("方法已废弃，请使用 CopyAsync 方法实现异步调用。")]
         public void Copy(COSXMLCopyTask copy)
         {
             copy.InitCosXmlServer(cosXml);
