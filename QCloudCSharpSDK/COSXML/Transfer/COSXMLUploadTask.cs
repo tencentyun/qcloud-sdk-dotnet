@@ -466,6 +466,7 @@ namespace COSXML.Transfer
                 sliceStruct.sliceEnd = sendOffset + i * sliceSize - 1;
                 sliceList.Add(sliceStruct);
             }
+            
             SliceStruct lastSliceStruct = new SliceStruct();
             lastSliceStruct.partNumber = i;
             lastSliceStruct.isAlreadyUpload = false;
