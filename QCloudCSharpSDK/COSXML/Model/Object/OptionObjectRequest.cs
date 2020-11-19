@@ -62,7 +62,7 @@ namespace COSXML.Model.Object
                 StringBuilder headers = new StringBuilder();
                 foreach (string accessControlHeader in accessControlHeaders)
                 {
-                    if(accessControlHeader != null) headers.Append(accessControlHeader).Append(",");
+                    if (accessControlHeader != null) headers.Append(accessControlHeader).Append(",");
                 }
                 string result = headers.ToString();
                 if (result.EndsWith(","))

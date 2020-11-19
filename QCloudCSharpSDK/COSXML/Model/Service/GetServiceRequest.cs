@@ -16,7 +16,7 @@ namespace COSXML.Model.Service
     /// </summary>
     public sealed class GetServiceRequest : CosRequest
     {
-        public string host {get; set;}
+        public string host { get; set; }
 
         public GetServiceRequest()
         {

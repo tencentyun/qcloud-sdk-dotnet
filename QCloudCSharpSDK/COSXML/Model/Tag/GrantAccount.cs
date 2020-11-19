@@ -31,7 +31,7 @@ namespace COSXML.Model.Tag
         public string GetGrantAccounts()
         {
             StringBuilder idBuilder = new StringBuilder();
-            foreach(string id in idList)
+            foreach (string id in idList)
             {
                 idBuilder.Append(id).Append(",");
             }

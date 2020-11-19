@@ -27,7 +27,7 @@ namespace COSXML.Transfer
         private long sendOffset = 0L;
         private long sendContentLength = -1L; // 实际要发送的总长度，类似于content-length
         private string srcPath;
-        
+
         private PutObjectRequest putObjectRequest;
         private DeleteObjectRequest deleteObjectRequest;
 
@@ -122,7 +122,7 @@ namespace COSXML.Transfer
                 return;
             }
 
-            if(sendContentLength == -1L || (sendContentLength + sendOffset > sourceLength))
+            if (sendContentLength == -1L || (sendContentLength + sendOffset > sourceLength))
             {
                 sendContentLength = sourceLength - sendOffset;
             }
@@ -141,14 +141,15 @@ namespace COSXML.Transfer
         private void SimpleUpload()
         {
             putObjectRequest = new PutObjectRequest(bucket, key, srcPath, sendOffset, sendContentLength);
-            if (customHeaders != null) {
+            if (customHeaders != null)
+            {
                 putObjectRequest.SetRequestHeaders(customHeaders);
             }
             if (progressCallback != null)
             {
                 putObjectRequest.SetCosProgressCallback(progressCallback);
             }
-            cosXmlServer.PutObject(putObjectRequest, delegate(CosResult cosResult)
+            cosXmlServer.PutObject(putObjectRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
                 {
@@ -171,9 +172,9 @@ namespace COSXML.Transfer
                         successCallback(copyTaskResult);
                     }
                 }
-                
+
             },
-                delegate(CosClientException clientEx, CosServerException serverEx)
+                delegate (CosClientException clientEx, CosServerException serverEx)
                 {
                     lock (syncExit)
                     {
@@ -208,10 +209,11 @@ namespace COSXML.Transfer
         private void InitMultiUploadPart()
         {
             initMultiUploadRequest = new InitMultipartUploadRequest(bucket, key);
-            if (customHeaders != null) {
+            if (customHeaders != null)
+            {
                 initMultiUploadRequest.SetRequestHeaders(customHeaders);
             }
-            cosXmlServer.InitMultipartUpload(initMultiUploadRequest, delegate(CosResult cosResult)
+            cosXmlServer.InitMultipartUpload(initMultiUploadRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
                 {
@@ -226,7 +228,7 @@ namespace COSXML.Transfer
                 OnInit();
 
             },
-            delegate(CosClientException clientEx, CosServerException serverEx)
+            delegate (CosClientException clientEx, CosServerException serverEx)
             {
                 lock (syncExit)
                 {
@@ -246,7 +248,7 @@ namespace COSXML.Transfer
         private void ListMultiParts()
         {
             listPartsRequest = new ListPartsRequest(bucket, key, uploadId);
-            cosXmlServer.ListParts(listPartsRequest, delegate(CosResult cosResult)
+            cosXmlServer.ListParts(listPartsRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
                 {
@@ -260,9 +262,9 @@ namespace COSXML.Transfer
                 UpdateSliceNums(result);
                 //通知执行PartCopy
                 OnInit();
-               
+
             },
-            delegate(CosClientException clientEx, CosServerException serverEx)
+            delegate (CosClientException clientEx, CosServerException serverEx)
             {
                 lock (syncExit)
                 {
@@ -287,7 +289,7 @@ namespace COSXML.Transfer
             uploadPartRequestList = new List<UploadPartRequest>(size);
 
             AutoResetEvent resetEvent = new AutoResetEvent(false);
-            
+
             for (int i = 0; i < size; i++)
             {
                 if (activieTasks > MAX_ACTIVIE_TASKS)
@@ -304,9 +306,10 @@ namespace COSXML.Transfer
                 SliceStruct sliceStruct = sliceList[i];
                 if (!sliceStruct.isAlreadyUpload)
                 {
-                    UploadPartRequest uploadPartRequest = new UploadPartRequest(bucket, key, sliceStruct.partNumber, uploadId, srcPath, 
+                    UploadPartRequest uploadPartRequest = new UploadPartRequest(bucket, key, sliceStruct.partNumber, uploadId, srcPath,
                         sliceStruct.sliceStart, sliceStruct.sliceLength);
-                    if(customHeaders.ContainsKey(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT)) {
+                    if (customHeaders.ContainsKey(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT))
+                    {
                         string trafficLimit = customHeaders[CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT];
                         uploadPartRequest.LimitTraffic(Convert.ToInt64(trafficLimit));
                     }
@@ -328,7 +331,7 @@ namespace COSXML.Transfer
 
 
                     Interlocked.Increment(ref activieTasks);
-    
+
                     cosXmlServer.UploadPart(uploadPartRequest, delegate (CosResult result)
                     {
                         Interlocked.Decrement(ref activieTasks);
@@ -405,7 +408,7 @@ namespace COSXML.Transfer
                     }
                 }
             }
-            
+
         }
 
         private void CompleteMultipartUpload()
@@ -415,7 +418,7 @@ namespace COSXML.Transfer
             {
                 completeMultiUploadRequest.SetPartNumberAndETag(sliceStruct.partNumber, sliceStruct.eTag); // partNumberEtag 有序的
             }
-            cosXmlServer.CompleteMultiUpload(completeMultiUploadRequest, delegate(CosResult result)
+            cosXmlServer.CompleteMultiUpload(completeMultiUploadRequest, delegate (CosResult result)
             {
                 lock (syncExit)
                 {
@@ -430,7 +433,7 @@ namespace COSXML.Transfer
                     OnCompleted(completeMultiUploadResult);
                 }
 
-            }, delegate(CosClientException clientEx, CosServerException serverEx)
+            }, delegate (CosClientException clientEx, CosServerException serverEx)
             {
                 lock (syncExit)
                 {
@@ -446,7 +449,7 @@ namespace COSXML.Transfer
                 }
 
             });
-        } 
+        }
 
         private void ComputeSliceNums()
         {
@@ -467,7 +470,7 @@ namespace COSXML.Transfer
             lastSliceStruct.partNumber = i;
             lastSliceStruct.isAlreadyUpload = false;
             lastSliceStruct.sliceStart = sendOffset + (i - 1) * sliceSize;
-            lastSliceStruct.sliceLength = sendContentLength  - (i - 1) * sliceSize;
+            lastSliceStruct.sliceLength = sendContentLength - (i - 1) * sliceSize;
             lastSliceStruct.sliceEnd = sendOffset + sendContentLength - 1;
             sliceList.Add(lastSliceStruct);
         }

@@ -92,7 +92,7 @@ namespace COSXML.Model.Object
         /// <param name="uploadId"></param>
         /// <param name="data"></param>
         public UploadPartRequest(string bucket, string key, int partNumber, string uploadId, byte[] data)
-            :this(bucket, key, partNumber, uploadId)
+            : this(bucket, key, partNumber, uploadId)
         {
             this.data = data;
         }
@@ -117,7 +117,8 @@ namespace COSXML.Model.Object
         /// 最大上传速度，单位是 bit/s
         /// </summary>
         /// <param name="start"></param>
-        public void LimitTraffic(long rate) {
+        public void LimitTraffic(long rate)
+        {
             SetRequestHeader(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, rate.ToString());
         }
         /// <summary>

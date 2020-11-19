@@ -37,7 +37,7 @@ namespace COSXML.Model.Object
             int completed = 0;
             while (completed < contentLength)
             {
-                int recvLen = inputStream.Read(content, completed, (int) Math.Min(2048, contentLength - completed));
+                int recvLen = inputStream.Read(content, completed, (int)Math.Min(2048, contentLength - completed));
                 completed += recvLen;
                 if (progressCallback != null)
                 {
@@ -50,7 +50,7 @@ namespace COSXML.Model.Object
             //     inputStream.CopyTo(memoryStream);
             //     content = memoryStream.ToArray();
             // }
-           
+
         }
 
     }

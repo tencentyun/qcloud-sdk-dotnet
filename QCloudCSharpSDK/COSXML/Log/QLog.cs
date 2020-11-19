@@ -57,7 +57,7 @@ namespace COSXML.Log
             {
                 Print(LEVEL.V, tag, message, exception);
             }
-            
+
         }
 
         public static void D(string tag, string message)
@@ -71,7 +71,7 @@ namespace COSXML.Log
             {
                 Print(LEVEL.D, tag, message, exception);
             }
-            
+
         }
 
         public static void I(string tag, string message)
@@ -86,7 +86,7 @@ namespace COSXML.Log
             {
                 Print(LEVEL.I, tag, message, exception);
             }
-            
+
         }
 
         public static void W(string tag, string message)
@@ -100,7 +100,7 @@ namespace COSXML.Log
             {
                 Print(LEVEL.W, tag, message, exception);
             }
-           
+
         }
 
         public static void E(string tag, string message)
@@ -114,7 +114,7 @@ namespace COSXML.Log
             {
                 Print(LEVEL.E, tag, message, exception);
             }
-           
+
         }
 
         private static void Print(LEVEL level, string tag, string message, Exception exception)
@@ -144,7 +144,7 @@ namespace COSXML.Log
             foreach (Log log in logImplList)
             {
                 log.PrintLog(messageBuilder.ToString());
-            }  
+            }
         }
 
         //private static string PrintExceptionTrace(Exception exception)

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace COSXML.Model.Bucket
 {
-    public sealed class PutBucketWebsiteRequest:BucketRequest
+    public sealed class PutBucketWebsiteRequest : BucketRequest
     {
         private WebsiteConfiguration websiteConfiguration;
 

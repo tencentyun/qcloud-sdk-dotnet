@@ -11,6 +11,6 @@ namespace COSXML.Model.Bucket
     /// </summary>
     public sealed class PutBucketLifecycleResult : CosResult
     {
-       
+
     }
 }

@@ -16,7 +16,7 @@ namespace COSXML.Model.CI
         /// 图片处理结果
         /// </summary>
         /// <value></value>
-        public PicOperationUploadResult uploadResult {get; private set;} 
+        public PicOperationUploadResult uploadResult { get; private set; }
 
         internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength)
         {

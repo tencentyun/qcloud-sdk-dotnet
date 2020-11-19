@@ -25,8 +25,8 @@ namespace COSXML.Model.Object
         /// </summary>
         private FormStruct formStruct;
 
-        private PostObjectRequest(string bucket, string key) 
-            : base(bucket, "/") 
+        private PostObjectRequest(string bucket, string key)
+            : base(bucket, "/")
         {
             this.method = CosRequestMethod.POST;
             formStruct = new FormStruct();
@@ -41,7 +41,7 @@ namespace COSXML.Model.Object
         /// <param name="key"></param>
         /// <param name="srcPath"></param>
         public PostObjectRequest(string bucket, string key, string srcPath)
-            :this(bucket, key, srcPath, -1L, -1L)
+            : this(bucket, key, srcPath, -1L, -1L)
         {
         }
         /// <summary>
@@ -66,7 +66,7 @@ namespace COSXML.Model.Object
         /// <param name="key"></param>
         /// <param name="data"></param>
         public PostObjectRequest(string bucket, string key, byte[] data)
-            :this(bucket, key)
+            : this(bucket, key)
         {
             formStruct.data = data;
         }
@@ -181,7 +181,8 @@ namespace COSXML.Model.Object
         /// 最大上传速度，单位是 bit/s
         /// </summary>
         /// <param name="start"></param>
-        public void LimitTraffic(long rate) {
+        public void LimitTraffic(long rate)
+        {
             formStruct.xCOSTrafficLimit = rate.ToString();
         }
 
@@ -230,7 +231,7 @@ namespace COSXML.Model.Object
             if (this.cosXmlSignSourceProvider != null)
             {
                 this.cosXmlSignSourceProvider.setSignAll(false);
-                this.cosXmlSignSourceProvider.onGetSign = delegate(Request request, string sign)
+                this.cosXmlSignSourceProvider.onGetSign = delegate (Request request, string sign)
                 {
                     //添加参数 sign
                     ((MultipartRequestBody)request.Body).AddParameter("Signature", sign);
@@ -325,7 +326,7 @@ namespace COSXML.Model.Object
             /// 上传回调
             /// </summary>
             public COSXML.Callback.OnProgressCallback progressCallback;
-            
+
 
             public FormStruct()
             {
@@ -333,36 +334,44 @@ namespace COSXML.Model.Object
                 customHeaders = new Dictionary<string, string>();
             }
 
-            public Dictionary<string, string> GetFormParameters() 
+            public Dictionary<string, string> GetFormParameters()
             {
                 Dictionary<string, string> formParameters = new Dictionary<string, string>();
-                if(acl != null){
+                if (acl != null)
+                {
                     formParameters.Add("Acl", acl);
                 }
-                foreach(KeyValuePair<string, string> pair in headers){
+                foreach (KeyValuePair<string, string> pair in headers)
+                {
                     formParameters.Add(pair.Key, pair.Value);
                 }
                 formParameters.Add("key", key);
-                if(successActionRedirect != null){
+                if (successActionRedirect != null)
+                {
                     formParameters.Add("success_action_redirect", successActionRedirect);
                 }
-                if(successActionStatus != null){
+                if (successActionStatus != null)
+                {
                     formParameters.Add("success_action_status", successActionStatus);
                 }
-                foreach(KeyValuePair<string, string> pair in customHeaders){
+                foreach (KeyValuePair<string, string> pair in customHeaders)
+                {
                     formParameters.Add(pair.Key, pair.Value);
                 }
-                if(xCosStorageClass != null){
+                if (xCosStorageClass != null)
+                {
                     formParameters.Add("x-cos-storage-class", xCosStorageClass);
                 }
-                if(xCOSTrafficLimit != null) {
+                if (xCOSTrafficLimit != null)
+                {
                     formParameters.Add(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, xCOSTrafficLimit);
                 }
                 if (sign != null)
                 {
                     formParameters.Add("Signature", sign);
                 }
-                if(policy != null){
+                if (policy != null)
+                {
                     formParameters.Add("policy", DigestUtils.GetBase64(policy.Content(), Encoding.UTF8));
                 }
                 return formParameters;
@@ -403,9 +412,10 @@ namespace COSXML.Model.Object
                 this.expiration = formatEndTime;
             }
 
-            public void AddConditions(string key, string value, bool isPrefixMatch) 
+            public void AddConditions(string key, string value, bool isPrefixMatch)
             {
-                if(isPrefixMatch){
+                if (isPrefixMatch)
+                {
                     conditions.Append('[')
                         .Append("starts-with")
                         .Append(',')
@@ -413,7 +423,9 @@ namespace COSXML.Model.Object
                         .Append(',')
                         .Append(value)
                         .Append(']');
-                }else {
+                }
+                else
+                {
                     conditions.Append('{')
                         .Append(key)
                         .Append(':')

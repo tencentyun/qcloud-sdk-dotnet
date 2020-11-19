@@ -90,7 +90,8 @@ namespace COSXML.Transfer
         /// </summary>
         /// <param name="uploader"></param>
         /// <returns></returns>
-        public Task<COSXMLUploadTask.UploadTaskResult> UploadAsync(COSXMLUploadTask uploader) {
+        public Task<COSXMLUploadTask.UploadTaskResult> UploadAsync(COSXMLUploadTask uploader)
+        {
             var t = newTaskCompletion<COSXMLUploadTask.UploadTaskResult>(uploader);
             Upload(uploader);
             return t.Task;
@@ -112,7 +113,8 @@ namespace COSXML.Transfer
         /// </summary>
         /// <param name="downloader"></param>
         /// <returns></returns>
-        public Task<COSXMLDownloadTask.DownloadTaskResult> DownloadAsync(COSXMLDownloadTask downloader) {
+        public Task<COSXMLDownloadTask.DownloadTaskResult> DownloadAsync(COSXMLDownloadTask downloader)
+        {
             var t = newTaskCompletion<COSXMLDownloadTask.DownloadTaskResult>(downloader);
             Download(downloader);
             return t.Task;
@@ -135,23 +137,30 @@ namespace COSXML.Transfer
         /// </summary>
         /// <param name="copyTask"></param>
         /// <returns></returns>
-        public Task<COSXMLCopyTask.CopyTaskResult> CopyAsync(COSXMLCopyTask copyTask) {
+        public Task<COSXMLCopyTask.CopyTaskResult> CopyAsync(COSXMLCopyTask copyTask)
+        {
             var t = newTaskCompletion<COSXMLCopyTask.CopyTaskResult>(copyTask);
             Copy(copyTask);
             return t.Task;
         }
 
-        private TaskCompletionSource<T> newTaskCompletion<T>(COSXMLTask task) where T: CosResult {
+        private TaskCompletionSource<T> newTaskCompletion<T>(COSXMLTask task) where T : CosResult
+        {
             var t = new TaskCompletionSource<T>();
 
-            task.successCallback = delegate(CosResult cosResult) {
+            task.successCallback = delegate (CosResult cosResult)
+            {
                 t.TrySetResult(cosResult as T);
             };
 
-            task.failCallback = delegate(CosClientException clientException, CosServerException serverException) {
-                if (clientException != null) {
+            task.failCallback = delegate (CosClientException clientException, CosServerException serverException)
+            {
+                if (clientException != null)
+                {
                     t.TrySetException(clientException);
-                } else {
+                }
+                else
+                {
                     t.TrySetException(serverException);
                 }
             };

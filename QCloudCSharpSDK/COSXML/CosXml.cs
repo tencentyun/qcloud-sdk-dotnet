@@ -10,7 +10,7 @@ using COSXML.Model.Tag;
 using System.Threading.Tasks;
 
 namespace COSXML
-{ 
+{
 
     /// <summary>
     /// COS 接口类，实现 COS XML 的所有功能。
@@ -928,7 +928,7 @@ namespace COSXML
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
         [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        void getBucketTaggingAsync(GetBucketTaggingRequest request,COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+        void getBucketTaggingAsync(GetBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
         /// 删除存储桶标签

@@ -51,7 +51,7 @@ namespace COSXML.Model.Tag
         public List<CommonPrefixes> commonPrefixesList;
         public string delimiter;
 
-    
+
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{ListBucket:\n");
@@ -62,18 +62,18 @@ namespace COSXML.Model.Tag
             stringBuilder.Append("MaxKeys:").Append(maxKeys).Append("\n");
             stringBuilder.Append("IsTruncated:").Append(isTruncated).Append("\n");
             stringBuilder.Append("NextMarker:").Append(nextMarker).Append("\n");
-            if(contentsList != null)
+            if (contentsList != null)
             {
                 foreach (Contents contents in contentsList)
                 {
-                    if(contents != null)stringBuilder.Append(contents.GetInfo()).Append("\n");
+                    if (contents != null) stringBuilder.Append(contents.GetInfo()).Append("\n");
                 }
             }
-            if(commonPrefixesList != null)
+            if (commonPrefixesList != null)
             {
                 foreach (CommonPrefixes commonPrefixes in commonPrefixesList)
                 {
-                    if(commonPrefixes != null)stringBuilder.Append(commonPrefixes.GetInfo()).Append("\n");
+                    if (commonPrefixes != null) stringBuilder.Append(commonPrefixes.GetInfo()).Append("\n");
                 }
             }
             stringBuilder.Append("Delimiter:").Append(delimiter).Append("\n");
@@ -117,14 +117,15 @@ namespace COSXML.Model.Tag
                 stringBuilder.Append("LastModified:").Append(lastModified).Append("\n");
                 stringBuilder.Append("ETag:").Append(eTag).Append("\n");
                 stringBuilder.Append("Size:").Append(size).Append("\n");
-                if (owner != null)stringBuilder.Append(owner.GetInfo()).Append("\n");
+                if (owner != null) stringBuilder.Append(owner.GetInfo()).Append("\n");
                 stringBuilder.Append("StorageClass:").Append(storageClass).Append("\n");
                 stringBuilder.Append("}");
                 return stringBuilder.ToString();
             }
         }
 
-        public sealed class CommonPrefixes{
+        public sealed class CommonPrefixes
+        {
             /// <summary>
             /// 单条 Common 的前缀
             /// </summary>
@@ -139,7 +140,8 @@ namespace COSXML.Model.Tag
             }
         }
 
-        public sealed class Owner{
+        public sealed class Owner
+        {
             /// <summary>
             /// Bucket 的 AppID
             /// </summary>

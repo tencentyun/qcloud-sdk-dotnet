@@ -35,7 +35,7 @@ namespace COSXML.Model.Object
             {
                 this.path = "/" + key;
             }
-            else 
+            else
             {
                 this.path = key;
             }
@@ -86,7 +86,8 @@ namespace COSXML.Model.Object
             return null;
         }
 
-        public override string GetCOSHost() {
+        public override string GetCOSHost()
+        {
             StringBuilder hostBuilder = new StringBuilder();
             hostBuilder.Append(bucket);
             if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
@@ -99,23 +100,29 @@ namespace COSXML.Model.Object
                     .Append(".myqcloud.com");
             return hostBuilder.ToString();
         }
-        
+
         public override string GetHost()
         {
             StringBuilder hostBuilder = new StringBuilder();
-            if (!String.IsNullOrEmpty(serviceConfig.host)) {
+            if (!String.IsNullOrEmpty(serviceConfig.host))
+            {
                 hostBuilder.Append(serviceConfig.host);
-            } else {
+            }
+            else
+            {
                 hostBuilder.Append(bucket);
                 if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
                 {
                     hostBuilder.Append("-")
                         .Append(appid);
                 }
-                if (serviceConfig.endpointSuffix != null) {
+                if (serviceConfig.endpointSuffix != null)
+                {
                     hostBuilder.Append(".")
                         .Append(serviceConfig.endpointSuffix);
-                } else {
+                }
+                else
+                {
                     hostBuilder.Append(".cos.")
                         .Append(region)
                         .Append(".myqcloud.com");
@@ -145,8 +152,8 @@ namespace COSXML.Model.Object
             }
         }
 
-        protected virtual void InternalUpdateQueryParameters() 
-        { 
+        protected virtual void InternalUpdateQueryParameters()
+        {
         }
 
         protected virtual void InteranlUpdateHeaders() { }
@@ -182,7 +189,7 @@ namespace COSXML.Model.Object
                 SetRequestHeader("x-cos-server-side-encryption-customer-algorithm", "AES256");
                 SetRequestHeader("x-cos-server-side-encryption-customer-key", DigestUtils.GetBase64(customerKey, Encoding.UTF8));
                 SetRequestHeader("x-cos-server-side-encryption-customer-key-MD5", DigestUtils.GetMd5ToBase64(customerKey, Encoding.UTF8));
-            } 
+            }
         }
 
         public void SetCosServerSideEncryptionWithKMS(string customerKeyID, string json)

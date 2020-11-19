@@ -7,7 +7,7 @@ using COSXML.Transfer;
 
 namespace COSXML.Model.Bucket
 {
-    public sealed class ListBucketVersionsResult :CosResult
+    public sealed class ListBucketVersionsResult : CosResult
     {
         public ListBucketVersions listBucketVersions;
 

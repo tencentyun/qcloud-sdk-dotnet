@@ -27,7 +27,7 @@ namespace COSXML.Model.Tag
         /// key 的 versionId
         /// </summary>
         public string versionId;
-    
+
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{CopyObject:\n");

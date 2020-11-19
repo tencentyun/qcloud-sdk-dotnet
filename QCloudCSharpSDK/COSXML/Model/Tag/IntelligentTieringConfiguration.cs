@@ -24,7 +24,8 @@ namespace COSXML.Model.Tag
         /// </summary>
         public int RequestFrequent;
 
-        public Boolean isEnabled() {
+        public Boolean isEnabled()
+        {
             return "Enabled".Equals(Status);
         }
     }

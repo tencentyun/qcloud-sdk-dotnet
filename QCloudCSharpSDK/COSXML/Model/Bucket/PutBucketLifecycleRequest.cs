@@ -42,7 +42,7 @@ namespace COSXML.Model.Bucket
         /// <param name="rule"></param>
         public void SetRule(LifecycleConfiguration.Rule rule)
         {
-            if(rule != null)
+            if (rule != null)
             {
                 lifecycleConfiguration.rules.Add(rule);
             }

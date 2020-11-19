@@ -23,7 +23,7 @@ namespace COSXML.Utils
             byte[] result = sha1.ComputeHash(content);
             sha1.Clear();
             var hexStr = new StringBuilder();
-            foreach( byte b in result)
+            foreach (byte b in result)
             {
                 hexStr.Append(b.ToString("x2")); // to lower
             }

@@ -20,52 +20,61 @@ namespace COSXML.Model.Object
 
         private COSXML.Callback.OnProgressCallback progressCallback;
 
-        public sealed class Stat {
+        public sealed class Stat
+        {
             public long BytesScanned;
             public long BytesProcessed;
             public long BytesReturned;
 
-            public override string ToString() {
+            public override string ToString()
+            {
                 return string.Format("BytesScanned:{0}, BytesProcessed:{1}, BytesReturned:{2}",
                     BytesScanned, BytesProcessed, BytesReturned);
             }
         }
 
-        internal override void ExternInfo(CosRequest cosRequest) {
-            this.outputFilePath = ((SelectObjectRequest) cosRequest).outputFilePath;
-            this.progressCallback = ((SelectObjectRequest) cosRequest).progressCallback;
+        internal override void ExternInfo(CosRequest cosRequest)
+        {
+            this.outputFilePath = ((SelectObjectRequest)cosRequest).outputFilePath;
+            this.progressCallback = ((SelectObjectRequest)cosRequest).progressCallback;
         }
 
-        internal override void ParseResponseBody(System.IO.Stream inputStream, 
+        internal override void ParseResponseBody(System.IO.Stream inputStream,
             string contentType, long contentLength)
         {
             // Read One Message for each loop
             // readToString(inputStream);
             System.IO.Stream outputStream;
-            if (outputFilePath != null) {
+            if (outputFilePath != null)
+            {
                 outputStream = new System.IO.FileStream(outputFilePath, FileMode.Create);
-            } else {
+            }
+            else
+            {
                 outputStream = new MemoryStream();
             }
 
-            using (outputStream) {
+            using (outputStream)
+            {
                 byte[] tempBuffer = new byte[4];
 
-                while(true) {
+                while (true)
+                {
                     tryRead(inputStream, tempBuffer, 0, 4);
                     long messageEntireLength = bytes4ToInt(tempBuffer);
 
                     tryRead(inputStream, tempBuffer, 0, 4);
                     long headerSectionLength = bytes4ToInt(tempBuffer);
 
-                    tryRead(inputStream, tempBuffer, 0 ,4);
+                    tryRead(inputStream, tempBuffer, 0, 4);
                     long preludeCRC = bytes4ToInt(tempBuffer);
 
                     Dictionary<String, String> headers = new Dictionary<string, string>();
 
                     // read header
                     long headerSectionRemainLength = headerSectionLength;
-                    while(headerSectionRemainLength > 0) {
+                    while (headerSectionRemainLength > 0)
+                    {
                         tryRead(inputStream, tempBuffer, 0, 1);
                         int headerNameLength = bytes1ToInt(tempBuffer);
 
@@ -83,7 +92,8 @@ namespace COSXML.Model.Object
                         tryRead(inputStream, valueBuffer, 0, valueLength);
                         String value = bytes2stringUTF8(valueBuffer);
 
-                        if (headers.ContainsKey(headerName)) {
+                        if (headers.ContainsKey(headerName))
+                        {
                             headers.Remove(headerName);
                         }
                         headers.Add(headerName, value);
@@ -101,7 +111,8 @@ namespace COSXML.Model.Object
 
                     bool isComplete = false;
 
-                    if ("event".Equals(messageType)) {
+                    if ("event".Equals(messageType))
+                    {
                         byte[] buffer;
 
                         switch (eventType)
@@ -109,8 +120,9 @@ namespace COSXML.Model.Object
                             case "Records":
                                 int totalRead = 0;
                                 buffer = new byte[1024];
-                                while(payloadLength > totalRead) {
-                                    int readLength = (int) Math.Min(payloadLength - totalRead, 1024);
+                                while (payloadLength > totalRead)
+                                {
+                                    int readLength = (int)Math.Min(payloadLength - totalRead, 1024);
                                     int readBytes = tryRead(inputStream, buffer, 0, readLength);
                                     outputStream.Write(buffer, 0, readBytes);
                                     totalRead += readBytes;
@@ -119,19 +131,19 @@ namespace COSXML.Model.Object
 
                             case "Progress":
                                 buffer = new byte[payloadLength];
-                                tryRead(inputStream, buffer, 0, (int) payloadLength);
+                                tryRead(inputStream, buffer, 0, (int)payloadLength);
                                 Stat stat = parseStatsBody(buffer);
                                 progressCallback(stat.BytesProcessed, stat.BytesScanned);
                                 break;
 
                             case "Cont":
                                 buffer = new byte[payloadLength];
-                                tryRead(inputStream, buffer, 0, (int) payloadLength);
+                                tryRead(inputStream, buffer, 0, (int)payloadLength);
                                 break;
 
                             case "Stats":
                                 buffer = new byte[payloadLength];
-                                tryRead(inputStream, buffer, 0, (int) payloadLength);
+                                tryRead(inputStream, buffer, 0, (int)payloadLength);
                                 this.stat = parseStatsBody(buffer);
                                 break;
 
@@ -140,51 +152,60 @@ namespace COSXML.Model.Object
                                 isComplete = true;
                                 break;
                         }
-                    } else if ("error".Equals(messageType)) {
+                    }
+                    else if ("error".Equals(messageType))
+                    {
                         string errorCode = null;
                         string errorMessage = null;
                         headers.TryGetValue(":error-code", out errorCode);
                         headers.TryGetValue(":error-message", out errorMessage);
 
                         throw new System.IO.IOException(string.Format(
-                            "search error happends with code :{0} and message: {1}", 
+                            "search error happends with code :{0} and message: {1}",
                             errorCode, errorMessage));
                     }
 
-                    if (isComplete) {
-                        if (outputFilePath == null) {
+                    if (isComplete)
+                    {
+                        if (outputFilePath == null)
+                        {
                             outputStream.Position = 0;
                             searchContent = readToString(outputStream);
                         }
                         break;
                     }
 
-                    tryRead(inputStream, tempBuffer, 0 ,4);
+                    tryRead(inputStream, tempBuffer, 0, 4);
                     long messageCRC = bytes4ToInt(tempBuffer);
                 }
             }
 
         }
 
-        private int tryRead(System.IO.Stream inputStream, byte[] buffer, int offset, int count) {
+        private int tryRead(System.IO.Stream inputStream, byte[] buffer, int offset, int count)
+        {
             int read = 0;
             int maxRead = 10;
             int remainReadCount = count;
 
-            while (remainReadCount > 0 && maxRead-- > 0 & inputStream.CanRead) {
+            while (remainReadCount > 0 && maxRead-- > 0 & inputStream.CanRead)
+            {
                 read = inputStream.Read(buffer, count - remainReadCount, remainReadCount);
                 remainReadCount -= read;
             }
-            if (remainReadCount > 0) {
+            if (remainReadCount > 0)
+            {
                 throw new System.IO.IOException("input stream is end unexpectly !");
             }
             return count - remainReadCount;
         }
 
-        private Stat parseStatsBody(byte[] body) {
+        private Stat parseStatsBody(byte[] body)
+        {
             XmlReader xmlReader = XmlReader.Create(new MemoryStream(body));
             Stat stat = new Stat();
-            try {
+            try
+            {
                 while (xmlReader.Read())
                 {
                     switch (xmlReader.NodeType)
@@ -208,13 +229,16 @@ namespace COSXML.Model.Object
                             break;
                     }
                 }
-            } catch (XmlException e) {
+            }
+            catch (XmlException e)
+            {
                 Console.WriteLine(e.StackTrace);
             }
             return stat;
         }
 
-        private string readToString(System.IO.Stream inputStream) {
+        private string readToString(System.IO.Stream inputStream)
+        {
             string content = null;
             using (StreamReader reader = new StreamReader(inputStream))
             {
@@ -223,22 +247,26 @@ namespace COSXML.Model.Object
             return content;
         }
 
-        private string bytes2stringUTF8(byte[] data) {
+        private string bytes2stringUTF8(byte[] data)
+        {
             return System.Text.Encoding.UTF8.GetString(data);
         }
 
-        private int bytes2ToInt(byte[] data) {
+        private int bytes2ToInt(byte[] data)
+        {
             return ((data[0] & 0xFF) << 8) | (data[1] & 0xFF);
         }
 
-        private int bytes1ToInt(byte[] data) {
+        private int bytes1ToInt(byte[] data)
+        {
             return (data[0] & 0xFF);
         }
 
-        private long bytes4ToInt(byte[] data) {
+        private long bytes4ToInt(byte[] data)
+        {
             return ((data[0] & 0xFF) << 24) | ((data[1] & 0xFF) << 16)
                 | ((data[2] & 0xFF) << 8) | (data[3] & 0xFF);
         }
     }
-    
+
 }

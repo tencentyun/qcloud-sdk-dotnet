@@ -21,7 +21,7 @@ namespace COSXMLTests
     {
 
         COSXML.CosXml cosXml;
-        TransferManager transferManager; 
+        TransferManager transferManager;
         string bucket;
         string bigFileSrcPath;
         string smallFileSrcPath;
@@ -33,7 +33,8 @@ namespace COSXMLTests
         string localFileName;
 
         [SetUp]
-        public void init() {
+        public void init()
+        {
             cosXml = QCloudServer.Instance().cosXml;
             bucket = QCloudServer.Instance().bucketForObjectTest;
             transferManager = new TransferManager(cosXml, new TransferConfig());
@@ -53,7 +54,8 @@ namespace COSXMLTests
         }
 
         [TearDown()]
-        public void clear() {
+        public void clear()
+        {
             DeleteObject();
             MultiDeleteObject();
 
@@ -303,7 +305,7 @@ namespace COSXMLTests
         {
             try
             {
-                CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid, 
+                CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
                     bucket, QCloudServer.Instance().region, "copy_objecttest.txt");
 
                 string tempBucket = "a-bucket-for-temp" + TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
@@ -367,7 +369,7 @@ namespace COSXMLTests
                 //设置进度回调
                 uploadPartRequest.SetCosProgressCallback(delegate (long completed, long total)
                 {
-                    Console.WriteLine(String.Format("{0} progress = {1} / {2} : {3:##.##}%", 
+                    Console.WriteLine(String.Format("{0} progress = {1} / {2} : {3:##.##}%",
                         DateTime.Now.ToString(), completed, total, completed * 100.0 / total));
                 });
 
@@ -418,8 +420,8 @@ namespace COSXMLTests
                 string uploadId = initMultipartUploadResult.initMultipartUpload.uploadId;
 
                 AbortMultipartUploadRequest request = new AbortMultipartUploadRequest(bucket, key, uploadId);
-                
-                
+
+
                 //执行请求
                 AbortMultipartUploadResult result = cosXml.AbortMultiUpload(request);
 
@@ -441,9 +443,9 @@ namespace COSXMLTests
         public void PartCopyObject()
         {
             string key = commonKey;
-            CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid, 
+            CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
                 bucket, QCloudServer.Instance().region, copykey);
-            
+
             try
             {
                 InitMultipartUploadRequest initMultipartUploadRequest = new InitMultipartUploadRequest(bucket, key);
@@ -531,7 +533,7 @@ namespace COSXMLTests
 
                 request.SetCosProgressCallback(delegate (long completed, long total)
                 {
-                   Console.WriteLine(String.Format("progress = {0} / {1} : {2:##.##}%", completed, total, completed * 100.0 / total));
+                    Console.WriteLine(String.Format("progress = {0} / {1} : {2:##.##}%", completed, total, completed * 100.0 / total));
                 });
 
                 //设置policy
@@ -610,10 +612,11 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testCreateDirectory() {
+        public void testCreateDirectory()
+        {
             try
             {
-                PutObjectRequest request = new PutObjectRequest(bucket, 
+                PutObjectRequest request = new PutObjectRequest(bucket,
                     "dir/", new byte[0]);
 
                 //执行请求
@@ -634,20 +637,21 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testGetObject() {
+        public void testGetObject()
+        {
             try
             {
                 GetObjectRequest request = new GetObjectRequest(bucket, commonKey, localDir, localFileName);
 
                 request.SetCosProgressCallback(delegate (long completed, long total)
                 {
-                   Console.WriteLine(String.Format("progress = {0} / {1} : {2:##.##}%", completed, total, completed * 100.0 / total));
+                    Console.WriteLine(String.Format("progress = {0} / {1} : {2:##.##}%", completed, total, completed * 100.0 / total));
                 });
 
                 //执行请求
                 GetObjectResult result = cosXml.GetObject(request);
                 Console.WriteLine(result.GetResultInfo());
-        }
+            }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
@@ -662,7 +666,8 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testGetObjectByte() {
+        public void testGetObjectByte()
+        {
             try
             {
                 HeadObjectRequest request = new HeadObjectRequest(bucket, commonKey);
@@ -698,7 +703,8 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testSelectObjectToFile() {
+        public void testSelectObjectToFile()
+        {
             try
             {
                 string key = "select_target.json";
@@ -708,22 +714,23 @@ namespace COSXMLTests
                 ObjectSelectionFormat.JSONFormat jSONFormat = new ObjectSelectionFormat.JSONFormat();
                 jSONFormat.Type = "DOCUMENT";
                 jSONFormat.RecordDelimiter = "\n";
-                
+
                 string outputFile = "select_local_file.json";
 
                 request.setExpression("Select * from COSObject")
                         .setInputFormat(new ObjectSelectionFormat(null, jSONFormat))
                         .setOutputFormat(new ObjectSelectionFormat(null, jSONFormat))
-                        .SetCosProgressCallback(delegate (long progress, long total) {
+                        .SetCosProgressCallback(delegate (long progress, long total)
+                        {
                             Console.WriteLine("OnProgress : " + progress + "," + total);
                         })
                         .outputToFile(outputFile)
                         ;
 
-                SelectObjectResult selectObjectResult =  cosXml.selectObject(request);
+                SelectObjectResult selectObjectResult = cosXml.selectObject(request);
 
                 Console.WriteLine(selectObjectResult.stat);
-                
+
                 Assert.AreEqual(selectObjectResult.stat.BytesReturned, new FileInfo(outputFile).Length);
             }
             catch (COSXML.CosException.CosClientException clientEx)
@@ -740,7 +747,8 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testSelectObjectInMemory() {
+        public void testSelectObjectInMemory()
+        {
             try
             {
                 string key = "select_target.json";
@@ -754,7 +762,8 @@ namespace COSXMLTests
                 request.setExpression("Select * from COSObject")
                         .setInputFormat(new ObjectSelectionFormat(null, jSONFormat))
                         .setOutputFormat(new ObjectSelectionFormat(null, jSONFormat))
-                        .SetCosProgressCallback(delegate (long progress, long total) {
+                        .SetCosProgressCallback(delegate (long progress, long total)
+                        {
                             Console.WriteLine("OnProgress : " + progress + "," + total);
                         })
                         ;
@@ -780,7 +789,8 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public async Task testUploadTask() {
+        public async Task testUploadTask()
+        {
             string key = multiKey;
 
             PutObjectRequest request = new PutObjectRequest(bucket, key, bigFileSrcPath);
@@ -802,11 +812,12 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public async Task testDownloadTask() {
+        public async Task testDownloadTask()
+        {
             long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
-            GetObjectRequest request = new GetObjectRequest(bucket, 
+            GetObjectRequest request = new GetObjectRequest(bucket,
                 commonKey, localDir, localFileName);
-            
+
             request.LimitTraffic(8 * 1000 * 1024);
             //执行请求
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
@@ -823,10 +834,11 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public async Task testCopyTask() {
-            CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid, 
+        public async Task testCopyTask()
+        {
+            CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
                     bucket, QCloudServer.Instance().region, copykey);
-            
+
             COSXMLCopyTask copyTask = new COSXMLCopyTask(bucket, multiKey, copySource);
 
             var autoEvent = new AutoResetEvent(false);
@@ -841,18 +853,19 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testPutObjectUploadTrafficLimit() {
+        public void testPutObjectUploadTrafficLimit()
+        {
             try
             {
                 long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
-                PutObjectRequest request = new PutObjectRequest(bucket, 
+                PutObjectRequest request = new PutObjectRequest(bucket,
                     commonKey, smallFileSrcPath);
-                
+
                 request.LimitTraffic(8 * 1000 * 1024);
                 //执行请求
                 PutObjectResult result = cosXml.PutObject(request);
                 long costTime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() - now;
-                
+
                 Console.WriteLine("costTime = " + costTime + "ms");
                 Console.WriteLine(result.GetResultInfo());
 
@@ -873,18 +886,19 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testPostObjectTrafficLimit() {
+        public void testPostObjectTrafficLimit()
+        {
             try
             {
                 long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
-                PostObjectRequest request = new PostObjectRequest(bucket, 
+                PostObjectRequest request = new PostObjectRequest(bucket,
                     commonKey, smallFileSrcPath);
-                
+
                 request.LimitTraffic(8 * 1000 * 1024);
                 //执行请求
                 PostObjectResult result = cosXml.PostObject(request);
                 long costTime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() - now;
-                
+
                 Console.WriteLine("costTime = " + costTime + "ms");
                 Console.WriteLine(result.GetResultInfo());
 
@@ -904,7 +918,8 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void generateSignUrl() {
+        public void generateSignUrl()
+        {
             QCloudServer instance = QCloudServer.Instance();
             string key = commonKey;
             PreSignatureStruct signatureStruct = new PreSignatureStruct();
@@ -920,7 +935,8 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public async Task asyncPutObject() {
+        public async Task asyncPutObject()
+        {
             PutObjectRequest request = new PutObjectRequest(bucket, commonKey, smallFileSrcPath);
 
             PutObjectResult result = await cosXml.executeAsync<PutObjectResult>(request);
@@ -929,7 +945,8 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public async Task testUploadTaskWithError() {
+        public async Task testUploadTaskWithError()
+        {
             string key = multiKey;
 
             PutObjectRequest request = new PutObjectRequest("3838" + bucket, key, bigFileSrcPath);
@@ -937,10 +954,13 @@ namespace COSXMLTests
             COSXMLUploadTask uploadTask = new COSXMLUploadTask(request);
             uploadTask.SetSrcPath(bigFileSrcPath);
 
-            try {
+            try
+            {
                 COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
                 Assert.Fail();
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Console.WriteLine("CosException: " + e);
                 Assert.NotNull(e);
             }

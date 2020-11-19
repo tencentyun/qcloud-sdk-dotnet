@@ -49,19 +49,19 @@ namespace COSXML.Network
             this.proxyDomain = builder.proxyDomain;
         }
 
-        public string UserAgnet 
+        public string UserAgnet
         {
             get
             {
                 return userAgent;
             }
-            
+
         }
 
         public bool AllowAutoRedirect
         {
             get { return allowAutoRedirect; }
-            
+
         }
 
         public int ConnectionTimeoutMs
@@ -71,7 +71,7 @@ namespace COSXML.Network
                 return connectionTimeoutMs;
             }
 
-           
+
         }
 
         public int ReadWriteTimeoutMs
@@ -81,7 +81,7 @@ namespace COSXML.Network
                 return readWriteTimeoutMs;
             }
 
-            
+
         }
 
         public int MaxRery
@@ -90,7 +90,7 @@ namespace COSXML.Network
             {
                 return maxRetry;
             }
-            
+
         }
 
         public int ConnectionLimit
@@ -99,7 +99,7 @@ namespace COSXML.Network
             {
                 return connectionLimit;
             }
-            
+
         }
 
         public string ProxyHost
@@ -108,7 +108,7 @@ namespace COSXML.Network
             {
                 return proxyHost;
             }
-            
+
         }
 
         public int ProxyPort
@@ -117,7 +117,7 @@ namespace COSXML.Network
             {
                 return proxyPort;
             }
-           
+
         }
 
         public string ProxyUserName
@@ -126,7 +126,7 @@ namespace COSXML.Network
             {
                 return proxyUserName;
             }
-            
+
         }
 
 
@@ -136,7 +136,7 @@ namespace COSXML.Network
             {
                 return proxyUserPassword;
             }
-           
+
         }
 
         public string ProxyDomain
@@ -145,7 +145,7 @@ namespace COSXML.Network
             {
                 return proxyDomain;
             }
-            
+
         }
 
         public class Builder
@@ -182,7 +182,7 @@ namespace COSXML.Network
 
             public Builder SetConnectionLimit(int connectionLimit)
             {
-                if (connectionLimit > 0) 
+                if (connectionLimit > 0)
                 {
                     this.connectionLimit = connectionLimit;
                 }
@@ -250,7 +250,7 @@ namespace COSXML.Network
             {
                 return new HttpClientConfig(this);
             }
- 
+
         }
     }
 }

@@ -41,7 +41,8 @@ namespace COSXML.Transfer
         public void InitCosXmlServer(CosXml cosXml)
         {
             cosXmlServer = cosXml;
-            if (this.region == null) {
+            if (this.region == null)
+            {
                 this.region = cosXml.GetConfig().Region;
             }
         }
@@ -66,7 +67,8 @@ namespace COSXML.Transfer
 
         public abstract void Resume();
 
-        protected void setHeaders(Dictionary<string, string> headers) {
+        protected void setHeaders(Dictionary<string, string> headers)
+        {
             this.customHeaders = headers;
         }
 
@@ -133,7 +135,7 @@ namespace COSXML.Transfer
                 }
             }
             return result;
-            
+
         }
 
     }

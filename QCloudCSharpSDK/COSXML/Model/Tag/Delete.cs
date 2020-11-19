@@ -20,7 +20,7 @@ namespace COSXML.Model.Tag
             stringBuilder.Append("Quiet:").Append(quiet).Append("\n");
             if (deleteObjects != null)
             {
-                foreach(DeleteObject deleteObject in deleteObjects)
+                foreach (DeleteObject deleteObject in deleteObjects)
                 {
                     stringBuilder.Append(deleteObject.GetInfo());
                 }

@@ -45,9 +45,9 @@ namespace COSXML.CosException
         /// cos server resuorce
         /// </summary>
         public string resource;
-        
+
         public CosServerException(int statusCode, string statusMessage, CosServerError serverError)
-            :this(statusCode, statusMessage)
+            : this(statusCode, statusMessage)
         {
             if (serverError != null)
             {
@@ -89,6 +89,6 @@ namespace COSXML.CosException
                 .Append(")");
             return builder.ToString();
         }
-       
+
     }
 }

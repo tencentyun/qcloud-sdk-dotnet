@@ -24,13 +24,13 @@ namespace COSXML
         /// 读取 Endpoint 后缀
         /// </summary>
         /// <value></value>
-        public string endpointSuffix {get;private set;}
+        public string endpointSuffix { get; private set; }
 
         /// <summary>
         /// 获取完整请求域名
         /// </summary>
         /// <value></value>
-        public string host {get;}
+        public string host { get; }
 
         private CosXmlConfig(Builder builder)
         {
@@ -103,7 +103,7 @@ namespace COSXML
             /// <summary>
             /// 初始化一个构造器
             /// </summary>
-            public Builder() 
+            public Builder()
             {
                 httpClientConfigBuilder = new HttpClientConfig.Builder();
             }
@@ -264,7 +264,8 @@ namespace COSXML
             /// </summary>
             /// <param name="suffix"></param>
             /// <returns></returns>
-            public Builder setEndpointSuffix(string suffix) {
+            public Builder setEndpointSuffix(string suffix)
+            {
                 this.endpointSuffix = suffix;
                 return this;
             }
@@ -274,7 +275,8 @@ namespace COSXML
             /// </summary>
             /// <param name="host"></param>
             /// <returns></returns>
-            public Builder setHost(string host) {
+            public Builder setHost(string host)
+            {
                 this.host = host;
                 return this;
             }

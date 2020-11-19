@@ -24,7 +24,7 @@ namespace COSXML.Transfer
             xmlWriter.WriteStartElement("CORSConfiguration");
             if (corsConfiguration.corsRules != null)
             {
-                foreach(CORSConfiguration.CORSRule  corsRule in corsConfiguration.corsRules)
+                foreach (CORSConfiguration.CORSRule corsRule in corsConfiguration.corsRules)
                 {
                     if (corsRule == null) continue;
 
@@ -89,11 +89,11 @@ namespace COSXML.Transfer
                 {
                     if (rule == null) continue;
                     xmlWriter.WriteStartElement("Rule");
-                    if(rule.id != null) xmlWriter.WriteElementString("ID", rule.id);
+                    if (rule.id != null) xmlWriter.WriteElementString("ID", rule.id);
                     if (rule.filter != null)
                     {
                         xmlWriter.WriteStartElement("Filter");
-                        if(rule.filter.prefix != null) xmlWriter.WriteElementString("Prefix", rule.filter.prefix);
+                        if (rule.filter.prefix != null) xmlWriter.WriteElementString("Prefix", rule.filter.prefix);
                         if (rule.filter.filterAnd != null)
                         {
                             xmlWriter.WriteStartElement("And");
@@ -102,11 +102,11 @@ namespace COSXML.Transfer
                         }
                         xmlWriter.WriteEndElement();
                     }
-                    if(rule.status != null) xmlWriter.WriteElementString("Status", rule.status);
+                    if (rule.status != null) xmlWriter.WriteElementString("Status", rule.status);
                     if (rule.transition != null)
                     {
                         xmlWriter.WriteStartElement("Transition");
-                        if(rule.transition.days > 0) xmlWriter.WriteElementString("Days", rule.transition.days.ToString());
+                        if (rule.transition.days > 0) xmlWriter.WriteElementString("Days", rule.transition.days.ToString());
                         if (rule.transition.storageClass != null) xmlWriter.WriteElementString("StorageClass", rule.transition.storageClass);
                         if (rule.transition.date != null) xmlWriter.WriteElementString("Date", rule.transition.date);
                         xmlWriter.WriteEndElement();
@@ -125,21 +125,21 @@ namespace COSXML.Transfer
                             {
                                 xmlWriter.WriteElementString("ExpiredObjectDeleteMarker", "false");
                             }
-                        } 
+                        }
                         if (rule.expiration.date != null) xmlWriter.WriteElementString("Date", rule.expiration.date);
                         xmlWriter.WriteEndElement();
                     }
                     if (rule.noncurrentVersionTransition != null)
                     {
                         xmlWriter.WriteStartElement("NoncurrentVersionTransition");
-                        if(rule.noncurrentVersionTransition.noncurrentDays > 0) xmlWriter.WriteElementString("NoncurrentDays", rule.noncurrentVersionTransition.noncurrentDays.ToString());
-                        if(rule.noncurrentVersionTransition.storageClass != null) xmlWriter.WriteElementString("StorageClass", rule.noncurrentVersionTransition.storageClass);
+                        if (rule.noncurrentVersionTransition.noncurrentDays > 0) xmlWriter.WriteElementString("NoncurrentDays", rule.noncurrentVersionTransition.noncurrentDays.ToString());
+                        if (rule.noncurrentVersionTransition.storageClass != null) xmlWriter.WriteElementString("StorageClass", rule.noncurrentVersionTransition.storageClass);
                         xmlWriter.WriteEndElement();
                     }
                     if (rule.noncurrentVersionExpiration != null)
                     {
                         xmlWriter.WriteStartElement("NoncurrentVersionExpiration");
-                        if(rule.noncurrentVersionExpiration.noncurrentDays > 0) xmlWriter.WriteElementString("NoncurrentDays", rule.noncurrentVersionExpiration.noncurrentDays.ToString());
+                        if (rule.noncurrentVersionExpiration.noncurrentDays > 0) xmlWriter.WriteElementString("NoncurrentDays", rule.noncurrentVersionExpiration.noncurrentDays.ToString());
                         xmlWriter.WriteEndElement();
                     }
                     if (rule.abortIncompleteMultiUpload != null)
@@ -173,21 +173,22 @@ namespace COSXML.Transfer
 
             xmlWriter.WriteElementString("Role", replicationConfiguration.role);
 
-             if(replicationConfiguration.rules != null)
-             {
-                foreach(ReplicationConfiguration.Rule rule in replicationConfiguration.rules)
+            if (replicationConfiguration.rules != null)
+            {
+                foreach (ReplicationConfiguration.Rule rule in replicationConfiguration.rules)
                 {
-                    if(rule == null)continue;
+                    if (rule == null) continue;
 
                     xmlWriter.WriteStartElement("Rule");
 
                     xmlWriter.WriteElementString("Status", rule.status);
                     xmlWriter.WriteElementString("ID", rule.id);
                     xmlWriter.WriteElementString("Prefix", rule.prefix);
-                    if(rule.destination != null){
+                    if (rule.destination != null)
+                    {
                         xmlWriter.WriteStartElement("Destination");
                         xmlWriter.WriteElementString("Bucket", rule.destination.bucket);
-                        if(rule.destination.storageClass != null) xmlWriter.WriteElementString("StorageClass", rule.destination.storageClass);
+                        if (rule.destination.storageClass != null) xmlWriter.WriteElementString("StorageClass", rule.destination.storageClass);
                         xmlWriter.WriteEndElement();
                     }
                     xmlWriter.WriteEndElement();
@@ -236,11 +237,11 @@ namespace COSXML.Transfer
             //start to write element
             xmlWriter.WriteStartElement("CompleteMultipartUpload");
 
-            if(completeMultipartUpload.parts != null)
+            if (completeMultipartUpload.parts != null)
             {
-                foreach(CompleteMultipartUpload.Part part in completeMultipartUpload.parts)
+                foreach (CompleteMultipartUpload.Part part in completeMultipartUpload.parts)
                 {
-                    if(part == null)continue;
+                    if (part == null) continue;
                     xmlWriter.WriteStartElement("Part");
                     xmlWriter.WriteElementString("PartNumber", part.partNumber.ToString());
                     xmlWriter.WriteElementString("ETag", part.eTag);
@@ -270,12 +271,12 @@ namespace COSXML.Transfer
             xmlWriter.WriteElementString("Quiet", delete.quiet ? "true" : "false");
             if (delete.deleteObjects != null)
             {
-                foreach(Delete.DeleteObject deleteObject in delete.deleteObjects)
+                foreach (Delete.DeleteObject deleteObject in delete.deleteObjects)
                 {
-                    if(deleteObject == null)continue;
+                    if (deleteObject == null) continue;
                     xmlWriter.WriteStartElement("Object");
                     xmlWriter.WriteElementString("Key", deleteObject.key);
-                    if(deleteObject.versionId != null) xmlWriter.WriteElementString("VersionId", deleteObject.versionId);
+                    if (deleteObject.versionId != null) xmlWriter.WriteElementString("VersionId", deleteObject.versionId);
                     xmlWriter.WriteEndElement();
                 }
             }
@@ -394,13 +395,13 @@ namespace COSXML.Transfer
             if (bucketLoggingStatus.loggingEnabled != null)
             {
                 xmlWriter.WriteStartElement("LoggingEnabled");
-                if(bucketLoggingStatus.loggingEnabled.targetBucket != null)
+                if (bucketLoggingStatus.loggingEnabled.targetBucket != null)
                     xmlWriter.WriteElementString("TargetBucket", bucketLoggingStatus.loggingEnabled.targetBucket);
-                if(bucketLoggingStatus.loggingEnabled.targetPrefix != null)
+                if (bucketLoggingStatus.loggingEnabled.targetPrefix != null)
                     xmlWriter.WriteElementString("TargetPrefix", bucketLoggingStatus.loggingEnabled.targetPrefix);
                 xmlWriter.WriteEndElement();
             }
-          
+
             // end to element
             xmlWriter.WriteEndElement();
 
@@ -420,7 +421,7 @@ namespace COSXML.Transfer
             xmlWriter.WriteStartElement("InventoryConfiguration");
 
             if (inventoryConfiguration.id != null)
-                xmlWriter.WriteElementString( "Id", inventoryConfiguration.id);
+                xmlWriter.WriteElementString("Id", inventoryConfiguration.id);
             xmlWriter.WriteElementString("IsEnabled", inventoryConfiguration.isEnabled ? "true" : "false");
             if (inventoryConfiguration.destination != null)
             {
@@ -483,7 +484,8 @@ namespace COSXML.Transfer
 
         }
 
-        public static string BuildTagging(Tagging tagging) {
+        public static string BuildTagging(Tagging tagging)
+        {
             StringWriter stringWriter = new StringWriter();
             XmlWriterSettings xmlWriterSetting = new XmlWriterSettings();
             xmlWriterSetting.Indent = true;
@@ -494,15 +496,17 @@ namespace COSXML.Transfer
             //start to write element
             xmlWriter.WriteStartElement("Tagging");
             xmlWriter.WriteStartElement("TagSet");
-            if (tagging.tagSet.tags.Count > 0) {
-                foreach (Tagging.Tag tag in tagging.tagSet.tags) {
+            if (tagging.tagSet.tags.Count > 0)
+            {
+                foreach (Tagging.Tag tag in tagging.tagSet.tags)
+                {
                     xmlWriter.WriteStartElement("Tag");
                     xmlWriter.WriteElementString("Key", tag.key);
                     xmlWriter.WriteElementString("Value", tag.value);
                     xmlWriter.WriteEndElement();
                 }
             }
-          
+
             // end to element
             xmlWriter.WriteEndElement();
             xmlWriter.WriteEndElement();
@@ -512,7 +516,8 @@ namespace COSXML.Transfer
             return RemoveXMLHeader(stringWriter.ToString());
         }
 
-        public static string BuildDomain(DomainConfiguration domain) {
+        public static string BuildDomain(DomainConfiguration domain)
+        {
             StringWriter stringWriter = new StringWriter();
             XmlWriterSettings xmlWriterSetting = new XmlWriterSettings();
             xmlWriterSetting.Indent = true;
@@ -524,16 +529,18 @@ namespace COSXML.Transfer
             xmlWriter.WriteStartElement("DomainConfiguration");
             xmlWriter.WriteStartElement("DomainRule");
 
-            if (domain.rule != null) {
+            if (domain.rule != null)
+            {
 
                 xmlWriter.WriteElementString("Status", domain.rule.Status);
                 xmlWriter.WriteElementString("Name", domain.rule.Name);
                 xmlWriter.WriteElementString("Type", domain.rule.Type);
-                if (domain.rule.Replace != null) {
+                if (domain.rule.Replace != null)
+                {
                     xmlWriter.WriteElementString("Replace", domain.rule.Replace);
                 }
             }
-          
+
             // end to element
             xmlWriter.WriteEndElement();
             xmlWriter.WriteEndElement();
@@ -544,7 +551,8 @@ namespace COSXML.Transfer
         }
 
         public static string BuildSelection(string expression, string expressionType,
-            ObjectSelectionFormat inputFormat, ObjectSelectionFormat outputFormat, bool notifyProgress) {
+            ObjectSelectionFormat inputFormat, ObjectSelectionFormat outputFormat, bool notifyProgress)
+        {
             StringWriter stringWriter = new StringWriter();
             XmlWriterSettings xmlWriterSetting = new XmlWriterSettings();
             xmlWriterSetting.Indent = true;
@@ -557,10 +565,12 @@ namespace COSXML.Transfer
             xmlWriter.WriteElementString("Expression", expression);
             xmlWriter.WriteElementString("ExpressionType", expressionType);
 
-            if (inputFormat != null) {
+            if (inputFormat != null)
+            {
                 xmlWriter.WriteStartElement("InputSerialization");
                 writeStringIfValuePresent(xmlWriter, "CompressionType", inputFormat.CompressionType);
-                if (inputFormat.csvFormat != null) {
+                if (inputFormat.csvFormat != null)
+                {
                     xmlWriter.WriteStartElement("CSV");
                     writeStringIfValuePresent(xmlWriter, "FileHeaderInfo", inputFormat.csvFormat.FileHeaderInfo);
                     writeStringIfValuePresent(xmlWriter, "RecordDelimiter", inputFormat.csvFormat.RecordDelimiter);
@@ -568,10 +578,12 @@ namespace COSXML.Transfer
                     writeStringIfValuePresent(xmlWriter, "QuoteCharacter", inputFormat.csvFormat.QuoteCharacter);
                     writeStringIfValuePresent(xmlWriter, "QuoteEscapeCharacter", inputFormat.csvFormat.QuoteEscapeCharacter);
                     writeStringIfValuePresent(xmlWriter, "Comments", inputFormat.csvFormat.Comments);
-                    writeStringIfValuePresent(xmlWriter, "AllowQuotedRecordDelimiter", 
+                    writeStringIfValuePresent(xmlWriter, "AllowQuotedRecordDelimiter",
                         inputFormat.csvFormat.AllowQuotedRecordDelimiter ? "TRUE" : "FALSE");
                     xmlWriter.WriteEndElement();
-                } else if (inputFormat.jsonFormat != null) {
+                }
+                else if (inputFormat.jsonFormat != null)
+                {
                     xmlWriter.WriteStartElement("JSON");
                     writeStringIfValuePresent(xmlWriter, "Type", inputFormat.jsonFormat.Type);
                     xmlWriter.WriteEndElement();
@@ -579,9 +591,11 @@ namespace COSXML.Transfer
                 xmlWriter.WriteEndElement();
             }
 
-            if (outputFormat != null) {
+            if (outputFormat != null)
+            {
                 xmlWriter.WriteStartElement("OutputSerialization");
-                if (outputFormat.csvFormat != null) {
+                if (outputFormat.csvFormat != null)
+                {
                     xmlWriter.WriteStartElement("CSV");
                     writeStringIfValuePresent(xmlWriter, "QuoteFields", outputFormat.csvFormat.QuoteFields);
                     writeStringIfValuePresent(xmlWriter, "RecordDelimiter", outputFormat.csvFormat.RecordDelimiter);
@@ -589,7 +603,9 @@ namespace COSXML.Transfer
                     writeStringIfValuePresent(xmlWriter, "QuoteCharacter", outputFormat.csvFormat.QuoteCharacter);
                     writeStringIfValuePresent(xmlWriter, "QuoteEscapeCharacter", outputFormat.csvFormat.QuoteEscapeCharacter);
                     xmlWriter.WriteEndElement();
-                } else if (outputFormat.jsonFormat != null) {
+                }
+                else if (outputFormat.jsonFormat != null)
+                {
                     xmlWriter.WriteStartElement("JSON");
                     writeStringIfValuePresent(xmlWriter, "RecordDelimiter", outputFormat.jsonFormat.RecordDelimiter);
                     xmlWriter.WriteEndElement();
@@ -611,13 +627,15 @@ namespace COSXML.Transfer
         /// </summary>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public static string BuildIntelligentTieringConfiguration(IntelligentTieringConfiguration configuration) {
+        public static string BuildIntelligentTieringConfiguration(IntelligentTieringConfiguration configuration)
+        {
             (StringWriter stringWriter, XmlWriter xmlWriter) = InitWriter();
 
             //start to write element
             xmlWriter.WriteStartElement("IntelligentTieringConfiguration");
             xmlWriter.WriteElementString("Status", configuration.Status);
-            if (configuration.Days > 0) {
+            if (configuration.Days > 0)
+            {
                 xmlWriter.WriteStartElement("Transition");
                 xmlWriter.WriteElementString("Days", configuration.Days.ToString());
                 xmlWriter.WriteElementString("RequestFrequent", configuration.RequestFrequent.ToString());
@@ -628,7 +646,8 @@ namespace COSXML.Transfer
             return endWriter(stringWriter, xmlWriter);
         }
 
-        private static (StringWriter, XmlWriter) InitWriter() {
+        private static (StringWriter, XmlWriter) InitWriter()
+        {
             StringWriter stringWriter = new StringWriter();
             XmlWriterSettings xmlWriterSetting = new XmlWriterSettings();
             xmlWriterSetting.Indent = true;
@@ -639,7 +658,8 @@ namespace COSXML.Transfer
             return (stringWriter, xmlWriter);
         }
 
-        private static string endWriter(StringWriter stringWriter, XmlWriter xmlWriter) {
+        private static string endWriter(StringWriter stringWriter, XmlWriter xmlWriter)
+        {
             xmlWriter.WriteEndDocument();
 
             xmlWriter.Flush();
@@ -647,8 +667,10 @@ namespace COSXML.Transfer
         }
 
         private static void writeStringIfValuePresent(XmlWriter xmlWriter, String elementName,
-            String elementValue) {
-            if (elementValue != null && elementValue.Length > 0) {
+            String elementValue)
+        {
+            if (elementValue != null && elementValue.Length > 0)
+            {
                 xmlWriter.WriteElementString(elementName, elementValue);
             }
         }

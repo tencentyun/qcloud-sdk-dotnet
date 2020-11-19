@@ -31,7 +31,7 @@ namespace COSXML.Model.Object
         /// </summary>
         private COSXML.Callback.OnProgressCallback progressCallback;
 
-        
+
         public GetObjectRequest(string bucket, string key, string localDir, string localFileName)
             : base(bucket, key)
         {
@@ -75,8 +75,8 @@ namespace COSXML.Model.Object
         {
             if (start < 0) return;
             if (end < start) end = -1;
-            SetRequestHeader(CosRequestHeaderKey.RANGE, String.Format("bytes={0}-{1}", start, 
-                (end == -1 ? "" : end.ToString()))); 
+            SetRequestHeader(CosRequestHeaderKey.RANGE, String.Format("bytes={0}-{1}", start,
+                (end == -1 ? "" : end.ToString())));
 
         }
         /// <summary>
@@ -91,7 +91,8 @@ namespace COSXML.Model.Object
         /// 最大下载速度，单位是 bit/s
         /// </summary>
         /// <param name="start"></param>
-        public void LimitTraffic(long rate) {
+        public void LimitTraffic(long rate)
+        {
             SetRequestHeader(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, rate.ToString());
         }
         /// <summary>
@@ -171,11 +172,11 @@ namespace COSXML.Model.Object
                 SetQueryParameter(CosRequestHeaderKey.RESPONSE_EXPIRES, responseExpires);
             }
         }
-        
+
         public override void CheckParameters()
         {
             if (localDir == null) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "localDir = null");
-            if(requestUrlWithSign != null && localFileName == null) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "localFileName = null");
+            if (requestUrlWithSign != null && localFileName == null) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "localFileName = null");
             base.CheckParameters();
         }
         /// <summary>
@@ -199,7 +200,7 @@ namespace COSXML.Model.Object
             {
                 result = result + System.IO.Path.DirectorySeparatorChar + localFileName;
             }
-            
+
             return result;
         }
     }

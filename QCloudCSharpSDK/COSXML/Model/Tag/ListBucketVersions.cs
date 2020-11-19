@@ -33,11 +33,11 @@ namespace COSXML.Model.Tag
             stringBuilder.Append("IsTruncated:").Append(isTruncated).Append("\n");
             stringBuilder.Append("NextKeyMarker:").Append(nextKeyMarker).Append("\n");
             stringBuilder.Append("NextVersionIdMarker:").Append(nextVersionIdMarker).Append("\n");
-            if(objectVersionList != null)
+            if (objectVersionList != null)
             {
-                foreach(ObjectVersion objectVersion in objectVersionList)
+                foreach (ObjectVersion objectVersion in objectVersionList)
                 {
-                   if(objectVersion != null) stringBuilder.Append(objectVersion.GetInfo()).Append("\n");
+                    if (objectVersion != null) stringBuilder.Append(objectVersion.GetInfo()).Append("\n");
                 }
             }
             if (commonPrefixesList != null)
@@ -65,7 +65,7 @@ namespace COSXML.Model.Tag
         public sealed class Owner
         {
             public string uid;
-        
+
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Owner:\n");
@@ -75,7 +75,8 @@ namespace COSXML.Model.Tag
             }
         }
 
-        public sealed class DeleteMarker : ObjectVersion{
+        public sealed class DeleteMarker : ObjectVersion
+        {
 
             public override string GetInfo()
             {
@@ -84,7 +85,7 @@ namespace COSXML.Model.Tag
                 stringBuilder.Append("VersionId:").Append(versionId).Append("\n");
                 stringBuilder.Append("IsLatest:").Append(isLatest).Append("\n");
                 stringBuilder.Append("LastModified:").Append(lastModified).Append("\n");
-                if(owner != null)
+                if (owner != null)
                 {
                     stringBuilder.Append(owner.GetInfo()).Append("\n");
                 }
@@ -92,7 +93,7 @@ namespace COSXML.Model.Tag
                 return stringBuilder.ToString();
             }
         }
-        
+
         public sealed class Version : ObjectVersion
         {
             public string eTag;
@@ -110,7 +111,7 @@ namespace COSXML.Model.Tag
                 stringBuilder.Append("ETag:").Append(eTag).Append("\n");
                 stringBuilder.Append("Size:").Append(size).Append("\n");
                 stringBuilder.Append("StorageClass:").Append(storageClass).Append("\n");
-                if(owner != null)
+                if (owner != null)
                 {
                     stringBuilder.Append(owner.GetInfo()).Append("\n");
                 }

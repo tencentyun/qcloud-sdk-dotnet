@@ -19,7 +19,7 @@ namespace COSXML.Model.Bucket
 
         public override string GetResultInfo()
         {
-            return base.GetResultInfo() + (replicationConfiguration == null ? "" : "\n" + replicationConfiguration.GetInfo()); 
+            return base.GetResultInfo() + (replicationConfiguration == null ? "" : "\n" + replicationConfiguration.GetInfo());
         }
     }
 }

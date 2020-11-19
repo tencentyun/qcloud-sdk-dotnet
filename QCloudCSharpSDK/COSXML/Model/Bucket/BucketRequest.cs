@@ -58,7 +58,8 @@ namespace COSXML.Model.Bucket
             return null;
         }
 
-        public override string GetCOSHost() {
+        public override string GetCOSHost()
+        {
             StringBuilder hostBuilder = new StringBuilder();
             hostBuilder.Append(bucket);
             if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
@@ -75,19 +76,25 @@ namespace COSXML.Model.Bucket
         public override string GetHost()
         {
             StringBuilder hostBuilder = new StringBuilder();
-            if (!String.IsNullOrEmpty(serviceConfig.host)) {
+            if (!String.IsNullOrEmpty(serviceConfig.host))
+            {
                 hostBuilder.Append(serviceConfig.host);
-            } else {
+            }
+            else
+            {
                 hostBuilder.Append(bucket);
                 if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
                 {
                     hostBuilder.Append("-")
                         .Append(appid);
                 }
-                if (serviceConfig.endpointSuffix != null) {
+                if (serviceConfig.endpointSuffix != null)
+                {
                     hostBuilder.Append(".")
                         .Append(serviceConfig.endpointSuffix);
-                } else {
+                }
+                else
+                {
                     hostBuilder.Append(".cos.")
                         .Append(region)
                         .Append(".myqcloud.com");

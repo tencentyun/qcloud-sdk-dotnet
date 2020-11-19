@@ -5,7 +5,7 @@ using System.Text;
 
 namespace COSXML.Model.Bucket
 {
-    public sealed class GetBucketWebsiteRequest :BucketRequest
+    public sealed class GetBucketWebsiteRequest : BucketRequest
     {
         public GetBucketWebsiteRequest(string bucket) : base(bucket)
         {

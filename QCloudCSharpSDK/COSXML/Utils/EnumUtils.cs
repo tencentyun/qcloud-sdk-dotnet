@@ -11,9 +11,9 @@ namespace COSXML.Utils
 {
     public static class EnumUtils
     {
-        public static string GetValue(Enum value) 
+        public static string GetValue(Enum value)
         {
-            if (value == null) 
+            if (value == null)
             {
                 return null;
             }

@@ -28,7 +28,7 @@ namespace COSXML.Network
         /// body length
         /// </summary>
         public virtual long ContentLength
-        { get{return contentLength;} set{contentLength = value;} }
+        { get { return contentLength; } set { contentLength = value; } }
 
         /// <summary>
         /// body mime type
@@ -79,7 +79,7 @@ namespace COSXML.Network
         /// <param name="total"></param>
         protected void UpdateProgress(long complete, long total)
         {
-            if (total == 0)progressCallback(0, 0);
+            if (total == 0) progressCallback(0, 0);
             else if (complete < total) progressCallback(complete, total);
             else progressCallback(total - 1, total);
         }
@@ -185,7 +185,7 @@ namespace COSXML.Network
             }
             finally
             {
-               
+
                 if (outputStream != null)
                 {
                     outputStream.Flush();
@@ -210,7 +210,7 @@ namespace COSXML.Network
                 {
                     UpdateProgress(requestBodyState.complete, contentLength);
                 }
-                if(requestBodyState.complete < contentLength)
+                if (requestBodyState.complete < contentLength)
                 {
                     long remain = contentLength - requestBodyState.complete;
                     int count = (int)(remain > SEGMENT_SIZE ? SEGMENT_SIZE : remain);
@@ -256,7 +256,7 @@ namespace COSXML.Network
             FileStream fileStream = null;
             try
             {
-                byte[] buffer = new byte[SEGMENT_SIZE]; 
+                byte[] buffer = new byte[SEGMENT_SIZE];
                 int bytesRead = 0;
                 long completed = bytesRead;
                 fileStream = new FileStream(srcPath, FileMode.Open, FileAccess.Read);
@@ -290,7 +290,7 @@ namespace COSXML.Network
             catch (Exception ex)
             {
                 QLog.E(TAG, ex.Message, ex);
-                throw ;
+                throw;
             }
             finally
             {
@@ -435,7 +435,7 @@ namespace COSXML.Network
                 requestBodyState.endRequestBody(ex);
                 requestBodyState = null;
             }
-            
+
         }
     }
 
@@ -461,7 +461,7 @@ namespace COSXML.Network
         private string fileName;
 
         private byte[] data;
-        
+
         private string srcPath;
         private long fileOffset;
         private Stream fileStream;
@@ -486,7 +486,7 @@ namespace COSXML.Network
                     this.parameters.Add(pair.Key, pair.Value);
                 }
             }
-            
+
         }
 
         public void AddParameter(string key, string value)
@@ -560,7 +560,7 @@ namespace COSXML.Network
                 contentLength += data.Length;
             }
             contentLength += realContentLength;
-            
+
             string endLine = CRLF + DASHDASH + BOUNDARY + DASHDASH + CRLF;
             byte[] endData = Encoding.UTF8.GetBytes(endLine);
             contentLength += endData.Length;
@@ -706,7 +706,7 @@ namespace COSXML.Network
                     outputStream = null;
                 }
             }
-           
+
         }
 
         public override string GetMD5()
@@ -846,7 +846,7 @@ namespace COSXML.Network
                         requestBodyState.complete += count;
                         outputStream.BeginWrite(requestBodyState.buffer, offset, count, AsyncStreamCallback, requestBodyState);
                     }
-                    
+
                     outputStream.Flush();
                 }
                 else

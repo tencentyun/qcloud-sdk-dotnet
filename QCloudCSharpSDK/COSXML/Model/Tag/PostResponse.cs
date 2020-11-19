@@ -28,8 +28,8 @@ namespace COSXML.Model.Tag
         /// </summary>
         public string eTag;
 
-        
-        public string GetInfo() 
+
+        public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{PostResponse:\n");
             stringBuilder.Append("Location:").Append(location).Append("\n");

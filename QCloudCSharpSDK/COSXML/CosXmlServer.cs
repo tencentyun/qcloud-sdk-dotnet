@@ -45,7 +45,7 @@ namespace COSXML
             {
                 this.config = new CosXmlConfig.Builder().Build();
             }
-            if(this.config.IsDebugLog)
+            if (this.config.IsDebugLog)
             {
                 QLog.AddLogAdapter(new LogImpl());
             }
@@ -58,7 +58,8 @@ namespace COSXML
         /// 获取配置
         /// </summary>
         /// <returns></returns>
-        public CosXmlConfig GetConfig() {
+        public CosXmlConfig GetConfig()
+        {
             return config;
         }
 
@@ -90,19 +91,25 @@ namespace COSXML
 
         }
 
-        public Task<T> executeAsync<T>(CosRequest request) where T : CosResult {
+        public Task<T> executeAsync<T>(CosRequest request) where T : CosResult
+        {
             T result = Activator.CreateInstance<T>();
-            
+
             CheckAppidAndRegion(request);
 
             var t = new TaskCompletionSource<T>();
 
-            schedue(request, result, delegate(CosResult cosResult) {
+            schedue(request, result, delegate (CosResult cosResult)
+            {
                 t.TrySetResult(result as T);
-            }, delegate(CosClientException clientException, CosServerException serverException) {
-                if (clientException != null) {
+            }, delegate (CosClientException clientException, CosServerException serverException)
+            {
+                if (clientException != null)
+                {
                     t.TrySetException(clientException);
-                } else {
+                }
+                else
+                {
                     t.TrySetException(serverException);
                 }
             });
@@ -110,15 +117,16 @@ namespace COSXML
             return t.Task;
         }
 
-        public T execute<T>(CosRequest request) where T : CosResult {
+        public T execute<T>(CosRequest request) where T : CosResult
+        {
             T result = Activator.CreateInstance<T>();
 
-            return (T) excute(request, result);
+            return (T)excute(request, result);
         }
 
-        private T execute<T>(CosRequest request, T result) where T : CosResult 
+        private T execute<T>(CosRequest request, T result) where T : CosResult
         {
-            return (T) excute(request, result);
+            return (T)excute(request, result);
         }
 
         private CosResult excute(CosRequest request, CosResult result)
@@ -645,7 +653,7 @@ namespace COSXML
                 }
                 urlBuilder.Append(preSignatureStruct.key);
 
-                string sign = GenerateSign(preSignatureStruct.httpMethod, preSignatureStruct.key, 
+                string sign = GenerateSign(preSignatureStruct.httpMethod, preSignatureStruct.key,
                     preSignatureStruct.queryParameters, preSignatureStruct.headers, preSignatureStruct.signDurationSecond);
 
                 StringBuilder queryBuilder = new StringBuilder();
@@ -721,7 +729,7 @@ namespace COSXML
 
         public PutBucketWebsiteResult putBucketWebsite(PutBucketWebsiteRequest request)
         {
-            return (Model.Bucket.PutBucketWebsiteResult)excute(request, new Model.Bucket.PutBucketWebsiteResult()); 
+            return (Model.Bucket.PutBucketWebsiteResult)excute(request, new Model.Bucket.PutBucketWebsiteResult());
         }
 
         [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
@@ -743,7 +751,7 @@ namespace COSXML
 
         public DeleteBucketWebsiteResult deleteBucketWebsite(DeleteBucketWebsiteRequest request)
         {
-            return (Model.Bucket.DeleteBucketWebsiteResult)excute(request, new Model.Bucket.DeleteBucketWebsiteResult()); 
+            return (Model.Bucket.DeleteBucketWebsiteResult)excute(request, new Model.Bucket.DeleteBucketWebsiteResult());
         }
 
         [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
@@ -818,30 +826,36 @@ namespace COSXML
             schedue(request, new Model.Bucket.ListBucketInventoryResult(), successCallback, failCallback);
         }
 
-        public PutBucketTaggingResult putBucketTagging(PutBucketTaggingRequest request) {
+        public PutBucketTaggingResult putBucketTagging(PutBucketTaggingRequest request)
+        {
             return (Model.Bucket.PutBucketTaggingResult)excute(request, new Model.Bucket.PutBucketTaggingResult());
         }
 
         [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void putBucketTaggingAsync(PutBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback) {
+        public void putBucketTaggingAsync(PutBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
+        {
             schedue(request, new Model.Bucket.PutBucketTaggingResult(), successCallback, failCallback);
         }
 
-        public GetBucketTaggingResult getBucketTagging(GetBucketTaggingRequest request) {
+        public GetBucketTaggingResult getBucketTagging(GetBucketTaggingRequest request)
+        {
             return (Model.Bucket.GetBucketTaggingResult)excute(request, new Model.Bucket.GetBucketTaggingResult());
         }
 
         [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void getBucketTaggingAsync(GetBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback) {
+        public void getBucketTaggingAsync(GetBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
+        {
             schedue(request, new Model.Bucket.GetBucketTaggingResult(), successCallback, failCallback);
         }
 
-        public DeleteBucketTaggingResult deleteBucketTagging(DeleteBucketTaggingRequest request) {
+        public DeleteBucketTaggingResult deleteBucketTagging(DeleteBucketTaggingRequest request)
+        {
             return (Model.Bucket.DeleteBucketTaggingResult)excute(request, new Model.Bucket.DeleteBucketTaggingResult());
         }
 
         [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void deleteBucketTaggingAsync(DeleteBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback) {
+        public void deleteBucketTaggingAsync(DeleteBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
+        {
             schedue(request, new Model.Bucket.DeleteBucketTaggingResult(), successCallback, failCallback);
         }
 
@@ -878,22 +892,29 @@ namespace COSXML
             schedue(request, new Model.Object.SelectObjectResult(), successCallback, failCallback);
         }
 
-        public GetBucketIntelligentTieringResult getBucketIntelligentTieringConfiguration(GetBucketIntelligentTieringRequest request) {
-            try {
+        public GetBucketIntelligentTieringResult getBucketIntelligentTieringConfiguration(GetBucketIntelligentTieringRequest request)
+        {
+            try
+            {
                 return execute(request, new GetBucketIntelligentTieringResult());
-            } catch (CosServerException e) {
-                if (e.statusCode == 404) {
+            }
+            catch (CosServerException e)
+            {
+                if (e.statusCode == 404)
+                {
                     return new GetBucketIntelligentTieringResult();
                 }
                 throw e;
             }
         }
 
-        public CosResult putBucketIntelligentTiering(PutBucketIntelligentTieringRequest request) {
+        public CosResult putBucketIntelligentTiering(PutBucketIntelligentTieringRequest request)
+        {
             return execute(request, new CosResult());
         }
 
-        public SensitiveContentRecognitionResult sensitiveContentRecognition(SensitiveContentRecognitionRequest request) {
+        public SensitiveContentRecognitionResult sensitiveContentRecognition(SensitiveContentRecognitionRequest request)
+        {
             return execute(request, new SensitiveContentRecognitionResult());
         }
 
@@ -902,7 +923,8 @@ namespace COSXML
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public ImageProcessResult imageProcess(ImageProcessRequest request) {
+        public ImageProcessResult imageProcess(ImageProcessRequest request)
+        {
             return execute(request, new ImageProcessResult());
         }
     }

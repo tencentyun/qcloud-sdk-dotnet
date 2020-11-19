@@ -34,8 +34,10 @@ namespace COSXML.Model.Object
             }
         }
 
-        internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength) {
-            if (contentLength > 0) {
+        internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength)
+        {
+            if (contentLength > 0)
+            {
                 // 图片处理会返回 body
                 uploadResult = XmlParse.ParsePicOpeartionResult(inputStream);
             }

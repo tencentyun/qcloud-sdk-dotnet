@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 
 namespace COSXMLTests
-{ 
+{
 
     [TestFixture()]
     public class BucketTest
@@ -67,7 +67,7 @@ namespace COSXMLTests
             try
             {
                 HeadBucketRequest request = new HeadBucketRequest(bucket);
-                
+
                 //执行请求
                 HeadBucketResult result = cosXml.HeadBucket(request);
                 Console.WriteLine(result.GetResultInfo());
@@ -85,7 +85,7 @@ namespace COSXMLTests
 
         }
 
-        
+
         public void GetBucket(COSXML.CosXml cosXml, string bucket)
         {
             try
@@ -161,7 +161,7 @@ namespace COSXMLTests
             try
             {
                 PutBucketACLRequest request = new PutBucketACLRequest(bucket);
-                
+
 
                 //添加acl
                 request.SetCosACL(CosACL.PUBLIC_READ);
@@ -199,7 +199,7 @@ namespace COSXMLTests
             try
             {
                 GetBucketACLRequest request = new GetBucketACLRequest(bucket);
-                
+
                 //执行请求
                 GetBucketACLResult result = cosXml.GetBucketACL(request);
                 Console.WriteLine(result.GetResultInfo());
@@ -221,7 +221,7 @@ namespace COSXMLTests
             try
             {
                 PutBucketCORSRequest request = new PutBucketCORSRequest(bucket);
-                
+
 
                 //设置cors
                 COSXML.Model.Tag.CORSConfiguration.CORSRule corsRule = new COSXML.Model.Tag.CORSConfiguration.CORSRule();
@@ -269,7 +269,7 @@ namespace COSXMLTests
             try
             {
                 GetBucketCORSRequest request = new GetBucketCORSRequest(bucket);
-                
+
                 //执行请求
                 GetBucketCORSResult result = cosXml.GetBucketCORS(request);
 
@@ -285,7 +285,7 @@ namespace COSXMLTests
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 Assert.Fail();
             }
-            
+
         }
 
         public void DeleteBucketCORS(COSXML.CosXml cosXml, string bucket)
@@ -293,7 +293,7 @@ namespace COSXMLTests
             try
             {
                 DeleteBucketCORSRequest request = new DeleteBucketCORSRequest(bucket);
-                
+
                 //执行请求
                 DeleteBucketCORSResult result = cosXml.DeleteBucketCORS(request);
 
@@ -317,7 +317,7 @@ namespace COSXMLTests
             try
             {
                 PutBucketLifecycleRequest request = new PutBucketLifecycleRequest(bucket);
-                
+
 
                 //设置 lifecycle
                 COSXML.Model.Tag.LifecycleConfiguration.Rule rule = new COSXML.Model.Tag.LifecycleConfiguration.Rule();
@@ -355,7 +355,7 @@ namespace COSXMLTests
             try
             {
                 GetBucketLifecycleRequest request = new GetBucketLifecycleRequest(bucket);
-                
+
                 //执行请求
                 GetBucketLifecycleResult result = cosXml.GetBucketLifecycle(request);
 
@@ -379,7 +379,7 @@ namespace COSXMLTests
             try
             {
                 DeleteBucketLifecycleRequest request = new DeleteBucketLifecycleRequest(bucket);
-                
+
                 //执行请求
                 DeleteBucketLifecycleResult result = cosXml.DeleteBucketLifecycle(request);
 
@@ -403,7 +403,7 @@ namespace COSXMLTests
             try
             {
                 PutBucketReplicationRequest request = new PutBucketReplicationRequest(bucket);
-                
+
 
                 //设置replication
                 PutBucketReplicationRequest.RuleStruct ruleStruct = new PutBucketReplicationRequest.RuleStruct();
@@ -441,7 +441,7 @@ namespace COSXMLTests
             try
             {
                 GetBucketReplicationRequest request = new GetBucketReplicationRequest(bucket);
-                
+
                 //执行请求
                 GetBucketReplicationResult result = cosXml.GetBucketReplication(request);
 
@@ -456,7 +456,7 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-               // Assert.Fail();
+                // Assert.Fail();
             }
 
         }
@@ -466,7 +466,7 @@ namespace COSXMLTests
             try
             {
                 DeleteBucketReplicationRequest request = new DeleteBucketReplicationRequest(bucket);
-                
+
                 //执行请求
                 DeleteBucketReplicationResult result = cosXml.DeleteBucketReplication(request);
 
@@ -490,7 +490,7 @@ namespace COSXMLTests
             try
             {
                 PutBucketVersioningRequest request = new PutBucketVersioningRequest(bucket);
-                
+
 
                 //开启版本控制
                 request.IsEnableVersionConfig(true);
@@ -518,7 +518,7 @@ namespace COSXMLTests
             try
             {
                 GetBucketVersioningRequest request = new GetBucketVersioningRequest(bucket);
-                
+
                 //执行请求
                 GetBucketVersioningResult result = cosXml.GetBucketVersioning(request);
 
@@ -542,7 +542,7 @@ namespace COSXMLTests
             try
             {
                 ListBucketVersionsRequest request = new ListBucketVersionsRequest(bucket);
-                
+
                 //执行请求
                 ListBucketVersionsResult result = cosXml.ListBucketVersions(request);
 
@@ -566,7 +566,7 @@ namespace COSXMLTests
             try
             {
                 ListMultiUploadsRequest request = new ListMultiUploadsRequest(bucket);
-                
+
                 //执行请求
                 ListMultiUploadsResult result = cosXml.ListMultiUploads(request);
 
@@ -590,7 +590,7 @@ namespace COSXMLTests
             try
             {
                 DeleteBucketRequest request = new DeleteBucketRequest(bucket);
-                
+
                 //
                 //执行请求
                 DeleteBucketResult result = cosXml.DeleteBucket(request);
@@ -611,28 +611,32 @@ namespace COSXMLTests
         }
 
         [SetUp()]
-        public void setup() {
+        public void setup()
+        {
             QCloudServer instance = QCloudServer.Instance();
             PutBucket(instance.cosXml, instance.bucketForBucketTest);
         }
 
         [TearDown()]
-        public void clear() {
+        public void clear()
+        {
             QCloudServer instance = QCloudServer.Instance();
-            if (isBucketCreatedByTest) {
+            if (isBucketCreatedByTest)
+            {
                 // DeleteBucket(instance.cosXml, instance.bucketForBucketTest);
             }
         }
-        
+
         [Test()]
-        public void testBucketTagging() {
+        public void testBucketTagging()
+        {
             QCloudServer instance = QCloudServer.Instance();
             try
             {
                 // 设置 tag
                 PutBucketTaggingRequest request = new PutBucketTaggingRequest(
                     instance.bucketForBucketTest);
-                
+
 
                 string akey = "aTagKey";
                 string avalue = "aTagValue";
@@ -649,14 +653,20 @@ namespace COSXMLTests
                     instance.bucketForBucketTest);
                 GetBucketTaggingResult getResult = instance.cosXml.getBucketTagging(getRequest);
 
-                Tagging tagging =  getResult.tagging;
+                Tagging tagging = getResult.tagging;
                 Assert.AreEqual(tagging.tagSet.tags.Count, 2);
-                foreach (Tagging.Tag tag in tagging.tagSet.tags) {
-                    if (tag.key.Equals(akey)) {
+                foreach (Tagging.Tag tag in tagging.tagSet.tags)
+                {
+                    if (tag.key.Equals(akey))
+                    {
                         Assert.AreEqual(avalue, tag.value);
-                    } else if (tag.key.Equals(bkey)) {
+                    }
+                    else if (tag.key.Equals(bkey))
+                    {
                         Assert.AreEqual(bvalue, tag.value);
-                    } else {
+                    }
+                    else
+                    {
                         Assert.Fail();
                     }
                 }
@@ -677,7 +687,8 @@ namespace COSXMLTests
                 Assert.Fail();
             }
 
-            try {
+            try
+            {
                 // 验证删除成功
                 GetBucketTaggingRequest getRequest = new GetBucketTaggingRequest(
                     instance.bucketForBucketTest);
@@ -699,7 +710,8 @@ namespace COSXMLTests
         public void testBucketDomain()
         {
             QCloudServer instance = QCloudServer.Instance();
-            try {
+            try
+            {
                 GetBucketDomainResult getResult = instance.cosXml.getBucketDomain(
                     new GetBucketDomainRequest(instance.bucketForBucketTest));
                 Assert.IsNotNull(getResult.domainConfiguration.rule);
@@ -710,12 +722,12 @@ namespace COSXMLTests
                 domain.rule.Name = "www.qq.com";
                 domain.rule.Status = "ENABLED";
                 domain.rule.Type = "WEBSITE";
-                
+
 
                 PutBucketDomainResult result = instance.cosXml.putBucketDomain(new PutBucketDomainRequest(
                     instance.bucketForBucketTest, domain));
 
-                
+
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -725,8 +737,9 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                if (serverEx.statusCode != 409 && serverEx.statusCode != 451) {
-                Assert.Fail();
+                if (serverEx.statusCode != 409 && serverEx.statusCode != 451)
+                {
+                    Assert.Fail();
                 }
             }
         }
@@ -735,22 +748,24 @@ namespace COSXMLTests
         public void testBucketLogging()
         {
             QCloudServer instance = QCloudServer.Instance();
-            try {
+            try
+            {
                 PutBucketLoggingRequest request = new PutBucketLoggingRequest(instance.bucketForBucketTest);
                 request.SetTarget("bucket-cssg-source-1253653367", "/abc");
                 PutBucketLoggingResult putResult = instance.cosXml.putBucketLogging(request);
-                
+
                 Assert.IsTrue(putResult.httpCode == 200);
 
                 GetBucketLoggingResult getResult = instance.cosXml.getBucketLogging(
                     new GetBucketLoggingRequest(instance.bucketForBucketTest));
                 BucketLoggingStatus status = getResult.bucketLoggingStatus;
-                if (status != null && status.loggingEnabled != null) {
+                if (status != null && status.loggingEnabled != null)
+                {
                     string targetBucket = status.loggingEnabled.targetBucket;
                     string targetPrefix = status.loggingEnabled.targetPrefix;
                     Assert.NotNull(targetBucket);
                 }
-                
+
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -760,8 +775,9 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                if (serverEx.statusCode != 409 && serverEx.statusCode != 451) {
-                Assert.Fail();
+                if (serverEx.statusCode != 409 && serverEx.statusCode != 451)
+                {
+                    Assert.Fail();
                 }
             }
         }
@@ -770,7 +786,8 @@ namespace COSXMLTests
         public void testBucketWebsite()
         {
             QCloudServer instance = QCloudServer.Instance();
-            try {
+            try
+            {
                 PutBucketWebsiteRequest putRequest = new PutBucketWebsiteRequest(instance.bucketForBucketTest);
                 putRequest.SetIndexDocument("index.html");
                 putRequest.SetErrorDocument("eroror.html");
@@ -787,7 +804,7 @@ namespace COSXMLTests
                 DeleteBucketWebsiteResult deleteResult = instance.cosXml.deleteBucketWebsite(deleteRequest);
                 Console.WriteLine(deleteResult.GetResultInfo());
                 Assert.NotNull(deleteResult.GetResultInfo());
-                
+
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -805,13 +822,14 @@ namespace COSXMLTests
         public void testBucketInventory()
         {
             QCloudServer instance = QCloudServer.Instance();
-            try {
+            try
+            {
                 string inventoryId = "id1";
 
                 PutBucketInventoryRequest putRequest = new PutBucketInventoryRequest(instance.bucketForBucketTest, inventoryId);
                 putRequest.SetDestination("CSV", "1278687956", "bucket-cssg-source-1253653367", instance.region, "list1");
                 putRequest.IsEnable(true);
-                putRequest.SetScheduleFrequency("Daily");
+                putRequest.SetScheduleFrequency("Daily");å
                 putRequest.SetIncludedObjectVersions("All");
                 PutBucketInventoryResult putResult = instance.cosXml.putBucketInventory(putRequest);
                 Assert.IsTrue(putResult.httpCode == 200);
@@ -826,7 +844,7 @@ namespace COSXMLTests
                 deleteRequest.SetInventoryId(inventoryId);
                 DeleteBucketInventoryResult deleteResult = instance.cosXml.deleteBucketInventory(deleteRequest);
                 Assert.IsTrue(putResult.httpCode == 200);
-                
+
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -836,14 +854,16 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                if (serverEx.statusCode != 409 && serverEx.statusCode != 451) {
-                Assert.Fail();
+                if (serverEx.statusCode != 409 && serverEx.statusCode != 451)
+                {
+                    Assert.Fail();
                 }
             }
         }
 
         [Test()]
-        public void testBucketIntelligentTiering() {
+        public void testBucketIntelligentTiering()
+        {
             var instance = QCloudServer.Instance();
 
             // Query
@@ -851,7 +871,8 @@ namespace COSXMLTests
             var getResult = instance.cosXml.getBucketIntelligentTieringConfiguration(getRequest);
             Console.WriteLine(getResult.GetResultInfo());
 
-            if (getResult.configuration == null || !getResult.configuration.isEnabled()) {
+            if (getResult.configuration == null || !getResult.configuration.isEnabled())
+            {
                 IntelligentTieringConfiguration configuration = new IntelligentTieringConfiguration();
                 configuration.Days = 60;
                 PutBucketIntelligentTieringRequest putRequest = new PutBucketIntelligentTieringRequest(instance.bucketForBucketTest, configuration);
@@ -902,7 +923,7 @@ namespace COSXMLTests
 
         }
 
-       
+
 
     }
 }

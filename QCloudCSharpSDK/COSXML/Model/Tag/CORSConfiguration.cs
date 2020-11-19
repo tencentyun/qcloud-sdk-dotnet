@@ -19,9 +19,11 @@ namespace COSXML.Model.Tag
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{CORSConfiguration:\n");
-            if(corsRules != null){
-                foreach(CORSRule corsRule in corsRules){
-                    if(corsRule != null) stringBuilder.Append(corsRule.GetInfo()).Append("\n");
+            if (corsRules != null)
+            {
+                foreach (CORSRule corsRule in corsRules)
+                {
+                    if (corsRule != null) stringBuilder.Append(corsRule.GetInfo()).Append("\n");
                 }
             }
             stringBuilder.Append("}");
@@ -61,18 +63,24 @@ namespace COSXML.Model.Tag
                 StringBuilder stringBuilder = new StringBuilder("{CORSRule:\n");
                 stringBuilder.Append("ID:").Append(id).Append("\n");
                 stringBuilder.Append("AllowedOrigin:").Append(allowedOrigin).Append("\n");
-                if(allowedMethods != null){
-                    foreach (string method in allowedMethods){
-                        if(method != null)stringBuilder.Append("AllowedMethod:").Append(method).Append("\n");
+                if (allowedMethods != null)
+                {
+                    foreach (string method in allowedMethods)
+                    {
+                        if (method != null) stringBuilder.Append("AllowedMethod:").Append(method).Append("\n");
                     }
                 }
-                if(allowedHeaders != null){
-                    foreach (string header in allowedHeaders){
-                        if(header != null)stringBuilder.Append("AllowedHeader:").Append(header).Append("\n");
+                if (allowedHeaders != null)
+                {
+                    foreach (string header in allowedHeaders)
+                    {
+                        if (header != null) stringBuilder.Append("AllowedHeader:").Append(header).Append("\n");
                     }
                 }
-                if(exposeHeaders != null){
-                    foreach (string exposeHeader in exposeHeaders){
+                if (exposeHeaders != null)
+                {
+                    foreach (string exposeHeader in exposeHeaders)
+                    {
                         if (exposeHeader != null) stringBuilder.Append("ExposeHeader:").Append(exposeHeader).Append("\n");
                     }
                 }
