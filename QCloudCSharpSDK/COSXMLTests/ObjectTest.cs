@@ -1,8 +1,9 @@
-﻿using COSXML.Common;
+using COSXML.Common;
 using COSXML.CosException;
 using COSXML.Model;
 using COSXML.Model.Object;
 using COSXML.Model.Tag;
+using COSXML.Model.Bucket;
 using COSXML.Utils;
 using COSXML.Transfer;
 using NUnit.Framework;
@@ -48,7 +49,7 @@ namespace COSXMLTests
             copykey = commonKey;
             imageKey = commonKey;
 
-            PutObject();
+            // PutObject();
         }
 
         [TearDown()]
@@ -303,18 +304,24 @@ namespace COSXMLTests
             try
             {
                 CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid, 
-                    bucket, QCloudServer.Instance().region, copykey);
+                    bucket, QCloudServer.Instance().region, "copy_objecttest.txt");
 
-                CopyObjectRequest request = new CopyObjectRequest(bucket, multiKey);
+                string tempBucket = "a-bucket-for-temp" + TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
 
-                //设置拷贝源
-                request.SetCopySource(copySource);
-
-                //设置是否拷贝还是更新
-                request.SetCopyMetaDataDirective(COSXML.Common.CosMetaDataDirective.COPY);
+                PutBucketRequest request = new PutBucketRequest(tempBucket);
 
                 //执行请求
-                CopyObjectResult result = cosXml.CopyObject(request);
+                PutBucketResult putBucketResult = cosXml.PutBucket(request);
+
+                Console.WriteLine(putBucketResult.GetResultInfo());
+
+                CopyObjectRequest copyObjectRequest = new CopyObjectRequest(tempBucket, multiKey);
+
+                //设置拷贝源
+                copyObjectRequest.SetCopySource(copySource);
+
+                //执行请求
+                CopyObjectResult result = cosXml.CopyObject(copyObjectRequest);
 
                 Console.WriteLine(result.GetResultInfo());
             }

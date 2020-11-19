@@ -1,4 +1,4 @@
-﻿using COSXML.Common;
+using COSXML.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

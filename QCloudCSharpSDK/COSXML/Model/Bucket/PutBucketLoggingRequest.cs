@@ -1,4 +1,4 @@
-﻿using COSXML.Common;
+using COSXML.Common;
 using COSXML.Model.Tag;
 using COSXML.Network;
 using System;
