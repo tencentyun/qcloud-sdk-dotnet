@@ -7,7 +7,7 @@ using COSXML.Common;
 
 namespace COSXML.Model.Bucket
 {
-    
+
     public abstract class BucketRequest : CosRequest
     {
         /// <summary>
@@ -31,7 +31,10 @@ namespace COSXML.Model.Bucket
         /// </summary>
         public string Bucket
         {
-            get { return this.bucket; }
+            get
+            {
+                return this.bucket;
+            }
             set { this.bucket = value; }
         }
 
@@ -41,19 +44,25 @@ namespace COSXML.Model.Bucket
         /// </summary>
         public string Region
         {
-            get { return this.region; }
+            get
+            {
+                return this.region;
+            }
             set { this.region = value; }
         }
 
         public override Network.RequestBody GetRequestBody()
         {
+
             return null;
         }
 
         public override string GetCOSHost()
         {
             StringBuilder hostBuilder = new StringBuilder();
+
             hostBuilder.Append(bucket);
+
             if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
             {
                 hostBuilder.Append("-")
@@ -63,12 +72,14 @@ namespace COSXML.Model.Bucket
             hostBuilder.Append(".cos.")
                     .Append(region)
                     .Append(".myqcloud.com");
+
             return hostBuilder.ToString();
         }
 
         public override string GetHost()
         {
             StringBuilder hostBuilder = new StringBuilder();
+
             if (!String.IsNullOrEmpty(serviceConfig.host))
             {
                 hostBuilder.Append(serviceConfig.host);
@@ -77,6 +88,7 @@ namespace COSXML.Model.Bucket
             else
             {
                 hostBuilder.Append(bucket);
+
                 if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
                 {
                     hostBuilder.Append("-")
@@ -96,15 +108,19 @@ namespace COSXML.Model.Bucket
                         .Append(".myqcloud.com");
                 }
             }
+
             return hostBuilder.ToString();
         }
 
         public override void CheckParameters()
         {
-            if (requestUrlWithSign != null){
+
+            if (requestUrlWithSign != null)
+            {
+
                 return;
             }
-            
+
             //if (appid == null)
             //{
             //    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "appid is null");

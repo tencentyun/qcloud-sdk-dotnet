@@ -27,6 +27,7 @@ namespace COSXML.Model.Bucket
 
         public override string GetResultInfo()
         {
+
             return base.GetResultInfo() + (locationConstraint == null ? "" : "\n" + locationConstraint.GetInfo());
         }
     }

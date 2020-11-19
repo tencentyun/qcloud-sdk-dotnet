@@ -37,6 +37,7 @@ namespace COSXML
         /// <param name="qcloudCredentailProvider">凭证提供者</param>
         public CosXmlServer(CosXmlConfig config, QCloudCredentialProvider qcloudCredentailProvider)
         {
+
             if (config != null)
             {
                 this.config = config;
@@ -45,10 +46,12 @@ namespace COSXML
             {
                 this.config = new CosXmlConfig.Builder().Build();
             }
+
             if (this.config.IsDebugLog)
             {
                 QLog.AddLogAdapter(new LogImpl());
             }
+
             this.qcloudCredentailProvider = qcloudCredentailProvider;
             HttpClient.Init(this.config.HttpConfig, this.qcloudCredentailProvider);
             httpClient = HttpClient.GetInstance();
@@ -60,32 +63,49 @@ namespace COSXML
         /// <returns></returns>
         public CosXmlConfig GetConfig()
         {
+
             return config;
         }
 
         private void CheckAppidAndRegion(CosRequest request)
         {
             request.serviceConfig = config;
+
             if (request.IsHttps == null)
             {
                 request.IsHttps = config.IsHttps;
             }
-            if (request is GetServiceRequest) return;
-            if (request.APPID == null) request.APPID = config.Appid;
+
+            if (request is GetServiceRequest)
+            {
+
+                return;
+            }
+
+            if (request.APPID == null)
+            {
+                request.APPID = config.Appid;
+            }
+
             if (request is ObjectRequest)
             {
+
                 if (((ObjectRequest)request).Region == null)
                 {
                     ((ObjectRequest)request).Region = config.Region;
                 }
+
                 return;
             }
+
             if (request is BucketRequest)
             {
+
                 if (((BucketRequest)request).Region == null)
                 {
                     ((BucketRequest)request).Region = config.Region;
                 }
+
                 return;
             }
 
@@ -99,11 +119,13 @@ namespace COSXML
 
             var t = new TaskCompletionSource<T>();
 
+
             schedue(request, result, delegate (CosResult cosResult)
             {
                 t.TrySetResult(result as T);
             }, delegate (CosClientException clientException, CosServerException serverException)
             {
+
                 if (clientException != null)
                 {
                     t.TrySetException(clientException);
@@ -121,11 +143,13 @@ namespace COSXML
         {
             T result = Activator.CreateInstance<T>();
 
+
             return (T)excute(request, result);
         }
 
         private T execute<T>(CosRequest request, T result) where T : CosResult
         {
+
             return (T)excute(request, result);
         }
 
@@ -133,6 +157,7 @@ namespace COSXML
         {
             CheckAppidAndRegion(request);
             httpClient.Excute(request, result);
+
             return result;
         }
 
@@ -144,6 +169,7 @@ namespace COSXML
 
         public Model.Service.GetServiceResult GetService(Model.Service.GetServiceRequest request)
         {
+
             return (Model.Service.GetServiceResult)excute(request, new Model.Service.GetServiceResult());
         }
 
@@ -155,6 +181,7 @@ namespace COSXML
 
         public PutBucketResult PutBucket(PutBucketRequest request)
         {
+
             return (Model.Bucket.PutBucketResult)excute(request, new Model.Bucket.PutBucketResult());
         }
 
@@ -166,6 +193,7 @@ namespace COSXML
 
         public DeleteBucketResult DeleteBucket(DeleteBucketRequest request)
         {
+
             return (Model.Bucket.DeleteBucketResult)excute(request, new Model.Bucket.DeleteBucketResult());
         }
 
@@ -177,6 +205,7 @@ namespace COSXML
 
         public HeadBucketResult HeadBucket(HeadBucketRequest request)
         {
+
             return (Model.Bucket.HeadBucketResult)excute(request, new Model.Bucket.HeadBucketResult());
         }
 
@@ -188,6 +217,7 @@ namespace COSXML
 
         public GetBucketResult GetBucket(GetBucketRequest request)
         {
+
             return (Model.Bucket.GetBucketResult)excute(request, new Model.Bucket.GetBucketResult());
         }
 
@@ -199,6 +229,7 @@ namespace COSXML
 
         public GetBucketLocationResult GetBucketLocation(GetBucketLocationRequest request)
         {
+
             return (Model.Bucket.GetBucketLocationResult)excute(request, new Model.Bucket.GetBucketLocationResult());
         }
 
@@ -210,6 +241,7 @@ namespace COSXML
 
         public PutBucketACLResult PutBucketACL(PutBucketACLRequest request)
         {
+
             return (Model.Bucket.PutBucketACLResult)excute(request, new Model.Bucket.PutBucketACLResult());
         }
 
@@ -221,6 +253,7 @@ namespace COSXML
 
         public GetBucketACLResult GetBucketACL(GetBucketACLRequest request)
         {
+
             return (Model.Bucket.GetBucketACLResult)excute(request, new Model.Bucket.GetBucketACLResult());
         }
 
@@ -232,6 +265,7 @@ namespace COSXML
 
         public PutBucketCORSResult PutBucketCORS(PutBucketCORSRequest request)
         {
+
             return (Model.Bucket.PutBucketCORSResult)excute(request, new Model.Bucket.PutBucketCORSResult());
         }
 
@@ -243,6 +277,7 @@ namespace COSXML
 
         public GetBucketCORSResult GetBucketCORS(GetBucketCORSRequest request)
         {
+
             return (Model.Bucket.GetBucketCORSResult)excute(request, new Model.Bucket.GetBucketCORSResult());
         }
 
@@ -254,6 +289,7 @@ namespace COSXML
 
         public DeleteBucketCORSResult DeleteBucketCORS(DeleteBucketCORSRequest request)
         {
+
             return (Model.Bucket.DeleteBucketCORSResult)excute(request, new Model.Bucket.DeleteBucketCORSResult());
         }
 
@@ -265,6 +301,7 @@ namespace COSXML
 
         public PutBucketLifecycleResult PutBucketLifecycle(PutBucketLifecycleRequest request)
         {
+
             return (Model.Bucket.PutBucketLifecycleResult)excute(request, new Model.Bucket.PutBucketLifecycleResult());
         }
 
@@ -276,6 +313,7 @@ namespace COSXML
 
         public GetBucketLifecycleResult GetBucketLifecycle(GetBucketLifecycleRequest request)
         {
+
             return (Model.Bucket.GetBucketLifecycleResult)excute(request, new Model.Bucket.GetBucketLifecycleResult());
         }
 
@@ -287,6 +325,7 @@ namespace COSXML
 
         public DeleteBucketLifecycleResult DeleteBucketLifecycle(DeleteBucketLifecycleRequest request)
         {
+
             return (Model.Bucket.DeleteBucketLifecycleResult)excute(request, new Model.Bucket.DeleteBucketLifecycleResult());
         }
 
@@ -298,6 +337,7 @@ namespace COSXML
 
         public PutBucketReplicationResult PutBucketReplication(PutBucketReplicationRequest request)
         {
+
             return (Model.Bucket.PutBucketReplicationResult)excute(request, new Model.Bucket.PutBucketReplicationResult());
         }
 
@@ -309,6 +349,7 @@ namespace COSXML
 
         public GetBucketReplicationResult GetBucketReplication(GetBucketReplicationRequest request)
         {
+
             return (Model.Bucket.GetBucketReplicationResult)excute(request, new Model.Bucket.GetBucketReplicationResult());
         }
 
@@ -320,6 +361,7 @@ namespace COSXML
 
         public DeleteBucketReplicationResult DeleteBucketReplication(DeleteBucketReplicationRequest request)
         {
+
             return (Model.Bucket.DeleteBucketReplicationResult)excute(request, new Model.Bucket.DeleteBucketReplicationResult());
         }
 
@@ -331,6 +373,7 @@ namespace COSXML
 
         public PutBucketVersioningResult PutBucketVersioning(PutBucketVersioningRequest request)
         {
+
             return (Model.Bucket.PutBucketVersioningResult)excute(request, new Model.Bucket.PutBucketVersioningResult());
         }
 
@@ -342,6 +385,7 @@ namespace COSXML
 
         public GetBucketVersioningResult GetBucketVersioning(GetBucketVersioningRequest request)
         {
+
             return (Model.Bucket.GetBucketVersioningResult)excute(request, new Model.Bucket.GetBucketVersioningResult());
         }
 
@@ -353,6 +397,7 @@ namespace COSXML
 
         public ListBucketVersionsResult ListBucketVersions(ListBucketVersionsRequest request)
         {
+
             return (Model.Bucket.ListBucketVersionsResult)excute(request, new Model.Bucket.ListBucketVersionsResult());
         }
 
@@ -364,6 +409,7 @@ namespace COSXML
 
         public ListMultiUploadsResult ListMultiUploads(ListMultiUploadsRequest request)
         {
+
             return (Model.Bucket.ListMultiUploadsResult)excute(request, new Model.Bucket.ListMultiUploadsResult());
         }
 
@@ -375,6 +421,7 @@ namespace COSXML
 
         public DeleteBucketPolicyResult DeleteBucketPolicy(DeleteBucketPolicyRequest request)
         {
+
             return (Model.Bucket.DeleteBucketPolicyResult)excute(request, new Model.Bucket.DeleteBucketPolicyResult());
         }
 
@@ -386,6 +433,7 @@ namespace COSXML
 
         public PutObjectResult PutObject(PutObjectRequest request)
         {
+
             return (Model.Object.PutObjectResult)excute(request, new Model.Object.PutObjectResult());
         }
 
@@ -397,6 +445,7 @@ namespace COSXML
 
         public HeadObjectResult HeadObject(HeadObjectRequest request)
         {
+
             return (Model.Object.HeadObjectResult)excute(request, new Model.Object.HeadObjectResult());
         }
 
@@ -408,6 +457,7 @@ namespace COSXML
 
         public GetObjectResult GetObject(GetObjectRequest request)
         {
+
             return (Model.Object.GetObjectResult)excute(request, new Model.Object.GetObjectResult());
         }
 
@@ -419,6 +469,7 @@ namespace COSXML
 
         public PutObjectACLResult PutObjectACL(PutObjectACLRequest request)
         {
+
             return (Model.Object.PutObjectACLResult)excute(request, new Model.Object.PutObjectACLResult());
         }
 
@@ -430,6 +481,7 @@ namespace COSXML
 
         public GetObjectACLResult GetObjectACL(GetObjectACLRequest request)
         {
+
             return (Model.Object.GetObjectACLResult)excute(request, new Model.Object.GetObjectACLResult());
         }
 
@@ -441,6 +493,7 @@ namespace COSXML
 
         public DeleteObjectResult DeleteObject(DeleteObjectRequest request)
         {
+
             return (Model.Object.DeleteObjectResult)excute(request, new Model.Object.DeleteObjectResult());
         }
 
@@ -452,6 +505,7 @@ namespace COSXML
 
         public DeleteMultiObjectResult DeleteMultiObjects(DeleteMultiObjectRequest request)
         {
+
             return (Model.Object.DeleteMultiObjectResult)excute(request, new Model.Object.DeleteMultiObjectResult());
         }
 
@@ -463,6 +517,7 @@ namespace COSXML
 
         public InitMultipartUploadResult InitMultipartUpload(InitMultipartUploadRequest request)
         {
+
             return (Model.Object.InitMultipartUploadResult)excute(request, new Model.Object.InitMultipartUploadResult());
         }
 
@@ -474,6 +529,7 @@ namespace COSXML
 
         public ListPartsResult ListParts(ListPartsRequest request)
         {
+
             return (Model.Object.ListPartsResult)excute(request, new Model.Object.ListPartsResult());
         }
 
@@ -485,6 +541,7 @@ namespace COSXML
 
         public UploadPartResult UploadPart(UploadPartRequest request)
         {
+
             return (Model.Object.UploadPartResult)excute(request, new Model.Object.UploadPartResult());
         }
 
@@ -496,6 +553,7 @@ namespace COSXML
 
         public CompleteMultipartUploadResult CompleteMultiUpload(CompleteMultipartUploadRequest request)
         {
+
             return (Model.Object.CompleteMultipartUploadResult)excute(request, new Model.Object.CompleteMultipartUploadResult());
         }
 
@@ -507,6 +565,7 @@ namespace COSXML
 
         public AbortMultipartUploadResult AbortMultiUpload(AbortMultipartUploadRequest request)
         {
+
             return (Model.Object.AbortMultipartUploadResult)excute(request, new Model.Object.AbortMultipartUploadResult());
         }
 
@@ -518,6 +577,7 @@ namespace COSXML
 
         public CopyObjectResult CopyObject(CopyObjectRequest request)
         {
+
             return (Model.Object.CopyObjectResult)excute(request, new Model.Object.CopyObjectResult());
         }
 
@@ -529,6 +589,7 @@ namespace COSXML
 
         public UploadPartCopyResult PartCopy(UploadPartCopyRequest request)
         {
+
             return (Model.Object.UploadPartCopyResult)excute(request, new Model.Object.UploadPartCopyResult());
         }
 
@@ -540,6 +601,7 @@ namespace COSXML
 
         public OptionObjectResult OptionObject(OptionObjectRequest request)
         {
+
             return (Model.Object.OptionObjectResult)excute(request, new Model.Object.OptionObjectResult());
         }
 
@@ -551,6 +613,7 @@ namespace COSXML
 
         public PostObjectResult PostObject(PostObjectRequest request)
         {
+
             return (Model.Object.PostObjectResult)excute(request, new Model.Object.PostObjectResult());
         }
 
@@ -562,6 +625,7 @@ namespace COSXML
 
         public RestoreObjectResult RestoreObject(RestoreObjectRequest request)
         {
+
             return (Model.Object.RestoreObjectResult)excute(request, new Model.Object.RestoreObjectResult());
         }
 
@@ -573,23 +637,30 @@ namespace COSXML
 
         public string GenerateSign(string method, string key, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, long signDurationSecond)
         {
+
             try
             {
                 string signTime = null;
+
                 if (signDurationSecond > 0)
                 {
                     long currentTimeSecond = TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
+
                     signTime = String.Format("{0};{1}", currentTimeSecond, currentTimeSecond + signDurationSecond);
                 }
+
                 Dictionary<string, string> encodeQuery = null;
+
                 if (queryParameters != null)
                 {
                     encodeQuery = new Dictionary<string, string>(queryParameters.Count);
+
                     foreach (KeyValuePair<string, string> keyValuePair in queryParameters)
                     {
                         encodeQuery[keyValuePair.Key] = URLEncodeUtils.Encode(keyValuePair.Value);
                     }
                 }
+
                 return CosXmlSigner.GenerateSign(method, key, encodeQuery, headers, signTime, qcloudCredentailProvider.GetQCloudCredentials());
             }
             catch (CosClientException)
@@ -604,17 +675,22 @@ namespace COSXML
 
         public string GenerateSignURL(PreSignatureStruct preSignatureStruct)
         {
+
             try
             {
+
                 if (preSignatureStruct.httpMethod == null)
                 {
                     throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "httpMethod = null");
                 }
+
                 if (preSignatureStruct.key == null)
                 {
                     throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "key = null");
                 }
+
                 StringBuilder urlBuilder = new StringBuilder();
+
                 if (preSignatureStruct.isHttps)
                 {
                     urlBuilder.Append("https://");
@@ -623,12 +699,15 @@ namespace COSXML
                 {
                     urlBuilder.Append("http://");
                 }
+
                 if (preSignatureStruct.host == null)
                 {
+
                     if (preSignatureStruct.bucket == null)
                     {
                         throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "bucket = null");
                     }
+
                     if (preSignatureStruct.bucket.EndsWith("-" + preSignatureStruct.appid))
                     {
                         urlBuilder.Append(preSignatureStruct.bucket);
@@ -638,6 +717,7 @@ namespace COSXML
                         urlBuilder.Append(preSignatureStruct.bucket).Append("-")
                             .Append(preSignatureStruct.appid);
                     }
+
                     urlBuilder.Append(".cos.")
                         .Append(preSignatureStruct.region)
                         .Append(".myqcloud.com");
@@ -651,22 +731,27 @@ namespace COSXML
                 {
                     preSignatureStruct.key = "/" + preSignatureStruct.key;
                 }
+
                 urlBuilder.Append(preSignatureStruct.key);
 
                 string sign = GenerateSign(preSignatureStruct.httpMethod, preSignatureStruct.key,
                     preSignatureStruct.queryParameters, preSignatureStruct.headers, preSignatureStruct.signDurationSecond);
 
                 StringBuilder queryBuilder = new StringBuilder();
+
                 if (preSignatureStruct.queryParameters != null && preSignatureStruct.queryParameters.Count > 0)
                 {
+
                     foreach (KeyValuePair<string, string> keyValuePair in preSignatureStruct.queryParameters)
                     {
                         queryBuilder.Append(keyValuePair.Key).Append('=').Append(URLEncodeUtils.Encode(keyValuePair.Value));
                         queryBuilder.Append('&');
                     }
                 }
+
                 queryBuilder.Append(sign);
                 urlBuilder.Append("?").Append(queryBuilder.ToString());
+
                 return urlBuilder.ToString();
             }
             catch (CosClientException)
@@ -681,11 +766,13 @@ namespace COSXML
 
         public string GetAccessURL(CosRequest request)
         {
+
             try
             {
                 CheckAppidAndRegion(request);
                 request.CheckParameters();
                 StringBuilder urlBuilder = new StringBuilder();
+
                 if (request.IsHttps != null && (bool)request.IsHttps)
                 {
                     urlBuilder.Append("https://");
@@ -694,8 +781,10 @@ namespace COSXML
                 {
                     urlBuilder.Append("http://");
                 }
+
                 urlBuilder.Append(request.GetHost());
                 urlBuilder.Append(request.RequestPath);
+
                 return urlBuilder.ToString();
             }
             catch (CosClientException)
@@ -710,6 +799,7 @@ namespace COSXML
 
         public void Cancel(CosRequest cosRequest)
         {
+
             if (cosRequest != null)
             {
                 cosRequest.Cancel();
@@ -718,6 +808,7 @@ namespace COSXML
 
         public GetObjectBytesResult GetObject(GetObjectBytesRequest request)
         {
+
             return (Model.Object.GetObjectBytesResult)excute(request, new Model.Object.GetObjectBytesResult());
         }
 
@@ -729,6 +820,7 @@ namespace COSXML
 
         public PutBucketWebsiteResult putBucketWebsite(PutBucketWebsiteRequest request)
         {
+
             return (Model.Bucket.PutBucketWebsiteResult)excute(request, new Model.Bucket.PutBucketWebsiteResult());
         }
 
@@ -740,6 +832,7 @@ namespace COSXML
 
         public GetBucketWebsiteResult getBucketWebsite(GetBucketWebsiteRequest request)
         {
+
             return (Model.Bucket.GetBucketWebsiteResult)excute(request, new Model.Bucket.GetBucketWebsiteResult());
         }
 
@@ -751,6 +844,7 @@ namespace COSXML
 
         public DeleteBucketWebsiteResult deleteBucketWebsite(DeleteBucketWebsiteRequest request)
         {
+
             return (Model.Bucket.DeleteBucketWebsiteResult)excute(request, new Model.Bucket.DeleteBucketWebsiteResult());
         }
 
@@ -762,6 +856,7 @@ namespace COSXML
 
         public PutBucketLoggingResult putBucketLogging(PutBucketLoggingRequest request)
         {
+
             return (Model.Bucket.PutBucketLoggingResult)excute(request, new Model.Bucket.PutBucketLoggingResult());
         }
 
@@ -773,6 +868,7 @@ namespace COSXML
 
         public GetBucketLoggingResult getBucketLogging(GetBucketLoggingRequest request)
         {
+
             return (Model.Bucket.GetBucketLoggingResult)excute(request, new Model.Bucket.GetBucketLoggingResult());
         }
 
@@ -784,6 +880,7 @@ namespace COSXML
 
         public PutBucketInventoryResult putBucketInventory(PutBucketInventoryRequest request)
         {
+
             return (Model.Bucket.PutBucketInventoryResult)excute(request, new Model.Bucket.PutBucketInventoryResult());
         }
 
@@ -795,6 +892,7 @@ namespace COSXML
 
         public GetBucketInventoryResult getBucketInventory(GetBucketInventoryRequest request)
         {
+
             return (Model.Bucket.GetBucketInventoryResult)excute(request, new Model.Bucket.GetBucketInventoryResult());
         }
 
@@ -806,6 +904,7 @@ namespace COSXML
 
         public DeleteBucketInventoryResult deleteBucketInventory(DeleteBucketInventoryRequest request)
         {
+
             return (Model.Bucket.DeleteBucketInventoryResult)excute(request, new Model.Bucket.DeleteBucketInventoryResult());
         }
 
@@ -817,6 +916,7 @@ namespace COSXML
 
         public ListBucketInventoryResult listBucketInventory(ListBucketInventoryRequest request)
         {
+
             return (Model.Bucket.ListBucketInventoryResult)excute(request, new Model.Bucket.ListBucketInventoryResult());
         }
 
@@ -828,6 +928,7 @@ namespace COSXML
 
         public PutBucketTaggingResult putBucketTagging(PutBucketTaggingRequest request)
         {
+
             return (Model.Bucket.PutBucketTaggingResult)excute(request, new Model.Bucket.PutBucketTaggingResult());
         }
 
@@ -839,6 +940,7 @@ namespace COSXML
 
         public GetBucketTaggingResult getBucketTagging(GetBucketTaggingRequest request)
         {
+
             return (Model.Bucket.GetBucketTaggingResult)excute(request, new Model.Bucket.GetBucketTaggingResult());
         }
 
@@ -850,6 +952,7 @@ namespace COSXML
 
         public DeleteBucketTaggingResult deleteBucketTagging(DeleteBucketTaggingRequest request)
         {
+
             return (Model.Bucket.DeleteBucketTaggingResult)excute(request, new Model.Bucket.DeleteBucketTaggingResult());
         }
 
@@ -861,6 +964,7 @@ namespace COSXML
 
         public PutBucketDomainResult putBucketDomain(PutBucketDomainRequest request)
         {
+
             return (Model.Bucket.PutBucketDomainResult)excute(request, new Model.Bucket.PutBucketDomainResult());
         }
 
@@ -872,6 +976,7 @@ namespace COSXML
 
         public GetBucketDomainResult getBucketDomain(GetBucketDomainRequest request)
         {
+
             return (Model.Bucket.GetBucketDomainResult)excute(request, new Model.Bucket.GetBucketDomainResult());
         }
 
@@ -883,6 +988,7 @@ namespace COSXML
 
         SelectObjectResult CosXml.selectObject(SelectObjectRequest request)
         {
+
             return (Model.Object.SelectObjectResult)excute(request, new Model.Object.SelectObjectResult());
         }
 
@@ -894,27 +1000,34 @@ namespace COSXML
 
         public GetBucketIntelligentTieringResult getBucketIntelligentTieringConfiguration(GetBucketIntelligentTieringRequest request)
         {
+
             try
             {
+
                 return execute(request, new GetBucketIntelligentTieringResult());
             }
             catch (CosServerException e)
             {
+
                 if (e.statusCode == 404)
                 {
+
                     return new GetBucketIntelligentTieringResult();
                 }
+
                 throw e;
             }
         }
 
         public CosResult putBucketIntelligentTiering(PutBucketIntelligentTieringRequest request)
         {
+
             return execute(request, new CosResult());
         }
 
         public SensitiveContentRecognitionResult sensitiveContentRecognition(SensitiveContentRecognitionRequest request)
         {
+
             return execute(request, new SensitiveContentRecognitionResult());
         }
 
@@ -925,6 +1038,7 @@ namespace COSXML
         /// <returns></returns>
         public ImageProcessResult imageProcess(ImageProcessRequest request)
         {
+
             return execute(request, new ImageProcessResult());
         }
     }

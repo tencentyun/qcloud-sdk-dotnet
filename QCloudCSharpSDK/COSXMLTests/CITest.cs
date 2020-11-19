@@ -21,6 +21,7 @@ namespace COSXMLTests
     public class CITest
     {
         private string localTempPhotoFilePath;
+
         private string photoKey;
 
         [SetUp]
@@ -31,9 +32,12 @@ namespace COSXMLTests
 
             localTempPhotoFilePath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".jpg", 1);
             FileInfo fileInfo = new FileInfo(localTempPhotoFilePath);
+
             DirectoryInfo directoryInfo = fileInfo.Directory;
 
+
             GetObjectRequest request = new GetObjectRequest(bucket, photoKey, directoryInfo.FullName, fileInfo.Name);
+
             QCloudServer.Instance().cosXml.GetObject(request);
         }
 
@@ -51,13 +55,16 @@ namespace COSXMLTests
             string key = "original_photo.jpg";
             string srcPath = localTempPhotoFilePath;
 
+
             PutObjectRequest request = new PutObjectRequest(bucket, key, srcPath);
 
             JObject o = new JObject();
+
             // 不返回原图
             o["is_pic_info"] = 0;
             JArray rules = new JArray();
             JObject rule = new JObject();
+
             rule["bucket"] = bucket;
             rule["fileid"] = "desample_photo.jpg";
             //处理参数，规则参见：https://cloud.tencent.com/document/product/460/19017
@@ -66,11 +73,13 @@ namespace COSXMLTests
             o["rules"] = rules;
             string ruleString = o.ToString(Formatting.None);
 
+
             Console.WriteLine(ruleString);
 
             request.SetRequestHeader("Pic-Operations", ruleString);
             //执行请求
             PutObjectResult result = QCloudServer.Instance().cosXml.PutObject(request);
+
             Console.WriteLine(result.GetResultInfo());
 
             Assert.True(result.uploadResult != null);
@@ -82,10 +91,15 @@ namespace COSXMLTests
         public void SensitiveRecognition()
         {
             string bucket = QCloudServer.Instance().bucketForBucketTest;
-            string key = photoKey; //对象键
+            //对象键
+            //对象键
+            string key = photoKey;
+
 
             SensitiveContentRecognitionRequest request = new SensitiveContentRecognitionRequest(bucket, key, "politics");
+
             SensitiveContentRecognitionResult result = QCloudServer.Instance().cosXml.sensitiveContentRecognition(request);
+
 
             Console.WriteLine(result.GetResultInfo());
 
@@ -100,10 +114,12 @@ namespace COSXMLTests
             string key = photoKey;
 
             JObject o = new JObject();
+
             // 不返回原图
             o["is_pic_info"] = 0;
             JArray rules = new JArray();
             JObject rule = new JObject();
+
             rule["bucket"] = bucket;
             rule["fileid"] = "desample_photo.jpg";
             //处理参数，规则参见：https://cloud.tencent.com/document/product/460/19017
@@ -111,11 +127,14 @@ namespace COSXMLTests
             rules.Add(rule);
             o["rules"] = rules;
             string ruleString = o.ToString(Formatting.None);
-            
+
+
             Console.WriteLine(ruleString);
 
             ImageProcessRequest request = new ImageProcessRequest(bucket, key, ruleString);
+
             ImageProcessResult result = QCloudServer.Instance().cosXml.imageProcess(request);
+
 
             Console.WriteLine(result.GetResultInfo());
 

@@ -47,12 +47,18 @@ namespace COSXML.Network
         {
             set
             {
-                if (value == null) throw new ArgumentNullException("scheme == null");
+
+                if (value == null)
+                {
+                    throw new ArgumentNullException("scheme == null");
+                }
+
                 if (value.Equals("http", StringComparison.OrdinalIgnoreCase))
                 {
                     this.scheme = "http";
                 }
-                else if (value.Equals("https", StringComparison.OrdinalIgnoreCase))
+                else
+if (value.Equals("https", StringComparison.OrdinalIgnoreCase))
                 {
                     this.scheme = "https";
                 }
@@ -61,7 +67,10 @@ namespace COSXML.Network
                     throw new ArgumentException("unexpected scheme: " + scheme);
                 }
             }
-            get { return this.scheme; }
+            get
+            {
+                return this.scheme;
+            }
 
         }
 
@@ -69,58 +78,98 @@ namespace COSXML.Network
         {
             set
             {
-                if (value == null) throw new ArgumentNullException("userName == null");
+
+                if (value == null)
+                {
+                    throw new ArgumentNullException("userName == null");
+                }
+
                 this.userName = value;
             }
-            get { return this.userName; }
+            get
+            {
+                return this.userName;
+            }
         }
 
         public string UserPassword
         {
             set
             {
-                if (value == null) throw new ArgumentNullException("userPwd == null");
+
+                if (value == null)
+                {
+                    throw new ArgumentNullException("userPwd == null");
+                }
+
                 this.userPwd = value;
             }
-            get { return this.userPwd; }
+            get
+            {
+                return this.userPwd;
+            }
         }
 
         public string Host
         {
             set
             {
-                if (value == null) throw new ArgumentNullException("host == null");
+
+                if (value == null)
+                {
+                    throw new ArgumentNullException("host == null");
+                }
+
                 this.host = value;
             }
-            get { return this.host; }
+            get
+            {
+                return this.host;
+            }
         }
 
         public int Port
         {
             set
             {
-                if (value <= 0 || value >= 65535) throw new ArgumentException("unexpected port: " + port);
+
+                if (value <= 0 || value >= 65535)
+                {
+                    throw new ArgumentException("unexpected port: " + port);
+                }
+
                 this.port = value;
             }
-            get { return this.port; }
+            get
+            {
+                return this.port;
+            }
         }
 
         public string Path
         {
             set
             {
+
                 if (value != null)
                 {
-                    this.path = value; // need url encode
+                    // need url encode
+                    // need url encode
+                    this.path = value;
                 }
             }
-            get { return path; }
+            get
+            {
+                return path;
+            }
         }
 
         public void SetQueryParameters(Dictionary<string, string> queryParameters)
         {
+
             if (queryParameters != null)
             {
+
                 foreach (KeyValuePair<string, string> pair in queryParameters)
                 {
                     this.queryParameters.Add(pair.Key, pair.Value);
@@ -131,6 +180,7 @@ namespace COSXML.Network
 
         public Dictionary<string, string> GetQueryParameters()
         {
+
             return queryParameters;
         }
 
@@ -140,7 +190,10 @@ namespace COSXML.Network
             {
                 this.fragment = value;
             }
-            get { return this.fragment; }
+            get
+            {
+                return this.fragment;
+            }
 
         }
 
@@ -152,17 +205,20 @@ namespace COSXML.Network
 
             StringBuilder url = new StringBuilder();
 
+
             url.Append(scheme)
                 .Append("://");
 
             if (userName != String.Empty || userPwd != String.Empty)
             {
                 url.Append(userName);
+
                 if (userPwd != String.Empty)
                 {
                     url.Append(':')
                         .Append(userPwd);
                 }
+
                 url.Append('@');
             }
 
@@ -178,6 +234,7 @@ namespace COSXML.Network
             }
 
             int effectivePort = EffecivePort();
+
             if (effectivePort != DefaultPort(scheme))
             {
                 url.Append(':')
@@ -187,16 +244,21 @@ namespace COSXML.Network
             url.Append(path);
 
             StringBuilder query = new StringBuilder();
+
             foreach (KeyValuePair<string, string> pair in queryParameters)
             {
                 query.Append(pair.Key);
+
                 if (!String.IsNullOrEmpty(pair.Value))
                 {
                     query.Append('=').Append(pair.Value);
                 }
+
                 query.Append('&');
             }
+
             string queryString = query.ToString();
+
             if (queryString.EndsWith("&"))
             {
                 queryString = queryString.Remove(queryString.Length - 1);
@@ -216,21 +278,27 @@ namespace COSXML.Network
 
         public int EffecivePort()
         {
+
             return port != -1 ? port : DefaultPort(scheme);
         }
 
         private int DefaultPort(string scheme)
         {
+
             if (scheme.Equals("http", StringComparison.OrdinalIgnoreCase))
             {
+
                 return 80;
             }
-            else if (scheme.Equals("https", StringComparison.OrdinalIgnoreCase))
+            else
+if (scheme.Equals("https", StringComparison.OrdinalIgnoreCase))
             {
+
                 return 443;
             }
             else
             {
+
                 return -1;
             }
         }

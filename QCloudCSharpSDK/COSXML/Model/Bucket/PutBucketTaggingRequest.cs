@@ -33,8 +33,11 @@ namespace COSXML.Model.Bucket
         public override Network.RequestBody GetRequestBody()
         {
             string content = Transfer.XmlBuilder.BuildTagging(tagging);
+
             byte[] data = Encoding.UTF8.GetBytes(content);
+
             ByteRequestBody body = new ByteRequestBody(data);
+
             return body;
         }
     }

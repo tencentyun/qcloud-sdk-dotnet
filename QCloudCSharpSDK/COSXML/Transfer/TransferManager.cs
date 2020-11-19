@@ -18,37 +18,69 @@ namespace COSXML.Transfer
     /// </summary>
     public sealed class TransferConfig
     {
-        internal long divisionForCopy = 5242880; // 5M
+        // 5M
+        internal long divisionForCopy = 5242880;
 
-        internal long sliceSizeForCopy = 2097152; // 2M
+        // 2M
+        internal long sliceSizeForCopy = 2097152;
 
-        internal long divisionForUpload = 5242880; // 5M
+        // 5M
+        internal long divisionForUpload = 5242880;
 
-        internal long sliceSizeForUpload = 1048576; // 1M
+        // 1M
+        internal long sliceSizeForUpload = 1048576;
 
         /// <summary>
         /// 多大的文件会自动使用分片拷贝
         /// </summary>
         /// <value>默认是 5MB</value>
-        public long DdivisionForCopy { get { return divisionForCopy; } set { divisionForCopy = value; } }
+        public long DdivisionForCopy
+        {
+            get
+            {
+                return divisionForCopy;
+            }
+            set { divisionForCopy = value; }
+        }
 
         /// <summary>
         /// 多大的文件会自动使用分片上传
         /// </summary>
         /// <value>默认是 2MB</value>
-        public long DivisionForUpload { get { return divisionForUpload; } set { divisionForUpload = value; } }
+        public long DivisionForUpload
+        {
+            get
+            {
+                return divisionForUpload;
+            }
+            set { divisionForUpload = value; }
+        }
 
         /// <summary>
         /// 每个分片拷贝任务的分片大小
         /// </summary>
         /// <value>默认是 5MB</value>
-        public long SliceSizeForCopy { get { return sliceSizeForCopy; } set { sliceSizeForCopy = value; } }
+        public long SliceSizeForCopy
+        {
+            get
+            {
+                return sliceSizeForCopy;
+            }
+            set { sliceSizeForCopy = value; }
+        }
 
         /// <summary>
         /// 每个分片上传任务的分片大小
         /// </summary>
         /// <value>默认是 1MB</value>
-        public long SliceSizeForUpload { get { return sliceSizeForUpload; } set { sliceSizeForUpload = value; } }
+        public long SliceSizeForUpload
+        {
+            get
+            {
+                return sliceSizeForUpload;
+            }
+            set { sliceSizeForUpload = value; }
+        }
     }
 
     /// <summary>
@@ -57,6 +89,7 @@ namespace COSXML.Transfer
     public sealed class TransferManager
     {
         private TransferConfig transferConfig;
+
         private CosXml cosXml;
 
         /// <summary>
@@ -66,8 +99,17 @@ namespace COSXML.Transfer
         /// <param name="transferConfig">高级传输设置</param>
         public TransferManager(CosXml cosXmlServer, TransferConfig transferConfig)
         {
-            if (cosXmlServer == null) throw new ArgumentNullException("CosXmlServer = null");
-            if (transferConfig == null) throw new ArgumentNullException("TransferConfig = null");
+
+            if (cosXmlServer == null)
+            {
+                throw new ArgumentNullException("CosXmlServer = null");
+            }
+
+            if (transferConfig == null)
+            {
+                throw new ArgumentNullException("TransferConfig = null");
+            }
+
             this.transferConfig = transferConfig;
             //COSXMLTask.InitCosXmlServer(cosXmlServer);
             this.cosXml = cosXmlServer;
@@ -94,6 +136,7 @@ namespace COSXML.Transfer
         {
             var t = newTaskCompletion<COSXMLUploadTask.UploadTaskResult>(uploader);
             Upload(uploader);
+
             return t.Task;
         }
 
@@ -117,6 +160,7 @@ namespace COSXML.Transfer
         {
             var t = newTaskCompletion<COSXMLDownloadTask.DownloadTaskResult>(downloader);
             Download(downloader);
+
             return t.Task;
         }
 
@@ -141,12 +185,14 @@ namespace COSXML.Transfer
         {
             var t = newTaskCompletion<COSXMLCopyTask.CopyTaskResult>(copyTask);
             Copy(copyTask);
+
             return t.Task;
         }
 
         private TaskCompletionSource<T> newTaskCompletion<T>(COSXMLTask task) where T : CosResult
         {
             var t = new TaskCompletionSource<T>();
+
 
             task.successCallback = delegate (CosResult cosResult)
             {
@@ -155,6 +201,7 @@ namespace COSXML.Transfer
 
             task.failCallback = delegate (CosClientException clientException, CosServerException serverException)
             {
+
                 if (clientException != null)
                 {
                     t.TrySetException(clientException);

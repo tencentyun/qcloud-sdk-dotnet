@@ -14,22 +14,27 @@ namespace COSXML.Model.Object
     public sealed class PutObjectRequest : ObjectRequest
     {
         private static string TAG = typeof(PutObjectRequest).FullName;
+
         /// <summary>
         /// 本地文件路径
         /// </summary>
         private string srcPath;
+
         /// <summary>
         /// 上传文件指定起始位置
         /// </summary>
         private long fileOffset = 0L;
+
         /// <summary>
         /// 上传data数据
         /// </summary>
         private byte[] data;
+
         /// <summary>
         /// 上传指定内容的长度
         /// </summary>
         private long contentLength = -1L;
+
         /// <summary>
         /// 上传回调
         /// </summary>
@@ -46,6 +51,7 @@ namespace COSXML.Model.Object
         {
 
         }
+
         /// <summary>
         /// 上传文件的指定内容
         /// </summary>
@@ -62,6 +68,7 @@ namespace COSXML.Model.Object
             this.fileOffset = fileOffset < 0 ? 0 : fileOffset;
             this.contentLength = needSendLength < 0 ? -1L : needSendLength;
         }
+
         /// <summary>
         /// 上传data数据
         /// </summary>
@@ -73,6 +80,7 @@ namespace COSXML.Model.Object
             this.method = CosRequestMethod.PUT;
             this.data = data;
         }
+
         /// <summary>
         /// 上传回调
         /// </summary>
@@ -84,34 +92,50 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
-            if (srcPath == null && data == null) throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "data source = null");
+
+            if (srcPath == null && data == null)
+            {
+                throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "data source = null");
+            }
+
             if (srcPath != null)
             {
-                if (!File.Exists(srcPath)) throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "file not exist");
+
+                if (!File.Exists(srcPath))
+                {
+                    throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "file not exist");
+                }
             }
+
             base.CheckParameters();
         }
 
         public override Network.RequestBody GetRequestBody()
         {
             RequestBody body = null;
+
             if (srcPath != null)
             {
                 FileInfo fileInfo = new FileInfo(srcPath);
+
                 if (contentLength == -1 || contentLength + fileOffset > fileInfo.Length)
                 {
                     contentLength = fileInfo.Length - fileOffset;
                 }
+
                 body = new FileRequestBody(srcPath, fileOffset, contentLength);
                 body.ProgressCallback = progressCallback;
             }
-            else if (data != null)
+            else
+if (data != null)
             {
                 body = new ByteRequestBody(data);
                 body.ProgressCallback = progressCallback;
             }
+
             return body;
         }
+
         /// <summary>
         /// 定义 Object 的 acl 属性。有效值：private，public-read-write，public-read；默认值：private
         /// <see cref="Common.CosACL"/>
@@ -119,6 +143,7 @@ namespace COSXML.Model.Object
         /// <param name="cosACL"></param>
         public void SetCosACL(string cosACL)
         {
+
             if (cosACL != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_ACL, cosACL);
@@ -133,6 +158,7 @@ namespace COSXML.Model.Object
         {
             SetRequestHeader(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, rate.ToString());
         }
+
         /// <summary>
         /// 定义 Object 的 acl 属性。有效值：private，public-read-write，public-read；默认值：private
         /// <see cref="Common.CosACL"/>
@@ -142,6 +168,7 @@ namespace COSXML.Model.Object
         {
             SetRequestHeader(CosRequestHeaderKey.X_COS_ACL, EnumUtils.GetValue(cosACL));
         }
+
         /// <summary>
         /// 赋予被授权者读的权限
         /// <see cref="Model.Tag.GrantAccount"/>
@@ -149,11 +176,13 @@ namespace COSXML.Model.Object
         /// <param name="grantAccount"></param>
         public void SetXCosGrantRead(GrantAccount grantAccount)
         {
+
             if (grantAccount != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_GRANT_READ, grantAccount.GetGrantAccounts());
             }
         }
+
         /// <summary>
         /// 赋予被授权者写的权限
         /// <see cref="Model.Tag.GrantAccount"/>
@@ -161,11 +190,13 @@ namespace COSXML.Model.Object
         /// <param name="grantAccount"></param>
         public void SetXCosGrantWrite(GrantAccount grantAccount)
         {
+
             if (grantAccount != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_GRANT_WRITE, grantAccount.GetGrantAccounts());
             }
         }
+
         /// <summary>
         /// 赋予被授权者所有的权限
         /// <see cref="Model.Tag.GrantAccount"/>
@@ -173,6 +204,7 @@ namespace COSXML.Model.Object
         /// <param name="grantAccount"></param>
         public void SetXCosReadWrite(GrantAccount grantAccount)
         {
+
             if (grantAccount != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_GRANT_FULL_CONTROL, grantAccount.GetGrantAccounts());

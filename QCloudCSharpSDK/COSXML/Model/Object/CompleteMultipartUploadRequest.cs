@@ -20,6 +20,7 @@ namespace COSXML.Model.Object
         /// <see cref="Model.Tag.CompleteMultipartUpload"/>
         /// </summary>
         private CompleteMultipartUpload completeMultipartUpload;
+
         /// <summary>
         /// 标识本次分块上传的 ID,
         /// 使用 Initiate Multipart Upload 接口初始化分片上传时会得到一个 uploadId，
@@ -56,6 +57,7 @@ namespace COSXML.Model.Object
         public void SetPartNumberAndETag(int partNumber, string eTag)
         {
             CompleteMultipartUpload.Part part = new CompleteMultipartUpload.Part();
+
             part.partNumber = partNumber;
             part.eTag = eTag;
             completeMultipartUpload.parts.Add(part);
@@ -67,8 +69,10 @@ namespace COSXML.Model.Object
         /// <param name="partNumberAndETags"></param>
         public void SetPartNumberAndETag(Dictionary<int, string> partNumberAndETags)
         {
+
             if (partNumberAndETags != null)
             {
+
                 foreach (KeyValuePair<int, string> pair in partNumberAndETags)
                 {
                     SetPartNumberAndETag(pair.Key, pair.Value);
@@ -79,19 +83,30 @@ namespace COSXML.Model.Object
         public override Network.RequestBody GetRequestBody()
         {
             string content = Transfer.XmlBuilder.BuildCompleteMultipartUpload(completeMultipartUpload);
+
             byte[] data = Encoding.UTF8.GetBytes(content);
+
             ByteRequestBody body = new ByteRequestBody(data);
+
             return body;
         }
 
         public override void CheckParameters()
         {
+
             if (completeMultipartUpload.parts.Count == 0)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "completeMultipartUpload.parts count = 0");
             }
-            if (requestUrlWithSign != null) return;
+
+            if (requestUrlWithSign != null)
+            {
+
+                return;
+            }
+
             base.CheckParameters();
+
             if (uploadId == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "uploadId is null");
@@ -100,6 +115,7 @@ namespace COSXML.Model.Object
 
         protected override void InternalUpdateQueryParameters()
         {
+
             try
             {
                 this.queryParameters.Add("uploadId", uploadId);

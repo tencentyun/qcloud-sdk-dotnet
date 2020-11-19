@@ -82,7 +82,10 @@ namespace COSXML.Model
         /// </summary>
         public bool? IsHttps
         {
-            get { return isHttps; }
+            get
+            {
+                return isHttps;
+            }
             set { isHttps = value; }
         }
 
@@ -91,7 +94,10 @@ namespace COSXML.Model
         /// </summary>
         public string Method
         {
-            get { return method; }
+            get
+            {
+                return method;
+            }
             set { this.method = value; }
         }
 
@@ -100,7 +106,10 @@ namespace COSXML.Model
         /// </summary>
         public string RequestPath
         {
-            get { return path; }
+            get
+            {
+                return path;
+            }
             private set { }
         }
 
@@ -110,6 +119,7 @@ namespace COSXML.Model
         /// <returns></returns>
         public virtual Dictionary<string, string> GetRequestParamters()
         {
+
             return queryParameters;
         }
 
@@ -119,6 +129,7 @@ namespace COSXML.Model
         /// <returns></returns>
         public virtual Dictionary<string, string> GetRequestHeaders()
         {
+
             return headers;
         }
 
@@ -140,13 +151,20 @@ namespace COSXML.Model
         /// <param name="isNeedUrlEncode"></param>
         public void SetQueryParameter(string key, string value, bool isNeedUrlEncode)
         {
+
             try
             {
-                if (value == null) value = "";
+
+                if (value == null)
+                {
+                    value = "";
+                }
+
                 if (isNeedUrlEncode)
                 {
                     value = URLEncodeUtils.Encode(value);
                 }
+
                 queryParameters.Add(key, value);
             }
             catch (ArgumentNullException)
@@ -155,7 +173,9 @@ namespace COSXML.Model
             }
             catch (ArgumentException)
             {
-                queryParameters[key] = value; // cover the current value
+                // cover the current value
+                // cover the current value
+                queryParameters[key] = value;
             }
         }
 
@@ -168,17 +188,20 @@ namespace COSXML.Model
         {
             SetRequestHeader(key, value, false);
         }
+
         /// <summary>
         /// add headers for cos request, and cover the current value, if it exists with the key.
         /// </summary>
         /// <param name="headers"></param>
         public void SetRequestHeaders(Dictionary<string, string> headers)
         {
+
             foreach (KeyValuePair<string, string> entry in headers)
             {
                 SetRequestHeader(entry.Key, entry.Value);
             }
         }
+
         /// <summary>
         /// header 默认不 encode
         /// </summary>
@@ -187,13 +210,20 @@ namespace COSXML.Model
         /// <param name="isNeedUrlEncode"></param>
         public void SetRequestHeader(string key, string value, bool isNeedUrlEncode)
         {
+
             try
             {
-                if (value == null) value = "";
+
+                if (value == null)
+                {
+                    value = "";
+                }
+
                 if (isNeedUrlEncode)
                 {
                     value = URLEncodeUtils.Encode(value);
                 }
+
                 headers.Add(key, value);
             }
             catch (ArgumentNullException)
@@ -202,7 +232,9 @@ namespace COSXML.Model
             }
             catch (ArgumentException)
             {
-                headers[key] = value; // cover the current value
+                // cover the current value
+                // cover the current value
+                headers[key] = value;
             }
         }
 
@@ -212,7 +244,10 @@ namespace COSXML.Model
         /// <param name="appid"> cos appid </param>
         public string APPID
         {
-            get { return this.appid; }
+            get
+            {
+                return this.appid;
+            }
             set { this.appid = value; }
         }
 
@@ -221,7 +256,10 @@ namespace COSXML.Model
         /// </summary>
         public bool IsNeedMD5
         {
-            get { return needMD5; }
+            get
+            {
+                return needMD5;
+            }
             set { needMD5 = value; }
         }
 
@@ -256,7 +294,12 @@ namespace COSXML.Model
         /// <param name="durationSecond"></param>
         public virtual void SetSign(long signStartTimeSecond, long durationSecond)
         {
-            if (cosXmlSignSourceProvider == null) cosXmlSignSourceProvider = new CosXmlSignSourceProvider();
+
+            if (cosXmlSignSourceProvider == null)
+            {
+                cosXmlSignSourceProvider = new CosXmlSignSourceProvider();
+            }
+
             cosXmlSignSourceProvider.SetSignTime(signStartTimeSecond, durationSecond);
         }
 
@@ -270,7 +313,12 @@ namespace COSXML.Model
         /// <param name="queryParameterKeys"></param>
         public virtual void SetSign(long signStartTimeSecond, long durationSecond, List<string> headerKeys, List<string> queryParameterKeys)
         {
-            if (cosXmlSignSourceProvider == null) cosXmlSignSourceProvider = new CosXmlSignSourceProvider();
+
+            if (cosXmlSignSourceProvider == null)
+            {
+                cosXmlSignSourceProvider = new CosXmlSignSourceProvider();
+            }
+
             cosXmlSignSourceProvider.SetSignTime(signStartTimeSecond, durationSecond);
             cosXmlSignSourceProvider.AddHeaderKeys(headerKeys);
             cosXmlSignSourceProvider.AddParameterKeys(queryParameterKeys);
@@ -291,6 +339,7 @@ namespace COSXML.Model
         /// <returns></returns>
         public virtual CosXmlSignSourceProvider GetSignSourceProvider()
         {
+
             return cosXmlSignSourceProvider;
         }
 
@@ -300,7 +349,10 @@ namespace COSXML.Model
         /// <param name="requestSignURL"></param>
         public string RequestURLWithSign
         {
-            get { return requestUrlWithSign; }
+            get
+            {
+                return requestUrlWithSign;
+            }
             set { requestUrlWithSign = value; }
         }
 
@@ -311,6 +363,7 @@ namespace COSXML.Model
 
         public void Cancel()
         {
+
             if (realRequest != null)
             {
                 realRequest.Cancel();

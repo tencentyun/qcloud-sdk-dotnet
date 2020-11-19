@@ -28,11 +28,17 @@ namespace COSXML.Model.Tag
         public sealed class CSVFormat
         {
             public string FileHeaderInfo;
+
             public string RecordDelimiter;
+
             public string FieldDelimiter;
+
             public string QuoteCharacter;
+
             public string QuoteEscapeCharacter;
+
             public string Comments;
+
             public bool AllowQuotedRecordDelimiter;
 
             public string QuoteFields;

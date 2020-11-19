@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -27,6 +27,7 @@ namespace COSXML.Model.Bucket
 
         public override string GetResultInfo()
         {
+
             return base.GetResultInfo() + (listMultipartUploads == null ? "" : "\n" + listMultipartUploads.GetInfo());
         }
     }

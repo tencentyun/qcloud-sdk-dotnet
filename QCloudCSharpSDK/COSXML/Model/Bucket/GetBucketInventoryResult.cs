@@ -15,6 +15,7 @@ namespace COSXML.Model.Bucket
 
         public override string GetResultInfo()
         {
+
             return base.GetResultInfo() + (inventoryConfiguration == null ? "" : "\n" + inventoryConfiguration.GetInfo());
         }
     }

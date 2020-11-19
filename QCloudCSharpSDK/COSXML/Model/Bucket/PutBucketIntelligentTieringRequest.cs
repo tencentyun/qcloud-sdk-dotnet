@@ -19,14 +19,17 @@ namespace COSXML.Model.Bucket
         public PutBucketIntelligentTieringRequest(string bucket, IntelligentTieringConfiguration configuration)
             : base(bucket)
         {
+
             if (String.IsNullOrEmpty(configuration.Status))
             {
                 configuration.Status = "Enabled";
             }
+
             if (configuration.Days < 1)
             {
                 configuration.Days = 30;
             }
+
             if (configuration.RequestFrequent < 1)
             {
                 configuration.RequestFrequent = 1;
@@ -41,15 +44,22 @@ namespace COSXML.Model.Bucket
         public override Network.RequestBody GetRequestBody()
         {
             string content = Transfer.XmlBuilder.BuildIntelligentTieringConfiguration(configuration);
+
             byte[] data = Encoding.UTF8.GetBytes(content);
+
             ByteRequestBody body = new ByteRequestBody(data);
+
             return body;
         }
 
         public override void CheckParameters()
         {
             base.CheckParameters();
-            if (String.IsNullOrEmpty(configuration.Status)) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "Status 不能为空");
+
+            if (String.IsNullOrEmpty(configuration.Status))
+            {
+                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "Status 不能为空");
+            }
         }
     }
 }

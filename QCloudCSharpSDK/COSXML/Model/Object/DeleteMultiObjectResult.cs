@@ -27,6 +27,7 @@ namespace COSXML.Model.Object
 
         public override string GetResultInfo()
         {
+
             return base.GetResultInfo() + (deleteResult == null ? "" : deleteResult.GetInfo());
         }
     }

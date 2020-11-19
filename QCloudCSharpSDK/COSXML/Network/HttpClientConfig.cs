@@ -53,6 +53,7 @@ namespace COSXML.Network
         {
             get
             {
+
                 return userAgent;
             }
 
@@ -60,7 +61,10 @@ namespace COSXML.Network
 
         public bool AllowAutoRedirect
         {
-            get { return allowAutoRedirect; }
+            get
+            {
+                return allowAutoRedirect;
+            }
 
         }
 
@@ -68,6 +72,7 @@ namespace COSXML.Network
         {
             get
             {
+
                 return connectionTimeoutMs;
             }
 
@@ -78,6 +83,7 @@ namespace COSXML.Network
         {
             get
             {
+
                 return readWriteTimeoutMs;
             }
 
@@ -88,6 +94,7 @@ namespace COSXML.Network
         {
             get
             {
+
                 return maxRetry;
             }
 
@@ -97,6 +104,7 @@ namespace COSXML.Network
         {
             get
             {
+
                 return connectionLimit;
             }
 
@@ -106,6 +114,7 @@ namespace COSXML.Network
         {
             get
             {
+
                 return proxyHost;
             }
 
@@ -115,6 +124,7 @@ namespace COSXML.Network
         {
             get
             {
+
                 return proxyPort;
             }
 
@@ -124,6 +134,7 @@ namespace COSXML.Network
         {
             get
             {
+
                 return proxyUserName;
             }
 
@@ -134,6 +145,7 @@ namespace COSXML.Network
         {
             get
             {
+
                 return proxyUserPassword;
             }
 
@@ -143,6 +155,7 @@ namespace COSXML.Network
         {
             get
             {
+
                 return proxyDomain;
             }
 
@@ -177,77 +190,92 @@ namespace COSXML.Network
             public Builder AllowAutoRedirect(bool allow)
             {
                 this.allowAutoRedirect = allow;
+
                 return this;
             }
 
             public Builder SetConnectionLimit(int connectionLimit)
             {
+
                 if (connectionLimit > 0)
                 {
                     this.connectionLimit = connectionLimit;
                 }
+
                 return this;
             }
 
             public Builder SetMaxRetry(int maxRetry)
             {
+
                 if (maxRetry > 0)
                 {
                     this.maxRetry = maxRetry;
                 }
+
                 return this;
             }
 
             public Builder SetConnectionTimeoutMs(int connectionTimeoutMs)
             {
+
                 if (connectionTimeoutMs > 0)
                 {
                     this.connectionTimeoutMs = connectionTimeoutMs;
                 }
+
                 return this;
             }
 
             public Builder SetReadWriteTimeoutMs(int readWriteTimeoutMs)
             {
+
                 if (readWriteTimeoutMs > 0)
                 {
                     this.readWriteTimeoutMs = readWriteTimeoutMs;
                 }
+
                 return this;
             }
 
             public Builder SetProxyHost(string host)
             {
                 this.proxyHost = host;
+
                 return this;
             }
 
             public Builder SetProxyPort(int port)
             {
                 this.proxyPort = port;
+
                 return this;
             }
 
             public Builder SetProxyUserName(string userName)
             {
                 this.proxyUserName = userName;
+
                 return this;
             }
 
             public Builder SetProxyUserPassword(string password)
             {
                 this.proxyUserPassword = password;
+
                 return this;
             }
 
             public Builder SetProxyDomain(string domain)
             {
                 this.proxyDomain = domain;
+
                 return this;
             }
 
             public HttpClientConfig Build()
             {
+
                 return new HttpClientConfig(this);
             }
 

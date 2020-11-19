@@ -29,15 +29,22 @@ namespace COSXML.Model.Object
             restoreConfigure = new RestoreConfigure();
             restoreConfigure.casJobParameters = new RestoreConfigure.CASJobParameters();
         }
+
         /// <summary>
         /// 设置临时副本的过期时间
         /// </summary>
         /// <param name="days"></param>
         public void SetExpireDays(int days)
         {
-            if (days < 0) days = 0;
+
+            if (days < 0)
+            {
+                days = 0;
+            }
+
             restoreConfigure.days = days;
         }
+
         /// <summary>
         /// 恢复数据时，Tier 可以指定为 CAS 支持的三种恢复类型，分别为 Expedited、Standard、Bulk
         /// <see cref="Model.Tag.RestoreConfigure.Tier"/>
@@ -47,8 +54,10 @@ namespace COSXML.Model.Object
         {
             restoreConfigure.casJobParameters.tier = tier;
         }
+
         public void SetVersionId(string versionId)
         {
+
             if (versionId != null)
             {
                 SetQueryParameter(CosRequestHeaderKey.VERSION_ID, versionId);
@@ -58,8 +67,11 @@ namespace COSXML.Model.Object
         public override Network.RequestBody GetRequestBody()
         {
             string content = Transfer.XmlBuilder.BuildRestoreConfigure(restoreConfigure);
+
             byte[] data = Encoding.UTF8.GetBytes(content);
+
             ByteRequestBody body = new ByteRequestBody(data);
+
             return body;
         }
     }

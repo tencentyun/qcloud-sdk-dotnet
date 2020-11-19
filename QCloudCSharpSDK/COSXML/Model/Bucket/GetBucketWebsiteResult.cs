@@ -1,4 +1,4 @@
-﻿using COSXML.Model.Tag;
+using COSXML.Model.Tag;
 using COSXML.Transfer;
 
 namespace COSXML.Model.Bucket
@@ -15,6 +15,7 @@ namespace COSXML.Model.Bucket
 
         public override string GetResultInfo()
         {
+
             return base.GetResultInfo() + (websiteConfiguration == null ? "" : "\n" + websiteConfiguration.ToString());
         }
     }

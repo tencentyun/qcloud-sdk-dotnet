@@ -24,15 +24,19 @@ namespace COSXML.Model.Tag
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{CompleteMultipartUpload:\n");
+
             if (parts != null)
             {
+
                 foreach (Part part in parts)
                 {
                     stringBuilder.Append(part.GetInfo());
                 }
 
             }
+
             stringBuilder.Append("}");
+
             return stringBuilder.ToString();
         }
 
@@ -45,6 +49,7 @@ namespace COSXML.Model.Tag
             /// 块编号
             /// </summary>
             public int partNumber;
+
             /// <summary>
             /// 每个块文件的 eTag 值
             /// </summary>
@@ -53,9 +58,11 @@ namespace COSXML.Model.Tag
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Part:\n");
+
                 stringBuilder.Append("PartNumber:").Append(partNumber).Append("\n");
                 stringBuilder.Append("ETag:").Append(eTag).Append("\n");
                 stringBuilder.Append("}");
+
                 return stringBuilder.ToString();
             }
         }

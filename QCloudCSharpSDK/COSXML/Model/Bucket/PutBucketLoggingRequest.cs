@@ -10,6 +10,7 @@ namespace COSXML.Model.Bucket
     public sealed class PutBucketLoggingRequest : BucketRequest
     {
         private BucketLoggingStatus bucketLoggingStatus;
+
         public PutBucketLoggingRequest(string bucket) : base(bucket)
         {
             this.method = CosRequestMethod.PUT;
@@ -19,20 +20,37 @@ namespace COSXML.Model.Bucket
 
         public void SetTarget(string targetBucket, string targetPrefix)
         {
-            if (targetPrefix == null && targetPrefix == null) return;
+
+            if (targetPrefix == null && targetPrefix == null)
+            {
+
+                return;
+            }
+
             if (bucketLoggingStatus.loggingEnabled == null)
             {
                 bucketLoggingStatus.loggingEnabled = new BucketLoggingStatus.LoggingEnabled();
             }
-            if (targetBucket != null) bucketLoggingStatus.loggingEnabled.targetBucket = targetBucket;
-            if (targetPrefix != null) bucketLoggingStatus.loggingEnabled.targetPrefix = targetPrefix;
+
+            if (targetBucket != null)
+            {
+                bucketLoggingStatus.loggingEnabled.targetBucket = targetBucket;
+            }
+
+            if (targetPrefix != null)
+            {
+                bucketLoggingStatus.loggingEnabled.targetPrefix = targetPrefix;
+            }
         }
 
         public override Network.RequestBody GetRequestBody()
         {
             string content = Transfer.XmlBuilder.BuildBucketLogging(bucketLoggingStatus);
+
             byte[] data = Encoding.UTF8.GetBytes(content);
+
             ByteRequestBody body = new ByteRequestBody(data);
+
             return body;
         }
     }

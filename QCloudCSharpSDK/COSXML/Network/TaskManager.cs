@@ -14,22 +14,28 @@ namespace Tencent.QCloud.Cos.Sdk.Network
     public class TaskManager
     {
         private Queue<HttpTask> httpTasks;
+
         private static TaskManager instance;
+
         private Object sync;
+
         private TaskManager()
         {
             httpTasks = new Queue<HttpTask>(30);
             sync = new Object();
         }
+
         public static TaskManager getInstance()
         {
             lock (typeof(TaskManager))
             {
+
                 if (instance == null)
                 {
                     instance = new TaskManager();
                 }
             }
+
             return instance;
         }
 
@@ -44,13 +50,16 @@ namespace Tencent.QCloud.Cos.Sdk.Network
         public HttpTask Dequeue()
         {
             HttpTask httpTask = null;
+
             lock (sync)
             {
+
                 if (httpTasks.Count != 0)
                 {
                     httpTask = httpTasks.Dequeue();
                 }
             }
+
             return httpTask;
         }
 

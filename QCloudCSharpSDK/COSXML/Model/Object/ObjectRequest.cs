@@ -31,6 +31,7 @@ namespace COSXML.Model.Object
         {
             this.bucket = bucket;
             this.key = key;
+
             if (!String.IsNullOrEmpty(key) && !key.StartsWith("/"))
             {
                 this.path = "/" + key;
@@ -46,7 +47,10 @@ namespace COSXML.Model.Object
         /// </summary>
         public string Bucket
         {
-            get { return this.bucket; }
+            get
+            {
+                return this.bucket;
+            }
             set { this.bucket = value; }
         }
 
@@ -56,7 +60,10 @@ namespace COSXML.Model.Object
         /// </summary>
         public string Region
         {
-            get { return this.region; }
+            get
+            {
+                return this.region;
+            }
             set { this.region = value; }
         }
 
@@ -65,12 +72,16 @@ namespace COSXML.Model.Object
         /// </summary>
         public string Key
         {
-            get { return this.key; }
+            get
+            {
+                return this.key;
+            }
             set { this.key = value; }
         }
 
         public virtual void SetCosPath(string key)
         {
+
             if (key != null && !key.StartsWith("/"))
             {
                 this.path = "/" + key;
@@ -83,27 +94,33 @@ namespace COSXML.Model.Object
 
         public override Network.RequestBody GetRequestBody()
         {
+
             return null;
         }
 
         public override string GetCOSHost()
         {
             StringBuilder hostBuilder = new StringBuilder();
+
             hostBuilder.Append(bucket);
+
             if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
             {
                 hostBuilder.Append("-")
                     .Append(appid);
             }
+
             hostBuilder.Append(".cos.")
                     .Append(region)
                     .Append(".myqcloud.com");
+
             return hostBuilder.ToString();
         }
 
         public override string GetHost()
         {
             StringBuilder hostBuilder = new StringBuilder();
+
             if (!String.IsNullOrEmpty(serviceConfig.host))
             {
                 hostBuilder.Append(serviceConfig.host);
@@ -111,11 +128,13 @@ namespace COSXML.Model.Object
             else
             {
                 hostBuilder.Append(bucket);
+
                 if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
                 {
                     hostBuilder.Append("-")
                         .Append(appid);
                 }
+
                 if (serviceConfig.endpointSuffix != null)
                 {
                     hostBuilder.Append(".")
@@ -128,12 +147,18 @@ namespace COSXML.Model.Object
                         .Append(".myqcloud.com");
                 }
             }
+
             return hostBuilder.ToString();
         }
 
         public override void CheckParameters()
         {
-            if (requestUrlWithSign != null) return;
+
+            if (requestUrlWithSign != null)
+            {
+
+                return;
+            }
             //if (appid == null)
             //{
             //    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "appid is null");
@@ -161,12 +186,14 @@ namespace COSXML.Model.Object
         public override Dictionary<string, string> GetRequestParamters()
         {
             InternalUpdateQueryParameters();
+
             return base.GetRequestParamters();
         }
 
         public override Dictionary<string, string> GetRequestHeaders()
         {
             InteranlUpdateHeaders();
+
             return base.GetRequestHeaders();
         }
 
@@ -184,6 +211,7 @@ namespace COSXML.Model.Object
         /// <param name="customerKey"></param>
         public void SetCosServerSideEncryptionWithCustomerKey(string customerKey)
         {
+
             if (customerKey != null)
             {
                 SetRequestHeader("x-cos-server-side-encryption-customer-algorithm", "AES256");
@@ -195,10 +223,12 @@ namespace COSXML.Model.Object
         public void SetCosServerSideEncryptionWithKMS(string customerKeyID, string json)
         {
             SetRequestHeader("x-cos-server-side-encryption", "cos/kms");
+
             if (customerKeyID != null)
             {
                 SetRequestHeader("x-cos-server-side-encryption-cos-kms-key-id", customerKeyID);
             }
+
             if (json != null)
             {
                 SetRequestHeader("x-cos-server-side-encryption-context", DigestUtils.GetBase64(json, Encoding.UTF8));

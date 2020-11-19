@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -29,6 +29,7 @@ namespace COSXML.Model.Bucket
         /// <param name="cosACL"></param>
         public void SetCosACL(string cosACL)
         {
+
             if (cosACL != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_ACL, cosACL);
@@ -52,6 +53,7 @@ namespace COSXML.Model.Bucket
         /// <param name="grantAccount"></param>
         public void SetXCosGrantRead(GrantAccount grantAccount)
         {
+
             if (grantAccount != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_GRANT_READ, grantAccount.GetGrantAccounts());
@@ -65,6 +67,7 @@ namespace COSXML.Model.Bucket
         /// <param name="grantAccount"></param>
         public void SetXCosGrantWrite(GrantAccount grantAccount)
         {
+
             if (grantAccount != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_GRANT_WRITE, grantAccount.GetGrantAccounts());
@@ -78,6 +81,7 @@ namespace COSXML.Model.Bucket
         /// <param name="grantAccount"></param>
         public void SetXCosReadWrite(GrantAccount grantAccount)
         {
+
             if (grantAccount != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_GRANT_FULL_CONTROL, grantAccount.GetGrantAccounts());
