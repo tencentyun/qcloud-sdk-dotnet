@@ -15,7 +15,9 @@ namespace COSXML.Tests
         public void TestCreateFile()
         {
             string path = QCloudServer.CreateFile("test.txt", 1024 * 1024 * 2);
+
             FileInfo fileInfo = new FileInfo(path);
+
             DirectoryInfo directoryInfo = fileInfo.Directory;
             Console.WriteLine(path);
             Console.WriteLine(directoryInfo.FullName);

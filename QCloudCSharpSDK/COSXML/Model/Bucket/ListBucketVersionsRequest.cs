@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -17,6 +17,7 @@ namespace COSXML.Model.Bucket
 
         public void SetPrefix(string prefix)
         {
+
             if (prefix != null)
             {
                 SetQueryParameter("prefix", prefix);
@@ -25,6 +26,7 @@ namespace COSXML.Model.Bucket
 
         public void SetKeyMarker(string keyMarker)
         {
+
             if (keyMarker != null)
             {
                 SetQueryParameter("key-marker", keyMarker);
@@ -33,6 +35,7 @@ namespace COSXML.Model.Bucket
 
         public void SetVersionIdMarker(string versionIdMarker)
         {
+
             if (versionIdMarker != null)
             {
                 SetQueryParameter("version-id-marker", versionIdMarker);
@@ -41,6 +44,7 @@ namespace COSXML.Model.Bucket
 
         public void SetDelimiter(string delimiter)
         {
+
             if (delimiter != null)
             {
                 SetQueryParameter("delimiter", delimiter);
@@ -49,6 +53,7 @@ namespace COSXML.Model.Bucket
 
         public void SetEncodingType(string encodingType)
         {
+
             if (encodingType != null)
             {
                 SetQueryParameter("encoding-type", encodingType);
@@ -57,6 +62,7 @@ namespace COSXML.Model.Bucket
 
         public void SetMaxKeys(string maxKeys)
         {
+
             if (maxKeys != null)
             {
                 SetQueryParameter("max-keys", maxKeys);

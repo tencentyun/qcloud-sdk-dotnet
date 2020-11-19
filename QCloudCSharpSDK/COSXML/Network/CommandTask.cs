@@ -49,6 +49,7 @@ namespace COSXML.Network
         {
             HttpWebRequest httpWebRequest = null;
             HttpWebResponse httpWebResponse = null;
+
             try
             {
                 //step1: create HttpWebRequest by request.url
@@ -73,6 +74,7 @@ namespace COSXML.Network
             }
             catch (WebException webEx)
             {
+
                 if (webEx.Response != null && webEx.Response is HttpWebResponse)
                 {
                     //notify has been got response
@@ -97,6 +99,7 @@ namespace COSXML.Network
             }
             finally
             {
+
                 if (httpWebResponse != null)
                 {
                     // print log
@@ -104,11 +107,13 @@ namespace COSXML.Network
                     httpWebResponse.Close();
                     //QLog.D("XIAO", "response close");
                 }
+
                 if (httpWebRequest != null)
                 {
                     httpWebRequest.Abort();
                     //QLog.D("XIAO", "request close");
                 }
+
                 QLog.D(TAG, "close");
             }
 
@@ -162,6 +167,7 @@ namespace COSXML.Network
         {
             HttpWebRequest httpWebRequest = null;
             RequestState requestState = new RequestState();
+
             try
             {
                 requestState.request = request;
@@ -216,9 +222,11 @@ namespace COSXML.Network
         {
             RequestState requestState = ar.AsyncState as RequestState;
             Stream requestStream = null;
+
             try
             {
                 HttpWebRequest httpWebRequest = requestState.httpWebRequest;
+
                 requestStream = httpWebRequest.EndGetRequestStream(ar);
 
                 ////开始写入数据
@@ -229,6 +237,7 @@ namespace COSXML.Network
 
                 requestState.request.Body.StartHandleRequestBody(requestStream, delegate (Exception exception)
                 {
+
                     if (exception != null)
                     {
                         // handle request body throw exception
@@ -259,9 +268,11 @@ namespace COSXML.Network
         {
             RequestState requestState = ar.AsyncState as RequestState;
             HttpWebResponse httpWebResponse = null;
+
             try
             {
                 HttpWebRequest httpWebRequest = requestState.httpWebRequest;
+
                 httpWebResponse = (HttpWebResponse)httpWebRequest.EndGetResponse(ar);
 
                 //nofity get response
@@ -273,6 +284,7 @@ namespace COSXML.Network
 
                 Stream responseStream = httpWebResponse.GetResponseStream();
 
+
                 requestState.response.Body.StartHandleResponseBody(responseStream, delegate (bool isSuccess, Exception ex)
                     {
                         PrintResponseInfo(httpWebResponse);
@@ -282,6 +294,7 @@ namespace COSXML.Network
             }
             catch (WebException webEx)
             {
+
                 if (webEx.Response != null && webEx.Response is HttpWebResponse)
                 {
                     //nofity get response
@@ -296,6 +309,7 @@ namespace COSXML.Network
                     HandleHttpWebResponseHeaders(requestState.response, httpWebResponse);
 
                     Stream responseStream = httpWebResponse.GetResponseStream();
+
 
                     requestState.response.Body.StartHandleResponseBody(responseStream, delegate (bool isSuccess, Exception ex)
                     {
@@ -375,15 +389,19 @@ namespace COSXML.Network
             response.Message = httpWebResponse.StatusDescription;
 
             WebHeaderCollection headers = httpWebResponse.Headers;
+
             if (headers != null)
             {
                 Dictionary<string, List<string>> result = new Dictionary<string, List<string>>(headers.Count);
+
                 for (int i = 0; i < headers.Count; i++)
                 {
                     List<string> values = null;
+
                     if (headers.GetValues(i) != null)
                     {
                         values = new List<string>();
+
                         foreach (string value in headers.GetValues(i))
                         {
                             values.Add(value);
@@ -392,11 +410,13 @@ namespace COSXML.Network
 
                     result.Add(headers.GetKey(i), values);
                 }
+
                 response.Headers = result;
             }
 
             response.ContentLength = httpWebResponse.ContentLength;
             response.ContentType = httpWebResponse.ContentType;
+
             if (response.Body != null)
             {
                 response.Body.ContentLength = httpWebResponse.ContentLength;
@@ -418,6 +438,7 @@ namespace COSXML.Network
 
             if (!String.IsNullOrEmpty(config.ProxyHost))
             {
+
                 if (config.ProxyPort < 0)
                 {
                     httpWebRequest.Proxy = new WebProxy(config.ProxyHost);
@@ -426,6 +447,7 @@ namespace COSXML.Network
                 {
                     httpWebRequest.Proxy = new WebProxy(config.ProxyHost, config.ProxyPort);
                 }
+
                 if (!String.IsNullOrEmpty(config.ProxyUserName))
                 {
                     httpWebRequest.Proxy.Credentials = String.IsNullOrEmpty(config.ProxyDomain) ?
@@ -433,7 +455,9 @@ namespace COSXML.Network
                         new NetworkCredential(config.ProxyUserName, config.ProxyUserPassword ?? String.Empty,
                             config.ProxyDomain);
                 }
-                httpWebRequest.PreAuthenticate = true; // 代理验证
+                // 代理验证
+                // 代理验证
+                httpWebRequest.PreAuthenticate = true;
             }
         }
 
@@ -447,6 +471,7 @@ namespace COSXML.Network
         /// <returns></returns>
         private static bool CheckValidationCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         {
+
             return true;
         }
 
@@ -457,12 +482,15 @@ namespace COSXML.Network
         private static void PrintReqeustInfo(HttpWebRequest httpWebRequest)
         {
             StringBuilder requestLog = new StringBuilder("--->");
+
             requestLog.Append(httpWebRequest.Method).Append(' ').Append(httpWebRequest.Address.AbsoluteUri).Append('\n');
             int count = httpWebRequest.Headers.Count;
+
             for (int i = 0; i < count; i++)
             {
                 requestLog.Append(httpWebRequest.Headers.GetKey(i)).Append(":").Append(httpWebRequest.Headers.GetValues(i)[0]).Append('\n');
             }
+
             requestLog.Append("allow auto redirect: " + httpWebRequest.AllowAutoRedirect).Append('\n');
             requestLog.Append("connect timeout: " + httpWebRequest.Timeout).Append('\n');
             requestLog.Append("read write timeout: " + httpWebRequest.ReadWriteTimeout).Append('\n');
@@ -479,13 +507,16 @@ namespace COSXML.Network
         private static void PrintResponseInfo(HttpWebResponse httpWebResponse)
         {
             StringBuilder responseLog = new StringBuilder("<---");
+
             responseLog.Append(httpWebResponse.Method).Append(' ').Append(httpWebResponse.ResponseUri.AbsoluteUri).Append('\n');
             responseLog.Append((int)httpWebResponse.StatusCode).Append(' ').Append(httpWebResponse.StatusDescription).Append('\n'); ;
             int count = httpWebResponse.Headers.Count;
+
             for (int i = 0; i < count; i++)
             {
                 responseLog.Append(httpWebResponse.Headers.GetKey(i)).Append(":").Append(httpWebResponse.Headers.GetValues(i)[0]).Append('\n');
             }
+
             responseLog.Append("<---");
             QLog.D(TAG, responseLog.ToString());
         }
@@ -493,11 +524,14 @@ namespace COSXML.Network
         internal static class HttpHeaderHandle
         {
             private static MethodInfo addHeaderMethod;
+
             private static readonly ICollection<PlatformID> monoPlatforms = new List<PlatformID> { PlatformID.MacOSX, PlatformID.Unix };
+
             private static bool? isMonoPlatform;
 
             internal static void AddHeader(WebHeaderCollection webHeaderCollection, string key, string value)
             {
+
                 if (isMonoPlatform == null)
                 {
                     isMonoPlatform = monoPlatforms.Contains(Environment.OSVersion.Platform);
@@ -509,6 +543,7 @@ namespace COSXML.Network
                     // Encode headers for win platforms.
 
                 }
+
                 if (addHeaderMethod == null)
                 {
                     // Specify the internal method name for adding headers
@@ -516,6 +551,7 @@ namespace COSXML.Network
                     // win: AddInternal
                     //var internalMethodName = (isMonoPlatform == false) ? "AddWithoutValidate" : "AddInternal";
                     var internalMethodName = "AddWithoutValidate";
+
                     QLog.D(TAG, internalMethodName.ToString());
                     var method = typeof(WebHeaderCollection).GetMethod(
                         internalMethodName,
@@ -523,6 +559,7 @@ namespace COSXML.Network
                         null,
                         new Type[] { typeof(string), typeof(string) },
                         null);
+
                     addHeaderMethod = method;
                 }
 
@@ -534,8 +571,11 @@ namespace COSXML.Network
         internal class RequestState
         {
             public HttpWebRequest httpWebRequest;
+
             public HttpWebResponse httpWebResponse;
+
             public Response response;
+
             public Request request;
 
             public RequestState()
@@ -548,8 +588,17 @@ namespace COSXML.Network
 
             public void Clear()
             {
-                if (httpWebRequest != null) httpWebRequest.Abort();
-                if (httpWebResponse != null) httpWebResponse.Close();
+
+                if (httpWebRequest != null)
+                {
+                    httpWebRequest.Abort();
+                }
+
+                if (httpWebResponse != null)
+                {
+                    httpWebResponse.Close();
+                }
+
                 QLog.D(TAG, "Close");
             }
         }

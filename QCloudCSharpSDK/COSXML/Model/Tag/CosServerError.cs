@@ -19,18 +19,22 @@ namespace COSXML.Model.Tag
         /// 错误码
         /// </summary>
         public string code;
+
         /// <summary>
         /// 错误信息
         /// </summary>
         public string message;
+
         /// <summary>
         /// 资源地址
         /// </summary>
         public string resource;
+
         /// <summary>
         /// 请求ID
         /// </summary>
         public string requestId;
+
         /// <summary>
         /// 错误ID
         /// </summary>
@@ -39,12 +43,14 @@ namespace COSXML.Model.Tag
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{Error:\n");
+
             stringBuilder.Append("Code:").Append(code).Append("\n");
             stringBuilder.Append("Message:").Append(message).Append("\n");
             stringBuilder.Append("Rresource:").Append(resource).Append("\n");
             stringBuilder.Append("RequestId:").Append(requestId).Append("\n");
             stringBuilder.Append("TraceId:").Append(traceId).Append("\n");
             stringBuilder.Append("}");
+
             return stringBuilder.ToString();
         }
     }

@@ -21,26 +21,32 @@ namespace COSXML.CosException
         /// http status code
         /// </summary>
         public int statusCode;
+
         /// <summary>
         /// http status message
         /// </summary>
         public string statusMessage;
+
         /// <summary>
         /// cos server error code
         /// </summary>
         public string errorCode;
+
         /// <summary>
         /// cos server error message
         /// </summary>
         public string errorMessage;
+
         /// <summary>
         /// cos server requestId for tracking error
         /// </summary>
         public string requestId;
+
         /// <summary>
         /// cos server trace id
         /// </summary>
         public string traceId;
+
         /// <summary>
         /// cos server resuorce
         /// </summary>
@@ -49,6 +55,7 @@ namespace COSXML.CosException
         public CosServerException(int statusCode, string statusMessage, CosServerError serverError)
             : this(statusCode, statusMessage)
         {
+
             if (serverError != null)
             {
                 this.resource = serverError.resource;
@@ -68,6 +75,7 @@ namespace COSXML.CosException
 
         public void SetCosServerError(CosServerError serverError)
         {
+
             if (serverError != null)
             {
                 this.resource = serverError.resource;
@@ -81,12 +89,14 @@ namespace COSXML.CosException
         public string GetInfo()
         {
             StringBuilder builder = new StringBuilder();
+
             builder.Append("(")
                 .Append("statusCode = ").Append(statusCode).Append(", statusMessage = ").Append(statusMessage)
                 .Append(", errorCode = ").Append(errorCode).Append(", errorMessage = ").Append(errorMessage)
                 .Append(", requestId = ").Append(requestId).Append(", traceId = ").Append(traceId)
                 .Append(", resouce = ").Append(resource)
                 .Append(")");
+
             return builder.ToString();
         }
 

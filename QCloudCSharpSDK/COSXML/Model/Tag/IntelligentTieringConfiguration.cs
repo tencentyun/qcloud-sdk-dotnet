@@ -26,6 +26,7 @@ namespace COSXML.Model.Tag
 
         public Boolean isEnabled()
         {
+
             return "Enabled".Equals(Status);
         }
     }

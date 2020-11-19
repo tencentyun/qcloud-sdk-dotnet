@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -28,6 +28,7 @@ namespace COSXML.Model.Bucket
         /// <param name="delimiter"></param>
         public void SetDelimiter(string delimiter)
         {
+
             if (delimiter != null)
             {
                 SetQueryParameter("delimiter", delimiter);
@@ -40,6 +41,7 @@ namespace COSXML.Model.Bucket
         /// <param name="encodingType"></param>
         public void SetEncodingType(string encodingType)
         {
+
             if (encodingType != null)
             {
                 SetQueryParameter("Encoding-type", encodingType);
@@ -55,6 +57,7 @@ namespace COSXML.Model.Bucket
         /// <param name="keyMarker"></param>
         public void SetKeyMarker(string keyMarker)
         {
+
             if (keyMarker != null)
             {
                 SetQueryParameter("key-marker", keyMarker);
@@ -67,6 +70,7 @@ namespace COSXML.Model.Bucket
         /// <param name="maxUploads"></param>
         public void SetMaxUploads(string maxUploads)
         {
+
             if (maxUploads != null)
             {
                 SetQueryParameter("max-uploads", maxUploads);
@@ -80,6 +84,7 @@ namespace COSXML.Model.Bucket
         /// <param name="prefix"></param>
         public void SetPrefix(string prefix)
         {
+
             if (prefix != null)
             {
                 SetQueryParameter("Prefix", prefix);
@@ -95,6 +100,7 @@ namespace COSXML.Model.Bucket
         /// <param name="uploadIdMarker"></param>
         public void SetUploadIdMarker(string uploadIdMarker)
         {
+
             if (uploadIdMarker != null)
             {
                 SetQueryParameter("upload-id-marker", uploadIdMarker);

@@ -16,10 +16,15 @@ namespace COSXML
     public sealed class CosXmlConfig
     {
         private HttpClientConfig httpConfig;
+
         private string appid;
+
         private string region;
+
         private bool isHttps = true;
+
         private bool isDebug;
+
         /// <summary>
         /// 读取 Endpoint 后缀
         /// </summary>
@@ -49,7 +54,10 @@ namespace COSXML
         /// <value></value>
         public string Appid
         {
-            get { return appid; }
+            get
+            {
+                return appid;
+            }
         }
 
         /// <summary>
@@ -58,7 +66,10 @@ namespace COSXML
         /// <value></value>
         public string Region
         {
-            get { return region; }
+            get
+            {
+                return region;
+            }
         }
 
         /// <summary>
@@ -67,7 +78,10 @@ namespace COSXML
         /// <value></value>
         public bool IsHttps
         {
-            get { return isHttps; }
+            get
+            {
+                return isHttps;
+            }
         }
 
         /// <summary>
@@ -76,7 +90,10 @@ namespace COSXML
         /// <value></value>
         public HttpClientConfig HttpConfig
         {
-            get { return httpConfig; }
+            get
+            {
+                return httpConfig;
+            }
         }
 
         /// <summary>
@@ -85,7 +102,10 @@ namespace COSXML
         /// <value></value>
         public bool IsDebugLog
         {
-            get { return isDebug; }
+            get
+            {
+                return isDebug;
+            }
         }
 
         /// <summary>
@@ -94,12 +114,19 @@ namespace COSXML
         public sealed class Builder
         {
             internal string appid;
+
             internal string region;
+
             internal bool isHttps = true;
+
             internal HttpClientConfig.Builder httpClientConfigBuilder;
+
             internal bool isDebug = false;
+
             internal string endpointSuffix;
+
             internal string host;
+
             /// <summary>
             /// 初始化一个构造器
             /// </summary>
@@ -107,6 +134,7 @@ namespace COSXML
             {
                 httpClientConfigBuilder = new HttpClientConfig.Builder();
             }
+
             /// <summary>
             /// cos 服务的Appid
             /// </summary>
@@ -115,8 +143,10 @@ namespace COSXML
             public Builder SetAppid(string appid)
             {
                 this.appid = appid;
+
                 return this;
             }
+
             /// <summary>
             /// 存储桶所属地域
             /// <see cref="COSXML.Common.CosRegion"/>
@@ -126,8 +156,10 @@ namespace COSXML
             public Builder SetRegion(string region)
             {
                 this.region = region;
+
                 return this;
             }
+
             /// <summary>
             /// true：https请求
             /// </summary>
@@ -136,8 +168,10 @@ namespace COSXML
             public Builder IsHttps(bool isHttps)
             {
                 this.isHttps = isHttps;
+
                 return this;
             }
+
             /// <summary>
             /// 设置最大连接数，默认值 512
             /// </summary>
@@ -146,6 +180,7 @@ namespace COSXML
             public Builder SetConnectionLimit(int connectionLimit)
             {
                 this.httpClientConfigBuilder.SetConnectionLimit(connectionLimit);
+
                 return this;
             }
 
@@ -157,6 +192,7 @@ namespace COSXML
             public Builder SetMaxRetry(int maxRetry)
             {
                 this.httpClientConfigBuilder.SetMaxRetry(maxRetry);
+
                 return this;
             }
 
@@ -168,6 +204,7 @@ namespace COSXML
             public Builder SetConnectionTimeoutMs(int connectionTimeoutMs)
             {
                 this.httpClientConfigBuilder.SetConnectionTimeoutMs(connectionTimeoutMs);
+
                 return this;
             }
 
@@ -179,6 +216,7 @@ namespace COSXML
             public Builder SetReadWriteTimeoutMs(int readWriteTimeoutMs)
             {
                 this.httpClientConfigBuilder.SetReadWriteTimeoutMs(readWriteTimeoutMs);
+
                 return this;
             }
 
@@ -190,6 +228,7 @@ namespace COSXML
             public Builder SetProxyHost(string host)
             {
                 this.httpClientConfigBuilder.SetProxyHost(host);
+
                 return this;
             }
 
@@ -201,6 +240,7 @@ namespace COSXML
             public Builder SetProxyPort(int port)
             {
                 this.httpClientConfigBuilder.SetProxyPort(port);
+
                 return this;
             }
 
@@ -212,6 +252,7 @@ namespace COSXML
             public Builder SetProxyUserName(string userName)
             {
                 this.httpClientConfigBuilder.SetProxyUserName(userName);
+
                 return this;
             }
 
@@ -223,6 +264,7 @@ namespace COSXML
             public Builder SetProxyUserPassword(string password)
             {
                 this.httpClientConfigBuilder.SetProxyUserPassword(password);
+
                 return this;
             }
 
@@ -234,6 +276,7 @@ namespace COSXML
             public Builder SetProxyDomain(string domain)
             {
                 this.httpClientConfigBuilder.SetProxyDomain(domain);
+
                 return this;
             }
 
@@ -245,6 +288,7 @@ namespace COSXML
             public Builder SetAllowAutoRedirect(bool isAllow)
             {
                 this.httpClientConfigBuilder.AllowAutoRedirect(isAllow);
+
                 return this;
             }
 
@@ -256,6 +300,7 @@ namespace COSXML
             public Builder SetDebugLog(bool isDebug)
             {
                 this.isDebug = isDebug;
+
                 return this;
             }
 
@@ -267,6 +312,7 @@ namespace COSXML
             public Builder setEndpointSuffix(string suffix)
             {
                 this.endpointSuffix = suffix;
+
                 return this;
             }
 
@@ -278,6 +324,7 @@ namespace COSXML
             public Builder setHost(string host)
             {
                 this.host = host;
+
                 return this;
             }
 
@@ -287,6 +334,7 @@ namespace COSXML
             /// <returns></returns>
             public CosXmlConfig Build()
             {
+
                 return new CosXmlConfig(this);
             }
 

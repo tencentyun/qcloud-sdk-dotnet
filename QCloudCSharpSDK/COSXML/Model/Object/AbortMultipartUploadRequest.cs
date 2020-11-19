@@ -40,17 +40,21 @@ namespace COSXML.Model.Object
         /// <returns>uploadId</returns>
         public string GetUploadId()
         {
+
             return uploadId;
         }
 
         public override void CheckParameters()
         {
-            if (requestUrlWithSign != null) 
+
+            if (requestUrlWithSign != null)
             {
+
                 return;
             }
-            
+
             base.CheckParameters();
+
             if (uploadId == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "uploadId is null");
@@ -59,6 +63,7 @@ namespace COSXML.Model.Object
 
         protected override void InternalUpdateQueryParameters()
         {
+
             try
             {
                 this.queryParameters.Add("uploadId", uploadId);

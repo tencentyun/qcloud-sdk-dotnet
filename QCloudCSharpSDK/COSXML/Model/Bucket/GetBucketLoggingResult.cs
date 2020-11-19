@@ -9,6 +9,7 @@ namespace COSXML.Model.Bucket
     public sealed class GetBucketLoggingResult : CosResult
     {
         public BucketLoggingStatus bucketLoggingStatus;
+
         internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
         {
             bucketLoggingStatus = new BucketLoggingStatus();
@@ -17,6 +18,7 @@ namespace COSXML.Model.Bucket
 
         public override string GetResultInfo()
         {
+
             return base.GetResultInfo() + (bucketLoggingStatus == null ? "" : "\n" + bucketLoggingStatus.GetInfo());
         }
     }

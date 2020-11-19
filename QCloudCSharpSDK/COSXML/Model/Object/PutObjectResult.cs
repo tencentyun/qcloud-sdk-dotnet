@@ -27,7 +27,9 @@ namespace COSXML.Model.Object
         internal override void InternalParseResponseHeaders()
         {
             List<string> values;
+
             this.responseHeaders.TryGetValue("ETag", out values);
+
             if (values != null && values.Count > 0)
             {
                 eTag = values[0];
@@ -36,6 +38,7 @@ namespace COSXML.Model.Object
 
         internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength)
         {
+
             if (contentLength > 0)
             {
                 // 图片处理会返回 body

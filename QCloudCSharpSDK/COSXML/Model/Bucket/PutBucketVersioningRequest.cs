@@ -23,14 +23,18 @@ namespace COSXML.Model.Bucket
         public override Network.RequestBody GetRequestBody()
         {
             string content = Transfer.XmlBuilder.BuildVersioningConfiguration(versioningConfiguration);
+
             byte[] data = Encoding.UTF8.GetBytes(content);
+
             ByteRequestBody body = new ByteRequestBody(data);
+
             return body;
         }
 
 
         public void IsEnableVersionConfig(bool isEnable)
         {
+
             if (isEnable)
             {
                 versioningConfiguration.status = "Enabled";

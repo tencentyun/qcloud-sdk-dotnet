@@ -18,8 +18,10 @@ namespace COSXML.Common
         public static string GetUserAgent()
         {
             StringBuilder userAgent = new StringBuilder();
+
             userAgent.Append("cos-net-sdk").Append('.')
                 .Append(SDKVersion);
+
             return userAgent.ToString();
         }
 

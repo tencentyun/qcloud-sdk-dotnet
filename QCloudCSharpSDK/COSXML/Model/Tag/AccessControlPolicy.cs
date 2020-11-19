@@ -16,6 +16,7 @@ namespace COSXML.Model.Tag
         /// <see cref="Owner"/>
         /// </summary>
         public Owner owner;
+
         /// <summary>
         /// 被授权者信息与权限信息
         /// <see cref="AccessControlList"/>
@@ -25,7 +26,8 @@ namespace COSXML.Model.Tag
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{AccessControlPolicy:\n");
-            if (owner != null) 
+
+            if (owner != null)
             {
                 stringBuilder.Append(owner.GetInfo()).Append("\n");
             }
@@ -36,6 +38,7 @@ namespace COSXML.Model.Tag
             }
 
             stringBuilder.Append("}");
+
             return stringBuilder.ToString();
         }
 
@@ -46,6 +49,7 @@ namespace COSXML.Model.Tag
             /// 格式：qcs::cam::uin/<OwnerUin>:uin/<SubUin> 如果是根帐号，<OwnerUin> 和 <SubUin> 是同一个值
             /// </summary>
             public string id;
+
             /// <summary>
             /// Bucket 持有者的名称
             /// </summary>
@@ -54,9 +58,11 @@ namespace COSXML.Model.Tag
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Owner:\n");
+
                 stringBuilder.Append("Id:").Append(id).Append("\n");
                 stringBuilder.Append("DisplayName:").Append(displayName).Append("\n");
                 stringBuilder.Append("}");
+
                 return stringBuilder.ToString();
             }
         }
@@ -73,18 +79,22 @@ namespace COSXML.Model.Tag
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{AccessControlList:\n");
+
                 if (grants != null)
                 {
+
                     foreach (Grant grant in grants)
                     {
+
                         if (grant != null)
                         {
                             stringBuilder.Append(grant.GetInfo()).Append("\n");
-                        } 
+                        }
                     }
                 }
 
                 stringBuilder.Append("}");
+
                 return stringBuilder.ToString();
             }
         }
@@ -96,6 +106,7 @@ namespace COSXML.Model.Tag
             /// <see cref="Grantee"/>
             /// </summary>
             public Grantee grantee;
+
             /// <summary>
             /// 指明授予被授权者的权限信息
             /// <see cref="COSXML.Common.CosGrantPermission"/>
@@ -105,13 +116,15 @@ namespace COSXML.Model.Tag
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Grant:\n");
-                if (grantee != null) 
+
+                if (grantee != null)
                 {
                     stringBuilder.Append(grantee.GetInfo()).Append("\n");
                 }
-                
+
                 stringBuilder.Append("Permission:").Append(permission).Append("\n");
                 stringBuilder.Append("}");
+
                 return stringBuilder.ToString();
             }
         }
@@ -123,10 +136,12 @@ namespace COSXML.Model.Tag
             /// 如果是子帐号，格式为： qcs::cam::uin/<OwnerUin>:uin/<SubUin>
             /// </summary>
             public string id;
+
             /// <summary>
             /// 用户的名称
             /// </summary>
             public string displayName;
+
             /// <summary>
             /// 或 qcs::cam::anyone:anyone （指代所有用户）.
             /// </summary>
@@ -135,22 +150,24 @@ namespace COSXML.Model.Tag
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Grantee:\n");
-                if (uri != null) 
+
+                if (uri != null)
                 {
                     stringBuilder.Append("URI:").Append(uri).Append("\n");
                 }
-                
-                if (id != null) 
+
+                if (id != null)
                 {
                     stringBuilder.Append("Id:").Append(id).Append("\n");
                 }
-                
-                if (displayName != null) 
+
+                if (displayName != null)
                 {
                     stringBuilder.Append("DisplayName:").Append(displayName).Append("\n");
                 }
-                
+
                 stringBuilder.Append("}");
+
                 return stringBuilder.ToString();
             }
         }

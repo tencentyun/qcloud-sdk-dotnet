@@ -30,8 +30,11 @@ namespace COSXML.Model.Bucket
         public override Network.RequestBody GetRequestBody()
         {
             string content = Transfer.XmlBuilder.BuildLifecycleConfiguration(lifecycleConfiguration);
+
             byte[] data = Encoding.UTF8.GetBytes(content);
+
             ByteRequestBody body = new ByteRequestBody(data);
+
             return body;
         }
 
@@ -42,11 +45,13 @@ namespace COSXML.Model.Bucket
         /// <param name="rule"></param>
         public void SetRule(LifecycleConfiguration.Rule rule)
         {
+
             if (rule != null)
             {
                 lifecycleConfiguration.rules.Add(rule);
             }
         }
+
         /// <summary>
         /// 设置生命周期规则
         /// <see cref="Model.Tag.LifecycleConfiguration.Rule"/>
@@ -54,6 +59,7 @@ namespace COSXML.Model.Bucket
         /// <param name="rules"></param>
         public void SetRules(List<LifecycleConfiguration.Rule> rules)
         {
+
             if (rules != null)
             {
                 lifecycleConfiguration.rules.AddRange(rules);
@@ -63,7 +69,11 @@ namespace COSXML.Model.Bucket
         public override void CheckParameters()
         {
             base.CheckParameters();
-            if (lifecycleConfiguration.rules.Count == 0) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "lifecycleConfiguration.rules.Count = 0");
+
+            if (lifecycleConfiguration.rules.Count == 0)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "lifecycleConfiguration.rules.Count = 0");
+            }
         }
     }
 }

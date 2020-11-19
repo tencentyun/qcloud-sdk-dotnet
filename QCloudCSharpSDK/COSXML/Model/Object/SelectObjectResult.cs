@@ -23,11 +23,14 @@ namespace COSXML.Model.Object
         public sealed class Stat
         {
             public long BytesScanned;
+
             public long BytesProcessed;
+
             public long BytesReturned;
 
             public override string ToString()
             {
+
                 return string.Format("BytesScanned:{0}, BytesProcessed:{1}, BytesReturned:{2}",
                     BytesScanned, BytesProcessed, BytesReturned);
             }
@@ -45,6 +48,7 @@ namespace COSXML.Model.Object
             // Read One Message for each loop
             // readToString(inputStream);
             System.IO.Stream outputStream;
+
             if (outputFilePath != null)
             {
                 outputStream = new System.IO.FileStream(outputFilePath, FileMode.Create);
@@ -57,6 +61,7 @@ namespace COSXML.Model.Object
             using (outputStream)
             {
                 byte[] tempBuffer = new byte[4];
+
 
                 while (true)
                 {
@@ -73,12 +78,15 @@ namespace COSXML.Model.Object
 
                     // read header
                     long headerSectionRemainLength = headerSectionLength;
+
                     while (headerSectionRemainLength > 0)
                     {
                         tryRead(inputStream, tempBuffer, 0, 1);
                         int headerNameLength = bytes1ToInt(tempBuffer);
 
+
                         byte[] headerNameBuffer = new byte[headerNameLength];
+
                         tryRead(inputStream, headerNameBuffer, 0, headerNameLength);
                         String headerName = bytes2stringUTF8(headerNameBuffer);
 
@@ -88,7 +96,9 @@ namespace COSXML.Model.Object
                         tryRead(inputStream, tempBuffer, 0, 2);
                         int valueLength = bytes2ToInt(tempBuffer);
 
+
                         byte[] valueBuffer = new byte[valueLength];
+
                         tryRead(inputStream, valueBuffer, 0, valueLength);
                         String value = bytes2stringUTF8(valueBuffer);
 
@@ -96,6 +106,7 @@ namespace COSXML.Model.Object
                         {
                             headers.Remove(headerName);
                         }
+
                         headers.Add(headerName, value);
 
                         headerSectionRemainLength -= 1 + headerNameLength + 3 + valueLength;
@@ -104,26 +115,33 @@ namespace COSXML.Model.Object
                     long payloadLength = messageEntireLength - headerSectionLength - 16;
 
                     string messageType;
+
                     headers.TryGetValue(":message-type", out messageType);
                     string eventType;
+
                     headers.TryGetValue(":event-type", out eventType);
                     Console.WriteLine("message = " + messageType + ", event = " + eventType);
 
                     bool isComplete = false;
 
+
                     if ("event".Equals(messageType))
                     {
                         byte[] buffer;
+
 
                         switch (eventType)
                         {
                             case "Records":
                                 int totalRead = 0;
                                 buffer = new byte[1024];
+
                                 while (payloadLength > totalRead)
                                 {
                                     int readLength = (int)Math.Min(payloadLength - totalRead, 1024);
+
                                     int readBytes = tryRead(inputStream, buffer, 0, readLength);
+
                                     outputStream.Write(buffer, 0, readBytes);
                                     totalRead += readBytes;
                                 }
@@ -153,7 +171,8 @@ namespace COSXML.Model.Object
                                 break;
                         }
                     }
-                    else if ("error".Equals(messageType))
+                    else
+if ("error".Equals(messageType))
                     {
                         string errorCode = null;
                         string errorMessage = null;
@@ -167,11 +186,13 @@ namespace COSXML.Model.Object
 
                     if (isComplete)
                     {
+
                         if (outputFilePath == null)
                         {
                             outputStream.Position = 0;
                             searchContent = readToString(outputStream);
                         }
+
                         break;
                     }
 
@@ -188,15 +209,18 @@ namespace COSXML.Model.Object
             int maxRead = 10;
             int remainReadCount = count;
 
+
             while (remainReadCount > 0 && maxRead-- > 0 & inputStream.CanRead)
             {
                 read = inputStream.Read(buffer, count - remainReadCount, remainReadCount);
                 remainReadCount -= read;
             }
+
             if (remainReadCount > 0)
             {
                 throw new System.IO.IOException("input stream is end unexpectly !");
             }
+
             return count - remainReadCount;
         }
 
@@ -204,24 +228,30 @@ namespace COSXML.Model.Object
         {
             XmlReader xmlReader = XmlReader.Create(new MemoryStream(body));
             Stat stat = new Stat();
+
             try
             {
+
                 while (xmlReader.Read())
                 {
+
                     switch (xmlReader.NodeType)
                     {
                         case XmlNodeType.Element:
+
                             if ("BytesScanned".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
                                 stat.BytesScanned = Convert.ToInt64(xmlReader.Value);
                             }
-                            else if ("BytesProcessed".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else
+if ("BytesProcessed".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
                                 stat.BytesProcessed = Convert.ToInt64(xmlReader.Value);
                             }
-                            else if ("BytesReturned".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else
+if ("BytesReturned".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
                                 stat.BytesReturned = Convert.ToInt64(xmlReader.Value);
@@ -234,36 +264,43 @@ namespace COSXML.Model.Object
             {
                 Console.WriteLine(e.StackTrace);
             }
+
             return stat;
         }
 
         private string readToString(System.IO.Stream inputStream)
         {
             string content = null;
+
             using (StreamReader reader = new StreamReader(inputStream))
             {
                 content = reader.ReadToEnd();
             }
+
             return content;
         }
 
         private string bytes2stringUTF8(byte[] data)
         {
+
             return System.Text.Encoding.UTF8.GetString(data);
         }
 
         private int bytes2ToInt(byte[] data)
         {
+
             return ((data[0] & 0xFF) << 8) | (data[1] & 0xFF);
         }
 
         private int bytes1ToInt(byte[] data)
         {
+
             return (data[0] & 0xFF);
         }
 
         private long bytes4ToInt(byte[] data)
         {
+
             return ((data[0] & 0xFF) << 24) | ((data[1] & 0xFF) << 16)
                 | ((data[2] & 0xFF) << 8) | (data[3] & 0xFF);
         }

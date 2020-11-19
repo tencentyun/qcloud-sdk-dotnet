@@ -20,8 +20,10 @@ namespace COSXML.Model.Tag
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{LocationConstraint:\n");
+
             stringBuilder.Append("Location:").Append(location).Append("\n");
             stringBuilder.Append("}");
+
             return stringBuilder.ToString();
         }
     }

@@ -35,14 +35,23 @@ namespace COSXML.Log
 
         public static void AddLogAdapter(Log log)
         {
-            if (log == null) return;
+
+            if (log == null)
+            {
+
+                return;
+            }
+
             foreach (Log logImpl in logImplList)
             {
+
                 if (logImpl.GetType().Name == log.GetType().Name)
                 {
+
                     return;
                 }
             }
+
             logImplList.Add(log);
         }
 
@@ -53,6 +62,7 @@ namespace COSXML.Log
 
         public static void V(string tag, string message, Exception exception)
         {
+
             if (LEVEL.V >= QLog.level)
             {
                 Print(LEVEL.V, tag, message, exception);
@@ -67,6 +77,7 @@ namespace COSXML.Log
 
         public static void D(string tag, string message, Exception exception)
         {
+
             if (LEVEL.D >= QLog.level)
             {
                 Print(LEVEL.D, tag, message, exception);
@@ -96,6 +107,7 @@ namespace COSXML.Log
 
         public static void W(string tag, string message, Exception exception)
         {
+
             if (LEVEL.W >= QLog.level)
             {
                 Print(LEVEL.W, tag, message, exception);
@@ -110,6 +122,7 @@ namespace COSXML.Log
 
         public static void E(string tag, string message, Exception exception)
         {
+
             if (LEVEL.E >= QLog.level)
             {
                 Print(LEVEL.E, tag, message, exception);
@@ -120,6 +133,7 @@ namespace COSXML.Log
         private static void Print(LEVEL level, string tag, string message, Exception exception)
         {
             StringBuilder messageBuilder = new StringBuilder();
+
 
             messageBuilder.Append(DateTime.Now.ToString(timeFormat))
                 .Append(" ")
@@ -135,12 +149,15 @@ namespace COSXML.Log
                 .Append(tag)
                 .Append(": ")
                 .Append(message);
+
             if (exception != null)
             {
                 messageBuilder.Append("\n Exception:\n")
                     .Append(exception.ToString());
             }
+
             messageBuilder.Append("\r\n");
+
             foreach (Log log in logImplList)
             {
                 log.PrintLog(messageBuilder.ToString());
@@ -156,9 +173,13 @@ namespace COSXML.Log
     public enum LEVEL
     {
         V = 0,
+
         D,
+
         I,
+
         W,
+
         E
     }
 }

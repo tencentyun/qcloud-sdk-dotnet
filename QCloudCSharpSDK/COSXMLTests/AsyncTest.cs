@@ -30,11 +30,13 @@ namespace COSXMLTests
                 delegate (CosResult cosResult)
                 {
                     GetBucketResult result = cosResult as GetBucketResult;
+
                     Assert.True(result.httpCode == 200);
                     manualResetEvent.Set();
                 },
             delegate (CosClientException clientEx, CosServerException serverEx)
             {
+
                 if (clientEx != null)
                 {
                     Console.WriteLine("CosClientException: " + clientEx.Message);
@@ -44,7 +46,7 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
-                
+
                 Assert.Fail();
                 manualResetEvent.Set();
             });

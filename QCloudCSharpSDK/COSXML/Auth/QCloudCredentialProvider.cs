@@ -42,11 +42,23 @@ namespace COSXML.Auth
         public override QCloudCredentials GetQCloudCredentials()
         {
             long keyStartTime = TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
+
             long keyEndTime = keyStartTime + keyTimDuration;
+
             string keyTime = String.Format("{0};{1}", keyStartTime, keyEndTime);
-            if (secretId == null) throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretId == null");
-            if (secretKey == null) throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretKey == null");
+
+            if (secretId == null)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretId == null");
+            }
+
+            if (secretKey == null)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretKey == null");
+            }
+
             string signKey = DigestUtils.GetHamcSha1ToHexString(keyTime, Encoding.UTF8, secretKey, Encoding.UTF8);
+
             return new QCloudCredentials(secretId, signKey, keyTime);
         }
 
@@ -64,8 +76,11 @@ namespace COSXML.Auth
     public class DefaultSessionQCloudCredentialProvider : QCloudCredentialProvider
     {
         private string tmpSecretId;
+
         private string tmpSecretKey;
+
         private string keyTime;
+
         private string token;
 
         public DefaultSessionQCloudCredentialProvider(string tmpSecretId, string tmpSecretKey, long tmpExpiredTime, string sessionToken)
@@ -83,11 +98,29 @@ namespace COSXML.Auth
 
         public override QCloudCredentials GetQCloudCredentials()
         {
-            if (IsNeedUpdateNow()) Refresh();
-            if (tmpSecretId == null) throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretId == null");
-            if (tmpSecretKey == null) throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretKey == null");
-            if (keyTime == null) throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "keyTime == null");
+
+            if (IsNeedUpdateNow())
+            {
+                Refresh();
+            }
+
+            if (tmpSecretId == null)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretId == null");
+            }
+
+            if (tmpSecretKey == null)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretKey == null");
+            }
+
+            if (keyTime == null)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "keyTime == null");
+            }
+
             string signKey = DigestUtils.GetHamcSha1ToHexString(keyTime, Encoding.UTF8, tmpSecretKey, Encoding.UTF8);
+
             return new SessionQCloudCredentials(tmpSecretId, signKey, token, keyTime);
         }
 
@@ -100,15 +133,25 @@ namespace COSXML.Auth
 
         public bool IsNeedUpdateNow()
         {
+
             if (String.IsNullOrEmpty(keyTime) || String.IsNullOrEmpty(tmpSecretId) || String.IsNullOrEmpty(tmpSecretKey) || String.IsNullOrEmpty(token))
             {
+
                 return true;
             }
+
             int index = keyTime.IndexOf(';');
             long endTime = -1L;
+
             long.TryParse(keyTime.Substring(index + 1), out endTime);
             long nowTime = TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
-            if (endTime <= nowTime) return true;
+
+            if (endTime <= nowTime)
+            {
+
+                return true;
+            }
+
             return false;
         }
 

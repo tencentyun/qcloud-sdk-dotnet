@@ -19,6 +19,7 @@ namespace COSXML.Model.Tag
         /// <see cref="Owner"/>
         /// </summary>
         public Owner owner;
+
         /// <summary>
         /// 本次响应的所有 Bucket 列表信息
         /// <see cref="Bucket"/>
@@ -28,17 +29,30 @@ namespace COSXML.Model.Tag
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{ListAllMyBuckets:\n");
-            if (owner != null) stringBuilder.Append(owner.GetInfo()).Append("\n");
+
+            if (owner != null)
+            {
+                stringBuilder.Append(owner.GetInfo()).Append("\n");
+            }
+
             stringBuilder.Append("Buckets:\n");
+
             if (buckets != null)
             {
+
                 foreach (Bucket bucket in buckets)
                 {
-                    if (bucket != null) stringBuilder.Append(bucket.GetInfo()).Append("\n");
+
+                    if (bucket != null)
+                    {
+                        stringBuilder.Append(bucket.GetInfo()).Append("\n");
+                    }
                 }
             }
+
             stringBuilder.Append("}").Append("\n");
             stringBuilder.Append("}");
+
             return stringBuilder.ToString();
         }
 
@@ -48,6 +62,7 @@ namespace COSXML.Model.Tag
             /// Bucket 所有者的 ID
             /// </summary>
             public string id;
+
             /// <summary>
             /// Bucket 所有者的名字信息
             /// </summary>
@@ -56,9 +71,11 @@ namespace COSXML.Model.Tag
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Owner:\n");
+
                 stringBuilder.Append("ID:").Append(id).Append("\n");
                 stringBuilder.Append("DisPlayName:").Append(disPlayName).Append("\n");
                 stringBuilder.Append("}");
+
                 return stringBuilder.ToString();
             }
         }
@@ -69,21 +86,26 @@ namespace COSXML.Model.Tag
             /// Bucket 的名称
             /// </summary>
             public string name;
+
             /// <summary>
             /// Bucket 所在地域
             /// </summary>
             public string location;
+
             /// <summary>
             /// Bucket 创建时间。ISO8601 格式
             /// </summary>
             public string createDate;
+
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Bucket:\n");
+
                 stringBuilder.Append("Name:").Append(name).Append("\n");
                 stringBuilder.Append("Location:").Append(location).Append("\n");
                 stringBuilder.Append("CreateDate:").Append(createDate).Append("\n");
                 stringBuilder.Append("}");
+
                 return stringBuilder.ToString();
             }
         }

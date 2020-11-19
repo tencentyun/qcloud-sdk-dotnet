@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -34,8 +34,11 @@ namespace COSXML.Model.Bucket
         public override Network.RequestBody GetRequestBody()
         {
             string content = Transfer.XmlBuilder.BuildCORSConfigXML(corsConfiguration);
+
             byte[] data = Encoding.UTF8.GetBytes(content);
+
             ByteRequestBody body = new ByteRequestBody(data);
+
             return body;
         }
 
@@ -46,11 +49,13 @@ namespace COSXML.Model.Bucket
         /// <param name="corsRule"></param>
         public void SetCORSRule(CORSConfiguration.CORSRule corsRule)
         {
+
             if (corsRule != null)
             {
                 corsConfiguration.corsRules.Add(corsRule);
             }
         }
+
         /// <summary>
         /// 设置 CORS 规则
         /// <see cref="Model.Tag.CORSConfiguration.CORSRule"/>
@@ -58,6 +63,7 @@ namespace COSXML.Model.Bucket
         /// <param name="corsRules"></param>
         public void SetCORSRules(List<CORSConfiguration.CORSRule> corsRules)
         {
+
             if (corsRules != null)
             {
                 corsConfiguration.corsRules.AddRange(corsRules);
@@ -67,7 +73,11 @@ namespace COSXML.Model.Bucket
         public override void CheckParameters()
         {
             base.CheckParameters();
-            if (corsConfiguration.corsRules.Count == 0) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "corsConfiguration.corsRules.Count = 0");
+
+            if (corsConfiguration.corsRules.Count == 0)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "corsConfiguration.corsRules.Count = 0");
+            }
         }
     }
 }
