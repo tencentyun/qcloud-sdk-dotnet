@@ -45,7 +45,7 @@ namespace COSXML.Model.Bucket
                 }
             }
         }
-        
+
         private void SetReplicationConfigurationWithRole(string ownerUin, string subUin)
         {
             if (ownerUin != null && subUin != null)

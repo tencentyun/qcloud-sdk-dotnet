@@ -19,16 +19,19 @@ namespace COSXML.Model.Bucket
         public PutBucketIntelligentTieringRequest(string bucket, IntelligentTieringConfiguration configuration)
             : base(bucket)
         {
-            if (String.IsNullOrEmpty(configuration.Status)) {
+            if (String.IsNullOrEmpty(configuration.Status))
+            {
                 configuration.Status = "Enabled";
             }
-            if (configuration.Days < 1) {
+            if (configuration.Days < 1)
+            {
                 configuration.Days = 30;
             }
-            if (configuration.RequestFrequent < 1) {
+            if (configuration.RequestFrequent < 1)
+            {
                 configuration.RequestFrequent = 1;
             }
-            
+
             this.method = CosRequestMethod.PUT;
             this.queryParameters.Add("intelligenttiering", null);
             this.configuration = configuration;

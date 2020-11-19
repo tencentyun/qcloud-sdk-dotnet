@@ -16,7 +16,7 @@ namespace COSXMLTests
     [TestFixture()]
     public class AsyncTests
     {
-        
+
         [Test()]
         public void AsyncGetBucket()
         {

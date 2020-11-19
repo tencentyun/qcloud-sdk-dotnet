@@ -195,7 +195,7 @@ namespace COSXML.Model.Object
             {
                 this.headers[CosRequestHeaderKey.X_COS_COPY_SOURCE] = copySourceStruct.GetCopySouce();
             }
-            
+
         }
     }
 }

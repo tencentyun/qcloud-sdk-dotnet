@@ -27,7 +27,7 @@ namespace COSXML.Model.Tag
         {
             StringBuilder stringBuilder = new StringBuilder("{RestoreRequest:\n");
             stringBuilder.Append("Days:").Append(days).Append("\n");
-            if(casJobParameters != null)stringBuilder.Append(casJobParameters.GetInfo()).Append("\n");
+            if (casJobParameters != null) stringBuilder.Append(casJobParameters.GetInfo()).Append("\n");
             stringBuilder.Append("}");
             return stringBuilder.ToString();
         }

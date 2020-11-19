@@ -31,7 +31,7 @@ namespace COSXML.Model.Tag
         /// </summary>
         public string eTag;
 
-        
+
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{CompleteMultipartUploadResult:\n");

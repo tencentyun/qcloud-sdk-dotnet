@@ -61,8 +61,8 @@ namespace COSXML.Network
                     throw new ArgumentException("unexpected scheme: " + scheme);
                 }
             }
-            get{return this.scheme;}
-            
+            get { return this.scheme; }
+
         }
 
         public string UserName
@@ -72,17 +72,17 @@ namespace COSXML.Network
                 if (value == null) throw new ArgumentNullException("userName == null");
                 this.userName = value;
             }
-            get{return this.userName;}
+            get { return this.userName; }
         }
 
         public string UserPassword
         {
-             set
+            set
             {
                 if (value == null) throw new ArgumentNullException("userPwd == null");
                 this.userPwd = value;
             }
-            get {return this.userPwd;}
+            get { return this.userPwd; }
         }
 
         public string Host
@@ -125,7 +125,7 @@ namespace COSXML.Network
                 {
                     this.queryParameters.Add(pair.Key, pair.Value);
                 }
-                
+
             }
         }
 
@@ -141,7 +141,7 @@ namespace COSXML.Network
                 this.fragment = value;
             }
             get { return this.fragment; }
-            
+
         }
 
         public override string ToString()

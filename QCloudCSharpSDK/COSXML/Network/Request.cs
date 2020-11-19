@@ -15,7 +15,7 @@ namespace COSXML.Network
 {
     public sealed class Request
     {
-        private static string TAG = "Request"; 
+        private static string TAG = "Request";
         private string method;  // post put get delete head, etc.
         private HttpUrl url;  // shceme://host:port/path?query# etc.
         private Dictionary<string, string> headers; // key : value
@@ -46,7 +46,7 @@ namespace COSXML.Network
             set { isHttps = value; }
         }
 
-        public string UserAgent 
+        public string UserAgent
         {
             get { return userAgent == null ? CosVersion.GetUserAgent() : userAgent; }
             set { userAgent = value; }
@@ -65,7 +65,7 @@ namespace COSXML.Network
                 //if (url == null) throw new ArgumentNullException("httpUrl == null");
                 return url;
             }
-            set 
+            set
             {
                 if (value == null) throw new ArgumentNullException("httpUrl == null");
                 url = value;
@@ -103,7 +103,7 @@ namespace COSXML.Network
             }
             catch (ArgumentException)
             {
-                if (String.IsNullOrEmpty(value)){ return; }
+                if (String.IsNullOrEmpty(value)) { return; }
 
                 if (!String.IsNullOrEmpty(headers[name]))
                 {
@@ -114,9 +114,9 @@ namespace COSXML.Network
                     headers[name] = value;
                 }
             }
-            
+
         }
-            
+
 
         public void SetHeader(string name, string value)
         {

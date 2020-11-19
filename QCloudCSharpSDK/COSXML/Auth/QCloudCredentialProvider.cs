@@ -69,7 +69,7 @@ namespace COSXML.Auth
         private string token;
 
         public DefaultSessionQCloudCredentialProvider(string tmpSecretId, string tmpSecretKey, long tmpExpiredTime, string sessionToken)
-            :this(tmpSecretId, tmpSecretKey, TimeUtils.GetCurrentTime(TimeUnit.SECONDS),tmpExpiredTime, sessionToken)
+            : this(tmpSecretId, tmpSecretKey, TimeUtils.GetCurrentTime(TimeUnit.SECONDS), tmpExpiredTime, sessionToken)
         {
         }
 
@@ -125,7 +125,7 @@ namespace COSXML.Auth
             this.tmpSecretKey = tmpSecretKey;
             this.token = sessionToken;
             this.keyTime = tmpkeyTime;
-        }   
+        }
     }
 
 

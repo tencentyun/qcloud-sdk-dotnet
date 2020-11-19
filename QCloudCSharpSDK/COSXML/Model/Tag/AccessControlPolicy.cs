@@ -123,13 +123,13 @@ namespace COSXML.Model.Tag
             {
                 StringBuilder stringBuilder = new StringBuilder("{Grantee:\n");
                 if (uri != null) stringBuilder.Append("URI:").Append(uri).Append("\n");
-                if(id != null) stringBuilder.Append("Id:").Append(id).Append("\n");
-                if(displayName != null) stringBuilder.Append("DisplayName:").Append(displayName).Append("\n");
+                if (id != null) stringBuilder.Append("Id:").Append(id).Append("\n");
+                if (displayName != null) stringBuilder.Append("DisplayName:").Append(displayName).Append("\n");
                 stringBuilder.Append("}");
                 return stringBuilder.ToString();
             }
         }
     }
 
-    
+
 }

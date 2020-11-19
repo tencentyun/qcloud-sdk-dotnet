@@ -51,7 +51,7 @@ namespace COSXML.Utils
                 start = index + 1;
                 index = path.IndexOf(separator, start);
             }
-            if(start < length) result.Append(Encode(path.Substring(start)));
+            if (start < length) result.Append(Encode(path.Substring(start)));
             return result.ToString();
         }
 
@@ -72,10 +72,10 @@ namespace COSXML.Utils
             if (String.IsNullOrEmpty(value)) return String.Empty;
             StringBuilder result = new StringBuilder(value.Length * 2); // %xy%xy
             byte[] strToBytes = encoding.GetBytes(value);
-            foreach(byte b in strToBytes)
+            foreach (byte b in strToBytes)
             {
                 char ch = (char)b;
-                if(URLAllowChars.IndexOf(ch) != -1)
+                if (URLAllowChars.IndexOf(ch) != -1)
                 {
                     result.Append(ch);
                 }

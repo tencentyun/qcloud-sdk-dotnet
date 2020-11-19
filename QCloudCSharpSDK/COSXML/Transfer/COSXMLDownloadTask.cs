@@ -64,7 +64,7 @@ namespace COSXML.Transfer
             UpdateTaskState(TaskState.WAITTING);
             //对象是否存在
             headObjectRequest = new HeadObjectRequest(bucket, key);
-            cosXmlServer.HeadObject(headObjectRequest, delegate(CosResult cosResult)
+            cosXmlServer.HeadObject(headObjectRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
                 {
@@ -83,7 +83,7 @@ namespace COSXML.Transfer
                 }
 
             },
-            delegate(CosClientException clientEx, CosServerException serverEx)
+            delegate (CosClientException clientEx, CosServerException serverEx)
             {
                 lock (syncExit)
                 {
@@ -105,7 +105,8 @@ namespace COSXML.Transfer
 
         private void GetObject()
         {
-            if (getObjectRequest == null) {
+            if (getObjectRequest == null)
+            {
                 getObjectRequest = new GetObjectRequest(bucket, key, localDir, localFileName);
             }
             if (progressCallback != null)
@@ -114,7 +115,7 @@ namespace COSXML.Transfer
             }
             getObjectRequest.SetRange(rangeStart, rangeEnd);
             getObjectRequest.SetLocalFileOffset(localFileOffset);
-            cosXmlServer.GetObject(getObjectRequest, delegate(CosResult result)
+            cosXmlServer.GetObject(getObjectRequest, delegate (CosResult result)
             {
                 lock (syncExit)
                 {
@@ -134,7 +135,7 @@ namespace COSXML.Transfer
                         successCallback(downloadTaskResult);
                     }
                 }
-            }, delegate(CosClientException clientEx, CosServerException serverEx)
+            }, delegate (CosClientException clientEx, CosServerException serverEx)
             {
                 lock (syncExit)
                 {
@@ -159,7 +160,7 @@ namespace COSXML.Transfer
             cosXmlServer.Cancel(headObjectRequest);
             cosXmlServer.Cancel(getObjectRequest);
         }
-        
+
         private void Clear()
         {
 

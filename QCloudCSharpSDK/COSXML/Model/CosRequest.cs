@@ -48,12 +48,12 @@ namespace COSXML.Model
         /// <summary>
         /// http 请求url中 query 部分.
         /// </summary>
-        protected Dictionary<string, string> queryParameters = new Dictionary<string,string>();
+        protected Dictionary<string, string> queryParameters = new Dictionary<string, string>();
 
         /// <summary>
         /// http 请求 header 部分.
         /// </summary>
-        protected Dictionary<string, string> headers = new Dictionary<string,string>();
+        protected Dictionary<string, string> headers = new Dictionary<string, string>();
 
         /// <summary>
         /// cos 服务的 appid.
@@ -75,12 +75,12 @@ namespace COSXML.Model
         /// </summary>
         protected string requestUrlWithSign = null;
 
-        public CosXmlConfig serviceConfig {get; set;}
+        public CosXmlConfig serviceConfig { get; set; }
 
         /// <summary>
         /// http or https for cos request.
         /// </summary>
-        public bool? IsHttps 
+        public bool? IsHttps
         {
             get { return isHttps; }
             set { isHttps = value; }
@@ -98,7 +98,7 @@ namespace COSXML.Model
         /// <summary>
         /// path of http url.
         /// </summary>
-        public string RequestPath 
+        public string RequestPath
         {
             get { return path; }
             private set { }
@@ -174,7 +174,7 @@ namespace COSXML.Model
         /// <param name="headers"></param>
         public void SetRequestHeaders(Dictionary<string, string> headers)
         {
-            foreach(KeyValuePair<string, string> entry in headers)
+            foreach (KeyValuePair<string, string> entry in headers)
             {
                 SetRequestHeader(entry.Key, entry.Value);
             }

@@ -28,7 +28,7 @@ namespace COSXML.Model.Bucket
 
         public override string GetResultInfo()
         {
-            return base.GetResultInfo() + (listBucket == null ? "" : "\n" + listBucket.GetInfo()); 
+            return base.GetResultInfo() + (listBucket == null ? "" : "\n" + listBucket.GetInfo());
         }
     }
 }

@@ -16,7 +16,7 @@ namespace COSXML.Model.CI
         /// 图片审核结果
         /// </summary>
         /// <value></value>
-        public SensitiveRecognitionResult recognitionResult {get; private set;} 
+        public SensitiveRecognitionResult recognitionResult { get; private set; }
 
         internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength)
         {

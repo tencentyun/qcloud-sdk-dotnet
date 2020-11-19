@@ -5,7 +5,7 @@ using System.Text;
 
 namespace COSXML.Model.Bucket
 {
-    public sealed class DeleteBucketWebsiteRequest:BucketRequest
+    public sealed class DeleteBucketWebsiteRequest : BucketRequest
     {
         public DeleteBucketWebsiteRequest(string bucket) : base(bucket)
         {

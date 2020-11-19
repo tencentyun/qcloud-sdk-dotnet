@@ -33,7 +33,8 @@ namespace COSXMLTests
             string secretKey = Environment.GetEnvironmentVariable("COS_SECRET");
             region = Environment.GetEnvironmentVariable("COS_REGION");
             bucketForBucketTest = Environment.GetEnvironmentVariable("COS_BUCKET");
-            if (bucketForBucketTest == null) {
+            if (bucketForBucketTest == null)
+            {
                 bucketForBucketTest = "bucket-4-csharp-test-1253653367";
             }
             bucketForObjectTest = bucketForBucketTest;
@@ -45,7 +46,7 @@ namespace COSXMLTests
                 secretKey = Environment.GetEnvironmentVariable("COS_SECRET", EnvironmentVariableTarget.Machine);
                 region = Environment.GetEnvironmentVariable("COS_REGION", EnvironmentVariableTarget.Machine);
             }
-           
+
             CosXmlConfig config = new CosXmlConfig.Builder()
                 .SetAppid(appid)
                 .SetRegion(region)

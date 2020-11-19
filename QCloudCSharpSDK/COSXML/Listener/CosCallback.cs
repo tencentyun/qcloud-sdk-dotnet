@@ -32,7 +32,7 @@ namespace COSXML.Callback
     /// <param name="cosResult"></param>
     public delegate void OnSuccessCallback<T>(T cosResult)
         where T : CosResult;
-     
+
     /// <summary>
     /// 请求失败回调
     /// </summary>
@@ -40,7 +40,7 @@ namespace COSXML.Callback
     /// <param name="cosRequest"></param>
     /// <param name="clientException"></param>
     /// <param name="serverException"></param>
-    public delegate void OnFailedCallback (CosClientException clientException, CosServerException serverException);
+    public delegate void OnFailedCallback(CosClientException clientException, CosServerException serverException);
 
     /// <summary>
     /// 解析流回调

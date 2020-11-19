@@ -20,7 +20,7 @@ namespace COSXML.Model.Object
 
         internal string outputFilePath;
 
-        
+
         public SelectObjectRequest(string bucket, string key)
             : base(bucket, key)
         {
@@ -29,27 +29,32 @@ namespace COSXML.Model.Object
             this.queryParameters.Add("select-type", "2");
         }
 
-        public SelectObjectRequest outputToFile(string filePath) {
+        public SelectObjectRequest outputToFile(string filePath)
+        {
             outputFilePath = filePath;
             return this;
         }
 
-        public SelectObjectRequest setExpression(string expression) {
+        public SelectObjectRequest setExpression(string expression)
+        {
             this.expression = expression;
             return this;
         }
 
-        public SelectObjectRequest setExpressionType(string expressionType) {
+        public SelectObjectRequest setExpressionType(string expressionType)
+        {
             this.expressionType = expressionType;
             return this;
         }
 
-        public SelectObjectRequest setInputFormat(ObjectSelectionFormat inputFormat) {
+        public SelectObjectRequest setInputFormat(ObjectSelectionFormat inputFormat)
+        {
             this.inputFormat = inputFormat;
             return this;
         }
 
-        public SelectObjectRequest setOutputFormat(ObjectSelectionFormat outputFormat) {
+        public SelectObjectRequest setOutputFormat(ObjectSelectionFormat outputFormat)
+        {
             this.outputFormat = outputFormat;
             return this;
         }
@@ -63,18 +68,21 @@ namespace COSXML.Model.Object
         public override void CheckParameters()
         {
             base.CheckParameters();
-            
-            if (expression == null) {
-              throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, 
-                "expression is null");
+
+            if (expression == null)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT,
+                  "expression is null");
             }
-            if (inputFormat == null) {
-              throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, 
-                "inputFormat is null");
+            if (inputFormat == null)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT,
+                  "inputFormat is null");
             }
-            if (outputFormat == null) {
-              throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, 
-                "outputFormat is null");
+            if (outputFormat == null)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT,
+                  "outputFormat is null");
             }
         }
 

@@ -107,7 +107,7 @@ namespace COSXML.Model.Tag
                 .Append(region).Append(".")
                 .Append("myqcloud.com")
                 .Append(URLEncodeUtils.EncodePathOfURL(key));
-           
+
             if (versionId != null)
             {
                 copySource.Append("?versionId=").Append(versionId);

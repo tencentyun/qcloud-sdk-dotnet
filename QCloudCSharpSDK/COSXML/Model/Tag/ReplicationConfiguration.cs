@@ -14,9 +14,9 @@ namespace COSXML.Model.Tag
         {
             StringBuilder stringBuilder = new StringBuilder("{ReplicationConfiguration:\n");
             stringBuilder.Append("Role:").Append(role).Append("\n");
-            if(rules != null)
+            if (rules != null)
             {
-                foreach(Rule rule in rules)
+                foreach (Rule rule in rules)
                 {
                     if (rule != null) stringBuilder.Append(rule.GetInfo()).Append("\n");
                 }

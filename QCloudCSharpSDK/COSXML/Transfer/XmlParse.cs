@@ -57,7 +57,7 @@ namespace COSXML.Transfer
                 switch (xmlReader.NodeType)
                 {
                     case XmlNodeType.Element: // element start
-                        if("Owner".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase)) // get element name
+                        if ("Owner".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase)) // get element name
                         {
                             result.owner = new ListAllMyBuckets.Owner();
                         }
@@ -660,7 +660,8 @@ namespace COSXML.Transfer
             }
         }
 
-        public static void ParseTagging(Stream inStream, Tagging tagging) {
+        public static void ParseTagging(Stream inStream, Tagging tagging)
+        {
             XmlReader xmlReader = XmlReader.Create(inStream);
             string key = null, value = null;
             while (xmlReader.Read())
@@ -678,7 +679,8 @@ namespace COSXML.Transfer
                             xmlReader.Read();
                             value = xmlReader.Value;
                         }
-                        if (key != null && value != null) {
+                        if (key != null && value != null)
+                        {
                             tagging.AddTag(key, value);
                             key = null;
                             value = null;
@@ -688,10 +690,12 @@ namespace COSXML.Transfer
             }
         }
 
-        public static void ParseBucketDomain(Stream inStream, DomainConfiguration domainConfiguration) {
+        public static void ParseBucketDomain(Stream inStream, DomainConfiguration domainConfiguration)
+        {
             XmlReader xmlReader = XmlReader.Create(inStream);
             domainConfiguration.rule = new DomainConfiguration.DomainRule();
-            try {
+            try
+            {
                 while (xmlReader.Read())
                 {
                     switch (xmlReader.NodeType)
@@ -715,10 +719,12 @@ namespace COSXML.Transfer
                             break;
                     }
                 }
-            } catch (XmlException e) {
+            }
+            catch (XmlException e)
+            {
                 Console.WriteLine(e.StackTrace);
             }
-    }
+        }
 
         public static void ParseListBucketVersions(Stream inStream, ListBucketVersions result)
         {
@@ -821,7 +827,7 @@ namespace COSXML.Transfer
                         }
                         else if ("Owner".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
-                             owner = new ListBucketVersions.Owner();
+                            owner = new ListBucketVersions.Owner();
                         }
                         else if ("UID".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
@@ -976,7 +982,7 @@ namespace COSXML.Transfer
                         }
                         else if ("Owner".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
-                           owner = new ListMultipartUploads.Owner();
+                            owner = new ListMultipartUploads.Owner();
                         }
                         else if ("UID".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
@@ -1101,7 +1107,7 @@ namespace COSXML.Transfer
                         }
                         break;
                 }
-            }       
+            }
         }
 
         public static void ParseInitiateMultipartUpload(Stream inStream, InitiateMultipartUpload result)
@@ -1116,18 +1122,18 @@ namespace COSXML.Transfer
                         {
                             xmlReader.Read();
                             result.bucket = xmlReader.Value;
-                         }
-                         else if ("Key".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
-                         {
-                             xmlReader.Read();
-                             result.key = xmlReader.Value;
-                         }
-                         else if ("UploadId".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
-                         {
+                        }
+                        else if ("Key".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            xmlReader.Read();
+                            result.key = xmlReader.Value;
+                        }
+                        else if ("UploadId".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                        {
                             xmlReader.Read();
                             result.uploadId = xmlReader.Value;
-                         }
-                         break;
+                        }
+                        break;
                 }
             }
         }
@@ -1443,7 +1449,7 @@ namespace COSXML.Transfer
                         else if ("HttpErrorCodeReturnedEquals".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
                             xmlReader.Read();
-                           int.TryParse(xmlReader.Value, out routingRule.contidion.httpErrorCodeReturnedEquals);
+                            int.TryParse(xmlReader.Value, out routingRule.contidion.httpErrorCodeReturnedEquals);
                         }
                         else if ("KeyPrefixEquals".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                         {
@@ -1778,10 +1784,12 @@ namespace COSXML.Transfer
             }
         }
 
-        public static IntelligentTieringConfiguration ParseBucketIntelligentTiering(Stream inStream) {
+        public static IntelligentTieringConfiguration ParseBucketIntelligentTiering(Stream inStream)
+        {
             XmlReader xmlReader = XmlReader.Create(inStream);
             IntelligentTieringConfiguration configuration = new IntelligentTieringConfiguration();
-            try {
+            try
+            {
                 while (xmlReader.Read())
                 {
                     switch (xmlReader.NodeType)
@@ -1805,13 +1813,16 @@ namespace COSXML.Transfer
                             break;
                     }
                 }
-            } catch (XmlException e) {
+            }
+            catch (XmlException e)
+            {
                 Console.WriteLine(e.StackTrace);
             }
             return configuration;
         }
 
-        public static PicOperationUploadResult ParsePicOpeartionResult(Stream inStream) {
+        public static PicOperationUploadResult ParsePicOpeartionResult(Stream inStream)
+        {
             XmlReader xmlReader = XmlReader.Create(inStream);
             PicOperationUploadResult uploadResult = new PicOperationUploadResult();
             var originalInfo = new PicOperationUploadResult.OriginalInfo();
@@ -1820,7 +1831,8 @@ namespace COSXML.Transfer
             var aProcessResult = new PicOperationUploadResult.ProcessResult();
             var parentNode = 0; // 1: originalInfo, 2: imageInfo, 3: processResult
 
-            try {
+            try
+            {
                 while (xmlReader.Read())
                 {
                     switch (xmlReader.NodeType)
@@ -1844,92 +1856,117 @@ namespace COSXML.Transfer
                             else if ("Key".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
-                                if (parentNode == 1) {
+                                if (parentNode == 1)
+                                {
                                     originalInfo.Key = xmlReader.Value;
-                                } else if (parentNode == 3) {
+                                }
+                                else if (parentNode == 3)
+                                {
                                     aProcessResult.Key = xmlReader.Value;
                                 }
                             }
                             else if ("Location".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
-                                if (parentNode == 1) {
+                                if (parentNode == 1)
+                                {
                                     originalInfo.Location = xmlReader.Value;
-                                } else if (parentNode == 3) {
+                                }
+                                else if (parentNode == 3)
+                                {
                                     aProcessResult.Location = xmlReader.Value;
                                 }
                             }
                             else if ("ETag".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
-                                if (parentNode == 1) {
+                                if (parentNode == 1)
+                                {
                                     originalInfo.ETag = xmlReader.Value;
-                                } else if (parentNode == 3) {
+                                }
+                                else if (parentNode == 3)
+                                {
                                     aProcessResult.ETag = xmlReader.Value;
                                 }
                             }
                             else if ("Format".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
-                                if (parentNode == 2) {
+                                if (parentNode == 2)
+                                {
                                     imageInfo.Format = xmlReader.Value;
-                                } else if (parentNode == 3) {
+                                }
+                                else if (parentNode == 3)
+                                {
                                     aProcessResult.Format = xmlReader.Value;
                                 }
                             }
                             else if ("Width".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
-                                if (parentNode == 2) {
-                                     Int32.TryParse(xmlReader.Value, out imageInfo.Width);
-                                } else if (parentNode == 3) {
+                                if (parentNode == 2)
+                                {
+                                    Int32.TryParse(xmlReader.Value, out imageInfo.Width);
+                                }
+                                else if (parentNode == 3)
+                                {
                                     Int32.TryParse(xmlReader.Value, out aProcessResult.Width);
                                 }
                             }
                             else if ("Height".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
-                                if (parentNode == 2) {
-                                     Int32.TryParse(xmlReader.Value, out imageInfo.Height);
-                                } else if (parentNode == 3) {
+                                if (parentNode == 2)
+                                {
+                                    Int32.TryParse(xmlReader.Value, out imageInfo.Height);
+                                }
+                                else if (parentNode == 3)
+                                {
                                     Int32.TryParse(xmlReader.Value, out aProcessResult.Height);
                                 }
                             }
                             else if ("Quality".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
-                                if (parentNode == 2) {
-                                     Int32.TryParse(xmlReader.Value, out imageInfo.Quality);
-                                } else if (parentNode == 3) {
+                                if (parentNode == 2)
+                                {
+                                    Int32.TryParse(xmlReader.Value, out imageInfo.Quality);
+                                }
+                                else if (parentNode == 3)
+                                {
                                     Int32.TryParse(xmlReader.Value, out aProcessResult.Quality);
                                 }
                             }
                             else if ("Orientation".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
-                                if (parentNode == 2) {
-                                     Int32.TryParse(xmlReader.Value, out imageInfo.Orientation);
+                                if (parentNode == 2)
+                                {
+                                    Int32.TryParse(xmlReader.Value, out imageInfo.Orientation);
                                 }
                             }
                             else if ("Size".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
-                                if (parentNode == 3) {
-                                     Int32.TryParse(xmlReader.Value, out aProcessResult.Size);
+                                if (parentNode == 3)
+                                {
+                                    Int32.TryParse(xmlReader.Value, out aProcessResult.Size);
                                 }
                             }
                             else if ("Ave".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
-                                if (parentNode == 2) {
-                                     imageInfo.Ave = xmlReader.Value;
+                                if (parentNode == 2)
+                                {
+                                    imageInfo.Ave = xmlReader.Value;
                                 }
                             }
                             else if ("WatermarkStatus".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
-                                if (parentNode == 3) {
-                                     Int32.TryParse(xmlReader.Value, out aProcessResult.WatermarkStatus);
+                                if (parentNode == 3)
+                                {
+                                    Int32.TryParse(xmlReader.Value, out aProcessResult.WatermarkStatus);
                                 }
                             }
                             break;
@@ -1938,7 +1975,7 @@ namespace COSXML.Transfer
                             {
                                 uploadResult.originalInfo = originalInfo;
                                 parentNode = 0;
-                            } 
+                            }
                             else if ("ImageInfo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 originalInfo.imageInfo = imageInfo;
@@ -1953,19 +1990,23 @@ namespace COSXML.Transfer
                             break;
                     }
                 }
-            } catch (XmlException e) {
+            }
+            catch (XmlException e)
+            {
                 Console.WriteLine(e.StackTrace);
             }
             return uploadResult;
         }
 
-        public static SensitiveRecognitionResult ParseSensitiveRecognitionResult(Stream inStream) {
+        public static SensitiveRecognitionResult ParseSensitiveRecognitionResult(Stream inStream)
+        {
             XmlReader xmlReader = XmlReader.Create(inStream);
             SensitiveRecognitionResult recognitionResult = new SensitiveRecognitionResult();
             var parentNode = 0; // 1: PornInfo, 2: PoliticsInfo, 3: TerroristInfo, 4: AdsInfo
             var recognitionInfo = new SensitiveRecognitionResult.RecognitionInfo();
 
-            try {
+            try
+            {
                 while (xmlReader.Read())
                 {
                     switch (xmlReader.NodeType)
@@ -2045,7 +2086,9 @@ namespace COSXML.Transfer
                             break;
                     }
                 }
-            } catch (XmlException e) {
+            }
+            catch (XmlException e)
+            {
                 Console.WriteLine(e.StackTrace);
             }
             return recognitionResult;

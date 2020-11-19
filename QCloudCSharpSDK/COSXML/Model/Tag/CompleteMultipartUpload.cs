@@ -30,7 +30,7 @@ namespace COSXML.Model.Tag
                 {
                     stringBuilder.Append(part.GetInfo());
                 }
-                
+
             }
             stringBuilder.Append("}");
             return stringBuilder.ToString();

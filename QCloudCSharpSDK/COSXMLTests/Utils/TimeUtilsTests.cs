@@ -15,14 +15,14 @@ namespace COSXML.Utils.Tests
             long hours = TimeUtils.GetCurrentTime(TimeUnit.HOURS);
             long minutes = TimeUtils.GetCurrentTime(TimeUnit.MINUTES);
             long seconds = TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
-            
+
 
         }
 
         [Test()]
         public void GetFormatTimeTest()
         {
-            
+
         }
     }
 }

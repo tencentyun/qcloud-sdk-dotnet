@@ -33,7 +33,7 @@ namespace COSXML.Network
 
         public COSXML.Callback.OnParseStream ParseStream { get { return parseStream; } set { parseStream = value; } }
 
-        public string rawContentBodyString {get; private set;}
+        public string rawContentBodyString { get; private set; }
 
         public ResponseBody()
         { }
@@ -51,7 +51,7 @@ namespace COSXML.Network
         /// <param name="inputStream"></param>
         /// <exception cref="CosServerException"> throw CosServerException </exception>
         /// <exception cref="Exception">throw Exception</exception>
-        public void HandleResponseBody(Stream inputStream) 
+        public void HandleResponseBody(Stream inputStream)
         {
             try
             {
@@ -75,10 +75,11 @@ namespace COSXML.Network
                 }
                 else
                 {
-                    if ("application/xml".Equals(contentType, StringComparison.OrdinalIgnoreCase) && 
-                        contentLength > 0 && contentLength < 10 * 1000) {
+                    if ("application/xml".Equals(contentType, StringComparison.OrdinalIgnoreCase) &&
+                        contentLength > 0 && contentLength < 10 * 1000)
+                    {
                         // save raw content
-                        memoryStream = new MemoryStream((int) contentLength);
+                        memoryStream = new MemoryStream((int)contentLength);
                         inputStream.CopyTo(memoryStream);
                         rawContentBodyString = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
 
@@ -94,7 +95,7 @@ namespace COSXML.Network
             catch (Exception ex)
             {
                 QLog.E("ResponseBody", ex.Message, ex);
-                throw ;
+                throw;
             }
             finally
             {
@@ -152,7 +153,7 @@ namespace COSXML.Network
                 }
                 QLog.E("ResponseBody", ex.Message, ex);
             }
-            
+
         }
 
         private void AsyncStreamCallback(IAsyncResult ar)
@@ -188,8 +189,9 @@ namespace COSXML.Network
                     }
                     else
                     {
-                        if ("application/xml".Equals(contentType, StringComparison.OrdinalIgnoreCase) && 
-                            memoryStream.Length > 0 && memoryStream.Length < 10 * 1000) {
+                        if ("application/xml".Equals(contentType, StringComparison.OrdinalIgnoreCase) &&
+                            memoryStream.Length > 0 && memoryStream.Length < 10 * 1000)
+                        {
                             memoryStream.Seek(0, SeekOrigin.Begin);
                             rawContentBodyString = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
                         }

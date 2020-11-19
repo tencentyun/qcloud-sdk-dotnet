@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace COSXML.Model.Bucket
 {
-    public sealed class GetBucketDomainRequest :BucketRequest
+    public sealed class GetBucketDomainRequest : BucketRequest
     {
         public GetBucketDomainRequest(string bucket) : base(bucket)
         {

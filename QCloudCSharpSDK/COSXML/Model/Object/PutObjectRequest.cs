@@ -42,7 +42,7 @@ namespace COSXML.Model.Object
         /// <param name="key"></param>
         /// <param name="srcPath"></param>
         public PutObjectRequest(string bucket, string key, string srcPath)
-            :this(bucket, key, srcPath, -1L, -1L)
+            : this(bucket, key, srcPath, -1L, -1L)
         {
 
         }
@@ -55,7 +55,7 @@ namespace COSXML.Model.Object
         /// <param name="fileOffset">文件指定起始位置</param>
         /// <param name="needSendLength">文件指定内容长度</param>
         public PutObjectRequest(string bucket, string key, string srcPath, long fileOffset, long needSendLength)
-            :base(bucket, key)
+            : base(bucket, key)
         {
             this.method = CosRequestMethod.PUT;
             this.srcPath = srcPath;
@@ -129,7 +129,8 @@ namespace COSXML.Model.Object
         /// 最大上传速度，单位是 bit/s
         /// </summary>
         /// <param name="start"></param>
-        public void LimitTraffic(long rate) {
+        public void LimitTraffic(long rate)
+        {
             SetRequestHeader(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, rate.ToString());
         }
         /// <summary>

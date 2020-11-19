@@ -88,7 +88,7 @@ namespace COSXML.Network
                     //QLog.E(TAG, webEx.Message, webEx);
                     throw;
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -111,7 +111,7 @@ namespace COSXML.Network
                 }
                 QLog.D(TAG, "close");
             }
- 
+
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace COSXML.Network
                 requestState.httpWebRequest = httpWebRequest;
 
                 //handle request body
-                if(request.Body != null)
+                if (request.Body != null)
                 {
                     httpWebRequest.ContentLength = request.Body.ContentLength;
                     httpWebRequest.BeginGetRequestStream(new AsyncCallback(AsyncRequestCallback), requestState);
@@ -191,7 +191,7 @@ namespace COSXML.Network
                     //wait for response
                     httpWebRequest.BeginGetResponse(new AsyncCallback(AsyncResponseCallback), requestState);
                 }
-                
+
                 //print log
                 PrintReqeustInfo(httpWebRequest);
             }
@@ -227,7 +227,7 @@ namespace COSXML.Network
                 ////wait for response
                 //httpWebRequest.BeginGetResponse(AsyncResponseCallback, requestState);
 
-                requestState.request.Body.StartHandleRequestBody(requestStream, delegate(Exception exception)
+                requestState.request.Body.StartHandleRequestBody(requestStream, delegate (Exception exception)
                 {
                     if (exception != null)
                     {
@@ -252,7 +252,7 @@ namespace COSXML.Network
                 requestState.Clear();
                 QLog.E(TAG, ex.Message, ex);
             }
-            
+
         }
 
         public static void AsyncResponseCallback(IAsyncResult ar)
@@ -273,10 +273,10 @@ namespace COSXML.Network
 
                 Stream responseStream = httpWebResponse.GetResponseStream();
 
-                requestState.response.Body.StartHandleResponseBody(responseStream, delegate(bool isSuccess, Exception ex)
+                requestState.response.Body.StartHandleResponseBody(responseStream, delegate (bool isSuccess, Exception ex)
                     {
                         PrintResponseInfo(httpWebResponse);
-                        requestState.response.OnFinish(isSuccess,ex);
+                        requestState.response.OnFinish(isSuccess, ex);
                         requestState.Clear();
                     });
             }
@@ -297,10 +297,10 @@ namespace COSXML.Network
 
                     Stream responseStream = httpWebResponse.GetResponseStream();
 
-                    requestState.response.Body.StartHandleResponseBody(responseStream, delegate(bool isSuccess, Exception ex)
+                    requestState.response.Body.StartHandleResponseBody(responseStream, delegate (bool isSuccess, Exception ex)
                     {
                         PrintResponseInfo(httpWebResponse);
-                        requestState.response.OnFinish(isSuccess,ex);
+                        requestState.response.OnFinish(isSuccess, ex);
                         requestState.Clear();
                     });
                 }
@@ -477,7 +477,7 @@ namespace COSXML.Network
         /// </summary>
         /// <param name="httpWebResponse"></param>
         private static void PrintResponseInfo(HttpWebResponse httpWebResponse)
-        { 
+        {
             StringBuilder responseLog = new StringBuilder("<---");
             responseLog.Append(httpWebResponse.Method).Append(' ').Append(httpWebResponse.ResponseUri.AbsoluteUri).Append('\n');
             responseLog.Append((int)httpWebResponse.StatusCode).Append(' ').Append(httpWebResponse.StatusDescription).Append('\n'); ;
@@ -526,7 +526,7 @@ namespace COSXML.Network
                     addHeaderMethod = method;
                 }
 
-                addHeaderMethod.Invoke(webHeaderCollection, new Object[] { key, value });          
+                addHeaderMethod.Invoke(webHeaderCollection, new Object[] { key, value });
             }
 
         }

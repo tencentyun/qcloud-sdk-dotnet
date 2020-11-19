@@ -9,7 +9,7 @@ using System.Text;
 */
 namespace COSXML.Utils
 {
-   public sealed class CosValueAttribute : Attribute
+    public sealed class CosValueAttribute : Attribute
     {
         public string Value
         {

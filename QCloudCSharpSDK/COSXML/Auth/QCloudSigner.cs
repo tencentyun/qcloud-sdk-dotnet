@@ -47,7 +47,8 @@ namespace COSXML.Auth
             this.signAll = true;
         }
 
-        public void setSignAll(Boolean signAll) {
+        public void setSignAll(Boolean signAll)
+        {
             this.signAll = signAll;
         }
 
@@ -63,7 +64,8 @@ namespace COSXML.Auth
         {
             if (keys != null)
             {
-                foreach (string key in keys) {
+                foreach (string key in keys)
+                {
                     this.parameterKeys.Add(key.ToLower());
                 }
             }
@@ -71,7 +73,7 @@ namespace COSXML.Auth
 
         public void AddHeaderKey(string key)
         {
-            if(key != null)
+            if (key != null)
             {
                 headerKeys.Add(key);
             }
@@ -81,7 +83,8 @@ namespace COSXML.Auth
         {
             if (keys != null)
             {
-                foreach (string key in keys) {
+                foreach (string key in keys)
+                {
                     this.headerKeys.Add(key.ToLower());
                 }
             }
@@ -89,7 +92,7 @@ namespace COSXML.Auth
 
         public void SetSignTime(string signTime)
         {
-            if(signTime != null)
+            if (signTime != null)
             {
                 this.signTime = signTime;
             }
@@ -97,7 +100,7 @@ namespace COSXML.Auth
 
         public void SetSignTime(long signStartTime, long duration)
         {
-            this.signTime = String.Format("{0};{1}",signStartTime, signStartTime + duration);
+            this.signTime = String.Format("{0};{1}", signStartTime, signStartTime + duration);
         }
 
         public string GetSignTime()
@@ -117,18 +120,20 @@ namespace COSXML.Auth
 
         public string Source(Request request)
         {
-            
+
             Dictionary<string, string> sourceHeaders = request.Headers;
             Dictionary<string, string> lowerKeySourceHeaders = new Dictionary<string, string>(sourceHeaders.Count);
             foreach (KeyValuePair<string, string> pair in sourceHeaders)
             {
                 lowerKeySourceHeaders.Add(pair.Key.ToLower(), pair.Value);
-                if (signAll) {
+                if (signAll)
+                {
                     if (pair.Key.Equals("content-type", StringComparison.OrdinalIgnoreCase) ||
                         pair.Key.Equals("content-md5", StringComparison.OrdinalIgnoreCase) ||
-                        pair.Key.StartsWith("x-cos-")) {
-                            headerKeys.Add(pair.Key.ToLower());
-                        } 
+                        pair.Key.StartsWith("x-cos-"))
+                    {
+                        headerKeys.Add(pair.Key.ToLower());
+                    }
                 }
             }
             try
@@ -138,28 +143,32 @@ namespace COSXML.Auth
             }
             catch (Exception)
             {
-                
+
             }
-            if (signAll) {
+            if (signAll)
+            {
                 try
                 {
                     long contentLength = 0;
-                    if (request.Body != null) {
+                    if (request.Body != null)
+                    {
                         contentLength = request.Body.ContentLength;
                     }
-                    if (contentLength > 0) {
+                    if (contentLength > 0)
+                    {
                         lowerKeySourceHeaders.Add("content-length", contentLength.ToString());
                         headerKeys.Add("content-length");
                     }
                 }
-                catch (Exception) {}
+                catch (Exception) { }
             }
             Dictionary<string, string> sourceParameters = request.Url.GetQueryParameters();
             Dictionary<string, string> lowerKeySourceParameters = new Dictionary<string, string>(sourceParameters.Count);
             foreach (KeyValuePair<string, string> pair in sourceParameters)
             {
                 lowerKeySourceParameters.Add(pair.Key.ToLower(), pair.Value);
-                if (signAll) {
+                if (signAll)
+                {
                     parameterKeys.Add(pair.Key.ToLower());
                 }
             }
@@ -242,7 +251,7 @@ namespace COSXML.Auth
                 string value = dict[key];
                 if (value != null)
                 {
-                    if(isNeedEncode)resultBuilder.Append(key).Append('=').Append(URLEncodeUtils.Encode(value)).Append('&');
+                    if (isNeedEncode) resultBuilder.Append(key).Append('=').Append(URLEncodeUtils.Encode(value)).Append('&');
                     else resultBuilder.Append(key).Append('=').Append(value).Append('&');
                     keyResultBuilder.Append(key).Append(';');
                 }
@@ -253,7 +262,7 @@ namespace COSXML.Auth
             {
                 result = result.Substring(0, result.Length - 1);
                 keyResult = keyResult.Substring(0, keyResult.Length - 1);
-                return new string[]{result, keyResult};
+                return new string[] { result, keyResult };
             }
             return null;
         }
@@ -270,9 +279,9 @@ namespace COSXML.Auth
                 {
                     list[i] = list[i].ToLower();
                 }
-                list.Sort(delegate(string strA, string strB)
+                list.Sort(delegate (string strA, string strB)
                 {
-                   return StringUtils.Compare(strA, strB, false);
+                    return StringUtils.Compare(strA, strB, false);
                 });
             }
         }
@@ -287,18 +296,18 @@ namespace COSXML.Auth
         {
             if (request == null) throw new ArgumentNullException("Request == null");
             if (qcloudCredentials == null) throw new ArgumentNullException("QCloudCredentials == null");
-            if(qcloudSignSource == null || !(qcloudSignSource is CosXmlSignSourceProvider)) throw new ArgumentNullException("CosXmlSourceProvider == null");
+            if (qcloudSignSource == null || !(qcloudSignSource is CosXmlSignSourceProvider)) throw new ArgumentNullException("CosXmlSourceProvider == null");
             CosXmlSignSourceProvider cosXmlSourceProvider = (CosXmlSignSourceProvider)qcloudSignSource;
-           
+
             string signTime = cosXmlSourceProvider.GetSignTime();
             if (signTime == null)
             {
                 signTime = qcloudCredentials.KeyTime;
                 cosXmlSourceProvider.SetSignTime(signTime);
-            } 
+            }
             string signature = DigestUtils.GetHamcSha1ToHexString(cosXmlSourceProvider.Source(request), Encoding.UTF8, qcloudCredentials.SignKey, Encoding.UTF8);
             StringBuilder signBuilder = new StringBuilder();
-            
+
             signBuilder.Append(CosAuthConstants.Q_SIGN_ALGORITHM).Append('=').Append(CosAuthConstants.SHA1).Append('&')
                 .Append(CosAuthConstants.Q_AK).Append('=').Append(qcloudCredentials.SecretId).Append('&')
                 .Append(CosAuthConstants.Q_SIGN_TIME).Append('=').Append(signTime).Append('&')
@@ -308,17 +317,17 @@ namespace COSXML.Auth
                 .Append(CosAuthConstants.Q_SIGNATURE).Append('=').Append(signature);
             string sign = signBuilder.ToString();
             request.AddHeader(CosRequestHeaderKey.AUTHORIZAIION, sign);
-            if(qcloudCredentials is SessionQCloudCredentials)
+            if (qcloudCredentials is SessionQCloudCredentials)
             {
-                request.AddHeader(CosRequestHeaderKey.COS_SESSION_TOKEN,((SessionQCloudCredentials)qcloudCredentials).Token);
+                request.AddHeader(CosRequestHeaderKey.COS_SESSION_TOKEN, ((SessionQCloudCredentials)qcloudCredentials).Token);
             }
             if (cosXmlSourceProvider.onGetSign != null)
             {
-                cosXmlSourceProvider.onGetSign(request, sign); 
+                cosXmlSourceProvider.onGetSign(request, sign);
             }
         }
 
-        public static string GenerateSign(string method, string path, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, 
+        public static string GenerateSign(string method, string path, Dictionary<string, string> queryParameters, Dictionary<string, string> headers,
             string signTime, QCloudCredentials qcloudCredentials)
         {
             if (qcloudCredentials == null) throw new ArgumentNullException("QCloudCredentials == null");
@@ -339,7 +348,7 @@ namespace COSXML.Auth
                     cosXmlSourceProvider.AddParameterKey(key);
                 }
             }
-            string signature = DigestUtils.GetHamcSha1ToHexString(cosXmlSourceProvider.GenerateSource(method, path, queryParameters, headers), Encoding.UTF8, 
+            string signature = DigestUtils.GetHamcSha1ToHexString(cosXmlSourceProvider.GenerateSource(method, path, queryParameters, headers), Encoding.UTF8,
                 qcloudCredentials.SignKey, Encoding.UTF8);
 
             StringBuilder signBuilder = new StringBuilder();

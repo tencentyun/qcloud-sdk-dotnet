@@ -26,21 +26,22 @@ namespace COSXML.Model.Tag
         /// </summary>
         public List<Error> errorList;
 
-       
+
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{DeleteResult:\n");
-            if(deletedList != null)
+            if (deletedList != null)
             {
-                foreach(Deleted deleted in deletedList)
+                foreach (Deleted deleted in deletedList)
                 {
-                    if(deleted != null)stringBuilder.Append(deleted.GetInfo()).Append("\n");
+                    if (deleted != null) stringBuilder.Append(deleted.GetInfo()).Append("\n");
                 }
             }
-            if(errorList != null){
-                foreach(Error error in errorList)
+            if (errorList != null)
+            {
+                foreach (Error error in errorList)
                 {
-                    if(error != null)stringBuilder.Append(error.GetInfo()).Append("\n");
+                    if (error != null) stringBuilder.Append(error.GetInfo()).Append("\n");
                 }
             }
             stringBuilder.Append("}");
@@ -64,8 +65,8 @@ namespace COSXML.Model.Tag
             /// <summary>
             /// delete marker versionId
             /// </summary>
-            public string  deleteMarkerVersionId;
-           
+            public string deleteMarkerVersionId;
+
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Deleted:\n");
@@ -97,7 +98,7 @@ namespace COSXML.Model.Tag
             /// </summary>
             public string versionId;
 
-           
+
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Error:\n");

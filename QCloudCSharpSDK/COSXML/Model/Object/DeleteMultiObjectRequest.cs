@@ -41,7 +41,7 @@ namespace COSXML.Model.Object
         /// verbose 模式返回每个 key 的删除情况，quiet 模式只返回删除失败的 key 的情况；
         /// </summary>
         /// <param name="quiet"></param>
-        public void SetDeleteQuiet(bool quiet) 
+        public void SetDeleteQuiet(bool quiet)
         {
             delete.quiet = quiet;
         }
@@ -74,7 +74,7 @@ namespace COSXML.Model.Object
                 }
                 delete.deleteObjects.Add(deleteObject);
             }
-            
+
         }
         /// <summary>
         /// 删除对象

@@ -40,7 +40,7 @@ namespace COSXML.Model.Tag
             stringBuilder.Append("}").Append("\n");
             stringBuilder.Append("}");
             return stringBuilder.ToString();
-         }
+        }
 
         public sealed class Owner
         {
@@ -89,5 +89,5 @@ namespace COSXML.Model.Tag
         }
     }
 
-    
+
 }

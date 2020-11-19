@@ -27,8 +27,8 @@ namespace COSXML.CosException
             this.errorCode = errorCode;
         }
 
-        public CosClientException(int errorCode, string message, Exception cause) 
-            :base(message, cause)
+        public CosClientException(int errorCode, string message, Exception cause)
+            : base(message, cause)
         {
             this.errorCode = errorCode;
         }

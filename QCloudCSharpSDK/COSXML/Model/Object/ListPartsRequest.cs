@@ -43,7 +43,7 @@ namespace COSXML.Model.Object
         /// <param name="partNumberMarker"></param>
         public void SetPartNumberMarker(int partNumberMarker)
         {
-           SetQueryParameter(CosRequestHeaderKey.PART_NUMBER_MARKER, partNumberMarker.ToString());
+            SetQueryParameter(CosRequestHeaderKey.PART_NUMBER_MARKER, partNumberMarker.ToString());
         }
         /// <summary>
         /// 规定返回值的编码方式
@@ -74,7 +74,7 @@ namespace COSXML.Model.Object
             {
                 queryParameters["uploadId"] = uploadId;
             }
-            
+
         }
 
 

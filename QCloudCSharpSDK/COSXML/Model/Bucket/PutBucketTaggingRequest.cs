@@ -24,7 +24,8 @@ namespace COSXML.Model.Bucket
             this.queryParameters.Add("tagging", null);
         }
 
-        public void AddTag(string key, string value) {
+        public void AddTag(string key, string value)
+        {
             this.tagging.AddTag(key, value);
         }
 

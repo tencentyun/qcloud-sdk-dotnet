@@ -5,7 +5,7 @@ using System.Text;
 
 namespace COSXML.Model.Bucket
 {
-    public sealed class ListBucketInventoryRequest: BucketRequest
+    public sealed class ListBucketInventoryRequest : BucketRequest
     {
         private String continuationToken;
         public ListBucketInventoryRequest(string bucket) : base(bucket)

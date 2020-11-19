@@ -20,7 +20,7 @@ namespace COSXML.Common
         public const string EXPIRES = "Expires";
         public const string X_COS_COPY_SOURCE = "x-cos-copy-source";
         public const string X_COS_METADATA_DIRECTIVE = "x-cos-metadata-directive";
-        public const string X_COS_COPY_SOURCE_IF_MODIFIED_SINCE= "x-cos-copy-source-If-Modified-Since";
+        public const string X_COS_COPY_SOURCE_IF_MODIFIED_SINCE = "x-cos-copy-source-If-Modified-Since";
         public const string X_COS_COPY_SOURCE_IF_UNMODIFIED_SINCE = "x-cos-copy-source-If-Unmodified-Since";
         public const string X_COS_COPY_SOURCE_IF_MATCH = "x-cos-copy-source-If-Match";
         public const string X_COS_COPY_SOURCE_IF_NONE_MATCH = "x-cos-copy-source-If-None-Match";

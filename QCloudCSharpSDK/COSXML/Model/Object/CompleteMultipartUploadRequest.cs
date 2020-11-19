@@ -108,7 +108,7 @@ namespace COSXML.Model.Object
             {
                 this.queryParameters["uploadId"] = uploadId;
             }
-            
+
         }
     }
 }

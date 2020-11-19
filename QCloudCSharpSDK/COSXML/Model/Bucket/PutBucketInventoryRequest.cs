@@ -50,7 +50,8 @@ namespace COSXML.Model.Bucket
             if (prefix != null) inventoryConfiguration.destination.cosBucketDestination.prefix = prefix;
         }
 
-        public void enableSSE() {
+        public void enableSSE()
+        {
             inventoryConfiguration.destination.cosBucketDestination.encryption = new InventoryConfiguration.Encryption();
             inventoryConfiguration.destination.cosBucketDestination.encryption.sSECOS = ""; //默认不填
         }

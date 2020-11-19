@@ -23,66 +23,67 @@ namespace COSXMLTests
     {
 
         COSXML.CosXml cosXml;
-        TransferManager transferManager; 
+        TransferManager transferManager;
         string bucket;
         string bigFileSrcPath;
         string smallFileSrcPath;
         string localDir;
         string localFileName;
 
-        public void init() {
-          string region = "ap-guangzhou";
-          
-          CosXmlConfig config = new CosXmlConfig.Builder()
-              .SetRegion(region)
-              .SetDebugLog(true)
-              .SetConnectionLimit(512)
-              .Build();
+        public void init()
+        {
+            string region = "ap-guangzhou";
 
-          QCloudCredentialProvider qCloudCredentialProvider = new DefaultSessionQCloudCredentialProvider(
-              "secretId",
-              "secretKey",
-              1597907089,
-              "sessionToken"
-          );
+            CosXmlConfig config = new CosXmlConfig.Builder()
+                .SetRegion(region)
+                .SetDebugLog(true)
+                .SetConnectionLimit(512)
+                .Build();
 
-          cosXml = new CosXmlServer(config, qCloudCredentialProvider);
-          
-          transferManager = new TransferManager(cosXml, new TransferConfig());
+            QCloudCredentialProvider qCloudCredentialProvider = new DefaultSessionQCloudCredentialProvider(
+                "secretId",
+                "secretKey",
+                1597907089,
+                "sessionToken"
+            );
 
-          smallFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 1);
-          bigFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 10);
-          FileInfo fileInfo = new FileInfo(smallFileSrcPath);
-          DirectoryInfo directoryInfo = fileInfo.Directory;
-          localDir = directoryInfo.FullName;
-          localFileName = "local.txt";
+            cosXml = new CosXmlServer(config, qCloudCredentialProvider);
+
+            transferManager = new TransferManager(cosXml, new TransferConfig());
+
+            smallFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 1);
+            bigFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 10);
+            FileInfo fileInfo = new FileInfo(smallFileSrcPath);
+            DirectoryInfo directoryInfo = fileInfo.Directory;
+            localDir = directoryInfo.FullName;
+            localFileName = "local.txt";
         }
 
         // [Test()]
         public void PutObject()
         {
-          init();
+            init();
 
-          string bucket = "000000-1253653367";
-          string objectKey = "文件夹/exampleobject";
+            string bucket = "000000-1253653367";
+            string objectKey = "文件夹/exampleobject";
 
-          try
-          {
-              PutObjectRequest request = new PutObjectRequest(bucket, objectKey, smallFileSrcPath);
+            try
+            {
+                PutObjectRequest request = new PutObjectRequest(bucket, objectKey, smallFileSrcPath);
 
-              //执行请求
-              PutObjectResult result = cosXml.PutObject(request);
+                //执行请求
+                PutObjectResult result = cosXml.PutObject(request);
 
-              Console.WriteLine(result.GetResultInfo());
-          }
-          catch (CosClientException clientEx)
-          {
-              Console.WriteLine("CosClientException: " + clientEx.Message);
-          }
-          catch (CosServerException serverEx)
-          {
-              Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-          }
+                Console.WriteLine(result.GetResultInfo());
+            }
+            catch (CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+            }
+            catch (CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+            }
         }
     }
 }

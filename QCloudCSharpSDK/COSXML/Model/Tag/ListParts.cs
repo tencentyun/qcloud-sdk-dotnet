@@ -62,7 +62,7 @@ namespace COSXML.Model.Tag
         /// </summary>
         public List<Part> parts;
 
-        
+
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{ListParts:\n");
@@ -70,18 +70,18 @@ namespace COSXML.Model.Tag
             stringBuilder.Append("EncodingType:").Append(encodingType).Append("\n");
             stringBuilder.Append("Key:").Append(key).Append("\n");
             stringBuilder.Append("UploadId:").Append(uploadId).Append("\n");
-            if(owner != null)stringBuilder.Append(owner.GetInfo()).Append("\n");
+            if (owner != null) stringBuilder.Append(owner.GetInfo()).Append("\n");
             stringBuilder.Append("PartNumberMarker:").Append(partNumberMarker).Append("\n");
-            if(initiator != null) stringBuilder.Append(initiator.GetInfo()).Append("\n");
+            if (initiator != null) stringBuilder.Append(initiator.GetInfo()).Append("\n");
             stringBuilder.Append("StorageClass:").Append(storageClass).Append("\n");
             stringBuilder.Append("NextPartNumberMarker:").Append(nextPartNumberMarker).Append("\n");
             stringBuilder.Append("MaxParts:").Append(maxParts).Append("\n");
             stringBuilder.Append("IsTruncated:").Append(isTruncated).Append("\n");
-            if(parts != null)
+            if (parts != null)
             {
-                foreach(Part part in parts)
+                foreach (Part part in parts)
                 {
-                    if(part != null)stringBuilder.Append(part.GetInfo()).Append("\n");
+                    if (part != null) stringBuilder.Append(part.GetInfo()).Append("\n");
                 }
             }
             stringBuilder.Append("}");
@@ -99,7 +99,7 @@ namespace COSXML.Model.Tag
              */
             public string disPlayName;
 
-            
+
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Owner:\n");
@@ -121,7 +121,7 @@ namespace COSXML.Model.Tag
             /// </summary>
             public string disPlayName;
 
-            
+
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Initiator:\n");
@@ -151,7 +151,7 @@ namespace COSXML.Model.Tag
             /// </summary>
             public string size;
 
-            
+
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Part:\n");

@@ -61,7 +61,7 @@ namespace COSXML.Network
                 // init grobal httpwebreqeust
                 CommandTask.Init(HttpClient.config);
             }
-            
+
         }
 
         private HttpClient()
@@ -128,23 +128,23 @@ namespace COSXML.Network
                 {
                     response = new CosResponse(cosResult, null, -1L, null);
                 }
-                
+
                 cosRequest.BindRequest(request);
                 CommandTask.Excute(request, response, config);
             }
             catch (CosServerException)
             {
-                throw ;
+                throw;
             }
             catch (CosClientException)
             {
-                throw ;
+                throw;
             }
             catch (Exception ex)
             {
                 throw new CosClientException((int)CosClientError.BAD_REQUEST, ex.Message, ex);
             }
-            
+
         }
 
         public void excute(Request request, Response response)
@@ -155,11 +155,11 @@ namespace COSXML.Network
             }
             catch (CosServerException)
             {
-                throw ;
+                throw;
             }
             catch (CosClientException)
             {
-                throw ;
+                throw;
             }
             catch (Exception ex)
             {
@@ -167,7 +167,7 @@ namespace COSXML.Network
             }
         }
 
-        public void InternalSchedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, 
+        public void InternalSchedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback,
             COSXML.Callback.OnFailedCallback failCallback)
         {
             try
@@ -182,7 +182,7 @@ namespace COSXML.Network
                 }
                 else
                 {
-                    response = new CosResponse(cosResult, null, -1L, null,successCallback, failCallback);
+                    response = new CosResponse(cosResult, null, -1L, null, successCallback, failCallback);
                 }
                 cosRequest.BindRequest(request);
                 CommandTask.Schedue(request, response, config);
@@ -245,8 +245,9 @@ namespace COSXML.Network
                 request.AddHeader(CosRequestHeaderKey.CONTENT_MD5, request.Body.GetMD5());
             }
             // content type header
-            if(request.Body != null && request.Body.ContentType != null && 
-                    !request.Headers.ContainsKey(CosRequestHeaderKey.CONTENT_TYPE)) {
+            if (request.Body != null && request.Body.ContentType != null &&
+                    !request.Headers.ContainsKey(CosRequestHeaderKey.CONTENT_TYPE))
+            {
                 request.AddHeader(CosRequestHeaderKey.CONTENT_TYPE, request.Body.ContentType);
             }
 
@@ -262,7 +263,7 @@ namespace COSXML.Network
         {
             HttpUrl httpUrl = new HttpUrl();
             httpUrl.Scheme = (bool)cosRequest.IsHttps ? "https" : "http";
-            httpUrl.Host = cosRequest.GetHost(); 
+            httpUrl.Host = cosRequest.GetHost();
             httpUrl.Path = URLEncodeUtils.EncodePathOfURL(cosRequest.RequestPath);
             httpUrl.SetQueryParameters(cosRequest.GetRequestParamters());
             return httpUrl;
@@ -281,7 +282,7 @@ namespace COSXML.Network
                 QLog.D(TAG, "has add authorizaiton in headers");
                 return;
             }
-            
+
             //has no authorization, but signSourceProvider == null
             if (qcloudSignSource == null)
             {
@@ -331,12 +332,12 @@ namespace COSXML.Network
                 {
                     this.Body = new ResponseBody();
                 }
-                
+
             }
 
             public CosResponse(CosResult cosResult, string saveFilePath, long saveFileOffset, COSXML.Callback.OnProgressCallback downloadProgressCallback,
-                COSXML.Callback.OnSuccessCallback<CosResult> successCallback, 
-                COSXML.Callback.OnFailedCallback failCallback):this(cosResult, saveFilePath, saveFileOffset, downloadProgressCallback)
+                COSXML.Callback.OnSuccessCallback<CosResult> successCallback,
+                COSXML.Callback.OnFailedCallback failCallback) : this(cosResult, saveFilePath, saveFileOffset, downloadProgressCallback)
             {
                 this.successCallback = successCallback;
                 this.faileCallback = failCallback;
@@ -397,8 +398,9 @@ namespace COSXML.Network
             public override void OnFinish(bool isSuccess, Exception ex)
             {
                 cosResult.rawContentBodyString = Body.rawContentBodyString;
-                
-                if (isSuccess && successCallback != null) {
+
+                if (isSuccess && successCallback != null)
+                {
                     successCallback(cosResult);
                 }
                 else if (faileCallback != null)
@@ -410,7 +412,7 @@ namespace COSXML.Network
 
             }
         }
-      
+
     }
-    
+
 }

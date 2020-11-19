@@ -18,7 +18,7 @@ namespace COSXML.Model.Object
         /// </summary>
         private string uploadId;
 
-        public AbortMultipartUploadRequest(string bucket, string key, string uploadId) 
+        public AbortMultipartUploadRequest(string bucket, string key, string uploadId)
             : base(bucket, key)
         {
             this.uploadId = uploadId;
@@ -62,7 +62,7 @@ namespace COSXML.Model.Object
             {
                 this.queryParameters["uploadId"] = uploadId;
             }
-            
+
         }
     }
 }

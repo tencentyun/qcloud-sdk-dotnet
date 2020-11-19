@@ -10,7 +10,7 @@ namespace COSXML.Model.Bucket
     public sealed class PutBucketLoggingRequest : BucketRequest
     {
         private BucketLoggingStatus bucketLoggingStatus;
-        public PutBucketLoggingRequest(string bucket):base(bucket)
+        public PutBucketLoggingRequest(string bucket) : base(bucket)
         {
             this.method = CosRequestMethod.PUT;
             this.queryParameters.Add("logging", null);
@@ -24,8 +24,8 @@ namespace COSXML.Model.Bucket
             {
                 bucketLoggingStatus.loggingEnabled = new BucketLoggingStatus.LoggingEnabled();
             }
-            if(targetBucket != null) bucketLoggingStatus.loggingEnabled.targetBucket = targetBucket;
-            if(targetPrefix != null) bucketLoggingStatus.loggingEnabled.targetPrefix = targetPrefix;
+            if (targetBucket != null) bucketLoggingStatus.loggingEnabled.targetBucket = targetBucket;
+            if (targetPrefix != null) bucketLoggingStatus.loggingEnabled.targetPrefix = targetPrefix;
         }
 
         public override Network.RequestBody GetRequestBody()

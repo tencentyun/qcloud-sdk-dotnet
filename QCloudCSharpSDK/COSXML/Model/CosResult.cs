@@ -35,12 +35,12 @@ namespace COSXML.Model
         /// <summary>
         /// raw http response body
         /// </summary>
-        public string rawContentBodyString {set; private get;}
+        public string rawContentBodyString { set; private get; }
 
         /// <summary>
         /// raw http response body
         /// </summary>
-        public string GetRawContentBodyString() { return rawContentBodyString;}
+        public string GetRawContentBodyString() { return rawContentBodyString; }
 
         /// <summary>
         /// exchange infor between request and result
@@ -72,7 +72,7 @@ namespace COSXML.Model
             resultBuilder.Append(httpCode).Append(" ").Append(httpMessage).Append("\n");
             if (responseHeaders != null)
             {
-                foreach(KeyValuePair<string, List<string>> element in responseHeaders)
+                foreach (KeyValuePair<string, List<string>> element in responseHeaders)
                 {
                     resultBuilder.Append(element.Key).Append(": ").Append(element.Value[0]).Append("\n");
                 }

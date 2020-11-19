@@ -34,7 +34,7 @@ namespace COSXML.Auth
             base(secretId, signKey, keyTime)
         {
             this.Token = token;
-            
+
         }
 
         public string Token

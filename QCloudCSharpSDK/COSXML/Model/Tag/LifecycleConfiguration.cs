@@ -16,10 +16,11 @@ namespace COSXML.Model.Tag
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{LifecycleConfiguration:\n");
-            if(rules != null)
+            if (rules != null)
             {
-                foreach (Rule rule in rules){
-                    if(rule != null) stringBuilder.Append(rule.GetInfo()).Append("\n");
+                foreach (Rule rule in rules)
+                {
+                    if (rule != null) stringBuilder.Append(rule.GetInfo()).Append("\n");
                 }
             }
             stringBuilder.Append("}");
@@ -97,7 +98,7 @@ namespace COSXML.Model.Tag
             {
                 StringBuilder stringBuilder = new StringBuilder("{Filter:\n");
                 stringBuilder.Append("Prefix:").Append(prefix).Append("\n");
-                if(filterAnd != null)stringBuilder.Append(filterAnd.GetInfo()).Append("\n");
+                if (filterAnd != null) stringBuilder.Append(filterAnd.GetInfo()).Append("\n");
                 stringBuilder.Append("}");
                 return stringBuilder.ToString();
             }
