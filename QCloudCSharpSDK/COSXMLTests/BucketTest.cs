@@ -28,7 +28,7 @@ namespace COSXMLTests
 
 
                 // 添加acl
-                request.SetCosACL(CosACL.PUBLIC_READ);
+                request.SetCosACL(CosACL.PublicRead);
 
                 COSXML.Model.Tag.GrantAccount readAccount = new COSXML.Model.Tag.GrantAccount();
 
@@ -187,7 +187,7 @@ namespace COSXMLTests
 
 
                 //添加acl
-                request.SetCosACL(CosACL.PUBLIC_READ);
+                request.SetCosACL(CosACL.PublicRead);
 
                 COSXML.Model.Tag.GrantAccount readAccount = new COSXML.Model.Tag.GrantAccount();
 
