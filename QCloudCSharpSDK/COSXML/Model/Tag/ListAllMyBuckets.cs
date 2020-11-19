@@ -6,6 +6,7 @@ using System.Text;
 namespace COSXML.Model.Tag
 {
     /// <summary>
+    /// 列出存储桶结果
     /// <see cref="https://cloud.tencent.com/document/product/436/8291"/>
     /// </summary>
     public sealed class ListAllMyBuckets

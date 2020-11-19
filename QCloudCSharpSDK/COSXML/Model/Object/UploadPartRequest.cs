@@ -91,7 +91,9 @@ namespace COSXML.Model.Object
         /// <param name="srcPath"></param>
         public UploadPartRequest(string bucket, string key, int partNumber, string uploadId, string srcPath)
             : this(bucket, key, partNumber, uploadId, srcPath, -1L, -1L)
-        { }
+        {
+
+        }
 
         /// <summary>
         /// 上传data数据

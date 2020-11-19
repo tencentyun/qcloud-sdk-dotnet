@@ -9,7 +9,7 @@ namespace COSXML.Model.Tag
     /// </summary>
     public sealed class GrantAccount
     {
-        List<string> idList;
+        internal List<string> idList;
 
         public GrantAccount()
         {

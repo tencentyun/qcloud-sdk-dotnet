@@ -60,7 +60,10 @@ namespace COSXML.Model.Tag
         /// <param name="region"></param>
         /// <param name="key"></param>
         public CopySourceStruct(string appid, string bucket, string region, string key)
-            : this(appid, bucket, region, key, null) { }
+            : this(appid, bucket, region, key, null) 
+            { 
+                
+            }
 
         /// <summary>
         /// check parameter

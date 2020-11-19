@@ -16,11 +16,11 @@ namespace COSXMLTests
 
 
         [Test()]
-        public void testHostEndpoint()
+        public void TestHostEndpoint()
         {
             CosXmlConfig config = new CosXmlConfig.Builder()
                       .SetConnectionLimit(512)
-                      .setEndpointSuffix("cos.accelerate.myqcloud.com")
+                      .SetEndpointSuffix("cos.accelerate.myqcloud.com")
                       .Build();
 
 
@@ -38,6 +38,7 @@ namespace COSXMLTests
             {
                 // ignore
             }
+
             Assert.AreEqual(bucket + "." + config.endpointSuffix, request.GetHost());
 
             GetBucketRequest bucketRequest = new GetBucketRequest(bucket);
@@ -50,6 +51,7 @@ namespace COSXMLTests
             {
                 // ignore
             }
+
             Assert.AreEqual(bucket + "." + config.endpointSuffix, bucketRequest.GetHost());
 
             // test service request
@@ -64,13 +66,13 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testCustomHost()
+        public void TestCustomHost()
         {
             string customHost = "www.my.custom.host.com";
 
             // test host
             CosXmlConfig configWithHost = new CosXmlConfig.Builder()
-                      .setHost(customHost)
+                      .SetHost(customHost)
                       .Build();
             string bucket = "bucket-125000";
             CosXmlServer cosXml = new CosXmlServer(configWithHost, null);
@@ -85,6 +87,7 @@ namespace COSXMLTests
             {
                 // ignore
             }
+
             Assert.AreEqual(customHost, bucketRequest.GetHost());
 
             GetObjectRequest request = new GetObjectRequest(bucket, "aKey", null, null);
@@ -97,6 +100,7 @@ namespace COSXMLTests
             {
                 // ignore
             }
+
             Assert.AreEqual(customHost, request.GetHost());
 
             GetServiceRequest serviceRequest = new GetServiceRequest();

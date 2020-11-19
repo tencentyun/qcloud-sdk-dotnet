@@ -2,13 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-
-/* ============================================================================== 
-* Copyright 2016-2019 Tencent Cloud. All Rights Reserved.
-* Auth：bradyxiao 
-* Date：2019/4/4 16:48:10 
-* ==============================================================================*/
-
 namespace Tencent.QCloud.Cos.Sdk.Network
 {
     public class TaskManager
@@ -25,7 +18,7 @@ namespace Tencent.QCloud.Cos.Sdk.Network
             sync = new Object();
         }
 
-        public static TaskManager getInstance()
+        public static TaskManager GetInstance()
         {
             lock (typeof(TaskManager))
             {

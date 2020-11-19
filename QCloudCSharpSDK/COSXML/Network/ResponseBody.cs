@@ -65,7 +65,9 @@ namespace COSXML.Network
         public string rawContentBodyString { get; private set; }
 
         public ResponseBody()
-        { }
+        {
+
+        }
 
         public ResponseBody(string filePath, long fileOffset)
         {

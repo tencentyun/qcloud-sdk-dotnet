@@ -72,6 +72,7 @@ namespace COSXML.Model
             {
                 return isHttps;
             }
+            
             set { isHttps = value; }
         }
 

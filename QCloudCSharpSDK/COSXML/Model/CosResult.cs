@@ -41,13 +41,19 @@ namespace COSXML.Model
         /// exchange infor between request and result
         /// </summary>
         /// <param name="cosRequest"></param>
-        internal virtual void ExternInfo(CosRequest cosRequest) { }
+        internal virtual void ExternInfo(CosRequest cosRequest) 
+        { 
+
+        }
 
         /// <summary>
         /// parse status line and headers
         /// </summary>
         /// <param name="response"> <see cref="COSXML.Network.Response"/></param>
-        internal virtual void InternalParseResponseHeaders() { }
+        internal virtual void InternalParseResponseHeaders() 
+        { 
+
+        }
 
         /// <summary>
         /// parse response body, such as download files.
@@ -55,7 +61,10 @@ namespace COSXML.Model
         /// <param name="inputStream"> input stream </param>
         /// <param name="contentType"> body mime type</param>
         /// <param name="contentLength">body length</param>
-        internal virtual void ParseResponseBody(Stream inputStream, string contentType, long contentLength) { }
+        internal virtual void ParseResponseBody(Stream inputStream, string contentType, long contentLength) 
+        {
+
+        }
 
         /// <summary>
         /// get result message

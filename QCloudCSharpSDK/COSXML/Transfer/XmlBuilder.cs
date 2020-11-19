@@ -769,7 +769,7 @@ namespace COSXML.Transfer
             if (inputFormat != null)
             {
                 xmlWriter.WriteStartElement("InputSerialization");
-                writeStringIfValuePresent(xmlWriter, "CompressionType", inputFormat.CompressionType);
+                writeStringIfValuePresent(xmlWriter, "CompressionType", inputFormat.compressionType);
 
                 if (inputFormat.csvFormat != null)
                 {

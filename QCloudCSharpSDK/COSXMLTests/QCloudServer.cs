@@ -7,13 +7,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-
-/* ============================================================================== 
-* Copyright 2016-2019 Tencent Cloud. All Rights Reserved.
-* Auth：bradyxiao 
-* Date：2019/1/22 19:34:45 
-* ==============================================================================*/
-
 namespace COSXMLTests
 {
     public class QCloudServer

@@ -181,7 +181,10 @@ namespace COSXML.Network
 
             internal string proxyDomain;
 
-            public Builder() { }
+            public Builder() 
+            { 
+                
+            }
 
             public Builder AllowAutoRedirect(bool allow)
             {

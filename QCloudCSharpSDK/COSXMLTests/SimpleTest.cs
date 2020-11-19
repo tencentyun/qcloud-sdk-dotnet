@@ -36,10 +36,9 @@ namespace COSXMLTests
 
         internal string localFileName;
 
-        public void init()
+        public void Init()
         {
             string region = "ap-guangzhou";
-
 
             CosXmlConfig config = new CosXmlConfig.Builder()
                 .SetRegion(region)
@@ -71,7 +70,7 @@ namespace COSXMLTests
 
         public void PutObject()
         {
-            init();
+            Init();
 
             string bucket = "000000-1253653367";
             string objectKey = "文件夹/exampleobject";

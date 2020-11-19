@@ -5,22 +5,22 @@ namespace COSXML.Model.Tag
     public sealed class ObjectSelectionFormat
     {
 
-        public readonly string CompressionType;
+        public readonly string compressionType;
 
         public readonly CSVFormat csvFormat;
 
         public readonly JSONFormat jsonFormat;
 
-        public ObjectSelectionFormat(string CompressionType, CSVFormat csv)
+        public ObjectSelectionFormat(string compressionType, CSVFormat csv)
         {
-            this.CompressionType = CompressionType;
+            this.compressionType = compressionType;
             this.csvFormat = csv;
             this.jsonFormat = null;
         }
 
-        public ObjectSelectionFormat(string CompressionType, JSONFormat json)
+        public ObjectSelectionFormat(string compressionType, JSONFormat json)
         {
-            this.CompressionType = CompressionType;
+            this.compressionType = compressionType;
             this.csvFormat = null;
             this.jsonFormat = json;
         }

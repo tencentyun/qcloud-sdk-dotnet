@@ -983,7 +983,7 @@ namespace COSXMLTests
 
             Console.WriteLine(getResult.GetResultInfo());
 
-            if (getResult.configuration == null || !getResult.configuration.isEnabled())
+            if (getResult.configuration == null || !getResult.configuration.IsEnabled())
             {
                 IntelligentTieringConfiguration configuration = new IntelligentTieringConfiguration();
 
