@@ -19,7 +19,7 @@ namespace COSXMLTests
     {
 
         [Test()]
-        public void testRestoreHistoryObject()
+        public void TestRestoreHistoryObject()
         {
 
             try

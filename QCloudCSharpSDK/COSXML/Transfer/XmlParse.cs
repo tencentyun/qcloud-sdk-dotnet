@@ -790,7 +790,8 @@ if ("Destination".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
         public static void ParseTagging(Stream inStream, Tagging tagging)
         {
             XmlReader xmlReader = XmlReader.Create(inStream);
-            string key = null, value = null;
+            string key = null;
+            string value = null;
 
             while (xmlReader.Read())
             {
@@ -842,14 +843,12 @@ if ("Value".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                                 xmlReader.Read();
                                 domainConfiguration.rule.Status = xmlReader.Value;
                             }
-                            else
-if ("Type".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("Type".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
                                 domainConfiguration.rule.Type = xmlReader.Value;
                             }
-                            else
-if ("Name".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("Name".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
                                 domainConfiguration.rule.Name = xmlReader.Value;
@@ -2483,6 +2482,7 @@ if ("Count".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                                 default:
                                     break;
                             }
+                            
                             parentNode = 0;
                             recognitionInfo = new SensitiveRecognitionResult.RecognitionInfo();
                             break;

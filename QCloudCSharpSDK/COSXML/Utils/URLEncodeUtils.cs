@@ -41,7 +41,8 @@ namespace COSXML.Utils
             }
 
             char separator = '/';
-            int start = 0, length = path.Length;
+            int start = 0;
+            int length = path.Length;
 
             int index = path.IndexOf(separator, start);
             StringBuilder result = new StringBuilder();

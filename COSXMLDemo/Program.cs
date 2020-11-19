@@ -53,15 +53,15 @@ namespace COSXMLDemo
             {
                 // 创建存储痛
                 Console.WriteLine(" ======= Put Bucket ======");
-                putBucket(cosXml);
+                PutBucket(cosXml);
 
                 // 上传对象
                 Console.WriteLine(" ======= Put Object ======");
-                string cosKey = putObject(cosXml);
+                string cosKey = PutObject(cosXml);
 
                 // 删除对象
                 Console.WriteLine(" ======= Delete Object ======");
-                deleteObject(cosXml, cosKey);
+                DeleteObject(cosXml, cosKey);
             } 
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -70,17 +70,18 @@ namespace COSXMLDemo
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-            } finally 
+            } 
+            finally 
             {
                 // 删除存储桶
                 Console.WriteLine(" ======= Delete Bucket ======");
-                deleteBucket(cosXml);
+                DeleteBucket(cosXml);
             }
 
             Console.WriteLine(" ======= Program End. ======");
         }
 
-        internal static void putBucket(CosXmlServer cosXml) 
+        internal static void PutBucket(CosXmlServer cosXml) 
         {
             try
             {
@@ -104,7 +105,7 @@ namespace COSXMLDemo
             }
         }
 
-        internal static void deleteBucket(CosXmlServer cosXml) 
+        internal static void DeleteBucket(CosXmlServer cosXml) 
         {
             DeleteBucketRequest request = new DeleteBucketRequest(bucket);
 
@@ -113,7 +114,7 @@ namespace COSXMLDemo
             Console.WriteLine(result.GetResultInfo());
         }
 
-        internal static string putObject(CosXmlServer cosXml) 
+        internal static string PutObject(CosXmlServer cosXml) 
         {
             string cosKey = "cosKey";
             byte[] tmpData = new byte[1024];
@@ -127,7 +128,7 @@ namespace COSXMLDemo
             return cosKey;
         }
 
-        internal static void deleteObject(CosXmlServer cosXml, string cosKey) 
+        internal static void DeleteObject(CosXmlServer cosXml, string cosKey) 
         {
             DeleteObjectRequest request = new DeleteObjectRequest(bucket, cosKey);
 

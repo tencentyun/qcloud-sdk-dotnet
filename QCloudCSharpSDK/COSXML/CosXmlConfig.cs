@@ -304,7 +304,7 @@ namespace COSXML
             /// </summary>
             /// <param name="suffix"></param>
             /// <returns></returns>
-            public Builder setEndpointSuffix(string suffix)
+            public Builder SetEndpointSuffix(string suffix)
             {
                 this.endpointSuffix = suffix;
 
@@ -316,7 +316,7 @@ namespace COSXML
             /// </summary>
             /// <param name="host"></param>
             /// <returns></returns>
-            public Builder setHost(string host)
+            public Builder SetHost(string host)
             {
                 this.host = host;
 

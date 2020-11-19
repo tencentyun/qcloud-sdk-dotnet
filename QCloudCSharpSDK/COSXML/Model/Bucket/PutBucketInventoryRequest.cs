@@ -65,7 +65,7 @@ namespace COSXML.Model.Bucket
             }
         }
 
-        public void enableSSE()
+        public void EnableSSE()
         {
             inventoryConfiguration.destination.cosBucketDestination.encryption = new InventoryConfiguration.Encryption();
             //默认不填

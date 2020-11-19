@@ -16,7 +16,7 @@ namespace COSXML.Log
 
         private static Process currentProcess = Process.GetCurrentProcess();
 
-        private static List<Log> logImplList = new List<Log>();
+        private static List<ILog> logImplList = new List<ILog>();
 
         private static Level level = Level.V;
 
@@ -25,7 +25,7 @@ namespace COSXML.Log
             QLog.level = level;
         }
 
-        public static void AddLogAdapter(Log log)
+        public static void AddLogAdapter(ILog log)
         {
 
             if (log == null)
@@ -34,7 +34,7 @@ namespace COSXML.Log
                 return;
             }
 
-            foreach (Log logImpl in logImplList)
+            foreach (ILog logImpl in logImplList)
             {
 
                 if (logImpl.GetType().Name == log.GetType().Name)
@@ -150,7 +150,7 @@ namespace COSXML.Log
 
             messageBuilder.Append("\r\n");
 
-            foreach (Log log in logImplList)
+            foreach (ILog log in logImplList)
             {
                 log.PrintLog(messageBuilder.ToString());
             }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace COSXML.Log
 {
-    public interface Log
+    public interface ILog
     {
         void PrintLog(string message);
     }

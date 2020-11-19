@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace COSXML.Log
 {
-    public sealed class LogImpl : Log
+    public sealed class LogImpl : ILog
     {
 
         public void PrintLog(string message)

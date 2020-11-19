@@ -21,14 +21,20 @@ namespace COSXML.Network
 
         public ResponseBody Body { get; set; }
 
-        public virtual void HandleResponseHeader() { }
+        public virtual void HandleResponseHeader() 
+        { 
+
+        }
 
         /// <summary>
         /// handle body successfully or throw exception
         /// </summary>
         /// <param name="ex"></param>
         /// <param name="isSuccess"></param>
-        public virtual void OnFinish(bool isSuccess, Exception ex) { }
+        public virtual void OnFinish(bool isSuccess, Exception ex) 
+        { 
+            
+        }
 
     }
 

@@ -139,7 +139,7 @@ namespace COSXML.Model.Tag
 
             public Encryption encryption;
 
-            public void setBucket(String region, String bucket)
+            public void SetBucket(String region, String bucket)
             {
 
                 if (region != null && bucket != null)

@@ -19,9 +19,6 @@ namespace COSXML.Model.Object
         /// </summary>
         public string eTag;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public PicOperationUploadResult uploadResult;
 
         internal override void InternalParseResponseHeaders()

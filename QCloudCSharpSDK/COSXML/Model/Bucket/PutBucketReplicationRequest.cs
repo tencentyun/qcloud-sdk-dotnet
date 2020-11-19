@@ -9,9 +9,6 @@ using COSXML.CosException;
 
 namespace COSXML.Model.Bucket
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class PutBucketReplicationRequest : BucketRequest
     {
         private ReplicationConfiguration replicationConfiguration;

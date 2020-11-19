@@ -682,7 +682,7 @@ if (complete < total)
 
                 if (!String.IsNullOrEmpty(fileName))
                 {
-                    parametersBuilder.Append("; filename=").Append("\"").Append(fileName).Append("\""); ;
+                    parametersBuilder.Append("; filename=").Append("\"").Append(fileName).Append("\"");
                 }
 
                 parametersBuilder.Append(CRLF);
@@ -737,7 +737,7 @@ if (complete < total)
 
             if (!String.IsNullOrEmpty(fileName))
             {
-                parametersBuilder.Append("; filename=").Append("\"").Append(fileName).Append("\""); ;
+                parametersBuilder.Append("; filename=").Append("\"").Append(fileName).Append("\"");
             }
 
             parametersBuilder.Append(CRLF);

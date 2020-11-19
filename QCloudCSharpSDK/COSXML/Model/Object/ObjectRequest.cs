@@ -179,7 +179,10 @@ namespace COSXML.Model.Object
         {
         }
 
-        protected virtual void InteranlUpdateHeaders() { }
+        protected virtual void InteranlUpdateHeaders() 
+        { 
+            
+        }
 
         public override Dictionary<string, string> GetRequestParamters()
         {

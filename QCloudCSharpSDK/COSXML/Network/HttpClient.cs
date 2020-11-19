@@ -96,8 +96,7 @@ namespace COSXML.Network
         }
 
 
-        public void Schedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback,
-            COSXML.Callback.OnFailedCallback failCallback)
+        public void Schedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
             //HttpTask httpTask = new HttpTask();
             //httpTask.cosRequest = cosRequest;
@@ -157,7 +156,7 @@ namespace COSXML.Network
 
         }
 
-        public void excute(Request request, Response response)
+        public void Execute(Request request, Response response)
         {
 
             try
@@ -178,8 +177,7 @@ namespace COSXML.Network
             }
         }
 
-        public void InternalSchedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback,
-            COSXML.Callback.OnFailedCallback failCallback)
+        public void InternalSchedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
 
             try
