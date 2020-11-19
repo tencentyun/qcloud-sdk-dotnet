@@ -4,18 +4,10 @@ using System.Collections.Generic;
 using System.Text;
 using COSXML.CosException;
 using COSXML.Common;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/2/2018 8:03:59 PM
-* bradyxiao
-*/
+
 namespace COSXML.Model.Bucket
 {
-    /**
-     * Buceket request for cos
-     * base class
-     * provider bucket,region property
-     */
+    
     public abstract class BucketRequest : CosRequest
     {
         /// <summary>
@@ -67,6 +59,7 @@ namespace COSXML.Model.Bucket
                 hostBuilder.Append("-")
                     .Append(appid);
             }
+
             hostBuilder.Append(".cos.")
                     .Append(region)
                     .Append(".myqcloud.com");
@@ -80,6 +73,7 @@ namespace COSXML.Model.Bucket
             {
                 hostBuilder.Append(serviceConfig.host);
             }
+
             else
             {
                 hostBuilder.Append(bucket);
@@ -88,11 +82,13 @@ namespace COSXML.Model.Bucket
                     hostBuilder.Append("-")
                         .Append(appid);
                 }
+
                 if (serviceConfig.endpointSuffix != null)
                 {
                     hostBuilder.Append(".")
                         .Append(serviceConfig.endpointSuffix);
                 }
+
                 else
                 {
                     hostBuilder.Append(".cos.")
@@ -105,7 +101,10 @@ namespace COSXML.Model.Bucket
 
         public override void CheckParameters()
         {
-            if (requestUrlWithSign != null) return;
+            if (requestUrlWithSign != null){
+                return;
+            }
+            
             //if (appid == null)
             //{
             //    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "appid is null");

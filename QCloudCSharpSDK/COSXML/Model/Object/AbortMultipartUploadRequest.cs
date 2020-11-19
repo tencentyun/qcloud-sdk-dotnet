@@ -49,6 +49,7 @@ namespace COSXML.Model.Object
             {
                 return;
             }
+            
             base.CheckParameters();
             if (uploadId == null)
             {

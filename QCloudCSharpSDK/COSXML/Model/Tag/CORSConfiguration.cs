@@ -5,9 +5,6 @@ using System.Text;
 
 namespace COSXML.Model.Tag
 {
-    /// <summary>
-    /// <see cref="https://cloud.tencent.com/document/product/436/8274"/>
-    /// </summary>
     public sealed class CORSConfiguration
     {
         /// <summary>
@@ -26,6 +23,7 @@ namespace COSXML.Model.Tag
                     if (corsRule != null) stringBuilder.Append(corsRule.GetInfo()).Append("\n");
                 }
             }
+
             stringBuilder.Append("}");
             return stringBuilder.ToString();
         }
@@ -67,23 +65,35 @@ namespace COSXML.Model.Tag
                 {
                     foreach (string method in allowedMethods)
                     {
-                        if (method != null) stringBuilder.Append("AllowedMethod:").Append(method).Append("\n");
+                        if (method != null) 
+                        {
+                            stringBuilder.Append("AllowedMethod:").Append(method).Append("\n");
+                        }
                     }
                 }
+
                 if (allowedHeaders != null)
                 {
                     foreach (string header in allowedHeaders)
                     {
-                        if (header != null) stringBuilder.Append("AllowedHeader:").Append(header).Append("\n");
+                        if (header != null) 
+                        {
+                            stringBuilder.Append("AllowedHeader:").Append(header).Append("\n");
+                        }
                     }
                 }
+
                 if (exposeHeaders != null)
                 {
                     foreach (string exposeHeader in exposeHeaders)
                     {
-                        if (exposeHeader != null) stringBuilder.Append("ExposeHeader:").Append(exposeHeader).Append("\n");
+                        if (exposeHeader != null)
+                        {
+                            stringBuilder.Append("ExposeHeader:").Append(exposeHeader).Append("\n");
+                        } 
                     }
                 }
+
                 stringBuilder.Append("MaxAgeSeconds:").Append(maxAgeSeconds).Append("\n");
                 stringBuilder.Append("}");
                 return stringBuilder.ToString();
