@@ -15,14 +15,17 @@ namespace COSXML.Model.Tag
         /// 对象的完整路径。
         /// </summary>
         public string location;
+
         /// <summary>
         /// 对象所在的存储桶
         /// </summary>
         public string bucket;
+
         /// <summary>
         /// 对象 key 名
         /// </summary>
         public string key;
+
         /// <summary>
         /// 对象Etag 内容
         /// </summary>
@@ -32,11 +35,13 @@ namespace COSXML.Model.Tag
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{PostResponse:\n");
+
             stringBuilder.Append("Location:").Append(location).Append("\n");
             stringBuilder.Append("Bucket:").Append(bucket).Append("\n");
             stringBuilder.Append("Key:").Append(key).Append("\n");
             stringBuilder.Append("ETag:").Append(eTag).Append("\n");
             stringBuilder.Append("}");
+
             return stringBuilder.ToString();
         }
     }

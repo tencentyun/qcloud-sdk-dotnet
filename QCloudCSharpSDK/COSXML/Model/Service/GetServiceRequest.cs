@@ -27,21 +27,25 @@ namespace COSXML.Model.Service
 
         public override string GetCOSHost()
         {
+
             return "service.cos.myqcloud.com";
         }
 
         public override string GetHost()
         {
+
             return host;
         }
 
         public override Network.RequestBody GetRequestBody()
         {
+
             return null;
         }
 
         public override void CheckParameters()
         {
+
             return;
         }
     }

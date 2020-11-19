@@ -32,36 +32,42 @@ namespace COSXML.Model.Object
         public SelectObjectRequest outputToFile(string filePath)
         {
             outputFilePath = filePath;
+
             return this;
         }
 
         public SelectObjectRequest setExpression(string expression)
         {
             this.expression = expression;
+
             return this;
         }
 
         public SelectObjectRequest setExpressionType(string expressionType)
         {
             this.expressionType = expressionType;
+
             return this;
         }
 
         public SelectObjectRequest setInputFormat(ObjectSelectionFormat inputFormat)
         {
             this.inputFormat = inputFormat;
+
             return this;
         }
 
         public SelectObjectRequest setOutputFormat(ObjectSelectionFormat outputFormat)
         {
             this.outputFormat = outputFormat;
+
             return this;
         }
 
         public SelectObjectRequest SetCosProgressCallback(COSXML.Callback.OnProgressCallback progressCallback)
         {
             this.progressCallback = progressCallback;
+
             return this;
         }
 
@@ -74,11 +80,13 @@ namespace COSXML.Model.Object
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT,
                   "expression is null");
             }
+
             if (inputFormat == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT,
                   "inputFormat is null");
             }
+
             if (outputFormat == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT,
@@ -90,8 +98,11 @@ namespace COSXML.Model.Object
         {
             string content = Transfer.XmlBuilder.BuildSelection(expression, expressionType, inputFormat,
               outputFormat, progressCallback != null);
+
             byte[] data = Encoding.UTF8.GetBytes(content);
+
             ByteRequestBody body = new ByteRequestBody(data);
+
             return body;
         }
     }

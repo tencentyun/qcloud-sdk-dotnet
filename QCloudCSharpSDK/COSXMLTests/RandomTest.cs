@@ -21,14 +21,17 @@ namespace COSXMLTests
         [Test()]
         public void testRestoreHistoryObject()
         {
+
             try
             {
                 RestoreObjectRequest request = new RestoreObjectRequest("000000000001",
                   "2020-01-17.21-35-01.log");
+
                 request.SetExpireDays(2);
                 request.SetTier(RestoreConfigure.Tier.Standard);
                 request.SetVersionId("MTg0NDUxNjQ1ODU5NjY2NDYyOTM");
                 RestoreObjectResult result = QCloudServer.Instance().cosXml.RestoreObject(request);
+
                 Console.WriteLine(result.GetResultInfo());
                 Assert.True(true);
             }

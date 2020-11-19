@@ -36,27 +36,43 @@ namespace COSXML.Utils
         /// <returns></returns>
         public static string EncodePathOfURL(string path)
         {
-            if (String.IsNullOrEmpty(path)) return String.Empty;
+
+            if (String.IsNullOrEmpty(path))
+            {
+
+                return String.Empty;
+            }
+
             char separator = '/';
             int start = 0, length = path.Length;
+
             int index = path.IndexOf(separator, start);
             StringBuilder result = new StringBuilder();
+
             while (index != -1 && start < length)
             {
+
                 if (start != index)
                 {
                     result.Append(Encode(path.Substring(start, index - start)));
                 }
+
                 result.Append(separator);
                 start = index + 1;
                 index = path.IndexOf(separator, start);
             }
-            if (start < length) result.Append(Encode(path.Substring(start)));
+
+            if (start < length)
+            {
+                result.Append(Encode(path.Substring(start)));
+            }
+
             return result.ToString();
         }
 
         public static string Encode(string value)
         {
+
             return Encode(value, Encoding.UTF8);
         }
 
@@ -69,12 +85,21 @@ namespace COSXML.Utils
         /// <returns></returns>
         public static string Encode(string value, Encoding encoding)
         {
-            if (String.IsNullOrEmpty(value)) return String.Empty;
-            StringBuilder result = new StringBuilder(value.Length * 2); // %xy%xy
+
+            if (String.IsNullOrEmpty(value))
+            {
+
+                return String.Empty;
+            }
+            // %xy%xy
+            // %xy%xy
+            StringBuilder result = new StringBuilder(value.Length * 2);
             byte[] strToBytes = encoding.GetBytes(value);
+
             foreach (byte b in strToBytes)
             {
                 char ch = (char)b;
+
                 if (URLAllowChars.IndexOf(ch) != -1)
                 {
                     result.Append(ch);
@@ -84,8 +109,10 @@ namespace COSXML.Utils
                     result.Append('%').Append(String.Format(CultureInfo.InvariantCulture, "{0:X2}", (int)b));
                 }
             }
+
             return result.ToString();
         }
+
         /// <summary>
         /// 解码比较统一，此处借用 Uri 来实现
         /// </summary>
@@ -93,8 +120,15 @@ namespace COSXML.Utils
         /// <returns></returns>
         public static string Decode(string valueEncode)
         {
-            if (String.IsNullOrEmpty(valueEncode)) return String.Empty;
+
+            if (String.IsNullOrEmpty(valueEncode))
+            {
+
+                return String.Empty;
+            }
+
             valueEncode.Replace('+', ' ');
+
             return Uri.UnescapeDataString(valueEncode);
         }
     }

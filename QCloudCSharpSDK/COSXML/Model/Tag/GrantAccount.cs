@@ -10,10 +10,12 @@ namespace COSXML.Model.Tag
     public sealed class GrantAccount
     {
         List<string> idList;
+
         public GrantAccount()
         {
             idList = new List<string>();
         }
+
         /// <summary>
         /// ownerUin,根账号
         /// subUin，子账号
@@ -22,6 +24,7 @@ namespace COSXML.Model.Tag
         /// <param name="subUin"></param>
         public void AddGrantAccount(string ownerUin, string subUin)
         {
+
             if (ownerUin != null && subUin != null)
             {
                 idList.Add(String.Format("id=\"qcs::cam::uin/{0}:uin/{1}\"", ownerUin, subUin));
@@ -31,16 +34,22 @@ namespace COSXML.Model.Tag
         public string GetGrantAccounts()
         {
             StringBuilder idBuilder = new StringBuilder();
+
             foreach (string id in idList)
             {
                 idBuilder.Append(id).Append(",");
             }
+
             string idStr = idBuilder.ToString();
+
             int last = idStr.LastIndexOf(",");
+
             if (last > 0)
             {
+
                 return idStr.Substring(0, last);
             }
+
             return null;
         }
     }

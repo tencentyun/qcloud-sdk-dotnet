@@ -18,18 +18,22 @@ namespace COSXML.Model.Tag
         /// cos 服务的appid
         /// </summary>
         public string appid;
+
         /// <summary>
         /// 存储桶名称
         /// </summary>
         public string bucket;
+
         /// <summary>
         /// Bucket所属地域
         /// </summary>
         public string region;
+
         /// <summary>
         /// 对象键
         /// </summary>
         public string key;
+
         /// <summary>
         /// 对象的版本ID
         /// </summary>
@@ -67,10 +71,12 @@ namespace COSXML.Model.Tag
         /// </summary>
         public void CheckParameters()
         {
+
             if (bucket == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source bucket = null");
             }
+
             if (key == null)
             {
                 throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source cosPath = null");
@@ -91,18 +97,23 @@ namespace COSXML.Model.Tag
         /// <returns></returns>
         public string GetCopySouce()
         {
+
             if (!key.StartsWith("/"))
             {
                 key = "/" + key;
             }
+
             StringBuilder copySource = new StringBuilder();
 
+
             copySource.Append(bucket);
+
             if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
             {
                 copySource.Append("-")
                         .Append(appid);
             }
+
             copySource.Append(".").Append("cos").Append(".")
                 .Append(region).Append(".")
                 .Append("myqcloud.com")
@@ -112,6 +123,7 @@ namespace COSXML.Model.Tag
             {
                 copySource.Append("?versionId=").Append(versionId);
             }
+
             return copySource.ToString();
         }
     }

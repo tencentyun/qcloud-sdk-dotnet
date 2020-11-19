@@ -27,39 +27,46 @@ namespace COSXML.Model.Object
         /// <param name="cacheControl"></param>
         public void SetCacheControl(string cacheControl)
         {
+
             if (cacheControl != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.CACHE_CONTROL, cacheControl);
             }
         }
+
         /// <summary>
         /// 定义的文件名称，将作为 Object 元数据保存
         /// </summary>
         /// <param name="contentDisposition"></param>
         public void SetContentDisposition(string contentDisposition)
         {
+
             if (contentDisposition != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.CONTENT_DISPOSITION, contentDisposition);
             }
         }
+
         /// <summary>
         /// 定义的编码格式，将作为 Object 元数据保存
         /// </summary>
         /// <param name="contentEncoding"></param>
         public void SetContentEncoding(string contentEncoding)
         {
+
             if (contentEncoding != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.CONTENT_ENCODING, contentEncoding);
             }
         }
+
         /// <summary>
         /// 定义的内容类型（MIME），将作为 Object 元数据保存
         /// </summary>
         /// <param name="expires"></param>
         public void SetExpires(string expires)
         {
+
             if (expires != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.EXPIRES, expires);
@@ -77,11 +84,13 @@ namespace COSXML.Model.Object
         /// <param name="cosACL"></param>
         public void SetCosACL(string cosACL)
         {
+
             if (cosACL != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_ACL, cosACL);
             }
         }
+
         /// Object 的 ACL 属性，有效值：private，public-read-write，public-read，
         /// default；默认值：default(继承 Bucket 权限)
         /// 当前访问策略条目限制为 1000 条，
@@ -92,6 +101,7 @@ namespace COSXML.Model.Object
         {
             SetRequestHeader(CosRequestHeaderKey.X_COS_ACL, EnumUtils.GetValue(cosACL));
         }
+
         /// <summary>
         /// 赋予被授权者读的权限
         /// <see cref="Model.Tag.GrantAccount"/>
@@ -99,11 +109,13 @@ namespace COSXML.Model.Object
         /// <param name="grantAccount"></param>
         public void SetXCosGrantRead(GrantAccount grantAccount)
         {
+
             if (grantAccount != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_GRANT_READ, grantAccount.GetGrantAccounts());
             }
         }
+
         /// <summary>
         /// 赋予被授权者写的权限
         /// <see cref="Model.Tag.GrantAccount"/>
@@ -111,11 +123,13 @@ namespace COSXML.Model.Object
         /// <param name="grantAccount"></param>
         public void SetXCosGrantWrite(GrantAccount grantAccount)
         {
+
             if (grantAccount != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_GRANT_WRITE, grantAccount.GetGrantAccounts());
             }
         }
+
         /// <summary>
         /// 赋予被授权者读写的权限
         /// <see cref="Model.Tag.GrantAccount"/>
@@ -123,6 +137,7 @@ namespace COSXML.Model.Object
         /// <param name="grantAccount"></param>
         public void SetXCosReadWrite(GrantAccount grantAccount)
         {
+
             if (grantAccount != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_GRANT_FULL_CONTROL, grantAccount.GetGrantAccounts());

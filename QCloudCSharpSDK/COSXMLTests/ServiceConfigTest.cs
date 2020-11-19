@@ -23,10 +23,13 @@ namespace COSXMLTests
                       .setEndpointSuffix("cos.accelerate.myqcloud.com")
                       .Build();
 
+
             CosXmlServer cosXml = new CosXmlServer(config, null);
 
             string bucket = "bucket-125000";
+
             GetObjectRequest request = new GetObjectRequest(bucket, "aKey", null, null);
+
             try
             {
                 cosXml.GetObject(request);
@@ -38,6 +41,7 @@ namespace COSXMLTests
             Assert.AreEqual(bucket + "." + config.endpointSuffix, request.GetHost());
 
             GetBucketRequest bucketRequest = new GetBucketRequest(bucket);
+
             try
             {
                 cosXml.GetBucket(bucketRequest);
@@ -50,9 +54,11 @@ namespace COSXMLTests
 
             // test service request
             GetServiceRequest serviceRequest = new GetServiceRequest();
+
             Assert.AreEqual("service.cos.myqcloud.com", serviceRequest.GetHost());
 
             string serviceHost = "service.cos.csp.com";
+
             serviceRequest.host = serviceHost;
             Assert.AreEqual(serviceHost, serviceRequest.GetHost());
         }
@@ -61,6 +67,7 @@ namespace COSXMLTests
         public void testCustomHost()
         {
             string customHost = "www.my.custom.host.com";
+
             // test host
             CosXmlConfig configWithHost = new CosXmlConfig.Builder()
                       .setHost(customHost)
@@ -69,6 +76,7 @@ namespace COSXMLTests
             CosXmlServer cosXml = new CosXmlServer(configWithHost, null);
 
             GetBucketRequest bucketRequest = new GetBucketRequest(bucket);
+
             try
             {
                 cosXml.GetBucket(bucketRequest);
@@ -80,6 +88,7 @@ namespace COSXMLTests
             Assert.AreEqual(customHost, bucketRequest.GetHost());
 
             GetObjectRequest request = new GetObjectRequest(bucket, "aKey", null, null);
+
             try
             {
                 cosXml.GetObject(request);
@@ -91,6 +100,7 @@ namespace COSXMLTests
             Assert.AreEqual(customHost, request.GetHost());
 
             GetServiceRequest serviceRequest = new GetServiceRequest();
+
             Assert.AreEqual("service.cos.myqcloud.com", serviceRequest.GetHost());
         }
     }

@@ -19,9 +19,13 @@ namespace COSXMLTests
     public class QCloudServer
     {
         internal CosXml cosXml;
+
         internal string bucketForBucketTest;
+
         internal string bucketForObjectTest;
+
         internal string region;
+
         internal string appid;
 
         private static QCloudServer instance;
@@ -33,10 +37,12 @@ namespace COSXMLTests
             string secretKey = Environment.GetEnvironmentVariable("COS_SECRET");
             region = Environment.GetEnvironmentVariable("COS_REGION");
             bucketForBucketTest = Environment.GetEnvironmentVariable("COS_BUCKET");
+
             if (bucketForBucketTest == null)
             {
                 bucketForBucketTest = "bucket-4-csharp-test-1253653367";
             }
+
             bucketForObjectTest = bucketForBucketTest;
 
             if (appid == null)
@@ -56,7 +62,9 @@ namespace COSXMLTests
 
 
             long keyDurationSecond = 600;
+
             QCloudCredentialProvider qCloudCredentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, keyDurationSecond);
+
 
             cosXml = new CosXmlServer(config, qCloudCredentialProvider);
         }
@@ -65,24 +73,29 @@ namespace COSXMLTests
         {
             lock (typeof(QCloudServer))
             {
+
                 if (instance == null)
                 {
                     instance = new QCloudServer();
                 }
 
             }
+
             return instance;
         }
 
         public static string CreateFile(string filename, long size)
         {
+
             try
             {
                 string path = null;
                 FileStream fs = new FileStream(filename, FileMode.Create);
+
                 fs.SetLength(size);
                 path = fs.Name;
                 fs.Close();
+
                 return path;
             }
             catch (Exception)
@@ -94,6 +107,7 @@ namespace COSXMLTests
         public static void DeleteFile(string path)
         {
             FileInfo fileInfo = new FileInfo(path);
+
             if (fileInfo.Exists)
             {
                 fileInfo.Delete();
@@ -103,11 +117,14 @@ namespace COSXMLTests
         public static void DeleteAllFile(string dirPath, string regix)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(dirPath);
+
             if (directoryInfo.Exists)
             {
                 FileInfo[] files = directoryInfo.GetFiles(regix);
+
                 if (files != null && files.Length > 0)
                 {
+
                     for (int i = 0, count = files.Length; i < count; i++)
                     {
                         Console.WriteLine(files[i].Name);

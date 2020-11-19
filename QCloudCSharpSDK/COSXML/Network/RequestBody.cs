@@ -19,22 +19,38 @@ namespace COSXML.Network
     public abstract class RequestBody
     {
         protected static string TAG = typeof(RequestBody).Name;
-        public const int SEGMENT_SIZE = 64 * 1024;// 64kb
+        // 64kb
+        public const int SEGMENT_SIZE = 64 * 1024;
 
         protected long contentLength;
+
         protected string contentType;
+
         protected Callback.OnProgressCallback progressCallback;
+
         /// <summary>
         /// body length
         /// </summary>
         public virtual long ContentLength
-        { get { return contentLength; } set { contentLength = value; } }
+        {
+            get
+            {
+                return contentLength;
+            }
+            set { contentLength = value; }
+        }
 
         /// <summary>
         /// body mime type
         /// </summary>
         public virtual string ContentType
-        { get { return contentType; } set { contentType = value; } }
+        {
+            get
+            {
+                return contentType;
+            }
+            set { contentType = value; }
+        }
 
         /// <summary>
         /// calculation content md5
@@ -57,7 +73,10 @@ namespace COSXML.Network
 
         public Callback.OnProgressCallback ProgressCallback
         {
-            get { return progressCallback; }
+            get
+            {
+                return progressCallback;
+            }
             set { progressCallback = value; }
         }
 
@@ -66,6 +85,7 @@ namespace COSXML.Network
         /// </summary>
         internal void OnNotifyGetResponse()
         {
+
             if (progressCallback != null && contentLength >= 0)
             {
                 progressCallback(contentLength, contentLength);
@@ -79,17 +99,31 @@ namespace COSXML.Network
         /// <param name="total"></param>
         protected void UpdateProgress(long complete, long total)
         {
-            if (total == 0) progressCallback(0, 0);
-            else if (complete < total) progressCallback(complete, total);
-            else progressCallback(total - 1, total);
+
+            if (total == 0)
+            {
+                progressCallback(0, 0);
+            }
+            else
+if (complete < total)
+            {
+                progressCallback(complete, total);
+            }
+            else
+            {
+                progressCallback(total - 1, total);
+            }
         }
     }
 
     public class RequestBodyState
     {
         public byte[] buffer;
+
         public long complete;
+
         public Stream outputStream;
+
         public EndRequestBody endRequestBody;
     }
 
@@ -108,23 +142,30 @@ namespace COSXML.Network
 
         public override void OnWrite(Stream outputStream)
         {
+
             try
             {
                 int completed = 0;
+
                 while (completed + SEGMENT_SIZE < contentLength)
                 {
                     outputStream.Write(data, completed, SEGMENT_SIZE);
                     outputStream.Flush();
                     completed += SEGMENT_SIZE;
+
                     if (progressCallback != null)
                     {
                         UpdateProgress(completed, contentLength);
                     }
                 }
+
                 if (completed < contentLength)
                 {
-                    outputStream.Write(data, completed, (int)(contentLength - completed));//包括本身
+                    //包括本身
+                    //包括本身
+                    outputStream.Write(data, completed, (int)(contentLength - completed));
                     outputStream.Flush();
+
                     if (progressCallback != null)
                     {
                         UpdateProgress(contentLength, contentLength);
@@ -137,6 +178,7 @@ namespace COSXML.Network
             }
             finally
             {
+
                 if (outputStream != null)
                 {
                     outputStream.Flush();
@@ -150,33 +192,42 @@ namespace COSXML.Network
 
         public override string GetMD5()
         {
+
             return DigestUtils.GetMd5ToBase64(data);
         }
 
         public override void StartHandleRequestBody(Stream outputStream, EndRequestBody endRequestBody)
         {
+
             try
             {
                 int completed = 0;
+
                 while (completed + SEGMENT_SIZE < contentLength)
                 {
                     outputStream.Write(data, completed, SEGMENT_SIZE);
                     outputStream.Flush();
                     completed += SEGMENT_SIZE;
+
                     if (progressCallback != null)
                     {
                         UpdateProgress(completed, contentLength);
                     }
                 }
+
                 if (completed < contentLength)
                 {
-                    outputStream.Write(data, completed, (int)(contentLength - completed));//包括本身
+                    //包括本身
+                    //包括本身
+                    outputStream.Write(data, completed, (int)(contentLength - completed));
                     outputStream.Flush();
+
                     if (progressCallback != null)
                     {
                         UpdateProgress(contentLength, contentLength);
                     }
                 }
+
                 endRequestBody(null);
             }
             catch (Exception ex)
@@ -202,17 +253,21 @@ namespace COSXML.Network
         {
             RequestBodyState requestBodyState = ar.AsyncState as RequestBodyState;
             Stream outputStream = null;
+
             try
             {
                 outputStream = requestBodyState.outputStream;
                 outputStream.EndWrite(ar);
+
                 if (progressCallback != null)
                 {
                     UpdateProgress(requestBodyState.complete, contentLength);
                 }
+
                 if (requestBodyState.complete < contentLength)
                 {
                     long remain = contentLength - requestBodyState.complete;
+
                     int count = (int)(remain > SEGMENT_SIZE ? SEGMENT_SIZE : remain);
                     int offset = (int)requestBodyState.complete;
                     requestBodyState.complete += count;
@@ -220,7 +275,11 @@ namespace COSXML.Network
                 }
                 else
                 {
-                    if (outputStream != null) outputStream.Close();
+
+                    if (outputStream != null)
+                    {
+                        outputStream.Close();
+                    }
                     //write over
                     requestBodyState.endRequestBody(null);
                     requestBodyState = null;
@@ -228,7 +287,12 @@ namespace COSXML.Network
             }
             catch (Exception ex)
             {
-                if (outputStream != null) outputStream.Close();
+
+                if (outputStream != null)
+                {
+                    outputStream.Close();
+                }
+
                 QLog.E(TAG, ex.Message, ex);
                 requestBodyState.endRequestBody(ex);
                 requestBodyState = null;
@@ -240,6 +304,7 @@ namespace COSXML.Network
     public class FileRequestBody : RequestBody
     {
         private readonly string srcPath;
+
         private readonly long fileOffset;
         //private RequestBodyState requestBodyState;
         private FileStream fileStream;
@@ -254,31 +319,44 @@ namespace COSXML.Network
         public override void OnWrite(Stream outputStream)
         {
             FileStream fileStream = null;
+
             try
             {
                 byte[] buffer = new byte[SEGMENT_SIZE];
                 int bytesRead = 0;
+
                 long completed = bytesRead;
                 fileStream = new FileStream(srcPath, FileMode.Open, FileAccess.Read);
-                fileStream.Seek(fileOffset, SeekOrigin.Begin);//seek to designated position
+                //seek to designated position
+                //seek to designated position
+                fileStream.Seek(fileOffset, SeekOrigin.Begin);
                 long remain = contentLength - completed;
+
                 if (remain > 0)
                 {
+
                     while ((bytesRead = fileStream.Read(buffer, 0, (int)(buffer.Length > remain ? remain : buffer.Length))) != 0)
                     {
                         outputStream.Write(buffer, 0, bytesRead);
                         outputStream.Flush();
                         completed += bytesRead;
+
                         if (progressCallback != null)
                         {
                             UpdateProgress(completed, contentLength);
                         }
+
                         remain = contentLength - completed;
-                        if (remain == 0) break;
+
+                        if (remain == 0)
+                        {
+                            break;
+                        }
                     }
                 }
                 else
                 {
+
                     if (progressCallback != null)
                     {
                         UpdateProgress(completed, contentLength);
@@ -302,6 +380,7 @@ namespace COSXML.Network
                     //QLog.D("XIAO", "stream close");
                     fileStream = null;
                 }
+
                 if (outputStream != null)
                 {
                     outputStream.Flush();
@@ -315,10 +394,12 @@ namespace COSXML.Network
 
         public override string GetMD5()
         {
+
             try
             {
                 fileStream = new FileStream(srcPath, FileMode.Open, FileAccess.Read);
                 fileStream.Seek(fileOffset, SeekOrigin.Begin);
+
                 return DigestUtils.GetMd5ToBase64(fileStream, contentLength);
             }
             catch (Exception ex)
@@ -328,7 +409,11 @@ namespace COSXML.Network
             }
             finally
             {
-                if (fileStream != null) fileStream.Close();
+
+                if (fileStream != null)
+                {
+                    fileStream.Close();
+                }
             }
 
         }
@@ -336,31 +421,44 @@ namespace COSXML.Network
         public override void StartHandleRequestBody(Stream outputStream, EndRequestBody endRequestBody)
         {
             FileStream fileStream = null;
+
             try
             {
                 byte[] buffer = new byte[SEGMENT_SIZE];
                 int bytesRead = 0;
+
                 long completed = bytesRead;
                 fileStream = new FileStream(srcPath, FileMode.Open, FileAccess.Read);
-                fileStream.Seek(fileOffset, SeekOrigin.Begin);//seek to designated position
+                //seek to designated position
+                //seek to designated position
+                fileStream.Seek(fileOffset, SeekOrigin.Begin);
                 long remain = contentLength - completed;
+
                 if (remain > 0)
                 {
+
                     while ((bytesRead = fileStream.Read(buffer, 0, (int)(buffer.Length > remain ? remain : buffer.Length))) != 0)
                     {
                         outputStream.Write(buffer, 0, bytesRead);
                         outputStream.Flush();
                         completed += bytesRead;
+
                         if (progressCallback != null)
                         {
                             UpdateProgress(completed, contentLength);
                         }
+
                         remain = contentLength - completed;
-                        if (remain == 0) break;
+
+                        if (remain == 0)
+                        {
+                            break;
+                        }
                     }
                 }
                 else
                 {
+
                     if (progressCallback != null)
                     {
                         UpdateProgress(completed, contentLength);
@@ -385,6 +483,7 @@ namespace COSXML.Network
                     //QLog.D("XIAO", "stream close");
                     fileStream = null;
                 }
+
                 if (outputStream != null)
                 {
                     outputStream.Flush();
@@ -401,26 +500,39 @@ namespace COSXML.Network
         {
             RequestBodyState requestBodyState = ar.AsyncState as RequestBodyState;
             Stream outputStream = null;
+
             try
             {
                 outputStream = requestBodyState.outputStream;
                 outputStream.EndWrite(ar);
                 outputStream.Flush();
+
                 if (progressCallback != null)
                 {
                     UpdateProgress(requestBodyState.complete, contentLength);
                 }
+
                 if (requestBodyState.complete < contentLength)
                 {
                     long remain = contentLength - requestBodyState.complete;
+
                     int count = fileStream.Read(requestBodyState.buffer, 0, (int)(requestBodyState.buffer.Length > remain ? remain : requestBodyState.buffer.Length));
+
                     requestBodyState.complete += count;
                     outputStream.BeginWrite(requestBodyState.buffer, 0, count, AsyncStreamCallback, requestBodyState);
                 }
                 else
                 {
-                    if (fileStream != null) fileStream.Close();
-                    if (outputStream != null) outputStream.Close();
+
+                    if (fileStream != null)
+                    {
+                        fileStream.Close();
+                    }
+
+                    if (outputStream != null)
+                    {
+                        outputStream.Close();
+                    }
                     //write over
                     requestBodyState.endRequestBody(null);
                     requestBodyState = null;
@@ -429,8 +541,17 @@ namespace COSXML.Network
             }
             catch (Exception ex)
             {
-                if (fileStream != null) fileStream.Close();
-                if (outputStream != null) outputStream.Close();
+
+                if (fileStream != null)
+                {
+                    fileStream.Close();
+                }
+
+                if (outputStream != null)
+                {
+                    outputStream.Close();
+                }
+
                 QLog.E(TAG, ex.Message, ex);
                 requestBodyState.endRequestBody(ex);
                 requestBodyState = null;
@@ -451,19 +572,25 @@ namespace COSXML.Network
     public class MultipartRequestBody : RequestBody
     {
         private readonly string DASHDASH = "--";
+
         public static string BOUNDARY = "314159265358979323------------";
+
         private readonly string CRLF = "\r\n";
+
         private readonly string CONTENT_DISPOSITION = "Content-Disposition: form-data; ";
 
         private Dictionary<string, string> parameters;
 
         private string name;
+
         private string fileName;
 
         private byte[] data;
 
         private string srcPath;
+
         private long fileOffset;
+
         private Stream fileStream;
 
         private long realContentLength;
@@ -479,8 +606,10 @@ namespace COSXML.Network
 
         public void AddParamters(Dictionary<string, string> parameters)
         {
+
             if (parameters != null)
             {
+
                 foreach (KeyValuePair<string, string> pair in parameters)
                 {
                     this.parameters.Add(pair.Key, pair.Value);
@@ -491,6 +620,7 @@ namespace COSXML.Network
 
         public void AddParameter(string key, string value)
         {
+
             if (key != null)
             {
                 parameters.Add(key, value);
@@ -520,6 +650,7 @@ namespace COSXML.Network
             get
             {
                 ComputerContentLength();
+
                 return base.ContentLength;
             }
             set { contentLength = value; }
@@ -527,11 +658,19 @@ namespace COSXML.Network
 
         private void ComputerContentLength()
         {
-            if (contentLength != -1) return;
+
+            if (contentLength != -1)
+            {
+
+                return;
+            }
+
             contentLength = 0;
+
             if (parameters != null && parameters.Count > 0)
             {
                 StringBuilder parametersBuilder = new StringBuilder();
+
                 foreach (KeyValuePair<string, string> pair in parameters)
                 {
                     parametersBuilder.Append(DASHDASH).Append(BOUNDARY).Append(CRLF);
@@ -539,39 +678,53 @@ namespace COSXML.Network
                     parametersBuilder.Append(CRLF);
                     parametersBuilder.Append(pair.Value).Append(CRLF);
                 }
+
                 string content = parametersBuilder.ToString();
+
                 byte[] data = Encoding.UTF8.GetBytes(content);
+
                 contentLength += data.Length;
             }
+
             if (name != null)
             {
                 StringBuilder parametersBuilder = new StringBuilder();
+
                 parametersBuilder.Append(DASHDASH).Append(BOUNDARY).Append(CRLF);
                 parametersBuilder.Append(CONTENT_DISPOSITION).Append("name=\"").Append(name).Append("\"");
+
                 if (!String.IsNullOrEmpty(fileName))
                 {
                     parametersBuilder.Append("; filename=").Append("\"").Append(fileName).Append("\""); ;
                 }
+
                 parametersBuilder.Append(CRLF);
                 parametersBuilder.Append("Content-Type: ").Append("application/octet-stream").Append(CRLF);
                 parametersBuilder.Append(CRLF);
                 string content = parametersBuilder.ToString();
+
                 byte[] data = Encoding.UTF8.GetBytes(content);
+
                 contentLength += data.Length;
             }
+
             contentLength += realContentLength;
 
             string endLine = CRLF + DASHDASH + BOUNDARY + DASHDASH + CRLF;
+
             byte[] endData = Encoding.UTF8.GetBytes(endLine);
+
             contentLength += endData.Length;
         }
 
 
         private void WriteParameters(Stream outputStream)
         {
+
             if (parameters != null && parameters.Count > 0)
             {
                 StringBuilder parametersBuilder = new StringBuilder();
+
                 foreach (KeyValuePair<string, string> pair in parameters)
                 {
                     parametersBuilder.Append(DASHDASH).Append(BOUNDARY).Append(CRLF);
@@ -579,8 +732,11 @@ namespace COSXML.Network
                     parametersBuilder.Append(CRLF);
                     parametersBuilder.Append(pair.Value).Append(CRLF);
                 }
+
                 string content = parametersBuilder.ToString();
+
                 byte[] data = Encoding.UTF8.GetBytes(content);
+
                 outputStream.Write(data, 0, data.Length);
             }
         }
@@ -588,24 +744,31 @@ namespace COSXML.Network
         private void WriteFileParameters(Stream outputStream)
         {
             StringBuilder parametersBuilder = new StringBuilder();
+
             parametersBuilder.Append(DASHDASH).Append(BOUNDARY).Append(CRLF);
             parametersBuilder.Append(CONTENT_DISPOSITION).Append("name=\"").Append(name).Append("\"");
+
             if (!String.IsNullOrEmpty(fileName))
             {
                 parametersBuilder.Append("; filename=").Append("\"").Append(fileName).Append("\""); ;
             }
+
             parametersBuilder.Append(CRLF);
             parametersBuilder.Append("Content-Type: ").Append("application/octet-stream").Append(CRLF);
             parametersBuilder.Append(CRLF);
             string content = parametersBuilder.ToString();
+
             byte[] data = Encoding.UTF8.GetBytes(content);
+
             outputStream.Write(data, 0, data.Length);
         }
 
         private void WriteEndLine(Stream outputStream)
         {
             string endLine = CRLF + DASHDASH + BOUNDARY + DASHDASH + CRLF;
+
             byte[] data = Encoding.UTF8.GetBytes(endLine);
+
             outputStream.Write(data, 0, data.Length);
         }
 
@@ -622,14 +785,17 @@ namespace COSXML.Network
             //wrtie content: file or bintary
             try
             {
+
                 if (data != null)
                 {
                     int completed = 0;
+
                     while (completed + SEGMENT_SIZE < realContentLength)
                     {
                         outputStream.Write(data, completed, SEGMENT_SIZE);
                         outputStream.Flush();
                         completed += SEGMENT_SIZE;
+
                         if (progressCallback != null)
                         {
                             UpdateProgress(completed, realContentLength);
@@ -638,7 +804,10 @@ namespace COSXML.Network
 
                     if (completed < realContentLength)
                     {
-                        outputStream.Write(data, completed, (int)(realContentLength - completed));//包括本身
+                        //包括本身
+                        //包括本身
+                        outputStream.Write(data, completed, (int)(realContentLength - completed));
+
                         if (progressCallback != null)
                         {
                             UpdateProgress(realContentLength, realContentLength);
@@ -648,31 +817,44 @@ namespace COSXML.Network
                     WriteEndLine(outputStream);
                     outputStream.Flush();
                 }
-                else if (srcPath != null)
+                else
+if (srcPath != null)
                 {
-                    byte[] buffer = new byte[SEGMENT_SIZE]; // 64kb
+                    // 64kb
+                    // 64kb
+                    byte[] buffer = new byte[SEGMENT_SIZE];
                     int bytesRead = 0;
+
                     long completed = bytesRead;
                     fileStream = new FileStream(srcPath, FileMode.Open, FileAccess.Read);
                     fileStream.Seek(fileOffset, SeekOrigin.Begin);
                     long remain = realContentLength - completed;
+
                     if (remain > 0)
                     {
+
                         while ((bytesRead = fileStream.Read(buffer, 0, (int)(buffer.Length > remain ? remain : buffer.Length))) != 0)
                         {
                             outputStream.Write(buffer, 0, bytesRead);
                             outputStream.Flush();
                             completed += bytesRead;
+
                             if (progressCallback != null)
                             {
                                 UpdateProgress(completed, realContentLength);
                             }
+
                             remain = realContentLength - completed;
-                            if (remain == 0) break;
+
+                            if (remain == 0)
+                            {
+                                break;
+                            }
                         }
                     }
                     else
                     {
+
                         if (progressCallback != null)
                         {
                             completed += bytesRead;
@@ -690,6 +872,7 @@ namespace COSXML.Network
             }
             finally
             {
+
                 if (fileStream != null)
                 {
                     fileStream.Close();
@@ -697,6 +880,7 @@ namespace COSXML.Network
                     //QLog.D("XIAO", "stream close");
                     fileStream = null;
                 }
+
                 if (outputStream != null)
                 {
                     outputStream.Flush();
@@ -728,14 +912,17 @@ namespace COSXML.Network
             //wrtie content: file or bintary
             try
             {
+
                 if (data != null)
                 {
                     int completed = 0;
+
                     while (completed + SEGMENT_SIZE < realContentLength)
                     {
                         outputStream.Write(data, completed, SEGMENT_SIZE);
                         outputStream.Flush();
                         completed += SEGMENT_SIZE;
+
                         if (progressCallback != null)
                         {
                             UpdateProgress(completed, realContentLength);
@@ -744,7 +931,10 @@ namespace COSXML.Network
 
                     if (completed < realContentLength)
                     {
-                        outputStream.Write(data, completed, (int)(realContentLength - completed));//包括本身
+                        //包括本身
+                        //包括本身
+                        outputStream.Write(data, completed, (int)(realContentLength - completed));
+
                         if (progressCallback != null)
                         {
                             UpdateProgress(realContentLength, realContentLength);
@@ -754,31 +944,44 @@ namespace COSXML.Network
                     WriteEndLine(outputStream);
                     outputStream.Flush();
                 }
-                else if (srcPath != null)
+                else
+if (srcPath != null)
                 {
-                    byte[] buffer = new byte[SEGMENT_SIZE]; // 64kb
+                    // 64kb
+                    // 64kb
+                    byte[] buffer = new byte[SEGMENT_SIZE];
                     int bytesRead = 0;
+
                     long completed = bytesRead;
                     fileStream = new FileStream(srcPath, FileMode.Open, FileAccess.Read);
                     fileStream.Seek(fileOffset, SeekOrigin.Begin);
                     long remain = realContentLength - completed;
+
                     if (remain > 0)
                     {
+
                         while ((bytesRead = fileStream.Read(buffer, 0, (int)(buffer.Length > remain ? remain : buffer.Length))) != 0)
                         {
                             outputStream.Write(buffer, 0, bytesRead);
                             outputStream.Flush();
                             completed += bytesRead;
+
                             if (progressCallback != null)
                             {
                                 UpdateProgress(completed, realContentLength);
                             }
+
                             remain = realContentLength - completed;
-                            if (remain == 0) break;
+
+                            if (remain == 0)
+                            {
+                                break;
+                            }
                         }
                     }
                     else
                     {
+
                         if (progressCallback != null)
                         {
                             completed += bytesRead;
@@ -798,6 +1001,7 @@ namespace COSXML.Network
             }
             finally
             {
+
                 if (fileStream != null)
                 {
                     fileStream.Close();
@@ -805,6 +1009,7 @@ namespace COSXML.Network
                     //QLog.D("XIAO", "stream close");
                     fileStream = null;
                 }
+
                 if (outputStream != null)
                 {
                     outputStream.Flush();
@@ -821,26 +1026,34 @@ namespace COSXML.Network
         {
             RequestBodyState requestBodyState = ar.AsyncState as RequestBodyState;
             Stream outputStream = null;
+
             try
             {
                 outputStream = requestBodyState.outputStream;
                 outputStream.EndWrite(ar);
+
                 if (progressCallback != null)
                 {
                     UpdateProgress(requestBodyState.complete, realContentLength);
                 }
+
                 if (requestBodyState.complete < realContentLength)
                 {
+
                     if (srcPath != null)
                     {
                         long remain = realContentLength - requestBodyState.complete;
+
                         int count = fileStream.Read(requestBodyState.buffer, 0, (int)(requestBodyState.buffer.Length > remain ? remain : requestBodyState.buffer.Length));
+
                         requestBodyState.complete += count;
                         outputStream.BeginWrite(requestBodyState.buffer, 0, count, AsyncStreamCallback, requestBodyState);
                     }
-                    else if (data != null)
+                    else
+if (data != null)
                     {
                         long remain = realContentLength - requestBodyState.complete;
+
                         int count = (int)(remain > SEGMENT_SIZE ? SEGMENT_SIZE : remain);
                         int offset = (int)requestBodyState.complete;
                         requestBodyState.complete += count;
@@ -853,8 +1066,16 @@ namespace COSXML.Network
                 {
                     WriteEndLine(outputStream);
                     outputStream.Flush();
-                    if (fileStream != null) fileStream.Close();
-                    if (outputStream != null) outputStream.Close();
+
+                    if (fileStream != null)
+                    {
+                        fileStream.Close();
+                    }
+
+                    if (outputStream != null)
+                    {
+                        outputStream.Close();
+                    }
                     //write over
                     requestBodyState.endRequestBody(null);
                 }
@@ -862,8 +1083,17 @@ namespace COSXML.Network
             }
             catch (Exception ex)
             {
-                if (fileStream != null) fileStream.Close();
-                if (outputStream != null) outputStream.Close();
+
+                if (fileStream != null)
+                {
+                    fileStream.Close();
+                }
+
+                if (outputStream != null)
+                {
+                    outputStream.Close();
+                }
+
                 QLog.E(TAG, ex.Message, ex);
                 requestBodyState.endRequestBody(ex);
             }

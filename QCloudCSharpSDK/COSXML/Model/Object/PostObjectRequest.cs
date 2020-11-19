@@ -19,6 +19,7 @@ namespace COSXML.Model.Object
     public sealed class PostObjectRequest : ObjectRequest
     {
         private static string TAG = typeof(PostObjectRequest).FullName;
+
         /// <summary>
         /// 表单字段
         /// <see cref="FormStruct"/>
@@ -34,6 +35,7 @@ namespace COSXML.Model.Object
             this.headers.Add(CosRequestHeaderKey.CONTENT_TYPE, "multipart/form-data; boundary=" + MultipartRequestBody.BOUNDARY);
             this.needMD5 = false;
         }
+
         /// <summary>
         /// 上传文件
         /// </summary>
@@ -44,6 +46,7 @@ namespace COSXML.Model.Object
             : this(bucket, key, srcPath, -1L, -1L)
         {
         }
+
         /// <summary>
         /// 上传文件的指定部分
         /// </summary>
@@ -59,6 +62,7 @@ namespace COSXML.Model.Object
             formStruct.fileOffset = fileOffset < 0 ? 0 : fileOffset;
             formStruct.contentLength = sendContentLength < 0L ? -1L : sendContentLength;
         }
+
         /// <summary>
         /// 上传data数据
         /// </summary>
@@ -70,6 +74,7 @@ namespace COSXML.Model.Object
         {
             formStruct.data = data;
         }
+
         /// <summary>
         /// 设置进度回调
         /// </summary>
@@ -78,6 +83,7 @@ namespace COSXML.Model.Object
         {
             formStruct.progressCallback = progressCallback;
         }
+
         /// <summary>
         /// 定义 Object 的 acl 属性。有效值：private，public-read-write，public-read；默认值：private
         /// <see cref="Common.CosACL"/>
@@ -87,6 +93,7 @@ namespace COSXML.Model.Object
         {
             formStruct.acl = EnumUtils.GetValue(cosACL);
         }
+
         /// <summary>
         /// 设置对象的 cacheControl
         /// </summary>
@@ -95,6 +102,7 @@ namespace COSXML.Model.Object
         {
             SetHeader("Cache-Control", cacheControl);
         }
+
         /// <summary>
         /// 设置对象的contentType
         /// </summary>
@@ -103,6 +111,7 @@ namespace COSXML.Model.Object
         {
             SetHeader("Content-Type", contentType);
         }
+
         /// <summary>
         /// 设置对象的contentDisposition
         /// </summary>
@@ -111,6 +120,7 @@ namespace COSXML.Model.Object
         {
             SetHeader("Content-Disposition", contentDisposition);
         }
+
         /// <summary>
         /// 设置对象的contentEncoding
         /// </summary>
@@ -119,6 +129,7 @@ namespace COSXML.Model.Object
         {
             SetHeader("Content-Encoding", contentEncoding);
         }
+
         /// <summary>
         /// 设置对象 Expire
         /// </summary>
@@ -127,6 +138,7 @@ namespace COSXML.Model.Object
         {
             SetHeader("Expires", expires);
         }
+
         /// <summary>
         /// 设置对象header属性
         /// </summary>
@@ -134,6 +146,7 @@ namespace COSXML.Model.Object
         /// <param name="value"></param>
         public void SetHeader(string key, string value)
         {
+
             try
             {
                 formStruct.headers.Add(key, value);
@@ -147,6 +160,7 @@ namespace COSXML.Model.Object
                 formStruct.headers[key] = value;
             }
         }
+
         /// <summary>
         /// 设置对象自定义的header属性
         /// </summary>
@@ -154,6 +168,7 @@ namespace COSXML.Model.Object
         /// <param name="value"></param>
         public void SetCustomerHeader(string key, string value)
         {
+
             try
             {
                 formStruct.customHeaders.Add(key, value);
@@ -167,6 +182,7 @@ namespace COSXML.Model.Object
                 formStruct.customHeaders[key] = value;
             }
         }
+
         /// <summary>
         /// 设置对象的存储类型
         /// <see cref="Common.CosStorageClass"/>
@@ -205,6 +221,7 @@ namespace COSXML.Model.Object
         {
             formStruct.successActionStatus = successHttpCode.ToString();
         }
+
         /// <summary>
         /// 用于做请求检查，如果请求的内容和 Policy 指定的条件不符，返回 403 AccessDenied。
         /// <see cref="Policy"/>
@@ -228,6 +245,7 @@ namespace COSXML.Model.Object
 
         public override CosXmlSignSourceProvider GetSignSourceProvider()
         {
+
             if (this.cosXmlSignSourceProvider != null)
             {
                 this.cosXmlSignSourceProvider.setSignAll(false);
@@ -237,28 +255,37 @@ namespace COSXML.Model.Object
                     ((MultipartRequestBody)request.Body).AddParameter("Signature", sign);
                 };
             }
+
             return base.GetSignSourceProvider();
         }
 
         public override RequestBody GetRequestBody()
         {
             MultipartRequestBody requestBody = new MultipartRequestBody();
+
             requestBody.AddParamters(formStruct.GetFormParameters());
+
             if (formStruct.data != null)
             {
                 requestBody.AddData(formStruct.data, "file", "tmp");
             }
-            else if (formStruct.srcPath != null)
+            else
+if (formStruct.srcPath != null)
             {
                 FileInfo fileInfo = new FileInfo(this.formStruct.srcPath);
+
                 string fileName = fileInfo.Name;
+
                 if (formStruct.contentLength == -1L || formStruct.contentLength + formStruct.fileOffset > fileInfo.Length)
                 {
                     formStruct.contentLength = fileInfo.Length - formStruct.fileOffset;
                 }
+
                 requestBody.AddData(formStruct.srcPath, formStruct.fileOffset, formStruct.contentLength, "file", fileName);
             }
+
             requestBody.ProgressCallback = formStruct.progressCallback;
+
             return requestBody;
         }
 
@@ -268,60 +295,74 @@ namespace COSXML.Model.Object
             /// 对象的ACL
             /// </summary>
             public string acl;
+
             /// <summary>
             /// 对象的header元数据
             /// </summary>
             public Dictionary<string, string> headers;
+
             /// <summary>
             /// 上传后的文件名，使用 ${filename} 则会进行替换。
             /// 例如a/b/${filename}，上传文件 a1.txt，那么最终的上传路径就是 a/b/a1.txt
             /// </summary>
             public string key;
+
             /// <summary>
             /// 若设置优先生效，返回 303 并提供 Location 头部
             /// </summary>
             public string successActionRedirect;
+
             /// <summary>
             /// 可选 200，201，204 默认返回 204。若填写 success_action_redirect 则会略此设置。
             /// </summary>
             public string successActionStatus;
+
             /// <summary>
             /// 对象的自定义元数据
             /// </summary>
             public Dictionary<string, string> customHeaders;
+
             /// <summary>
             /// 对象存储类型
             /// </summary>
             public string xCosStorageClass;
+
             /// <summary>
             /// 速度限制
             /// </summary>
             public string xCOSTrafficLimit;
+
             /// <summary>
             /// 签名串
             /// </summary>
             public string sign;
+
             /// <summary>
             /// 请求检查策略
             /// <see cref="Policy"/>
             /// </summary>
             public Policy policy;
+
             /// <summary>
             /// 上传文件的本地路径
             /// </summary>
             public string srcPath;
+
             /// <summary>
             /// 上传文件指定起始位置
             /// </summary>
             public long fileOffset = 0L;
+
             /// <summary>
             /// 上传文件指定内容大小
             /// </summary>
             public long contentLength = -1L;
+
             /// <summary>
             /// 上传data数据
             /// </summary>
             public byte[] data;
+
             /// <summary>
             /// 上传回调
             /// </summary>
@@ -337,56 +378,77 @@ namespace COSXML.Model.Object
             public Dictionary<string, string> GetFormParameters()
             {
                 Dictionary<string, string> formParameters = new Dictionary<string, string>();
+
                 if (acl != null)
                 {
                     formParameters.Add("Acl", acl);
                 }
+
                 foreach (KeyValuePair<string, string> pair in headers)
                 {
                     formParameters.Add(pair.Key, pair.Value);
                 }
+
                 formParameters.Add("key", key);
+
                 if (successActionRedirect != null)
                 {
                     formParameters.Add("success_action_redirect", successActionRedirect);
                 }
+
                 if (successActionStatus != null)
                 {
                     formParameters.Add("success_action_status", successActionStatus);
                 }
+
                 foreach (KeyValuePair<string, string> pair in customHeaders)
                 {
                     formParameters.Add(pair.Key, pair.Value);
                 }
+
                 if (xCosStorageClass != null)
                 {
                     formParameters.Add("x-cos-storage-class", xCosStorageClass);
                 }
+
                 if (xCOSTrafficLimit != null)
                 {
                     formParameters.Add(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, xCOSTrafficLimit);
                 }
+
                 if (sign != null)
                 {
                     formParameters.Add("Signature", sign);
                 }
+
                 if (policy != null)
                 {
                     formParameters.Add("policy", DigestUtils.GetBase64(policy.Content(), Encoding.UTF8));
                 }
+
                 return formParameters;
             }
 
             public void CheckParameter()
             {
-                if (String.IsNullOrEmpty(key)) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "FormStruct.key(null or empty) is invalid");
+
+                if (String.IsNullOrEmpty(key))
+                {
+                    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "FormStruct.key(null or empty) is invalid");
+                }
+
                 if (srcPath == null && data == null)
                 {
                     throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "data source = null");
                 }
+
                 if (srcPath != null)
                 {
-                    if (!File.Exists(srcPath)) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "srcPath not exist");
+
+                    if (!File.Exists(srcPath))
+                    {
+                        throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "srcPath not exist");
+                    }
                 }
             }
         }
@@ -397,6 +459,7 @@ namespace COSXML.Model.Object
             /// 过期时间
             /// </summary>
             private string expiration;
+
             /// <summary>
             /// 检查条件
             /// </summary>
@@ -414,6 +477,7 @@ namespace COSXML.Model.Object
 
             public void AddConditions(string key, string value, bool isPrefixMatch)
             {
+
                 if (isPrefixMatch)
                 {
                     conditions.Append('[')
@@ -448,13 +512,17 @@ namespace COSXML.Model.Object
             public string Content()
             {
                 StringBuilder content = new StringBuilder();
+
                 content.Append('{');
+
                 if (expiration != null)
                 {
                     content.Append(String.Format("expiration:{0}", expiration));
                 }
+
                 content.Append(String.Format("conditions:{0}", conditions));
                 content.Append('}');
+
                 return content.ToString();
             }
         }

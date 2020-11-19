@@ -36,11 +36,13 @@ namespace COSXML.Transfer
         protected Dictionary<string, string> customHeaders;
 
         protected TaskState taskState;
+
         protected Object syncTaskState = new Object();
 
         public void InitCosXmlServer(CosXml cosXml)
         {
             cosXmlServer = cosXml;
+
             if (this.region == null)
             {
                 this.region = cosXml.GetConfig().Region;
@@ -75,65 +77,108 @@ namespace COSXML.Transfer
         protected bool UpdateTaskState(TaskState newTaskState)
         {
             bool result = false;
+
             lock (syncTaskState)
             {
+
                 switch (newTaskState)
                 {
                     case TaskState.WAITTING:
                         taskState = newTaskState;
-                        if (onState != null) onState(taskState);
+
+                        if (onState != null)
+                        {
+                            onState(taskState);
+                        }
                         result = true;
                         break;
                     case TaskState.RUNNING:
+
                         if (taskState == TaskState.WAITTING)
                         {
                             taskState = newTaskState;
-                            if (onState != null) onState(taskState);
+
+                            if (onState != null)
+                            {
+                                onState(taskState);
+                            }
+
                             result = true;
                         }
                         break;
                     case TaskState.COMPLETED:
+
                         if (taskState == TaskState.RUNNING)
                         {
                             taskState = newTaskState;
-                            if (onState != null) onState(taskState);
+
+                            if (onState != null)
+                            {
+                                onState(taskState);
+                            }
+
                             result = true;
                         }
                         break;
                     case TaskState.FAILED:
+
                         if (taskState == TaskState.WAITTING || taskState == TaskState.RUNNING)
                         {
                             taskState = newTaskState;
-                            if (onState != null) onState(taskState);
+
+                            if (onState != null)
+                            {
+                                onState(taskState);
+                            }
+
                             result = true;
                         }
                         break;
                     case TaskState.PAUSE:
+
                         if (taskState == TaskState.WAITTING || taskState == TaskState.RUNNING)
                         {
                             taskState = newTaskState;
-                            if (onState != null) onState(taskState);
+
+                            if (onState != null)
+                            {
+                                onState(taskState);
+                            }
+
                             result = true;
                         }
                         break;
                     case TaskState.CANCEL:
+
                         if (taskState != TaskState.COMPLETED || taskState != TaskState.CANCEL)
                         {
                             taskState = newTaskState;
-                            if (onState != null) onState(taskState);
+
+                            if (onState != null)
+                            {
+                                onState(taskState);
+                            }
+
                             result = true;
                         }
                         break;
                     case TaskState.RESUME:
+
                         if (taskState == TaskState.PAUSE || taskState == TaskState.FAILED)
                         {
                             taskState = newTaskState;
-                            if (onState != null) onState(taskState);
+
+                            if (onState != null)
+                            {
+                                onState(taskState);
+                            }
+
                             result = true;
                         }
                         break;
                 }
             }
+
             return result;
 
         }
@@ -143,21 +188,32 @@ namespace COSXML.Transfer
     internal class SliceStruct
     {
         public int partNumber;
+
         public bool isAlreadyUpload;
+
         public long sliceStart;
+
         public long sliceEnd;
+
         public long sliceLength;
+
         public string eTag;
     }
 
     public enum TaskState
     {
         WAITTING = 0,
+
         RUNNING,
+
         COMPLETED,
+
         FAILED,
+
         CANCEL,
+
         PAUSE,
+
         RESUME,
     }
 
@@ -168,8 +224,11 @@ namespace COSXML.Transfer
     internal interface OnMultipartUploadStateListener
     {
         void OnInit();
+
         void OnPart();
+
         void OnCompleted(CompleteMultipartUploadResult result);
+
         void OnFailed(CosClientException clientEx, CosServerException serverEx);
     }
 

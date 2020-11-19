@@ -14,26 +14,35 @@ namespace COSXML.Transfer
     public sealed class COSXMLCopyTask : COSXMLTask, OnMultipartUploadStateListener
     {
         private long divisionSize;
+
         private long sliceSize;
+
         private CopySourceStruct copySource;
 
         private HeadObjectRequest headObjectRequest;
+
         private DeleteObjectRequest deleteObjectRequest;
+
         private long sourceSize;
 
         private CopyObjectRequest copyObjectRequest;
 
         private Object syncExit = new Object();
+
         private bool isExit = false;
 
         private InitMultipartUploadRequest initMultiUploadRequest;
+
         private string uploadId;
 
         private ListPartsRequest listPartsRequest;
 
         private List<UploadPartCopyRequest> uploadCopyCopyRequestList;
+
         private List<SliceStruct> sliceList;
+
         private Object syncPartCopyCount = new object();
+
         private int sliceCount;
 
         private CompleteMultipartUploadRequest completeMultiUploadRequest;
@@ -66,14 +75,17 @@ namespace COSXML.Transfer
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
 
                 if (UpdateTaskState(TaskState.FAILED))
                 {
+
                     if (failCallback != null)
                     {
                         failCallback(new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copySource = null"), null);
@@ -84,14 +96,17 @@ namespace COSXML.Transfer
                 //error
                 return;
             }
+
             headObjectRequest = new HeadObjectRequest(copySource.bucket, copySource.key);
             headObjectRequest.Region = copySource.region;
             cosXmlServer.HeadObject(headObjectRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
@@ -99,8 +114,10 @@ namespace COSXML.Transfer
                 if (UpdateTaskState(TaskState.RUNNING))
                 {
                     HeadObjectResult result = cosResult as HeadObjectResult;
+
                     //源对象的长度
                     sourceSize = result.size;
+
                     if (sourceSize > divisionSize)
                     {
                         MultiPartCopy();
@@ -116,14 +133,17 @@ namespace COSXML.Transfer
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
 
                 if (UpdateTaskState(TaskState.FAILED))
                 {
+
                     if (failCallback != null)
                     {
                         failCallback(clientEx, serverEx);
@@ -143,12 +163,15 @@ namespace COSXML.Transfer
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         if (taskState == TaskState.CANCEL)
                         {
                             DeleteObject();
                         }
+
                         return;
                     }
                 }
@@ -157,7 +180,9 @@ namespace COSXML.Transfer
                 {
                     CopyObjectResult result = cosResult as CopyObjectResult;
                     CopyTaskResult copyTaskResult = new CopyTaskResult();
+
                     copyTaskResult.SetResult(result);
+
                     if (successCallback != null)
                     {
                         successCallback(copyTaskResult);
@@ -168,14 +193,17 @@ namespace COSXML.Transfer
                 {
                     lock (syncExit)
                     {
+
                         if (isExit)
                         {
+
                             return;
                         }
                     }
 
                     if (UpdateTaskState(TaskState.FAILED))
                     {
+
                         if (failCallback != null)
                         {
                             failCallback(clientEx, serverEx);
@@ -186,6 +214,7 @@ namespace COSXML.Transfer
 
         private void MultiPartCopy()
         {
+
             if (uploadId != null)
             {
                 //list -> partCopy -> complete
@@ -206,13 +235,16 @@ namespace COSXML.Transfer
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
 
                 InitMultipartUploadResult result = cosResult as InitMultipartUploadResult;
+
                 uploadId = result.initMultipartUpload.uploadId;
                 //计算分片块
                 ComputeSliceNums();
@@ -224,8 +256,10 @@ namespace COSXML.Transfer
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
@@ -244,13 +278,16 @@ namespace COSXML.Transfer
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
 
                 ListPartsResult result = cosResult as ListPartsResult;
+
                 //更新分块
                 UpdateSliceNums(result);
                 //通知执行PartCopy
@@ -261,8 +298,10 @@ namespace COSXML.Transfer
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
@@ -278,19 +317,25 @@ namespace COSXML.Transfer
         {
             int size = sliceList.Count;
 
+
             sliceCount = size;
             uploadCopyCopyRequestList = new List<UploadPartCopyRequest>(size);
+
             for (int i = 0; i < size; i++)
             {
+
                 if (isExit)
                 {
+
                     return;
                 }
-                
+
                 SliceStruct sliceStruct = sliceList[i];
+
                 if (!sliceStruct.isAlreadyUpload)
                 {
                     UploadPartCopyRequest uploadPartCopyRequest = new UploadPartCopyRequest(bucket, key, sliceStruct.partNumber, uploadId);
+
                     uploadPartCopyRequest.SetCopySource(copySource);
                     uploadPartCopyRequest.SetCopyRange(sliceStruct.sliceStart, sliceStruct.sliceEnd);
                     uploadCopyCopyRequestList.Add(uploadPartCopyRequest);
@@ -298,20 +343,25 @@ namespace COSXML.Transfer
                     {
                         lock (syncExit)
                         {
+
                             if (isExit)
                             {
+
                                 return;
                             }
                         }
 
                         UploadPartCopyResult uploadPartCopyResult = result as UploadPartCopyResult;
+
                         sliceStruct.eTag = uploadPartCopyResult.copyObject.eTag;
                         lock (syncPartCopyCount)
                         {
                             sliceCount--;
+
                             if (sliceCount == 0)
                             {
                                 OnPart();
+
                                 return;
                             }
                         }
@@ -319,16 +369,19 @@ namespace COSXML.Transfer
                     {
                         lock (syncExit)
                         {
+
                             if (isExit)
                             {
+
                                 return;
                             }
                         }
-                        
+
                         if (UpdateTaskState(TaskState.FAILED))
                         {
                             OnFailed(clientEx, serverEx);
                         }
+
                         return;
                     });
                 }
@@ -337,9 +390,11 @@ namespace COSXML.Transfer
                     lock (syncPartCopyCount)
                     {
                         sliceCount--;
+
                         if (sliceCount == 0)
                         {
                             OnPart();
+
                             return;
                         }
                     }
@@ -350,19 +405,24 @@ namespace COSXML.Transfer
         private void ComputeSliceNums()
         {
             int count = (int)(sourceSize / sliceSize);
+
             sliceList = new List<SliceStruct>(count > 0 ? count : 1);
             int i = 1;
+
 
             for (; i < count; i++)
             {
                 SliceStruct sliceStruct = new SliceStruct();
+
                 sliceStruct.partNumber = i;
                 sliceStruct.isAlreadyUpload = false;
                 sliceStruct.sliceStart = (i - 1) * sliceSize;
                 sliceStruct.sliceEnd = i * sliceSize - 1;
                 sliceList.Add(sliceStruct);
             }
+
             SliceStruct lastSliceStruct = new SliceStruct();
+
             lastSliceStruct.partNumber = i;
             lastSliceStruct.isAlreadyUpload = false;
             lastSliceStruct.sliceStart = (i - 1) * sliceSize;
@@ -372,12 +432,15 @@ namespace COSXML.Transfer
 
         private void UpdateSliceNums(ListPartsResult listPartsResult)
         {
+
             try
             {
+
                 if (listPartsResult.listParts.parts != null)
                 {
                     //获取原来的parts并提取partNumber
                     Dictionary<int, SliceStruct> sourceParts = new Dictionary<int, SliceStruct>(sliceList.Count);
+
                     foreach (SliceStruct sliceStruct in sliceList)
                     {
                         sourceParts.Add(sliceStruct.partNumber, sliceStruct);
@@ -386,14 +449,17 @@ namespace COSXML.Transfer
                     foreach (ListParts.Part part in listPartsResult.listParts.parts)
                     {
                         int partNumber = -1;
+
                         bool parse = int.TryParse(part.partNumber, out partNumber);
 
-                        if (!parse) 
+
+                        if (!parse)
                         {
                             throw new ArgumentException("ListParts.Part parse error");
                         }
-                        
+
                         SliceStruct sliceStruct = sourceParts[partNumber];
+
                         sliceStruct.isAlreadyUpload = true;
                         sliceStruct.eTag = part.eTag;
                     }
@@ -403,8 +469,10 @@ namespace COSXML.Transfer
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
@@ -421,6 +489,7 @@ namespace COSXML.Transfer
         private void CompleteMultipartUpload()
         {
             completeMultiUploadRequest = new CompleteMultipartUploadRequest(bucket, key, uploadId);
+
             foreach (SliceStruct sliceStruct in sliceList)
             {
                 completeMultiUploadRequest.SetPartNumberAndETag(sliceStruct.partNumber, sliceStruct.eTag);
@@ -430,8 +499,10 @@ namespace COSXML.Transfer
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
@@ -439,14 +510,17 @@ namespace COSXML.Transfer
                 if (UpdateTaskState(TaskState.COMPLETED))
                 {
                     CompleteMultipartUploadResult completeMultiUploadResult = result as CompleteMultipartUploadResult;
+
                     OnCompleted(completeMultiUploadResult);
                 }
             }, delegate (CosClientException clientEx, CosServerException serverEx)
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
@@ -483,6 +557,7 @@ namespace COSXML.Transfer
             if (successCallback != null)
             {
                 CopyTaskResult copyTaskResult = new CopyTaskResult();
+
                 copyTaskResult.SetResult(result);
                 successCallback(copyTaskResult);
             }
@@ -490,6 +565,7 @@ namespace COSXML.Transfer
 
         public void OnFailed(CosClientException clientEx, CosServerException serverEx)
         {
+
             if (!isExit)
             {
                 lock (syncExit)
@@ -526,8 +602,10 @@ namespace COSXML.Transfer
             cosXmlServer.Cancel(copyObjectRequest);
             cosXmlServer.Cancel(initMultiUploadRequest);
             cosXmlServer.Cancel(completeMultiUploadRequest);
+
             if (uploadCopyCopyRequestList != null)
             {
+
                 foreach (UploadPartCopyRequest uploadPartCopyRequest in uploadCopyCopyRequestList)
                 {
                     cosXmlServer.Cancel(uploadPartCopyRequest);
@@ -537,12 +615,14 @@ namespace COSXML.Transfer
 
         public override void Pause()
         {
+
             if (UpdateTaskState(TaskState.PAUSE))
             {
-                lock (syncExit) 
-                { 
-                    isExit = true; 
-                }//exit copy
+                //exit copy
+                lock (syncExit)
+                {
+                    isExit = true;
+                }
 
                 //cancle request
                 RealCancle();
@@ -552,12 +632,14 @@ namespace COSXML.Transfer
 
         public override void Cancel()
         {
+
             if (UpdateTaskState(TaskState.CANCEL))
             {
-                lock (syncExit) 
-                { 
-                    isExit = true; 
-                }//exit copy
+                //exit copy
+                lock (syncExit)
+                {
+                    isExit = true;
+                }
 
                 //cancle request
                 RealCancle();
@@ -569,13 +651,14 @@ namespace COSXML.Transfer
 
         public override void Resume()
         {
+
             if (UpdateTaskState(TaskState.RESUME))
             {
                 lock (syncExit)
                 {
                     isExit = false;
                 }
-                
+
                 Copy();
             }
         }
@@ -602,6 +685,7 @@ namespace COSXML.Transfer
 
             public override string GetResultInfo()
             {
+
                 return base.GetResultInfo() + ("\n : ETag: " + eTag);
             }
         }

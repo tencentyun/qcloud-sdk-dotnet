@@ -15,6 +15,7 @@ namespace COSXML.Model.Bucket
 
         public void SetInventoryId(string inventoryId)
         {
+
             if (inventoryId != null)
             {
                 SetQueryParameter("id", inventoryId);

@@ -35,6 +35,7 @@ namespace COSXML.Model.Object
         {
             // do nothing for delete multi objects api
         }
+
         /// <summary>
         /// 返回模式
         /// verbose 模式和 quiet 模式，默认为 verbose 模式。
@@ -45,6 +46,7 @@ namespace COSXML.Model.Object
         {
             delete.quiet = quiet;
         }
+
         /// <summary>
         /// 删除对象
         /// </summary>
@@ -53,6 +55,7 @@ namespace COSXML.Model.Object
         {
             SetDeleteKey(key, null);
         }
+
         /// <summary>
         /// 删除指定版本的对象
         /// </summary>
@@ -60,44 +63,56 @@ namespace COSXML.Model.Object
         /// <param name="versionId"></param>
         public void SetDeleteKey(string key, string versionId)
         {
+
             if (!String.IsNullOrEmpty(key))
             {
+
                 if (key.StartsWith("/"))
                 {
                     key = key.Substring(1);
                 }
+
                 Delete.DeleteObject deleteObject = new Delete.DeleteObject();
+
                 deleteObject.key = key;
+
                 if (versionId != null)
                 {
                     deleteObject.versionId = versionId;
                 }
+
                 delete.deleteObjects.Add(deleteObject);
             }
 
         }
+
         /// <summary>
         /// 删除对象
         /// </summary>
         /// <param name="keys"></param>
         public void SetObjectKeys(List<string> keys)
         {
+
             if (keys != null)
             {
+
                 foreach (string key in keys)
                 {
                     SetDeleteKey(key, null);
                 }
             }
         }
+
         /// <summary>
         /// 删除指定版本的对象
         /// </summary>
         /// <param name="versionIdAndKey"></param>
         public void SetObjectKeys(Dictionary<string, string> versionIdAndKey)
         {
+
             if (versionIdAndKey != null)
             {
+
                 foreach (KeyValuePair<string, string> pair in versionIdAndKey)
                 {
                     SetDeleteKey(pair.Value, pair.Key);
@@ -107,15 +122,23 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
-            if (delete.deleteObjects.Count == 0) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "delete keys（null or empty) is invalid");
+
+            if (delete.deleteObjects.Count == 0)
+            {
+                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "delete keys（null or empty) is invalid");
+            }
+
             base.CheckParameters();
         }
 
         public override Network.RequestBody GetRequestBody()
         {
             string content = Transfer.XmlBuilder.BuildDelete(delete);
+
             byte[] data = Encoding.UTF8.GetBytes(content);
+
             ByteRequestBody body = new ByteRequestBody(data);
+
             return body;
         }
 

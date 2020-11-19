@@ -21,6 +21,7 @@ namespace COSXML.Utils
         {
             TimeSpan timeSpan = DateTime.UtcNow - UTC_START_TIME;
             long result = -1L;
+
             switch (timeUnit)
             {
                 case TimeUnit.DAYS:
@@ -39,6 +40,7 @@ namespace COSXML.Utils
                     result = (long)timeSpan.TotalMilliseconds;
                     break;
             }
+
             return result;
         }
 
@@ -49,6 +51,7 @@ namespace COSXML.Utils
         {
             DateTime end = DateTime.MinValue;
             DateTime start = UTC_START_TIME;
+
             switch (timeUnit)
             {
                 case TimeUnit.DAYS:
@@ -68,6 +71,7 @@ namespace COSXML.Utils
                     break;
             }
             end = TimeZone.CurrentTimeZone.ToLocalTime(end);
+
             return end.ToString(format);
         }
     }
@@ -75,9 +79,13 @@ namespace COSXML.Utils
     public enum TimeUnit
     {
         MILLISECONDS = 0,
+
         SECONDS,
+
         MINUTES,
+
         HOURS,
+
         DAYS,
     }
 }

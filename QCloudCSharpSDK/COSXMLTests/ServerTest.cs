@@ -15,11 +15,14 @@ namespace COSXMLTests
         [Test()]
         public void GetServerTest()
         {
+
             try
             {
                 QCloudServer instance = QCloudServer.Instance();
                 GetServiceRequest request = new GetServiceRequest();
+
                 GetServiceResult result = instance.cosXml.GetService(request);
+
                 Assert.True(result.httpCode == 200);
             }
             catch (COSXML.CosException.CosClientException clientEx)
@@ -40,7 +43,9 @@ namespace COSXMLTests
         {
             QCloudServer instance = QCloudServer.Instance();
             GetServiceRequest request = new GetServiceRequest();
+
             GetServiceResult result = await instance.cosXml.executeAsync<GetServiceResult>(request);
+
             Assert.True(result.httpCode == 200);
         }
 

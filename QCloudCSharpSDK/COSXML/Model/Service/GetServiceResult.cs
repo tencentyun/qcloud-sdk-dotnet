@@ -32,6 +32,7 @@ namespace COSXML.Model.Service
 
         public override string GetResultInfo()
         {
+
             return base.GetResultInfo() + (listAllMyBuckets == null ? "" : "\n" + listAllMyBuckets.GetInfo());
         }
     }

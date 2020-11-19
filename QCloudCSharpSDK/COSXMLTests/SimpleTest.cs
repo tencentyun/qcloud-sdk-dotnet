@@ -23,16 +23,23 @@ namespace COSXMLTests
     {
 
         COSXML.CosXml cosXml;
+
         TransferManager transferManager;
+
         string bucket;
+
         string bigFileSrcPath;
+
         string smallFileSrcPath;
+
         string localDir;
+
         string localFileName;
 
         public void init()
         {
             string region = "ap-guangzhou";
+
 
             CosXmlConfig config = new CosXmlConfig.Builder()
                 .SetRegion(region)
@@ -47,6 +54,7 @@ namespace COSXMLTests
                 "sessionToken"
             );
 
+
             cosXml = new CosXmlServer(config, qCloudCredentialProvider);
 
             transferManager = new TransferManager(cosXml, new TransferConfig());
@@ -54,7 +62,9 @@ namespace COSXMLTests
             smallFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 1);
             bigFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 10);
             FileInfo fileInfo = new FileInfo(smallFileSrcPath);
+
             DirectoryInfo directoryInfo = fileInfo.Directory;
+
             localDir = directoryInfo.FullName;
             localFileName = "local.txt";
         }
@@ -67,12 +77,15 @@ namespace COSXMLTests
             string bucket = "000000-1253653367";
             string objectKey = "文件夹/exampleobject";
 
+
             try
             {
                 PutObjectRequest request = new PutObjectRequest(bucket, objectKey, smallFileSrcPath);
 
+
                 //执行请求
                 PutObjectResult result = cosXml.PutObject(request);
+
 
                 Console.WriteLine(result.GetResultInfo());
             }
