@@ -13,18 +13,18 @@ namespace COSXML.Common
         /// 只读权限
         /// </summary>
         [CosValue("READ")]
-        READ = 0,
+        Read = 0,
 
         /// <summary>
         /// 只写权限
         /// </summary>
         [CosValue("WRITE")]
-        WRITE,
+        Write,
 
         /// <summary>
         /// 读写权限
         /// </summary>
         [CosValue("FULL_CONTROL")]
-        FULL_CONTROL
+        FullControl
     }
 }
