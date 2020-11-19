@@ -157,7 +157,7 @@ namespace COSXML.Transfer
         private void SimpleCopy()
         {
             copyObjectRequest = new CopyObjectRequest(bucket, key);
-            copyObjectRequest.SetCopyMetaDataDirective(Common.CosMetaDataDirective.COPY);
+            copyObjectRequest.SetCopyMetaDataDirective(Common.CosMetaDataDirective.Copy);
             copyObjectRequest.SetCopySource(copySource);
             cosXmlServer.CopyObject(copyObjectRequest, delegate (CosResult cosResult)
             {

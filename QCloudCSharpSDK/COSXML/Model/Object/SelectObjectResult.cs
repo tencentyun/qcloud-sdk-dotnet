@@ -209,7 +209,7 @@ if ("error".Equals(messageType))
             int remainReadCount = count;
 
 
-        while (remainReadCount > 0 && maxRead--> 0 && inputStream.CanRead)
+        while (remainReadCount > 0 && maxRead -- > 0 && inputStream.CanRead)
             {
                 read = inputStream.Read(buffer, count - remainReadCount, remainReadCount);
                 remainReadCount -= read;

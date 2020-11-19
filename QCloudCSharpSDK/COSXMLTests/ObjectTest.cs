@@ -262,7 +262,7 @@ namespace COSXMLTests
 
 
                 //添加acl
-                request.SetCosACL(CosACL.PRIVATE);
+                request.SetCosACL(CosACL.Private);
 
                 COSXML.Model.Tag.GrantAccount readAccount = new COSXML.Model.Tag.GrantAccount();
 
