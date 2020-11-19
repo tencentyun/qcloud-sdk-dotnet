@@ -5,19 +5,11 @@ using System.Text;
 using System.IO;
 using System.Threading;
 using System.Diagnostics;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/2/2018 10:06:17 AM
-* bradyxiao
-*/
+
 namespace COSXML.Log
 {
     public sealed class QLog
     {
-        /**
-        * log format: [time] [thread]/[application] [Level]/[TAG]: [message]
-        */
-
         private static string timeFormat = "yyyy-MM-dd HH:mm:ss.fff";
 
         //private static string currentDir = Directory.GetCurrentDirectory();

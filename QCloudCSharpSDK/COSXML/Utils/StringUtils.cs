@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using COSXML.CosException;
 using COSXML.Common;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/23/2018 2:57:33 PM
-* bradyxiao
-*/
+
 namespace COSXML.Utils
 {
     public sealed class StringUtils

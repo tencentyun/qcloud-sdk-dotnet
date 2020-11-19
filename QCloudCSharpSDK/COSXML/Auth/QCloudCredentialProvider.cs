@@ -6,11 +6,7 @@ using COSXML.CosException;
 using COSXML.Common;
 using COSXML.Log;
 using System.IO;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/9/2018 12:16:20 PM
-* bradyxiao
-*/
+
 namespace COSXML.Auth
 {
 

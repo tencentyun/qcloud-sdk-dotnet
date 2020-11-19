@@ -5,11 +5,7 @@ using System.Text;
 using COSXML.CosException;
 using COSXML.Common;
 using COSXML.Utils;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/5/2018 7:54:35 PM
-* bradyxiao
-*/
+
 namespace COSXML.Model.Tag
 {
     public sealed class CopySourceStruct

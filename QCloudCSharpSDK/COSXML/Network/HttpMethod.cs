@@ -2,12 +2,7 @@
 //using System.Collections.Generic;
 
 //using System.Text;
-///**
-//* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-//* 11/6/2018 11:56:45 AM
-//* bradyxiao
-// * copy from oktthp
-//*/
+
 //namespace COSXML.Network
 //{
 //    public sealed class HttpMethod

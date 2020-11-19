@@ -2,21 +2,10 @@ using System;
 using System.Collections.Generic;
 
 using System.Text;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/6/2018 11:37:45 AM
-* bradyxiao
-*/
+
 namespace COSXML.Network
 {
-    /**
-     * //最基本的划分
-        [scheme:]scheme-specific-part[#fragment]  
-        //对scheme-specific-part进一步划分
-        [scheme:][//authority][path][?query][#fragment]  
-        //对authority再次划分, 这是最细分的结构
-        [scheme:][//host:port][path][?query][#fragment]
-     */
+    
     public sealed class HttpUrl
     {
 

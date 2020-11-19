@@ -7,23 +7,9 @@ using COSXML.Network;
 using COSXML.Log;
 using COSXML.Auth;
 using COSXML.Utils;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/2/2018 1:05:09 PM
-* bradyxiao
-*/
+
 namespace COSXML.Model
 {
-    /**
-     * cos request base class, all cos operator must be extended this.
-     * 
-     * request method | request path | query parameters
-     * request headers
-     * request body
-     * 
-     * special:
-     * cos sign;
-     */
     public abstract class CosRequest
     {
         private static string TAG = typeof(CosRequest).FullName;

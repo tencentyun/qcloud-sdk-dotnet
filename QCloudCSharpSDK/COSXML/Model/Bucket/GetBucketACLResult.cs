@@ -5,11 +5,7 @@ using System.Text;
 using COSXML.Model.Tag;
 using System.IO;
 using COSXML.Transfer;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/2/2018 9:08:55 PM
-* bradyxiao
-*/
+
 namespace COSXML.Model.Bucket
 {
     /// <summary>

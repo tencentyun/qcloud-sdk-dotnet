@@ -6,11 +6,7 @@
 //using System.IO;
 //using COSXML.Utils;
 //using System.Threading;
-///**
-//* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-//* 11/22/2018 9:53:10 PM
-//* bradyxiao
-//*/
+
 //namespace COSXML.Log
 //{
 //    /// <summary>

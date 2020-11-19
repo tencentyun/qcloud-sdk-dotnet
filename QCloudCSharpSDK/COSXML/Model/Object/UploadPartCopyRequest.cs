@@ -19,10 +19,8 @@ namespace COSXML.Model.Object
         /// <see cref="Model.Tag.CopySourceStruct"/>
         /// </summary>
         private CopySourceStruct copySourceStruct;
-        /**Specified part number*/
-        private int partNumber = -1;
-        /**init upload generate' s uploadId by service*/
-        private String uploadId = null;
+                private int partNumber = -1;
+                private String uploadId = null;
 
         public UploadPartCopyRequest(string bucket, string key, int partNumber, string uploadId)
             : base(bucket, key)

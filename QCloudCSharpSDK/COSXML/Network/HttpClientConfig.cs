@@ -3,11 +3,7 @@ using System.Collections.Generic;
 
 using System.Text;
 using COSXML.Common;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/6/2018 8:58:18 PM
-* bradyxiao
-*/
+
 namespace COSXML.Network
 {
     public class HttpClientConfig

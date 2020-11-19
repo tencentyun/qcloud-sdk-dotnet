@@ -2,11 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using System.Text;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/5/2018 11:51:33 AM
-* bradyxiao
-*/
+
 namespace COSXML.Model.Tag
 {
     /// <summary>
@@ -40,9 +36,6 @@ namespace COSXML.Model.Tag
             return stringBuilder.ToString();
         }
 
-        /**
-         * 本块编号 和 eTag值
-         */
         public sealed class Part
         {
             /// <summary>

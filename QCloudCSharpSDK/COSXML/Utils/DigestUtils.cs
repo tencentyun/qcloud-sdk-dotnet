@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Security.Cryptography;
 using System.IO;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/9/2018 9:53:39 PM
-* bradyxiao
-*/
+
 namespace COSXML.Utils
 {
     public sealed class DigestUtils

@@ -4,11 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using COSXML.Common;
 using COSXML.Utils;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/5/2018 11:46:17 AM
-* bradyxiao
-*/
+
 namespace COSXML.Model.Tag
 {
     public sealed class RestoreConfigure

@@ -3,27 +3,24 @@ using System.Collections.Generic;
 
 using System.Text;
 using System.Globalization;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/5/2018 5:40:47 PM
-* bradyxiao
-*/
+
 namespace COSXML.Utils
 {
-    /**
-     * URL Encode: 
-     * 可分为绝对不需要编码的字符:[a~z][A~A][0~9][._-~] 
-     * 特殊字符需要视情况而言:!*'();:@&=+$,/?#[]
-     * 空字符用+或者%20代替
-     * 汉字绝地需要编码
-     * 因此，针对完整URL则要分块进行编码：path块，query块，fragment块，host块
-     * path块，需要以'/'进行分割，即 '/' 不需要编码，其它均需要编码
-     * query块，需要以'&'分割一对对key=value；key 和 value 需要编码, "="不编码
-     * fragment，全部进行编码
-     * URL Decode:
-     * 不需要判断是否是特殊字符，因为其解码规则很简单，直接根据内容中是否出现%来判断是否需要解码，
-     * 还是直接输出：若出现了%，则连续读出其后两位进行解码；反之，直接输出
-     */
+    
+    /// <summary>
+    /// * URL Encode: 
+    ///  * 可分为绝对不需要编码的字符:[a~z][A~A][0~9][._-~] 
+    ///  * 特殊字符需要视情况而言:!*'();:@&amp;=+$,/?#[]
+    ///  * 空字符用+或者%20代替
+    ///  * 汉字绝地需要编码
+    ///  * 因此，针对完整URL则要分块进行编码：path块，query块，fragment块，host块
+    ///  * path块，需要以'/'进行分割，即 '/' 不需要编码，其它均需要编码
+    ///  * query块，需要以'&amp;'分割一对对key=value；key 和 value 需要编码, "="不编码
+    ///  * fragment，全部进行编码
+    ///  * URL Decode:
+    ///  * 不需要判断是否是特殊字符，因为其解码规则很简单，直接根据内容中是否出现%来判断是否需要解码，
+    ///  * 还是直接输出：若出现了%，则连续读出其后两位进行解码；反之，直接输出
+    /// </summary>
     public sealed class URLEncodeUtils
     {
         //只有字母和数字[0-9a-zA-Z]、一些特殊符号"-_.!*~',以及某些保留字，才可以不经过编码直接用于URL。"

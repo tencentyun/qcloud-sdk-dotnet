@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 using COSXML.Model;
 using COSXML.CosException;
 
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/29/2018 5:09:07 PM
-* bradyxiao
-*/
+
 namespace COSXML.Transfer
 {
     /// <summary>

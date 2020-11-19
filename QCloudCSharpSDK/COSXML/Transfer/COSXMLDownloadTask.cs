@@ -5,11 +5,7 @@ using COSXML.Model.Object;
 using COSXML.Utils;
 using COSXML.Model;
 using COSXML.CosException;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/29/2018 4:58:58 PM
-* bradyxiao
-*/
+
 namespace COSXML.Transfer
 {
     public sealed class COSXMLDownloadTask : COSXMLTask
@@ -194,7 +190,11 @@ namespace COSXML.Transfer
             if (UpdateTaskState(TaskState.PAUSE))
             {
                 //exit download
-                lock (syncExit) { isExit = true; }
+                lock (syncExit) 
+                { 
+                    isExit = true; 
+                }
+
                 //cancle request
                 RealCancle();
             }
@@ -206,7 +206,11 @@ namespace COSXML.Transfer
             if (UpdateTaskState(TaskState.CANCEL))
             {
                 //exit copy
-                lock (syncExit) { isExit = true; }
+                lock (syncExit) 
+                { 
+                    isExit = true; 
+                }
+
                 //cancle request
                 RealCancle();
                 //clear recoder
@@ -225,6 +229,7 @@ namespace COSXML.Transfer
                     //continue to download
                     isExit = false;
                 }
+                
                 Download();
             }
         }

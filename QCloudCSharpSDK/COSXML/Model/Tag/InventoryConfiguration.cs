@@ -6,25 +6,18 @@ namespace COSXML.Model.Tag
 {
     public sealed class InventoryConfiguration
     {
-        /** 清单的名称，与请求参数中的 id 对应 */
         public string id;
 
-        /** 清单是否启用的标识。如果设置为 True，清单功能将生效；如果设置为 False，将不生成任何清单 */
         public bool isEnabled;
 
-        /** 是否在清单中包含对象版本 */
         public string includedObjectVersions;
 
-        /** 筛选待分析对象。清单功能将分析符合 Filter 中设置的前缀的对象 */
         public Filter filter;
 
-        /** 设置清单结果中应包含的分析项目 */
         public OptionalFields optionalFields;
 
-        /** 配置清单任务周期 */
         public Schedule schedule;
 
-        /** 描述存放清单结果的信息 */
         public Destination destination;
 
 

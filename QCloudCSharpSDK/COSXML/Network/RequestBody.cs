@@ -6,11 +6,7 @@ using System.IO;
 using COSXML.Common;
 using COSXML.Log;
 using COSXML.Utils;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/2/2018 4:33:28 PM
-* bradyxiao
-*/
+
 namespace COSXML.Network
 {
     /// <summary>
@@ -560,15 +556,6 @@ if (complete < total)
         }
     }
 
-    /**
-     * --boundary\r\n
-     * content-type: value\r\n
-     * content-disposition: form-data; name="key"\r\n
-     * content-transfer-encoding: encoding\r\n
-     * \r\n
-     * value\r\n
-     * --boundary--
-     */
     public class MultipartRequestBody : RequestBody
     {
         private readonly string DASHDASH = "--";
