@@ -5,11 +5,7 @@ using COSXML.Network;
 using COSXML.Common;
 using COSXML.Log;
 using COSXML.Utils;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/9/2018 4:30:34 PM
-* bradyxiao
-*/
+
 namespace COSXML.Auth
 {
 

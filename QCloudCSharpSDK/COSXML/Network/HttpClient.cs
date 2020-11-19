@@ -14,11 +14,7 @@ using COSXML.Log;
 using System.IO;
 using COSXML.Model.Object;
 using COSXML.Utils;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/6/2018 8:52:29 PM
-* bradyxiao
-*/
+
 namespace COSXML.Network
 {
     /// <summary>

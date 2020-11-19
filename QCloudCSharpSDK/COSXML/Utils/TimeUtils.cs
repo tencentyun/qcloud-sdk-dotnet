@@ -2,21 +2,14 @@ using System;
 using System.Collections.Generic;
 
 using System.Text;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/6/2018 10:03:00 AM
-* bradyxiao
-*/
+
 namespace COSXML.Utils
 {
     public sealed class TimeUtils
     {
         // utc start time
         public static readonly DateTime UTC_START_TIME = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-        /**
-         * 根据UTC时间戳的含义= UTC时间 - UTC起始时间
-         */
+       
         public static long GetCurrentTime(TimeUnit timeUnit)
         {
             TimeSpan timeSpan = DateTime.UtcNow - UTC_START_TIME;
@@ -44,9 +37,6 @@ namespace COSXML.Utils
             return result;
         }
 
-        /**
-         * 先获取 对应的 UTC -> 转为 当前时区的时间
-         */
         public static string GetFormatTime(string format, long time, TimeUnit timeUnit)
         {
             DateTime end = DateTime.MinValue;

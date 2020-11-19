@@ -4,17 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 using COSXML.Network;
 using System.IO;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/2/2018 1:05:46 PM
-* bradyxiao
-*/
+
 namespace COSXML.Model
 {
-    /**
-     * this class for cos result.
-     * 
-     */
     public class CosResult
     {
         /// <summary>

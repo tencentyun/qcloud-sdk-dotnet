@@ -3,11 +3,7 @@ using System.Collections.Generic;
 
 using System.Text;
 using COSXML.Common;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/2/2018 5:25:23 PM
-* bradyxiao
-*/
+
 namespace COSXML.Model.Service
 {
     /// <summary>

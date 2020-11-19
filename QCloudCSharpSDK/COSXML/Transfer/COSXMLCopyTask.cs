@@ -584,15 +584,33 @@ namespace COSXML.Transfer
         private void Abort()
         {
             abortMultiUploadRequest = new AbortMultipartUploadRequest(bucket, key, uploadId);
-            cosXmlServer.AbortMultiUpload(abortMultiUploadRequest, delegate (CosResult cosResult) { },
-                delegate (CosClientException cosClientException, CosServerException cosServerException) { DeleteObject(); });
+            cosXmlServer.AbortMultiUpload(abortMultiUploadRequest, 
+                delegate (CosResult cosResult) 
+                { 
+
+                },
+                
+                delegate (CosClientException cosClientException, CosServerException cosServerException) 
+                { 
+                    DeleteObject(); 
+                }
+            );
         }
 
         private void DeleteObject()
         {
             deleteObjectRequest = new DeleteObjectRequest(bucket, key);
-            cosXmlServer.DeleteObject(deleteObjectRequest, delegate (CosResult cosResult) { },
-                delegate (CosClientException cosClientException, CosServerException cosServerException) { });
+            cosXmlServer.DeleteObject(deleteObjectRequest, 
+                delegate (CosResult cosResult) 
+                { 
+
+                },
+
+                delegate (CosClientException cosClientException, CosServerException cosServerException) 
+                { 
+
+                }
+            );
         }
 
         private void RealCancle()

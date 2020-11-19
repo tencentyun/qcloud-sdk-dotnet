@@ -9,11 +9,7 @@ using COSXML.Utils;
 using COSXML.Model.Tag;
 using COSXML.Log;
 using System.Threading;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/29/2018 4:58:32 PM
-* bradyxiao
-*/
+
 namespace COSXML.Transfer
 {
     public sealed class COSXMLUploadTask : COSXMLTask, OnMultipartUploadStateListener
@@ -77,7 +73,7 @@ namespace COSXML.Transfer
         public COSXMLUploadTask(PutObjectRequest request)
             : base(request.Bucket, request.Region, request.Key)
         {
-            setHeaders(request.GetRequestHeaders());
+            SetHeaders(request.GetRequestHeaders());
         }
 
         internal void SetDivision(long divisionSize, long sliceSize)
@@ -106,7 +102,7 @@ namespace COSXML.Transfer
         internal void Upload()
         {
             //UpdateTaskState(TaskState.WAITTING);
-            taskState = TaskState.WAITTING;
+            taskState = TaskState.Waiting;
             hasReceiveDataLength = 0;
             FileInfo fileInfo = null;
             long sourceLength = 0;
@@ -128,7 +124,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.FAILED))
+                if (UpdateTaskState(TaskState.Failed))
                 {
 
                     if (failCallback != null)
@@ -145,7 +141,7 @@ namespace COSXML.Transfer
                 sendContentLength = sourceLength - sendOffset;
             }
 
-            taskState = TaskState.RUNNING;
+            taskState = TaskState.Running;
 
             if (sendContentLength > divisionSize)
             {
@@ -180,7 +176,7 @@ namespace COSXML.Transfer
                     if (isExit)
                     {
 
-                        if (taskState == TaskState.CANCEL)
+                        if (taskState == TaskState.Cancel)
                         {
                             DeleteObject();
                         }
@@ -189,7 +185,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.COMPLETED))
+                if (UpdateTaskState(TaskState.Completed))
                 {
                     PutObjectResult result = cosResult as PutObjectResult;
                     UploadTaskResult copyTaskResult = new UploadTaskResult();
@@ -215,7 +211,7 @@ namespace COSXML.Transfer
                         }
                     }
 
-                    if (UpdateTaskState(TaskState.FAILED))
+                    if (UpdateTaskState(TaskState.Failed))
                     {
 
                         if (failCallback != null)
@@ -260,6 +256,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 InitMultipartUploadResult result = cosResult as InitMultipartUploadResult;
 
                 uploadId = result.initMultipartUpload.uploadId;
@@ -279,7 +276,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.FAILED))
+                if (UpdateTaskState(TaskState.Failed))
                 {
                     OnFailed(clientEx, serverEx);
                 }
@@ -301,6 +298,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 ListPartsResult result = cosResult as ListPartsResult;
 
                 //更细listParts
@@ -321,7 +319,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.FAILED))
+                if (UpdateTaskState(TaskState.Failed))
                 {
                     OnFailed(clientEx, serverEx);
                 }
@@ -357,6 +355,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 SliceStruct sliceStruct = sliceList[i];
 
                 if (!sliceStruct.isAlreadyUpload)
@@ -405,13 +404,14 @@ namespace COSXML.Transfer
                                 OnPart();
                             }
                         }
+
                         resetEvent.Set();
 
                     }, delegate (CosClientException clientEx, CosServerException serverEx)
                     {
                         Interlocked.Decrement(ref activieTasks);
 
-                        if (UpdateTaskState(TaskState.FAILED))
+                        if (UpdateTaskState(TaskState.Failed))
                         {
                             OnFailed(clientEx, serverEx);
                         }
@@ -504,7 +504,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.COMPLETED))
+                if (UpdateTaskState(TaskState.Completed))
                 {
                     CompleteMultipartUploadResult completeMultiUploadResult = result as CompleteMultipartUploadResult;
 
@@ -523,7 +523,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.FAILED))
+                if (UpdateTaskState(TaskState.Failed))
                 {
                     OnFailed(clientEx, serverEx);
                 }
@@ -615,7 +615,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.FAILED))
+                if (UpdateTaskState(TaskState.Failed))
                 {
                     OnFailed(new CosClientException((int)CosClientError.INTERNA_LERROR, ex.Message, ex), null);
                 }
@@ -667,16 +667,34 @@ namespace COSXML.Transfer
         private void Abort()
         {
             abortMultiUploadRequest = new AbortMultipartUploadRequest(bucket, key, uploadId);
-            cosXmlServer.AbortMultiUpload(abortMultiUploadRequest, delegate (CosResult cosResult) { },
-                delegate (CosClientException cosClientException, CosServerException cosServerException) { DeleteObject(); });
+            cosXmlServer.AbortMultiUpload(abortMultiUploadRequest, 
+                delegate (CosResult cosResult) 
+                { 
+
+                },
+
+                delegate (CosClientException cosClientException, CosServerException cosServerException) 
+                { 
+                    DeleteObject(); 
+                }
+            );
 
         }
 
         private void DeleteObject()
         {
             deleteObjectRequest = new DeleteObjectRequest(bucket, key);
-            cosXmlServer.DeleteObject(deleteObjectRequest, delegate (CosResult cosResult) { },
-                delegate (CosClientException cosClientException, CosServerException cosServerException) { });
+            cosXmlServer.DeleteObject(deleteObjectRequest, 
+                delegate (CosResult cosResult) 
+                { 
+
+                },
+
+                delegate (CosClientException cosClientException, CosServerException cosServerException) 
+                { 
+
+                }
+            );
         }
 
         private void RealCancle()
@@ -700,10 +718,14 @@ namespace COSXML.Transfer
         public override void Pause()
         {
 
-            if (UpdateTaskState(TaskState.PAUSE))
+            if (UpdateTaskState(TaskState.Pause))
             {
                 //exit upload
-                lock (syncExit) { isExit = true; }
+                lock (syncExit) 
+                { 
+                    isExit = true; 
+                }
+
                 //cancle request
                 RealCancle();
             }
@@ -712,10 +734,14 @@ namespace COSXML.Transfer
         public override void Cancel()
         {
 
-            if (UpdateTaskState(TaskState.CANCEL))
+            if (UpdateTaskState(TaskState.Cancel))
             {
                 //exit upload
-                lock (syncExit) { isExit = true; }
+                lock (syncExit) 
+                { 
+                    isExit = true; 
+                }
+
                 //cancle request
                 RealCancle();
                 //abort
@@ -727,7 +753,7 @@ namespace COSXML.Transfer
         public override void Resume()
         {
 
-            if (UpdateTaskState(TaskState.RESUME))
+            if (UpdateTaskState(TaskState.Resume))
             {
                 lock (syncExit)
                 {
@@ -735,6 +761,7 @@ namespace COSXML.Transfer
                     //continue to upload
                     isExit = false;
                 }
+                
                 Upload();
             }
         }

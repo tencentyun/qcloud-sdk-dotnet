@@ -10,11 +10,7 @@ using System.Reflection;
 using System.IO;
 using System.Net.Cache;
 
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/7/2018 9:34:42 AM
-* bradyxiao
-*/
+
 namespace COSXML.Network
 {
     /// <summary>
@@ -509,7 +505,7 @@ namespace COSXML.Network
             StringBuilder responseLog = new StringBuilder("<---");
 
             responseLog.Append(httpWebResponse.Method).Append(' ').Append(httpWebResponse.ResponseUri.AbsoluteUri).Append('\n');
-            responseLog.Append((int)httpWebResponse.StatusCode).Append(' ').Append(httpWebResponse.StatusDescription).Append('\n'); ;
+            responseLog.Append((int)httpWebResponse.StatusCode).Append(' ').Append(httpWebResponse.StatusDescription).Append('\n');
             int count = httpWebResponse.Headers.Count;
 
             for (int i = 0; i < count; i++)

@@ -1,11 +1,7 @@
 using System;
 using System.IO;
 using COSXML.Log;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/28/2018 2:58:22 PM
-* bradyxiao
-*/
+
 namespace COSXML.Network
 {
     public sealed class ResponseBody

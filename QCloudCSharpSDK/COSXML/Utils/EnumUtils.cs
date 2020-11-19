@@ -2,11 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using System.Text;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/1/2018 8:51:37 PM
-* bradyxiao
-*/
+
 namespace COSXML.Utils
 {
     public static class EnumUtils

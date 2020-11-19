@@ -4,11 +4,7 @@ using System.Text;
 using COSXML.Model;
 using COSXML.CosException;
 using System.IO;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/21/2018 10:12:14 AM
-* bradyxiao
-*/
+
 namespace COSXML.Callback
 {
     /// <summary>

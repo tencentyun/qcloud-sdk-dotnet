@@ -2,14 +2,11 @@ using System;
 using System.Collections.Generic;
 
 using System.Text;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/5/2018 11:55:28 AM
-* bradyxiao
-*/
+
 namespace COSXML.Model.Tag
 {
     /// <summary>
+    /// 分片上传完成结果
     /// <see cref="https://cloud.tencent.com/document/product/436/7742"/>
     /// </summary>
     public sealed class CompleteResult

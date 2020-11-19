@@ -4,11 +4,7 @@ using System.Text;
 using COSXML.Model;
 using COSXML.Model.Object;
 using COSXML.CosException;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/29/2018 5:08:32 PM
-* bradyxiao
-*/
+
 namespace COSXML.Transfer
 {
     public abstract class COSXMLTask
@@ -69,7 +65,7 @@ namespace COSXML.Transfer
 
         public abstract void Resume();
 
-        protected void setHeaders(Dictionary<string, string> headers)
+        protected void SetHeaders(Dictionary<string, string> headers)
         {
             this.customHeaders = headers;
         }
@@ -83,18 +79,19 @@ namespace COSXML.Transfer
 
                 switch (newTaskState)
                 {
-                    case TaskState.WAITTING:
+                    case TaskState.Waiting:
                         taskState = newTaskState;
 
                         if (onState != null)
                         {
                             onState(taskState);
                         }
+                        
                         result = true;
                         break;
-                    case TaskState.RUNNING:
+                    case TaskState.Running:
 
-                        if (taskState == TaskState.WAITTING)
+                        if (taskState == TaskState.Waiting)
                         {
                             taskState = newTaskState;
 
@@ -106,9 +103,9 @@ namespace COSXML.Transfer
                             result = true;
                         }
                         break;
-                    case TaskState.COMPLETED:
+                    case TaskState.Completed:
 
-                        if (taskState == TaskState.RUNNING)
+                        if (taskState == TaskState.Running)
                         {
                             taskState = newTaskState;
 
@@ -120,9 +117,9 @@ namespace COSXML.Transfer
                             result = true;
                         }
                         break;
-                    case TaskState.FAILED:
+                    case TaskState.Failed:
 
-                        if (taskState == TaskState.WAITTING || taskState == TaskState.RUNNING)
+                        if (taskState == TaskState.Waiting || taskState == TaskState.Running)
                         {
                             taskState = newTaskState;
 
@@ -134,9 +131,9 @@ namespace COSXML.Transfer
                             result = true;
                         }
                         break;
-                    case TaskState.PAUSE:
+                    case TaskState.Pause:
 
-                        if (taskState == TaskState.WAITTING || taskState == TaskState.RUNNING)
+                        if (taskState == TaskState.Waiting || taskState == TaskState.Running)
                         {
                             taskState = newTaskState;
 
@@ -148,9 +145,9 @@ namespace COSXML.Transfer
                             result = true;
                         }
                         break;
-                    case TaskState.CANCEL:
+                    case TaskState.Cancel:
 
-                        if (taskState != TaskState.COMPLETED || taskState != TaskState.CANCEL)
+                        if (taskState != TaskState.Completed || taskState != TaskState.Cancel)
                         {
                             taskState = newTaskState;
 
@@ -162,9 +159,9 @@ namespace COSXML.Transfer
                             result = true;
                         }
                         break;
-                    case TaskState.RESUME:
+                    case TaskState.Resume:
 
-                        if (taskState == TaskState.PAUSE || taskState == TaskState.FAILED)
+                        if (taskState == TaskState.Pause || taskState == TaskState.Failed)
                         {
                             taskState = newTaskState;
 
@@ -202,26 +199,26 @@ namespace COSXML.Transfer
 
     public enum TaskState
     {
-        WAITTING = 0,
+        Waiting = 0,
 
-        RUNNING,
+        Running,
 
-        COMPLETED,
+        Completed,
 
-        FAILED,
+        Failed,
 
-        CANCEL,
+        Cancel,
 
-        PAUSE,
+        Pause,
 
-        RESUME,
+        Resume,
     }
 
     public delegate void OnState(TaskState taskState);
 
     public delegate void OnInternalHandleBeforExcute(CosRequest cosRequest);
 
-    internal interface OnMultipartUploadStateListener
+    interface OnMultipartUploadStateListener
     {
         void OnInit();
 

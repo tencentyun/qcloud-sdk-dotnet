@@ -936,7 +936,7 @@ if (tag.key.Equals(bkey))
 
                 putRequest.SetDestination("CSV", "1278687956", "bucket-cssg-source-1253653367", instance.region, "list1");
                 putRequest.IsEnable(true);
-                putRequest.SetScheduleFrequency("Daily"); å
+                putRequest.SetScheduleFrequency("Daily");
                 putRequest.SetIncludedObjectVersions("All");
                 PutBucketInventoryResult putResult = instance.cosXml.putBucketInventory(putRequest);
 

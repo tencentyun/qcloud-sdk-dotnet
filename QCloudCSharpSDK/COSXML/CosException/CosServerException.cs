@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 using COSXML.Model.Tag;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/2/2018 11:27:27 AM
-* bradyxiao
-*/
+
 namespace COSXML.CosException
 {
     /// <summary>
