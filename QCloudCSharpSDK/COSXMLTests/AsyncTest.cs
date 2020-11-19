@@ -14,7 +14,7 @@ namespace COSXMLTests
 {
 
     [TestFixture()]
-    public class AsyncTests
+    public class AsyncTest
     {
 
         [Test()]
@@ -39,10 +39,12 @@ namespace COSXMLTests
                 {
                     Console.WriteLine("CosClientException: " + clientEx.Message);
                 }
+
                 if (serverEx != null)
                 {
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
+                
                 Assert.Fail();
                 manualResetEvent.Set();
             });

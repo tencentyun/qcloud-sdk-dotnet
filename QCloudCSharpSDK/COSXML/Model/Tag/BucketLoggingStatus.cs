@@ -11,7 +11,11 @@ namespace COSXML.Model.Tag
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{BucketLoggingStatus:\n");
-            if (loggingEnabled != null) stringBuilder.Append(loggingEnabled.ToString()).Append("\n");
+            if (loggingEnabled != null) 
+            {
+                stringBuilder.Append(loggingEnabled.ToString()).Append("\n");
+            }
+            
             stringBuilder.Append("}");
             return stringBuilder.ToString();
         }

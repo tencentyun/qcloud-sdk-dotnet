@@ -18,13 +18,13 @@ namespace COSXMLTests
 {
 
     [TestFixture()]
-    public class PicOperationTest
+    public class CITest
     {
         private string localTempPhotoFilePath;
         private string photoKey;
 
         [SetUp]
-        public void setup()
+        public void Setup()
         {
             string bucket = QCloudServer.Instance().bucketForBucketTest;
             photoKey = "example_photo.jpg";
@@ -38,7 +38,7 @@ namespace COSXMLTests
         }
 
         [TearDown]
-        public void clear()
+        public void Clear()
         {
             QCloudServer.DeleteFile(localTempPhotoFilePath);
         }
@@ -48,8 +48,8 @@ namespace COSXMLTests
         public void PutObjectWithDeSample()
         {
             string bucket = QCloudServer.Instance().bucketForBucketTest;
-            string key = "original_photo.jpg"; //对象键
-            string srcPath = localTempPhotoFilePath;//本地文件绝对路径
+            string key = "original_photo.jpg";
+            string srcPath = localTempPhotoFilePath;
 
             PutObjectRequest request = new PutObjectRequest(bucket, key, srcPath);
 
@@ -65,6 +65,7 @@ namespace COSXMLTests
             rules.Add(rule);
             o["rules"] = rules;
             string ruleString = o.ToString(Formatting.None);
+
             Console.WriteLine(ruleString);
 
             request.SetRequestHeader("Pic-Operations", ruleString);
@@ -96,7 +97,7 @@ namespace COSXMLTests
         public void ImageProcess()
         {
             string bucket = QCloudServer.Instance().bucketForBucketTest;
-            string key = photoKey; //对象键
+            string key = photoKey;
 
             JObject o = new JObject();
             // 不返回原图
@@ -110,6 +111,7 @@ namespace COSXMLTests
             rules.Add(rule);
             o["rules"] = rules;
             string ruleString = o.ToString(Formatting.None);
+            
             Console.WriteLine(ruleString);
 
             ImageProcessRequest request = new ImageProcessRequest(bucket, key, ruleString);

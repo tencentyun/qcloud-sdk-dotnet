@@ -145,7 +145,8 @@ namespace COSXML.Model.Tag
                     stringBuilder.Append("Id:").Append(id).Append("\n");
                 }
                 
-                if (displayName != null) {
+                if (displayName != null) 
+                {
                     stringBuilder.Append("DisplayName:").Append(displayName).Append("\n");
                 }
                 

@@ -8,11 +8,7 @@ using COSXML.Model;
 using COSXML.CosException;
 using COSXML.Log;
 using COSXML.Common;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/29/2018 5:02:22 PM
-* bradyxiao
-*/
+
 namespace COSXML.Transfer
 {
     public sealed class COSXMLCopyTask : COSXMLTask, OnMultipartUploadStateListener
@@ -75,6 +71,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 if (UpdateTaskState(TaskState.FAILED))
                 {
                     if (failCallback != null)
@@ -83,6 +80,7 @@ namespace COSXML.Transfer
                     }
 
                 }
+
                 //error
                 return;
             }
@@ -97,6 +95,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 if (UpdateTaskState(TaskState.RUNNING))
                 {
                     HeadObjectResult result = cosResult as HeadObjectResult;
@@ -122,6 +121,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 if (UpdateTaskState(TaskState.FAILED))
                 {
                     if (failCallback != null)
@@ -152,6 +152,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 if (UpdateTaskState(TaskState.COMPLETED))
                 {
                     CopyObjectResult result = cosResult as CopyObjectResult;
@@ -172,6 +173,7 @@ namespace COSXML.Transfer
                             return;
                         }
                     }
+
                     if (UpdateTaskState(TaskState.FAILED))
                     {
                         if (failCallback != null)
@@ -209,6 +211,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 InitMultipartUploadResult result = cosResult as InitMultipartUploadResult;
                 uploadId = result.initMultipartUpload.uploadId;
                 //计算分片块
@@ -226,6 +229,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 if (UpdateTaskState(TaskState.FAILED))
                 {
                     OnFailed(clientEx, serverEx);
@@ -245,6 +249,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 ListPartsResult result = cosResult as ListPartsResult;
                 //更新分块
                 UpdateSliceNums(result);
@@ -261,6 +266,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 if (UpdateTaskState(TaskState.FAILED))
                 {
                     OnFailed(clientEx, serverEx);
@@ -271,11 +277,16 @@ namespace COSXML.Transfer
         private void PartCopy()
         {
             int size = sliceList.Count;
+
             sliceCount = size;
             uploadCopyCopyRequestList = new List<UploadPartCopyRequest>(size);
             for (int i = 0; i < size; i++)
             {
-                if (isExit) return;
+                if (isExit)
+                {
+                    return;
+                }
+                
                 SliceStruct sliceStruct = sliceList[i];
                 if (!sliceStruct.isAlreadyUpload)
                 {
@@ -292,6 +303,7 @@ namespace COSXML.Transfer
                                 return;
                             }
                         }
+
                         UploadPartCopyResult uploadPartCopyResult = result as UploadPartCopyResult;
                         sliceStruct.eTag = uploadPartCopyResult.copyObject.eTag;
                         lock (syncPartCopyCount)
@@ -312,6 +324,7 @@ namespace COSXML.Transfer
                                 return;
                             }
                         }
+                        
                         if (UpdateTaskState(TaskState.FAILED))
                         {
                             OnFailed(clientEx, serverEx);
@@ -338,7 +351,8 @@ namespace COSXML.Transfer
         {
             int count = (int)(sourceSize / sliceSize);
             sliceList = new List<SliceStruct>(count > 0 ? count : 1);
-            int i = 1; // partNumber >= 1
+            int i = 1;
+
             for (; i < count; i++)
             {
                 SliceStruct sliceStruct = new SliceStruct();
@@ -368,11 +382,17 @@ namespace COSXML.Transfer
                     {
                         sourceParts.Add(sliceStruct.partNumber, sliceStruct);
                     }
+
                     foreach (ListParts.Part part in listPartsResult.listParts.parts)
                     {
                         int partNumber = -1;
                         bool parse = int.TryParse(part.partNumber, out partNumber);
-                        if (!parse) throw new ArgumentException("ListParts.Part parse error");
+
+                        if (!parse) 
+                        {
+                            throw new ArgumentException("ListParts.Part parse error");
+                        }
+                        
                         SliceStruct sliceStruct = sourceParts[partNumber];
                         sliceStruct.isAlreadyUpload = true;
                         sliceStruct.eTag = part.eTag;
@@ -388,6 +408,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 if (UpdateTaskState(TaskState.FAILED))
                 {
                     OnFailed(new CosClientException((int)CosClientError.INTERNA_LERROR, ex.Message, ex), null);
@@ -402,8 +423,9 @@ namespace COSXML.Transfer
             completeMultiUploadRequest = new CompleteMultipartUploadRequest(bucket, key, uploadId);
             foreach (SliceStruct sliceStruct in sliceList)
             {
-                completeMultiUploadRequest.SetPartNumberAndETag(sliceStruct.partNumber, sliceStruct.eTag); // partNumberEtag 有序的
+                completeMultiUploadRequest.SetPartNumberAndETag(sliceStruct.partNumber, sliceStruct.eTag);
             }
+
             cosXmlServer.CompleteMultiUpload(completeMultiUploadRequest, delegate (CosResult result)
             {
                 lock (syncExit)
@@ -413,6 +435,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 if (UpdateTaskState(TaskState.COMPLETED))
                 {
                     CompleteMultipartUploadResult completeMultiUploadResult = result as CompleteMultipartUploadResult;
@@ -427,6 +450,7 @@ namespace COSXML.Transfer
                         return;
                     }
                 }
+
                 if (UpdateTaskState(TaskState.FAILED))
                 {
                     OnFailed(clientEx, serverEx);
@@ -473,6 +497,7 @@ namespace COSXML.Transfer
                     isExit = true;
                 }
             }
+
             if (failCallback != null)
             {
                 failCallback(clientEx, serverEx);
@@ -514,7 +539,11 @@ namespace COSXML.Transfer
         {
             if (UpdateTaskState(TaskState.PAUSE))
             {
-                lock (syncExit) { isExit = true; }//exit copy
+                lock (syncExit) 
+                { 
+                    isExit = true; 
+                }//exit copy
+
                 //cancle request
                 RealCancle();
             }
@@ -525,7 +554,11 @@ namespace COSXML.Transfer
         {
             if (UpdateTaskState(TaskState.CANCEL))
             {
-                lock (syncExit) { isExit = true; }//exit copy
+                lock (syncExit) 
+                { 
+                    isExit = true; 
+                }//exit copy
+
                 //cancle request
                 RealCancle();
                 //abort
@@ -540,8 +573,9 @@ namespace COSXML.Transfer
             {
                 lock (syncExit)
                 {
-                    isExit = false;//continue to copy
+                    isExit = false;
                 }
+                
                 Copy();
             }
         }
