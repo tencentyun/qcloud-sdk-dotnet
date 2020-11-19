@@ -33,6 +33,7 @@ namespace COSXML.Model.Object
         {
             this.uploadId = uploadId;
         }
+
         /// <summary>
         /// 分片块上传的UploadId
         /// </summary>
@@ -44,7 +45,10 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
-            if (requestUrlWithSign != null) return;
+            if (requestUrlWithSign != null) 
+            {
+                return;
+            }
             base.CheckParameters();
             if (uploadId == null)
             {

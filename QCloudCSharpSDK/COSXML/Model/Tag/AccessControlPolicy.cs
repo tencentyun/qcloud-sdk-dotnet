@@ -2,14 +2,11 @@ using System;
 using System.Collections.Generic;
 
 using System.Text;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/2/2018 9:48:29 PM
-* bradyxiao
-*/
+
 namespace COSXML.Model.Tag
 {
     /// <summary>
+    /// ACL权限
     /// <see cref="https://cloud.tencent.com/document/product/436/7733"/>
     /// </summary>
     public sealed class AccessControlPolicy
@@ -28,8 +25,16 @@ namespace COSXML.Model.Tag
         public string GetInfo()
         {
             StringBuilder stringBuilder = new StringBuilder("{AccessControlPolicy:\n");
-            if (owner != null) stringBuilder.Append(owner.GetInfo()).Append("\n");
-            if (accessControlList != null) stringBuilder.Append(accessControlList.GetInfo()).Append("\n");
+            if (owner != null) 
+            {
+                stringBuilder.Append(owner.GetInfo()).Append("\n");
+            }
+
+            if (accessControlList != null)
+            {
+                stringBuilder.Append(accessControlList.GetInfo()).Append("\n");
+            }
+
             stringBuilder.Append("}");
             return stringBuilder.ToString();
         }
@@ -72,9 +77,13 @@ namespace COSXML.Model.Tag
                 {
                     foreach (Grant grant in grants)
                     {
-                        if (grant != null) stringBuilder.Append(grant.GetInfo()).Append("\n");
+                        if (grant != null)
+                        {
+                            stringBuilder.Append(grant.GetInfo()).Append("\n");
+                        } 
                     }
                 }
+
                 stringBuilder.Append("}");
                 return stringBuilder.ToString();
             }
@@ -96,7 +105,11 @@ namespace COSXML.Model.Tag
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Grant:\n");
-                if (grantee != null) stringBuilder.Append(grantee.GetInfo()).Append("\n");
+                if (grantee != null) 
+                {
+                    stringBuilder.Append(grantee.GetInfo()).Append("\n");
+                }
+                
                 stringBuilder.Append("Permission:").Append(permission).Append("\n");
                 stringBuilder.Append("}");
                 return stringBuilder.ToString();
@@ -122,9 +135,20 @@ namespace COSXML.Model.Tag
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Grantee:\n");
-                if (uri != null) stringBuilder.Append("URI:").Append(uri).Append("\n");
-                if (id != null) stringBuilder.Append("Id:").Append(id).Append("\n");
-                if (displayName != null) stringBuilder.Append("DisplayName:").Append(displayName).Append("\n");
+                if (uri != null) 
+                {
+                    stringBuilder.Append("URI:").Append(uri).Append("\n");
+                }
+                
+                if (id != null) 
+                {
+                    stringBuilder.Append("Id:").Append(id).Append("\n");
+                }
+                
+                if (displayName != null) {
+                    stringBuilder.Append("DisplayName:").Append(displayName).Append("\n");
+                }
+                
                 stringBuilder.Append("}");
                 return stringBuilder.ToString();
             }
