@@ -207,7 +207,7 @@ namespace COSXML.Model.Object
         }
 
         /// <summary>
-        /// 
+        /// SSEC 自定义密钥
         /// </summary>
         /// <param name="customerKey"></param>
         public void SetCosServerSideEncryptionWithCustomerKey(string customerKey)

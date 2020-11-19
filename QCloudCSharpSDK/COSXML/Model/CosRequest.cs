@@ -97,6 +97,7 @@ namespace COSXML.Model
             {
                 return path;
             }
+            
             private set { }
         }
 

@@ -10,9 +10,9 @@ namespace COSXML.Common
     public enum CosMetaDataDirective
     {
         [CosValue("Copy")]
-        COPY = 0,
+        Copy = 0,
 
         [CosValue("Replaced")]
-        REPLACED
+        Replaced
     }
 }
