@@ -76,7 +76,7 @@ namespace COSXML.Model.Bucket
 
             if (corsConfiguration.corsRules.Count == 0)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "corsConfiguration.corsRules.Count = 0");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "corsConfiguration.corsRules.Count = 0");
             }
         }
     }

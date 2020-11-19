@@ -19,8 +19,10 @@ namespace COSXML.Model.Object
         /// <see cref="Model.Tag.CopySourceStruct"/>
         /// </summary>
         private CopySourceStruct copySourceStruct;
-                private int partNumber = -1;
-                private String uploadId = null;
+
+        private int partNumber = -1;
+
+        private String uploadId = null;
 
         public UploadPartCopyRequest(string bucket, string key, int partNumber, string uploadId)
             : base(bucket, key)
@@ -117,7 +119,7 @@ namespace COSXML.Model.Object
 
             if (copySourceStruct == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "copy source = null");
             }
             else
             {
@@ -134,12 +136,12 @@ namespace COSXML.Model.Object
 
             if (partNumber <= 0)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "partNumber < 1");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "partNumber < 1");
             }
 
             if (uploadId == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "uploadID = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "uploadID = null");
             }
         }
 

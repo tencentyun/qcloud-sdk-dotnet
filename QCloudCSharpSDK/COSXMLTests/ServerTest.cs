@@ -44,7 +44,7 @@ namespace COSXMLTests
             QCloudServer instance = QCloudServer.Instance();
             GetServiceRequest request = new GetServiceRequest();
 
-            GetServiceResult result = await instance.cosXml.executeAsync<GetServiceResult>(request);
+            GetServiceResult result = await instance.cosXml.ExecuteAsync<GetServiceResult>(request);
 
             Assert.True(result.httpCode == 200);
         }

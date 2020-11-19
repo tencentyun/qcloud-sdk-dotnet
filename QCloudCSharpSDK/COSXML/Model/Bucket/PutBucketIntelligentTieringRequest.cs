@@ -58,7 +58,7 @@ namespace COSXML.Model.Bucket
 
             if (String.IsNullOrEmpty(configuration.Status))
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "Status 不能为空");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "Status 不能为空");
             }
         }
     }

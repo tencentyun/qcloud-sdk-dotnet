@@ -18,7 +18,6 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// Bucket 所在的地域
-        /// <see cref="Common.CosRegion"/>
         /// </summary>
         protected string region;
 
@@ -56,7 +55,6 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// Bucket 所在的地域
-        /// <see cref="Common.CosRegion"/>
         /// </summary>
         public string Region
         {
@@ -165,7 +163,7 @@ namespace COSXML.Model.Object
             //}
             if (bucket == null || bucket.Length < 1)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "bucket is null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "bucket is null");
             }
             // if (region == null || region.Length < 1)
             // {
@@ -173,7 +171,7 @@ namespace COSXML.Model.Object
             // }
             if (path == null || path.Length < 1)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "cosPath(null or empty)is invalid");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "cosPath(null or empty)is invalid");
             }
         }
 

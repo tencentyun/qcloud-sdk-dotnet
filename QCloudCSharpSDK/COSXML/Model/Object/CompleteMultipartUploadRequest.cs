@@ -96,7 +96,7 @@ namespace COSXML.Model.Object
 
             if (completeMultipartUpload.parts.Count == 0)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "completeMultipartUpload.parts count = 0");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "completeMultipartUpload.parts count = 0");
             }
 
             if (requestUrlWithSign != null)
@@ -109,7 +109,7 @@ namespace COSXML.Model.Object
 
             if (uploadId == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "uploadId is null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "uploadId is null");
             }
         }
 

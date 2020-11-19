@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace COSXML.Transfer
 {
-    public sealed class COSXMLUploadTask : COSXMLTask, OnMultipartUploadStateListener
+    public sealed class COSXMLUploadTask : COSXMLTask, IOnMultipartUploadStateListener
     {
         private long divisionSize;
 
@@ -129,7 +129,7 @@ namespace COSXML.Transfer
 
                     if (failCallback != null)
                     {
-                        failCallback(new CosClientException((int)CosClientError.INVALID_ARGUMENT, ex.Message, ex), null);
+                        failCallback(new CosClientException((int)CosClientError.InvalidArgument, ex.Message, ex), null);
                     }
                 }
                 //error
@@ -617,7 +617,7 @@ namespace COSXML.Transfer
 
                 if (UpdateTaskState(TaskState.Failed))
                 {
-                    OnFailed(new CosClientException((int)CosClientError.INTERNA_LERROR, ex.Message, ex), null);
+                    OnFailed(new CosClientException((int)CosClientError.InternalError, ex.Message, ex), null);
                 }
             }
 

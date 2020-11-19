@@ -14,17 +14,17 @@ namespace COSXML.Auth
     /// <summary>
     /// 计算请求签名
     /// </summary>
-    public interface QCloudSigner
+    public interface IQCloudSigner
     {
-        void Sign(Request request, QCloudSignSource qcloudSignSource, QCloudCredentials qcloudCredentials);
+        void Sign(Request request, IQCloudSignSource qcloudSignSource, QCloudCredentials qcloudCredentials);
     }
 
-    public interface QCloudSignSource
+    public interface IQCloudSignSource
     {
         string Source(Request request);
     }
 
-    public sealed class CosXmlSignSourceProvider : QCloudSignSource
+    public sealed class CosXmlSignSourceProvider : IQCloudSignSource
     {
         private HashSet<string> parameterKeys;
 
@@ -47,7 +47,7 @@ namespace COSXML.Auth
             this.signAll = true;
         }
 
-        public void setSignAll(Boolean signAll)
+        public void SetSignAll(Boolean signAll)
         {
             this.signAll = signAll;
         }
@@ -179,7 +179,10 @@ namespace COSXML.Auth
                         headerKeys.Add("content-length");
                     }
                 }
-                catch (Exception) { }
+                catch (Exception) 
+                { 
+
+                }
             }
 
             Dictionary<string, string> sourceParameters = request.Url.GetQueryParameters();
@@ -377,11 +380,14 @@ namespace COSXML.Auth
 
     }
 
-    public sealed class CosXmlSigner : QCloudSigner
+    public sealed class CosXmlSigner : IQCloudSigner
     {
-        public CosXmlSigner() { }
+        public CosXmlSigner() 
+        { 
 
-        public void Sign(Request request, QCloudSignSource qcloudSignSource, QCloudCredentials qcloudCredentials)
+        }
+
+        public void Sign(Request request, IQCloudSignSource qcloudSignSource, QCloudCredentials qcloudCredentials)
         {
 
             if (request == null)
@@ -436,8 +442,7 @@ namespace COSXML.Auth
             }
         }
 
-        public static string GenerateSign(string method, string path, Dictionary<string, string> queryParameters, Dictionary<string, string> headers,
-            string signTime, QCloudCredentials qcloudCredentials)
+        public static string GenerateSign(string method, string path, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, string signTime, QCloudCredentials qcloudCredentials)
         {
 
             if (qcloudCredentials == null)

@@ -20,36 +20,36 @@ namespace COSXMLTests
     public class ObjectTest
     {
 
-        COSXML.CosXml cosXml;
+        internal COSXML.CosXml cosXml;
 
-        TransferManager transferManager;
+        internal TransferManager transferManager;
 
-        string bucket;
+        internal string bucket;
 
-        string bigFileSrcPath;
+        internal string bigFileSrcPath;
 
-        string smallFileSrcPath;
+        internal string smallFileSrcPath;
 
-        string commonKey;
+        internal string commonKey;
 
-        string imageKey;
+        internal string imageKey;
 
-        string copykey;
+        internal string copykey;
 
-        string multiKey;
+        internal string multiKey;
 
-        string localDir;
+        internal string localDir;
 
-        string localFileName;
+        internal string localFileName;
 
         [SetUp]
-        public void init()
+        public void Init()
         {
             cosXml = QCloudServer.Instance().cosXml;
             bucket = QCloudServer.Instance().bucketForObjectTest;
             transferManager = new TransferManager(cosXml, new TransferConfig());
-            smallFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 1);
-            bigFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 10);
+            smallFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".txt", 1024 * 1024 * 1);
+            bigFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".txt", 1024 * 1024 * 10);
             FileInfo fileInfo = new FileInfo(smallFileSrcPath);
 
             DirectoryInfo directoryInfo = fileInfo.Directory;
@@ -57,8 +57,8 @@ namespace COSXMLTests
             localDir = directoryInfo.FullName;
             localFileName = "local.txt";
 
-            commonKey = "simpleObject" + TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
-            multiKey = "bigObject" + TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
+            commonKey = "simpleObject" + TimeUtils.GetCurrentTime(TimeUnit.Seconds);
+            multiKey = "bigObject" + TimeUtils.GetCurrentTime(TimeUnit.Seconds);
             copykey = commonKey;
             imageKey = commonKey;
 
@@ -66,7 +66,7 @@ namespace COSXMLTests
         }
 
         [TearDown()]
-        public void clear()
+        public void Clear()
         {
             DeleteObject();
             MultiDeleteObject();
@@ -357,7 +357,7 @@ namespace COSXMLTests
                 CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
                     bucket, QCloudServer.Instance().region, "copy_objecttest.txt");
 
-                string tempBucket = "a-bucket-for-temp" + TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
+                string tempBucket = "a-bucket-for-temp" + TimeUtils.GetCurrentTime(TimeUnit.Seconds);
 
 
                 PutBucketRequest request = new PutBucketRequest(tempBucket);
@@ -704,7 +704,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testCreateDirectory()
+        public void TestCreateDirectory()
         {
 
             try
@@ -732,7 +732,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testGetObject()
+        public void TestGetObject()
         {
 
             try
@@ -764,7 +764,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testGetObjectByte()
+        public void TestGetObjectByte()
         {
 
             try
@@ -807,7 +807,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testSelectObjectToFile()
+        public void TestSelectObjectToFile()
         {
 
             try
@@ -825,17 +825,17 @@ namespace COSXMLTests
                 string outputFile = "select_local_file.json";
 
 
-                request.setExpression("Select * from COSObject")
-                        .setInputFormat(new ObjectSelectionFormat(null, jSONFormat))
-                        .setOutputFormat(new ObjectSelectionFormat(null, jSONFormat))
+                request.SetExpression("Select * from COSObject")
+                        .SetInputFormat(new ObjectSelectionFormat(null, jSONFormat))
+                        .SetOutputFormat(new ObjectSelectionFormat(null, jSONFormat))
                         .SetCosProgressCallback(delegate (long progress, long total)
                         {
                             Console.WriteLine("OnProgress : " + progress + "," + total);
                         })
-                        .outputToFile(outputFile)
+                        .OutputToFile(outputFile)
                         ;
 
-                SelectObjectResult selectObjectResult = cosXml.selectObject(request);
+                SelectObjectResult selectObjectResult = cosXml.SelectObject(request);
 
 
                 Console.WriteLine(selectObjectResult.stat);
@@ -856,7 +856,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testSelectObjectInMemory()
+        public void TestSelectObjectInMemory()
         {
 
             try
@@ -871,16 +871,16 @@ namespace COSXMLTests
                 jSONFormat.Type = "DOCUMENT";
                 jSONFormat.RecordDelimiter = "\n";
 
-                request.setExpression("Select * from COSObject")
-                        .setInputFormat(new ObjectSelectionFormat(null, jSONFormat))
-                        .setOutputFormat(new ObjectSelectionFormat(null, jSONFormat))
+                request.SetExpression("Select * from COSObject")
+                        .SetInputFormat(new ObjectSelectionFormat(null, jSONFormat))
+                        .SetOutputFormat(new ObjectSelectionFormat(null, jSONFormat))
                         .SetCosProgressCallback(delegate (long progress, long total)
                         {
                             Console.WriteLine("OnProgress : " + progress + "," + total);
                         })
                         ;
 
-                SelectObjectResult selectObjectResult = cosXml.selectObject(request);
+                SelectObjectResult selectObjectResult = cosXml.SelectObject(request);
 
 
                 Console.WriteLine(selectObjectResult.stat);
@@ -902,7 +902,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public async Task testUploadTask()
+        public async Task TestUploadTask()
         {
             string key = multiKey;
 
@@ -929,7 +929,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public async Task testDownloadTask()
+        public async Task TestDownloadTask()
         {
             long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
             GetObjectRequest request = new GetObjectRequest(bucket,
@@ -954,7 +954,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public async Task testCopyTask()
+        public async Task TestCopyTask()
         {
             CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
                     bucket, QCloudServer.Instance().region, copykey);
@@ -975,7 +975,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testPutObjectUploadTrafficLimit()
+        public void TestPutObjectUploadTrafficLimit()
         {
 
             try
@@ -1011,7 +1011,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testPostObjectTrafficLimit()
+        public void TestPostObjectTrafficLimit()
         {
 
             try
@@ -1046,7 +1046,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void generateSignUrl()
+        public void GenerateSignUrl()
         {
             QCloudServer instance = QCloudServer.Instance();
             string key = commonKey;
@@ -1065,19 +1065,19 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public async Task asyncPutObject()
+        public async Task AsyncPutObject()
         {
             PutObjectRequest request = new PutObjectRequest(bucket, commonKey, smallFileSrcPath);
 
 
-            PutObjectResult result = await cosXml.executeAsync<PutObjectResult>(request);
+            PutObjectResult result = await cosXml.ExecuteAsync<PutObjectResult>(request);
 
 
             Assert.NotNull(result.GetResultInfo());
         }
 
         [Test()]
-        public async Task testUploadTaskWithError()
+        public async Task TestUploadTaskWithError()
         {
             string key = multiKey;
 

@@ -153,7 +153,7 @@ namespace COSXML.Model.Object
             }
             catch (ArgumentNullException)
             {
-                QLog.D(TAG, "SetHeader: key ==null");
+                QLog.Debug(TAG, "SetHeader: key ==null");
             }
             catch (ArgumentException)
             {
@@ -175,7 +175,7 @@ namespace COSXML.Model.Object
             }
             catch (ArgumentNullException)
             {
-                QLog.D(TAG, "SetHeader: key ==null");
+                QLog.Debug(TAG, "SetHeader: key ==null");
             }
             catch (ArgumentException)
             {
@@ -248,7 +248,7 @@ namespace COSXML.Model.Object
 
             if (this.cosXmlSignSourceProvider != null)
             {
-                this.cosXmlSignSourceProvider.setSignAll(false);
+                this.cosXmlSignSourceProvider.SetSignAll(false);
                 this.cosXmlSignSourceProvider.onGetSign = delegate (Request request, string sign)
                 {
                     //添加参数 sign
@@ -434,12 +434,12 @@ if (formStruct.srcPath != null)
 
                 if (String.IsNullOrEmpty(key))
                 {
-                    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "FormStruct.key(null or empty) is invalid");
+                    throw new CosClientException((int)CosClientError.InvalidArgument, "FormStruct.key(null or empty) is invalid");
                 }
 
                 if (srcPath == null && data == null)
                 {
-                    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "data source = null");
+                    throw new CosClientException((int)CosClientError.InvalidArgument, "data source = null");
                 }
 
                 if (srcPath != null)
@@ -447,7 +447,7 @@ if (formStruct.srcPath != null)
 
                     if (!File.Exists(srcPath))
                     {
-                        throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "srcPath not exist");
+                        throw new CosClientException((int)CosClientError.InvalidArgument, "srcPath not exist");
                     }
                 }
             }
@@ -467,7 +467,7 @@ if (formStruct.srcPath != null)
 
             public void SetExpiration(long endTimeMills)
             {
-                this.expiration = TimeUtils.GetFormatTime("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", endTimeMills, TimeUnit.MILLISECONDS);
+                this.expiration = TimeUtils.GetFormatTime("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", endTimeMills, TimeUnit.Milliseconds);
             }
 
             public void SetExpiration(string formatEndTime)

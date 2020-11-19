@@ -92,12 +92,12 @@ namespace COSXML.Model.Object
 
             if (origin == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "origin = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "origin = null");
             }
 
             if (accessControlMethod == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "accessControlMethod = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "accessControlMethod = null");
             }
 
             base.CheckParameters();

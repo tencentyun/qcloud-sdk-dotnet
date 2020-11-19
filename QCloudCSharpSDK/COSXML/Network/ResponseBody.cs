@@ -131,7 +131,7 @@ namespace COSXML.Network
             }
             catch (Exception ex)
             {
-                QLog.E("ResponseBody", ex.Message, ex);
+                QLog.Error("ResponseBody", ex.Message, ex);
                 throw;
             }
             finally
@@ -198,7 +198,7 @@ namespace COSXML.Network
                     memoryStream.Dispose();
                 }
 
-                QLog.E("ResponseBody", ex.Message, ex);
+                QLog.Error("ResponseBody", ex.Message, ex);
             }
 
         }
@@ -289,7 +289,7 @@ if (recvLen == 0)
                     memoryStream.Dispose();
                 }
 
-                QLog.E("ResponseBody", ex.Message, ex);
+                QLog.Error("ResponseBody", ex.Message, ex);
             }
 
         }

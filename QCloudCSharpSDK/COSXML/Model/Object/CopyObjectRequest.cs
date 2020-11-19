@@ -196,7 +196,7 @@ namespace COSXML.Model.Object
 
             if (copySourceStruct == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source is null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "copy source is null");
             }
             else
             {

@@ -11,12 +11,10 @@ namespace COSXML.Utils.Tests
         [Test()]
         public void GetCurrentTimeTest()
         {
-            long days = TimeUtils.GetCurrentTime(TimeUnit.DAYS);
-            long hours = TimeUtils.GetCurrentTime(TimeUnit.HOURS);
-            long minutes = TimeUtils.GetCurrentTime(TimeUnit.MINUTES);
-            long seconds = TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
-
-
+            long days = TimeUtils.GetCurrentTime(TimeUnit.Days);
+            long hours = TimeUtils.GetCurrentTime(TimeUnit.Hours);
+            long minutes = TimeUtils.GetCurrentTime(TimeUnit.Minutes);
+            long seconds = TimeUtils.GetCurrentTime(TimeUnit.Seconds);
         }
 
         [Test()]
@@ -26,10 +24,3 @@ namespace COSXML.Utils.Tests
         }
     }
 }
-
-
-/* ============================================================================== 
-* Copyright 2016-2019 Tencent Cloud. All Rights Reserved.
-* Auth：bradyxiao 
-* Date：2019/1/22 17:32:45 
-* ==============================================================================*/

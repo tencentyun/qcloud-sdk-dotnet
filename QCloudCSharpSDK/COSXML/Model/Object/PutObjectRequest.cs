@@ -95,7 +95,7 @@ namespace COSXML.Model.Object
 
             if (srcPath == null && data == null)
             {
-                throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "data source = null");
+                throw new CosClientException((int)(CosClientError.InvalidArgument), "data source = null");
             }
 
             if (srcPath != null)
@@ -103,7 +103,7 @@ namespace COSXML.Model.Object
 
                 if (!File.Exists(srcPath))
                 {
-                    throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "file not exist");
+                    throw new CosClientException((int)(CosClientError.InvalidArgument), "file not exist");
                 }
             }
 

@@ -155,7 +155,7 @@ namespace COSXML.Model
             }
             catch (ArgumentNullException)
             {
-                QLog.D(TAG, "SetQueryParameter: key ==null");
+                QLog.Debug(TAG, "SetQueryParameter: key ==null");
             }
             catch (ArgumentException)
             {
@@ -214,7 +214,7 @@ namespace COSXML.Model
             }
             catch (ArgumentNullException)
             {
-                QLog.D(TAG, "SetRequestHeader: key ==null");
+                QLog.Debug(TAG, "SetRequestHeader: key ==null");
             }
             catch (ArgumentException)
             {

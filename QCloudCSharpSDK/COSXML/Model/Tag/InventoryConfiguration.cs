@@ -152,10 +152,10 @@ namespace COSXML.Model.Tag
             {
                 StringBuilder stringBuilder = new StringBuilder("{COSBucketDestination:\n");
 
-                stringBuilder.Append("Format:").Append(format).Append("\n"); ;
-                stringBuilder.Append("AccountId:").Append(accountId).Append("\n"); ;
-                stringBuilder.Append("Bucket:").Append(bucket).Append("\n"); ;
-                stringBuilder.Append("Prefix:").Append(prefix).Append("\n"); ;
+                stringBuilder.Append("Format:").Append(format).Append("\n");
+                stringBuilder.Append("AccountId:").Append(accountId).Append("\n");
+                stringBuilder.Append("Bucket:").Append(bucket).Append("\n");
+                stringBuilder.Append("Prefix:").Append(prefix).Append("\n");
 
                 if (encryption != null)
                 {

@@ -61,7 +61,7 @@ namespace COSXML.Transfer
 
         internal void Download()
         {
-            UpdateTaskState(TaskState.WAITTING);
+            UpdateTaskState(TaskState.Waiting);
             //对象是否存在
             headObjectRequest = new HeadObjectRequest(bucket, key);
             cosXmlServer.HeadObject(headObjectRequest, delegate (CosResult cosResult)
@@ -76,7 +76,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.RUNNING))
+                if (UpdateTaskState(TaskState.Running))
                 {
                     HeadObjectResult result = cosResult as HeadObjectResult;
                     //计算range
@@ -98,7 +98,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.FAILED))
+                if (UpdateTaskState(TaskState.Failed))
                 {
 
                     if (failCallback != null)
@@ -137,7 +137,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.COMPLETED))
+                if (UpdateTaskState(TaskState.Completed))
                 {
                     GetObjectResult getObjectResult = result as GetObjectResult;
                     DownloadTaskResult downloadTaskResult = new DownloadTaskResult();
@@ -161,7 +161,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.FAILED))
+                if (UpdateTaskState(TaskState.Failed))
                 {
 
                     if (failCallback != null)
@@ -187,7 +187,7 @@ namespace COSXML.Transfer
         public override void Pause()
         {
 
-            if (UpdateTaskState(TaskState.PAUSE))
+            if (UpdateTaskState(TaskState.Pause))
             {
                 //exit download
                 lock (syncExit) 
@@ -203,7 +203,7 @@ namespace COSXML.Transfer
         public override void Cancel()
         {
 
-            if (UpdateTaskState(TaskState.CANCEL))
+            if (UpdateTaskState(TaskState.Cancel))
             {
                 //exit copy
                 lock (syncExit) 
@@ -221,7 +221,7 @@ namespace COSXML.Transfer
         public override void Resume()
         {
 
-            if (UpdateTaskState(TaskState.RESUME))
+            if (UpdateTaskState(TaskState.Resume))
             {
                 lock (syncExit)
                 {
@@ -229,7 +229,7 @@ namespace COSXML.Transfer
                     //continue to download
                     isExit = false;
                 }
-                
+
                 Download();
             }
         }

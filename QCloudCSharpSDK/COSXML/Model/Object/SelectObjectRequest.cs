@@ -29,35 +29,35 @@ namespace COSXML.Model.Object
             this.queryParameters.Add("select-type", "2");
         }
 
-        public SelectObjectRequest outputToFile(string filePath)
+        public SelectObjectRequest OutputToFile(string filePath)
         {
             outputFilePath = filePath;
 
             return this;
         }
 
-        public SelectObjectRequest setExpression(string expression)
+        public SelectObjectRequest SetExpression(string expression)
         {
             this.expression = expression;
 
             return this;
         }
 
-        public SelectObjectRequest setExpressionType(string expressionType)
+        public SelectObjectRequest SetExpressionType(string expressionType)
         {
             this.expressionType = expressionType;
 
             return this;
         }
 
-        public SelectObjectRequest setInputFormat(ObjectSelectionFormat inputFormat)
+        public SelectObjectRequest SetInputFormat(ObjectSelectionFormat inputFormat)
         {
             this.inputFormat = inputFormat;
 
             return this;
         }
 
-        public SelectObjectRequest setOutputFormat(ObjectSelectionFormat outputFormat)
+        public SelectObjectRequest SetOutputFormat(ObjectSelectionFormat outputFormat)
         {
             this.outputFormat = outputFormat;
 
@@ -77,19 +77,19 @@ namespace COSXML.Model.Object
 
             if (expression == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT,
+                throw new CosClientException((int)CosClientError.InvalidArgument,
                   "expression is null");
             }
 
             if (inputFormat == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT,
+                throw new CosClientException((int)CosClientError.InvalidArgument,
                   "inputFormat is null");
             }
 
             if (outputFormat == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT,
+                throw new CosClientException((int)CosClientError.InvalidArgument,
                   "outputFormat is null");
             }
         }

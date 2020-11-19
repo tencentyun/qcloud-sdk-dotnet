@@ -218,7 +218,7 @@ namespace COSXML.Transfer
 
     public delegate void OnInternalHandleBeforExcute(CosRequest cosRequest);
 
-    interface OnMultipartUploadStateListener
+    internal interface IOnMultipartUploadStateListener
     {
         void OnInit();
 

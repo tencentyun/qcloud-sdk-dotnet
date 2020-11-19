@@ -211,12 +211,12 @@ namespace COSXML.Model.Object
 
             if (localDir == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "localDir = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "localDir = null");
             }
 
             if (requestUrlWithSign != null && localFileName == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "localFileName = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "localFileName = null");
             }
 
             base.CheckParameters();

@@ -38,10 +38,6 @@ namespace COSXML.Model.Bucket
             set { this.bucket = value; }
         }
 
-        /// <summary>
-        /// Bucket 所在地域
-        /// <see cref="COSXML.Common.CosRegion"/>
-        /// </summary>
         public string Region
         {
             get
@@ -127,7 +123,7 @@ namespace COSXML.Model.Bucket
             //}
             if (bucket == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "bucket is null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "bucket is null");
             }
             // if (region == null)
             // {

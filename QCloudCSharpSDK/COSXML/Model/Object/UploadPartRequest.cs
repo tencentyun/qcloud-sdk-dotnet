@@ -148,7 +148,7 @@ namespace COSXML.Model.Object
 
             if (srcPath == null && data == null)
             {
-                throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "data source = null");
+                throw new CosClientException((int)(CosClientError.InvalidArgument), "data source = null");
             }
 
             if (srcPath != null)
@@ -156,7 +156,7 @@ namespace COSXML.Model.Object
 
                 if (!File.Exists(srcPath))
                 {
-                    throw new CosClientException((int)(CosClientError.INVALID_ARGUMENT), "file not exist");
+                    throw new CosClientException((int)(CosClientError.InvalidArgument), "file not exist");
                 }
             }
 
@@ -170,12 +170,12 @@ namespace COSXML.Model.Object
 
             if (partNumber <= 0)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "partNumber < 1");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "partNumber < 1");
             }
 
             if (uploadId == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "uploadId = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "uploadId = null");
             }
         }
 

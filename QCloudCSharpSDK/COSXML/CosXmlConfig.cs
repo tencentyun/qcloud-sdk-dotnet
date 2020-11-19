@@ -145,7 +145,6 @@ namespace COSXML
 
             /// <summary>
             /// 存储桶所属地域
-            /// <see cref="COSXML.Common.CosRegion"/>
             /// </summary>
             /// <param name="region"></param>
             /// <returns></returns>

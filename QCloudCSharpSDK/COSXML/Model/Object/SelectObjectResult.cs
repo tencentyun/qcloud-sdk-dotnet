@@ -42,8 +42,7 @@ namespace COSXML.Model.Object
             this.progressCallback = ((SelectObjectRequest)cosRequest).progressCallback;
         }
 
-        internal override void ParseResponseBody(System.IO.Stream inputStream,
-            string contentType, long contentLength)
+        internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
         {
             // Read One Message for each loop
             // readToString(inputStream);
@@ -65,14 +64,14 @@ namespace COSXML.Model.Object
 
                 while (true)
                 {
-                    tryRead(inputStream, tempBuffer, 0, 4);
-                    long messageEntireLength = bytes4ToInt(tempBuffer);
+                    TryRead(inputStream, tempBuffer, 0, 4);
+                    long messageEntireLength = Bytes4ToInt(tempBuffer);
 
-                    tryRead(inputStream, tempBuffer, 0, 4);
-                    long headerSectionLength = bytes4ToInt(tempBuffer);
+                    TryRead(inputStream, tempBuffer, 0, 4);
+                    long headerSectionLength = Bytes4ToInt(tempBuffer);
 
-                    tryRead(inputStream, tempBuffer, 0, 4);
-                    long preludeCRC = bytes4ToInt(tempBuffer);
+                    TryRead(inputStream, tempBuffer, 0, 4);
+                    long preludeCRC = Bytes4ToInt(tempBuffer);
 
                     Dictionary<String, String> headers = new Dictionary<string, string>();
 
@@ -81,26 +80,26 @@ namespace COSXML.Model.Object
 
                     while (headerSectionRemainLength > 0)
                     {
-                        tryRead(inputStream, tempBuffer, 0, 1);
-                        int headerNameLength = bytes1ToInt(tempBuffer);
+                        TryRead(inputStream, tempBuffer, 0, 1);
+                        int headerNameLength = Bytes1ToInt(tempBuffer);
 
 
                         byte[] headerNameBuffer = new byte[headerNameLength];
 
-                        tryRead(inputStream, headerNameBuffer, 0, headerNameLength);
-                        String headerName = bytes2stringUTF8(headerNameBuffer);
+                        TryRead(inputStream, headerNameBuffer, 0, headerNameLength);
+                        String headerName = Bytes2stringUTF8(headerNameBuffer);
 
                         // 7
                         inputStream.ReadByte();
 
-                        tryRead(inputStream, tempBuffer, 0, 2);
-                        int valueLength = bytes2ToInt(tempBuffer);
+                        TryRead(inputStream, tempBuffer, 0, 2);
+                        int valueLength = Bytes2ToInt(tempBuffer);
 
 
                         byte[] valueBuffer = new byte[valueLength];
 
-                        tryRead(inputStream, valueBuffer, 0, valueLength);
-                        String value = bytes2stringUTF8(valueBuffer);
+                        TryRead(inputStream, valueBuffer, 0, valueLength);
+                        String value = Bytes2stringUTF8(valueBuffer);
 
                         if (headers.ContainsKey(headerName))
                         {
@@ -140,7 +139,7 @@ namespace COSXML.Model.Object
                                 {
                                     int readLength = (int)Math.Min(payloadLength - totalRead, 1024);
 
-                                    int readBytes = tryRead(inputStream, buffer, 0, readLength);
+                                    int readBytes = TryRead(inputStream, buffer, 0, readLength);
 
                                     outputStream.Write(buffer, 0, readBytes);
                                     totalRead += readBytes;
@@ -149,20 +148,20 @@ namespace COSXML.Model.Object
 
                             case "Progress":
                                 buffer = new byte[payloadLength];
-                                tryRead(inputStream, buffer, 0, (int)payloadLength);
-                                Stat stat = parseStatsBody(buffer);
+                                TryRead(inputStream, buffer, 0, (int)payloadLength);
+                                Stat stat = ParseStatsBody(buffer);
                                 progressCallback(stat.BytesProcessed, stat.BytesScanned);
                                 break;
 
                             case "Cont":
                                 buffer = new byte[payloadLength];
-                                tryRead(inputStream, buffer, 0, (int)payloadLength);
+                                TryRead(inputStream, buffer, 0, (int)payloadLength);
                                 break;
 
                             case "Stats":
                                 buffer = new byte[payloadLength];
-                                tryRead(inputStream, buffer, 0, (int)payloadLength);
-                                this.stat = parseStatsBody(buffer);
+                                TryRead(inputStream, buffer, 0, (int)payloadLength);
+                                this.stat = ParseStatsBody(buffer);
                                 break;
 
                             case "End":
@@ -190,20 +189,20 @@ if ("error".Equals(messageType))
                         if (outputFilePath == null)
                         {
                             outputStream.Position = 0;
-                            searchContent = readToString(outputStream);
+                            searchContent = ReadToString(outputStream);
                         }
 
                         break;
                     }
 
-                    tryRead(inputStream, tempBuffer, 0, 4);
-                    long messageCRC = bytes4ToInt(tempBuffer);
+                    TryRead(inputStream, tempBuffer, 0, 4);
+                    long messageCRC = Bytes4ToInt(tempBuffer);
                 }
             }
 
         }
 
-        private int tryRead(System.IO.Stream inputStream, byte[] buffer, int offset, int count)
+        private int TryRead(System.IO.Stream inputStream, byte[] buffer, int offset, int count)
         {
             int read = 0;
             int maxRead = 10;
@@ -224,7 +223,7 @@ if ("error".Equals(messageType))
             return count - remainReadCount;
         }
 
-        private Stat parseStatsBody(byte[] body)
+        private Stat ParseStatsBody(byte[] body)
         {
             XmlReader xmlReader = XmlReader.Create(new MemoryStream(body));
             Stat stat = new Stat();
@@ -268,7 +267,7 @@ if ("BytesReturned".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
             return stat;
         }
 
-        private string readToString(System.IO.Stream inputStream)
+        private string ReadToString(System.IO.Stream inputStream)
         {
             string content = null;
 
@@ -280,25 +279,25 @@ if ("BytesReturned".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
             return content;
         }
 
-        private string bytes2stringUTF8(byte[] data)
+        private string Bytes2stringUTF8(byte[] data)
         {
 
             return System.Text.Encoding.UTF8.GetString(data);
         }
 
-        private int bytes2ToInt(byte[] data)
+        private int Bytes2ToInt(byte[] data)
         {
 
             return ((data[0] & 0xFF) << 8) | (data[1] & 0xFF);
         }
 
-        private int bytes1ToInt(byte[] data)
+        private int Bytes1ToInt(byte[] data)
         {
 
             return (data[0] & 0xFF);
         }
 
-        private long bytes4ToInt(byte[] data)
+        private long Bytes4ToInt(byte[] data)
         {
 
             return ((data[0] & 0xFF) << 24) | ((data[1] & 0xFF) << 16)
