@@ -1,4 +1,4 @@
-﻿using COSXML.Common;
+using COSXML.Common;
 using COSXML.CosException;
 using COSXML.Model;
 using COSXML.Model.Bucket;
@@ -85,14 +85,12 @@ namespace COSXMLTests
 
         }
 
+        
         public void GetBucket(COSXML.CosXml cosXml, string bucket)
         {
             try
             {
                 GetBucketRequest request = new GetBucketRequest(bucket);
-
-                
-                //
 
                 request.SetPrefix("a/中文/d");
 
@@ -107,6 +105,42 @@ namespace COSXMLTests
 
                 //执行请求
                 GetBucketResult result = cosXml.GetBucket(request);
+                Assert.True(result.httpCode == 200);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+
+        }
+
+        [Test()]
+        public void GetBucket()
+        {
+            try
+            {
+                QCloudServer instance = QCloudServer.Instance();
+
+                GetBucketRequest request = new GetBucketRequest(instance.bucketForBucketTest);
+
+                request.SetDelimiter("/");
+
+                List<string> headerKeys = new List<string>();
+                headerKeys.Add("Host");
+
+
+                List<string> queryParameters = new List<string>();
+                queryParameters.Add("prefix");
+                queryParameters.Add("max-keys");
+                //执行请求
+                GetBucketResult result = instance.cosXml.GetBucket(request);
+                Console.WriteLine(result.listBucket.commonPrefixesList.ToArray().Length);
                 Assert.True(result.httpCode == 200);
             }
             catch (COSXML.CosException.CosClientException clientEx)

@@ -1,4 +1,4 @@
-﻿using COSXML.Model.Tag;
+using COSXML.Model.Tag;
 using COSXML.Transfer;
 namespace COSXML.Model.Bucket
 {

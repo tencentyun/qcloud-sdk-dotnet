@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using COSXML.Utils;
 using System.Collections.Generic;
 using System.Text;

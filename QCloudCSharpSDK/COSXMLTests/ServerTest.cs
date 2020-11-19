@@ -1,4 +1,4 @@
-﻿using COSXML.Log;
+using COSXML.Log;
 using COSXML.Model.Service;
 using NUnit.Framework;
 using System;
