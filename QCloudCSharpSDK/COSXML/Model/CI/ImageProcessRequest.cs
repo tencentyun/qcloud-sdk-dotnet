@@ -16,7 +16,7 @@ namespace COSXML.Model.CI
 
             if (operationRules == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "operationRules = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "operationRules = null");
             }
 
             this.method = CosRequestMethod.POST;

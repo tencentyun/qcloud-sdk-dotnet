@@ -111,7 +111,7 @@ namespace COSXML
 
         }
 
-        public Task<T> executeAsync<T>(CosRequest request) where T : CosResult
+        public Task<T> ExecuteAsync<T>(CosRequest request) where T : CosResult
         {
             T result = Activator.CreateInstance<T>();
 
@@ -139,7 +139,7 @@ namespace COSXML
             return t.Task;
         }
 
-        public T execute<T>(CosRequest request) where T : CosResult
+        public T Execute<T>(CosRequest request) where T : CosResult
         {
             T result = Activator.CreateInstance<T>();
 
@@ -173,7 +173,7 @@ namespace COSXML
             return (Model.Service.GetServiceResult)excute(request, new Model.Service.GetServiceResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetService(Model.Service.GetServiceRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
             schedue(request, new GetServiceResult(), successCallback, failCallback);
@@ -185,7 +185,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketResult)excute(request, new Model.Bucket.PutBucketResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucket(PutBucketRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
             schedue(request, new PutBucketResult(), successCallback, failCallback);
@@ -197,7 +197,7 @@ namespace COSXML
             return (Model.Bucket.DeleteBucketResult)excute(request, new Model.Bucket.DeleteBucketResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteBucket(DeleteBucketRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new DeleteBucketResult(), successCallback, failCallback);
@@ -209,7 +209,7 @@ namespace COSXML
             return (Model.Bucket.HeadBucketResult)excute(request, new Model.Bucket.HeadBucketResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void HeadBucket(HeadBucketRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new HeadBucketResult(), successCallback, failCallback);
@@ -221,7 +221,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketResult)excute(request, new Model.Bucket.GetBucketResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucket(GetBucketRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new GetBucketResult(), successCallback, failCallback);
@@ -233,7 +233,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketLocationResult)excute(request, new Model.Bucket.GetBucketLocationResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketLocation(GetBucketLocationRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new GetBucketLocationResult(), successCallback, failCallback);
@@ -245,7 +245,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketACLResult)excute(request, new Model.Bucket.PutBucketACLResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketACL(PutBucketACLRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new PutBucketACLResult(), successCallback, failCallback);
@@ -257,7 +257,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketACLResult)excute(request, new Model.Bucket.GetBucketACLResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketACL(GetBucketACLRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new GetBucketACLResult(), successCallback, failCallback);
@@ -269,7 +269,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketCORSResult)excute(request, new Model.Bucket.PutBucketCORSResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketCORS(PutBucketCORSRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new PutBucketCORSResult(), successCallback, failCallback);
@@ -281,7 +281,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketCORSResult)excute(request, new Model.Bucket.GetBucketCORSResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketCORS(GetBucketCORSRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new GetBucketCORSResult(), successCallback, failCallback);
@@ -293,7 +293,7 @@ namespace COSXML
             return (Model.Bucket.DeleteBucketCORSResult)excute(request, new Model.Bucket.DeleteBucketCORSResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteBucketCORS(DeleteBucketCORSRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new DeleteBucketCORSResult(), successCallback, failCallback);
@@ -305,7 +305,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketLifecycleResult)excute(request, new Model.Bucket.PutBucketLifecycleResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketLifecycle(PutBucketLifecycleRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new PutBucketLifecycleResult(), successCallback, failCallback);
@@ -317,7 +317,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketLifecycleResult)excute(request, new Model.Bucket.GetBucketLifecycleResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketLifecycle(GetBucketLifecycleRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new GetBucketLifecycleResult(), successCallback, failCallback);
@@ -329,7 +329,7 @@ namespace COSXML
             return (Model.Bucket.DeleteBucketLifecycleResult)excute(request, new Model.Bucket.DeleteBucketLifecycleResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteBucketLifecycle(DeleteBucketLifecycleRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new DeleteBucketLifecycleResult(), successCallback, failCallback);
@@ -341,7 +341,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketReplicationResult)excute(request, new Model.Bucket.PutBucketReplicationResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketReplication(PutBucketReplicationRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new PutBucketReplicationResult(), successCallback, failCallback);
@@ -353,7 +353,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketReplicationResult)excute(request, new Model.Bucket.GetBucketReplicationResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketReplication(GetBucketReplicationRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new GetBucketReplicationResult(), successCallback, failCallback);
@@ -365,7 +365,7 @@ namespace COSXML
             return (Model.Bucket.DeleteBucketReplicationResult)excute(request, new Model.Bucket.DeleteBucketReplicationResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteBucketReplication(DeleteBucketReplicationRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new DeleteBucketReplicationResult(), successCallback, failCallback);
@@ -377,7 +377,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketVersioningResult)excute(request, new Model.Bucket.PutBucketVersioningResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketVersioning(PutBucketVersioningRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new PutBucketVersioningResult(), successCallback, failCallback);
@@ -389,7 +389,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketVersioningResult)excute(request, new Model.Bucket.GetBucketVersioningResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketVersioning(GetBucketVersioningRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new GetBucketVersioningResult(), successCallback, failCallback);
@@ -401,7 +401,7 @@ namespace COSXML
             return (Model.Bucket.ListBucketVersionsResult)excute(request, new Model.Bucket.ListBucketVersionsResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void ListBucketVersions(ListBucketVersionsRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new ListBucketVersionsResult(), successCallback, failCallback);
@@ -413,7 +413,7 @@ namespace COSXML
             return (Model.Bucket.ListMultiUploadsResult)excute(request, new Model.Bucket.ListMultiUploadsResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void ListMultiUploads(ListMultiUploadsRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new ListMultiUploadsResult(), successCallback, failCallback);
@@ -425,7 +425,7 @@ namespace COSXML
             return (Model.Bucket.DeleteBucketPolicyResult)excute(request, new Model.Bucket.DeleteBucketPolicyResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteBucketPolicy(DeleteBucketPolicyRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new DeleteBucketPolicyResult(), successCallback, failCallback);
@@ -437,7 +437,7 @@ namespace COSXML
             return (Model.Object.PutObjectResult)excute(request, new Model.Object.PutObjectResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutObject(PutObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new PutObjectResult(), successCallback, failCallback);
@@ -449,7 +449,7 @@ namespace COSXML
             return (Model.Object.HeadObjectResult)excute(request, new Model.Object.HeadObjectResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void HeadObject(HeadObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new HeadObjectResult(), successCallback, failCallback);
@@ -461,7 +461,7 @@ namespace COSXML
             return (Model.Object.GetObjectResult)excute(request, new Model.Object.GetObjectResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetObject(GetObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new GetObjectResult(), successCallback, failCallback);
@@ -473,7 +473,7 @@ namespace COSXML
             return (Model.Object.PutObjectACLResult)excute(request, new Model.Object.PutObjectACLResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutObjectACL(PutObjectACLRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new PutObjectACLResult(), successCallback, failCallback);
@@ -485,7 +485,7 @@ namespace COSXML
             return (Model.Object.GetObjectACLResult)excute(request, new Model.Object.GetObjectACLResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetObjectACL(GetObjectACLRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new GetObjectACLResult(), successCallback, failCallback);
@@ -497,7 +497,7 @@ namespace COSXML
             return (Model.Object.DeleteObjectResult)excute(request, new Model.Object.DeleteObjectResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteObject(DeleteObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new DeleteObjectResult(), successCallback, failCallback);
@@ -509,7 +509,7 @@ namespace COSXML
             return (Model.Object.DeleteMultiObjectResult)excute(request, new Model.Object.DeleteMultiObjectResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteMultiObjects(DeleteMultiObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new DeleteMultiObjectResult(), successCallback, failCallback);
@@ -521,7 +521,7 @@ namespace COSXML
             return (Model.Object.InitMultipartUploadResult)excute(request, new Model.Object.InitMultipartUploadResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void InitMultipartUpload(InitMultipartUploadRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new InitMultipartUploadResult(), successCallback, failCallback);
@@ -533,7 +533,7 @@ namespace COSXML
             return (Model.Object.ListPartsResult)excute(request, new Model.Object.ListPartsResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void ListParts(ListPartsRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new ListPartsResult(), successCallback, failCallback);
@@ -545,7 +545,7 @@ namespace COSXML
             return (Model.Object.UploadPartResult)excute(request, new Model.Object.UploadPartResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void UploadPart(UploadPartRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new UploadPartResult(), successCallback, failCallback);
@@ -557,7 +557,7 @@ namespace COSXML
             return (Model.Object.CompleteMultipartUploadResult)excute(request, new Model.Object.CompleteMultipartUploadResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void CompleteMultiUpload(CompleteMultipartUploadRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new CompleteMultipartUploadResult(), successCallback, failCallback);
@@ -569,7 +569,7 @@ namespace COSXML
             return (Model.Object.AbortMultipartUploadResult)excute(request, new Model.Object.AbortMultipartUploadResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void AbortMultiUpload(AbortMultipartUploadRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new AbortMultipartUploadResult(), successCallback, failCallback);
@@ -581,7 +581,7 @@ namespace COSXML
             return (Model.Object.CopyObjectResult)excute(request, new Model.Object.CopyObjectResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void CopyObject(CopyObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new CopyObjectResult(), successCallback, failCallback);
@@ -593,7 +593,7 @@ namespace COSXML
             return (Model.Object.UploadPartCopyResult)excute(request, new Model.Object.UploadPartCopyResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PartCopy(UploadPartCopyRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new UploadPartCopyResult(), successCallback, failCallback);
@@ -605,7 +605,7 @@ namespace COSXML
             return (Model.Object.OptionObjectResult)excute(request, new Model.Object.OptionObjectResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void OptionObject(OptionObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new OptionObjectResult(), successCallback, failCallback);
@@ -617,7 +617,7 @@ namespace COSXML
             return (Model.Object.PostObjectResult)excute(request, new Model.Object.PostObjectResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PostObject(PostObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new PostObjectResult(), successCallback, failCallback);
@@ -629,7 +629,7 @@ namespace COSXML
             return (Model.Object.RestoreObjectResult)excute(request, new Model.Object.RestoreObjectResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void RestoreObject(RestoreObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             schedue(request, new RestoreObjectResult(), successCallback, failCallback);
@@ -644,7 +644,7 @@ namespace COSXML
 
                 if (signDurationSecond > 0)
                 {
-                    long currentTimeSecond = TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
+                    long currentTimeSecond = TimeUtils.GetCurrentTime(TimeUnit.Seconds);
 
                     signTime = String.Format("{0};{1}", currentTimeSecond, currentTimeSecond + signDurationSecond);
                 }
@@ -669,7 +669,7 @@ namespace COSXML
             }
             catch (Exception ex)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, ex.Message, ex);
+                throw new CosClientException((int)CosClientError.InvalidArgument, ex.Message, ex);
             }
         }
 
@@ -681,12 +681,12 @@ namespace COSXML
 
                 if (preSignatureStruct.httpMethod == null)
                 {
-                    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "httpMethod = null");
+                    throw new CosClientException((int)CosClientError.InvalidArgument, "httpMethod = null");
                 }
 
                 if (preSignatureStruct.key == null)
                 {
-                    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "key = null");
+                    throw new CosClientException((int)CosClientError.InvalidArgument, "key = null");
                 }
 
                 StringBuilder urlBuilder = new StringBuilder();
@@ -705,7 +705,7 @@ namespace COSXML
 
                     if (preSignatureStruct.bucket == null)
                     {
-                        throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "bucket = null");
+                        throw new CosClientException((int)CosClientError.InvalidArgument, "bucket = null");
                     }
 
                     if (preSignatureStruct.bucket.EndsWith("-" + preSignatureStruct.appid))
@@ -760,7 +760,7 @@ namespace COSXML
             }
             catch (Exception ex)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, ex.Message, ex);
+                throw new CosClientException((int)CosClientError.InvalidArgument, ex.Message, ex);
             }
         }
 
@@ -793,7 +793,7 @@ namespace COSXML
             }
             catch (Exception ex)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, ex.Message, ex);
+                throw new CosClientException((int)CosClientError.InvalidArgument, ex.Message, ex);
             }
         }
 
@@ -812,193 +812,193 @@ namespace COSXML
             return (Model.Object.GetObjectBytesResult)excute(request, new Model.Object.GetObjectBytesResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetObject(GetObjectBytesRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new GetObjectBytesResult(), successCallback, failCallback);
         }
 
-        public PutBucketWebsiteResult putBucketWebsite(PutBucketWebsiteRequest request)
+        public PutBucketWebsiteResult PutBucketWebsite(PutBucketWebsiteRequest request)
         {
 
             return (Model.Bucket.PutBucketWebsiteResult)excute(request, new Model.Bucket.PutBucketWebsiteResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void putBucketWebsiteAsync(PutBucketWebsiteRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void PutBucketWebsiteAsync(PutBucketWebsiteRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.PutBucketWebsiteResult(), successCallback, failCallback);
         }
 
-        public GetBucketWebsiteResult getBucketWebsite(GetBucketWebsiteRequest request)
+        public GetBucketWebsiteResult GetBucketWebsite(GetBucketWebsiteRequest request)
         {
 
             return (Model.Bucket.GetBucketWebsiteResult)excute(request, new Model.Bucket.GetBucketWebsiteResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void getBucketWebsiteAsync(GetBucketWebsiteRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void GetBucketWebsiteAsync(GetBucketWebsiteRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.GetBucketWebsiteResult(), successCallback, failCallback);
         }
 
-        public DeleteBucketWebsiteResult deleteBucketWebsite(DeleteBucketWebsiteRequest request)
+        public DeleteBucketWebsiteResult DeleteBucketWebsite(DeleteBucketWebsiteRequest request)
         {
 
             return (Model.Bucket.DeleteBucketWebsiteResult)excute(request, new Model.Bucket.DeleteBucketWebsiteResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void deleteBucketWebsiteAsync(DeleteBucketWebsiteRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void DeleteBucketWebsiteAsync(DeleteBucketWebsiteRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.DeleteBucketWebsiteResult(), successCallback, failCallback);
         }
 
-        public PutBucketLoggingResult putBucketLogging(PutBucketLoggingRequest request)
+        public PutBucketLoggingResult PutBucketLogging(PutBucketLoggingRequest request)
         {
 
             return (Model.Bucket.PutBucketLoggingResult)excute(request, new Model.Bucket.PutBucketLoggingResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void putBucketLoggingAsync(PutBucketLoggingRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void PutBucketLoggingAsync(PutBucketLoggingRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.PutBucketLoggingResult(), successCallback, failCallback);
         }
 
-        public GetBucketLoggingResult getBucketLogging(GetBucketLoggingRequest request)
+        public GetBucketLoggingResult GetBucketLogging(GetBucketLoggingRequest request)
         {
 
             return (Model.Bucket.GetBucketLoggingResult)excute(request, new Model.Bucket.GetBucketLoggingResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void getBucketLoggingAsync(GetBucketLoggingRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void GetBucketLoggingAsync(GetBucketLoggingRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.GetBucketLoggingResult(), successCallback, failCallback);
         }
 
-        public PutBucketInventoryResult putBucketInventory(PutBucketInventoryRequest request)
+        public PutBucketInventoryResult PutBucketInventory(PutBucketInventoryRequest request)
         {
 
             return (Model.Bucket.PutBucketInventoryResult)excute(request, new Model.Bucket.PutBucketInventoryResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void putBucketInventoryAsync(PutBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void PutBucketInventoryAsync(PutBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.PutBucketInventoryResult(), successCallback, failCallback);
         }
 
-        public GetBucketInventoryResult getBucketInventory(GetBucketInventoryRequest request)
+        public GetBucketInventoryResult GetBucketInventory(GetBucketInventoryRequest request)
         {
 
             return (Model.Bucket.GetBucketInventoryResult)excute(request, new Model.Bucket.GetBucketInventoryResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void getBucketInventoryAsync(GetBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void GetBucketInventoryAsync(GetBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.GetBucketInventoryResult(), successCallback, failCallback);
         }
 
-        public DeleteBucketInventoryResult deleteBucketInventory(DeleteBucketInventoryRequest request)
+        public DeleteBucketInventoryResult DeleteBucketInventory(DeleteBucketInventoryRequest request)
         {
 
             return (Model.Bucket.DeleteBucketInventoryResult)excute(request, new Model.Bucket.DeleteBucketInventoryResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void deleteInventoryAsync(DeleteBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void DeleteInventoryAsync(DeleteBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.DeleteBucketInventoryResult(), successCallback, failCallback);
         }
 
-        public ListBucketInventoryResult listBucketInventory(ListBucketInventoryRequest request)
+        public ListBucketInventoryResult ListBucketInventory(ListBucketInventoryRequest request)
         {
 
             return (Model.Bucket.ListBucketInventoryResult)excute(request, new Model.Bucket.ListBucketInventoryResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void listBucketInventoryAsync(ListBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void ListBucketInventoryAsync(ListBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.ListBucketInventoryResult(), successCallback, failCallback);
         }
 
-        public PutBucketTaggingResult putBucketTagging(PutBucketTaggingRequest request)
+        public PutBucketTaggingResult PutBucketTagging(PutBucketTaggingRequest request)
         {
 
             return (Model.Bucket.PutBucketTaggingResult)excute(request, new Model.Bucket.PutBucketTaggingResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void putBucketTaggingAsync(PutBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void PutBucketTaggingAsync(PutBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.PutBucketTaggingResult(), successCallback, failCallback);
         }
 
-        public GetBucketTaggingResult getBucketTagging(GetBucketTaggingRequest request)
+        public GetBucketTaggingResult GetBucketTagging(GetBucketTaggingRequest request)
         {
 
             return (Model.Bucket.GetBucketTaggingResult)excute(request, new Model.Bucket.GetBucketTaggingResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void getBucketTaggingAsync(GetBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void GetBucketTaggingAsync(GetBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.GetBucketTaggingResult(), successCallback, failCallback);
         }
 
-        public DeleteBucketTaggingResult deleteBucketTagging(DeleteBucketTaggingRequest request)
+        public DeleteBucketTaggingResult DeleteBucketTagging(DeleteBucketTaggingRequest request)
         {
 
             return (Model.Bucket.DeleteBucketTaggingResult)excute(request, new Model.Bucket.DeleteBucketTaggingResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void deleteBucketTaggingAsync(DeleteBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void DeleteBucketTaggingAsync(DeleteBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.DeleteBucketTaggingResult(), successCallback, failCallback);
         }
 
-        public PutBucketDomainResult putBucketDomain(PutBucketDomainRequest request)
+        public PutBucketDomainResult PutBucketDomain(PutBucketDomainRequest request)
         {
 
             return (Model.Bucket.PutBucketDomainResult)excute(request, new Model.Bucket.PutBucketDomainResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void putBucketDomainAsync(PutBucketDomainRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void PutBucketDomainAsync(PutBucketDomainRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.PutBucketDomainResult(), successCallback, failCallback);
         }
 
-        public GetBucketDomainResult getBucketDomain(GetBucketDomainRequest request)
+        public GetBucketDomainResult GetBucketDomain(GetBucketDomainRequest request)
         {
 
             return (Model.Bucket.GetBucketDomainResult)excute(request, new Model.Bucket.GetBucketDomainResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        public void getBucketDomainAsync(GetBucketDomainRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void GetBucketDomainAsync(GetBucketDomainRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new Model.Bucket.GetBucketDomainResult(), successCallback, failCallback);
         }
 
-        SelectObjectResult CosXml.selectObject(SelectObjectRequest request)
+        SelectObjectResult CosXml.SelectObject(SelectObjectRequest request)
         {
 
             return (Model.Object.SelectObjectResult)excute(request, new Model.Object.SelectObjectResult());
         }
 
-        [Obsolete("方法已废弃，请使用 executeAsync 实现异步请求。")]
-        void CosXml.selectObjectAsync(SelectObjectRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        void CosXml.SelectObjectAsync(SelectObjectRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             schedue(request, new Model.Object.SelectObjectResult(), successCallback, failCallback);
         }
 
-        public GetBucketIntelligentTieringResult getBucketIntelligentTieringConfiguration(GetBucketIntelligentTieringRequest request)
+        public GetBucketIntelligentTieringResult GetBucketIntelligentTieringConfiguration(GetBucketIntelligentTieringRequest request)
         {
 
             try
@@ -1019,13 +1019,13 @@ namespace COSXML
             }
         }
 
-        public CosResult putBucketIntelligentTiering(PutBucketIntelligentTieringRequest request)
+        public CosResult PutBucketIntelligentTiering(PutBucketIntelligentTieringRequest request)
         {
 
             return execute(request, new CosResult());
         }
 
-        public SensitiveContentRecognitionResult sensitiveContentRecognition(SensitiveContentRecognitionRequest request)
+        public SensitiveContentRecognitionResult SensitiveContentRecognition(SensitiveContentRecognitionRequest request)
         {
 
             return execute(request, new SensitiveContentRecognitionResult());
@@ -1036,7 +1036,7 @@ namespace COSXML
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public ImageProcessResult imageProcess(ImageProcessRequest request)
+        public ImageProcessResult ImageProcess(ImageProcessRequest request)
         {
 
             return execute(request, new ImageProcessResult());

@@ -70,7 +70,7 @@ namespace COSXML.Model.Object
 
             if (uploadId == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "uploadId = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "uploadId = null");
             }
         }
 

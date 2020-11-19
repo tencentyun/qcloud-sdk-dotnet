@@ -22,19 +22,19 @@ namespace COSXMLTests
     public class SimpleTest
     {
 
-        COSXML.CosXml cosXml;
+        internal COSXML.CosXml cosXml;
 
-        TransferManager transferManager;
+        internal TransferManager transferManager;
 
-        string bucket;
+        internal string bucket;
 
-        string bigFileSrcPath;
+        internal string bigFileSrcPath;
 
-        string smallFileSrcPath;
+        internal string smallFileSrcPath;
 
-        string localDir;
+        internal string localDir;
 
-        string localFileName;
+        internal string localFileName;
 
         public void init()
         {
@@ -59,8 +59,8 @@ namespace COSXMLTests
 
             transferManager = new TransferManager(cosXml, new TransferConfig());
 
-            smallFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 1);
-            bigFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".txt", 1024 * 1024 * 10);
+            smallFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".txt", 1024 * 1024 * 1);
+            bigFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".txt", 1024 * 1024 * 10);
             FileInfo fileInfo = new FileInfo(smallFileSrcPath);
 
             DirectoryInfo directoryInfo = fileInfo.Directory;
@@ -69,7 +69,6 @@ namespace COSXMLTests
             localFileName = "local.txt";
         }
 
-        // [Test()]
         public void PutObject()
         {
             init();

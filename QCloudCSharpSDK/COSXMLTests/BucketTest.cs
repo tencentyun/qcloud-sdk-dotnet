@@ -664,11 +664,8 @@ namespace COSXMLTests
             {
                 DeleteBucketRequest request = new DeleteBucketRequest(bucket);
 
-
-                //
                 //执行请求
                 DeleteBucketResult result = cosXml.DeleteBucket(request);
-
 
                 Console.WriteLine(result.GetResultInfo());
             }
@@ -686,7 +683,7 @@ namespace COSXMLTests
         }
 
         [SetUp()]
-        public void setup()
+        public void Setup()
         {
             QCloudServer instance = QCloudServer.Instance();
 
@@ -694,7 +691,7 @@ namespace COSXMLTests
         }
 
         [TearDown()]
-        public void clear()
+        public void Clear()
         {
             QCloudServer instance = QCloudServer.Instance();
 
@@ -705,7 +702,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void testBucketTagging()
+        public void TestBucketTagging()
         {
             QCloudServer instance = QCloudServer.Instance();
 
@@ -724,13 +721,13 @@ namespace COSXMLTests
                 request.AddTag(akey, avalue);
                 request.AddTag(bkey, bvalue);
 
-                PutBucketTaggingResult result = instance.cosXml.putBucketTagging(request);
+                PutBucketTaggingResult result = instance.cosXml.PutBucketTagging(request);
 
                 // 获取 tag
                 GetBucketTaggingRequest getRequest = new GetBucketTaggingRequest(
                     instance.bucketForBucketTest);
 
-                GetBucketTaggingResult getResult = instance.cosXml.getBucketTagging(getRequest);
+                GetBucketTaggingResult getResult = instance.cosXml.GetBucketTagging(getRequest);
 
 
                 Tagging tagging = getResult.tagging;
@@ -744,8 +741,7 @@ namespace COSXMLTests
                     {
                         Assert.AreEqual(avalue, tag.value);
                     }
-                    else
-if (tag.key.Equals(bkey))
+                    else if (tag.key.Equals(bkey))
                     {
                         Assert.AreEqual(bvalue, tag.value);
                     }
@@ -758,7 +754,7 @@ if (tag.key.Equals(bkey))
                 // 删除 tag
                 DeleteBucketTaggingRequest deleteRequest = new DeleteBucketTaggingRequest(instance.bucketForBucketTest);
 
-                DeleteBucketTaggingResult deleteResult = instance.cosXml.deleteBucketTagging(deleteRequest);
+                DeleteBucketTaggingResult deleteResult = instance.cosXml.DeleteBucketTagging(deleteRequest);
 
             }
             catch (COSXML.CosException.CosClientException clientEx)
@@ -778,7 +774,7 @@ if (tag.key.Equals(bkey))
                 GetBucketTaggingRequest getRequest = new GetBucketTaggingRequest(
                     instance.bucketForBucketTest);
 
-                GetBucketTaggingResult getResult = instance.cosXml.getBucketTagging(getRequest);
+                GetBucketTaggingResult getResult = instance.cosXml.GetBucketTagging(getRequest);
                 Assert.Fail();
             }
             catch (COSXML.CosException.CosClientException clientEx)
@@ -793,13 +789,13 @@ if (tag.key.Equals(bkey))
         }
 
         [Test()]
-        public void testBucketDomain()
+        public void TestBucketDomain()
         {
             QCloudServer instance = QCloudServer.Instance();
 
             try
             {
-                GetBucketDomainResult getResult = instance.cosXml.getBucketDomain(
+                GetBucketDomainResult getResult = instance.cosXml.GetBucketDomain(
                     new GetBucketDomainRequest(instance.bucketForBucketTest));
 
                 Assert.IsNotNull(getResult.domainConfiguration.rule);
@@ -813,7 +809,7 @@ if (tag.key.Equals(bkey))
                 domain.rule.Type = "WEBSITE";
 
 
-                PutBucketDomainResult result = instance.cosXml.putBucketDomain(new PutBucketDomainRequest(
+                PutBucketDomainResult result = instance.cosXml.PutBucketDomain(new PutBucketDomainRequest(
                     instance.bucketForBucketTest, domain));
 
 
@@ -835,7 +831,7 @@ if (tag.key.Equals(bkey))
         }
 
         [Test()]
-        public void testBucketLogging()
+        public void TestBucketLogging()
         {
             QCloudServer instance = QCloudServer.Instance();
 
@@ -844,12 +840,12 @@ if (tag.key.Equals(bkey))
                 PutBucketLoggingRequest request = new PutBucketLoggingRequest(instance.bucketForBucketTest);
 
                 request.SetTarget("bucket-cssg-source-1253653367", "/abc");
-                PutBucketLoggingResult putResult = instance.cosXml.putBucketLogging(request);
+                PutBucketLoggingResult putResult = instance.cosXml.PutBucketLogging(request);
 
 
                 Assert.IsTrue(putResult.httpCode == 200);
 
-                GetBucketLoggingResult getResult = instance.cosXml.getBucketLogging(
+                GetBucketLoggingResult getResult = instance.cosXml.GetBucketLogging(
                     new GetBucketLoggingRequest(instance.bucketForBucketTest));
 
                 BucketLoggingStatus status = getResult.bucketLoggingStatus;
@@ -879,7 +875,7 @@ if (tag.key.Equals(bkey))
         }
 
         [Test()]
-        public void testBucketWebsite()
+        public void TestBucketWebsite()
         {
             QCloudServer instance = QCloudServer.Instance();
 
@@ -890,13 +886,13 @@ if (tag.key.Equals(bkey))
                 putRequest.SetIndexDocument("index.html");
                 putRequest.SetErrorDocument("eroror.html");
                 putRequest.SetRedirectAllRequestTo("https");
-                PutBucketWebsiteResult putResult = instance.cosXml.putBucketWebsite(putRequest);
+                PutBucketWebsiteResult putResult = instance.cosXml.PutBucketWebsite(putRequest);
 
                 Assert.IsTrue(putResult.httpCode == 200);
 
                 GetBucketWebsiteRequest getRequest = new GetBucketWebsiteRequest(instance.bucketForBucketTest);
 
-                GetBucketWebsiteResult getResult = instance.cosXml.getBucketWebsite(getRequest);
+                GetBucketWebsiteResult getResult = instance.cosXml.GetBucketWebsite(getRequest);
 
                 WebsiteConfiguration configuration = getResult.websiteConfiguration;
 
@@ -904,7 +900,7 @@ if (tag.key.Equals(bkey))
 
                 DeleteBucketWebsiteRequest deleteRequest = new DeleteBucketWebsiteRequest(instance.bucketForBucketTest);
 
-                DeleteBucketWebsiteResult deleteResult = instance.cosXml.deleteBucketWebsite(deleteRequest);
+                DeleteBucketWebsiteResult deleteResult = instance.cosXml.DeleteBucketWebsite(deleteRequest);
 
                 Console.WriteLine(deleteResult.GetResultInfo());
                 Assert.NotNull(deleteResult.GetResultInfo());
@@ -923,7 +919,7 @@ if (tag.key.Equals(bkey))
         }
 
         [Test()]
-        public void testBucketInventory()
+        public void TestBucketInventory()
         {
             QCloudServer instance = QCloudServer.Instance();
 
@@ -938,14 +934,14 @@ if (tag.key.Equals(bkey))
                 putRequest.IsEnable(true);
                 putRequest.SetScheduleFrequency("Daily");
                 putRequest.SetIncludedObjectVersions("All");
-                PutBucketInventoryResult putResult = instance.cosXml.putBucketInventory(putRequest);
+                PutBucketInventoryResult putResult = instance.cosXml.PutBucketInventory(putRequest);
 
                 Assert.IsTrue(putResult.httpCode == 200);
 
                 GetBucketInventoryRequest getRequest = new GetBucketInventoryRequest(instance.bucketForBucketTest);
 
                 getRequest.SetInventoryId(inventoryId);
-                GetBucketInventoryResult getResult = instance.cosXml.getBucketInventory(getRequest);
+                GetBucketInventoryResult getResult = instance.cosXml.GetBucketInventory(getRequest);
 
                 InventoryConfiguration configuration = getResult.inventoryConfiguration;
 
@@ -954,7 +950,7 @@ if (tag.key.Equals(bkey))
                 DeleteBucketInventoryRequest deleteRequest = new DeleteBucketInventoryRequest(instance.bucketForBucketTest);
 
                 deleteRequest.SetInventoryId(inventoryId);
-                DeleteBucketInventoryResult deleteResult = instance.cosXml.deleteBucketInventory(deleteRequest);
+                DeleteBucketInventoryResult deleteResult = instance.cosXml.DeleteBucketInventory(deleteRequest);
                 Assert.IsTrue(putResult.httpCode == 200);
 
             }
@@ -975,7 +971,7 @@ if (tag.key.Equals(bkey))
         }
 
         [Test()]
-        public void testBucketIntelligentTiering()
+        public void TestBucketIntelligentTiering()
         {
             var instance = QCloudServer.Instance();
 
@@ -983,7 +979,7 @@ if (tag.key.Equals(bkey))
             // Query
             GetBucketIntelligentTieringRequest getRequest = new GetBucketIntelligentTieringRequest(instance.bucketForBucketTest);
 
-            var getResult = instance.cosXml.getBucketIntelligentTieringConfiguration(getRequest);
+            var getResult = instance.cosXml.GetBucketIntelligentTieringConfiguration(getRequest);
 
             Console.WriteLine(getResult.GetResultInfo());
 
@@ -994,19 +990,19 @@ if (tag.key.Equals(bkey))
                 configuration.Days = 60;
                 PutBucketIntelligentTieringRequest putRequest = new PutBucketIntelligentTieringRequest(instance.bucketForBucketTest, configuration);
 
-                var putResult = instance.cosXml.putBucketIntelligentTiering(putRequest);
+                var putResult = instance.cosXml.PutBucketIntelligentTiering(putRequest);
 
                 Assert.AreEqual(putResult.httpCode, 200);
 
                 getRequest = new GetBucketIntelligentTieringRequest(instance.bucketForBucketTest);
-                getResult = instance.cosXml.getBucketIntelligentTieringConfiguration(getRequest);
+                getResult = instance.cosXml.GetBucketIntelligentTieringConfiguration(getRequest);
                 Assert.AreEqual(getResult.configuration.Status, configuration.Status);
                 Assert.AreEqual(getResult.configuration.Days, configuration.Days);
             }
         }
 
         [Test()]
-        public void testBucket()
+        public void TestBucket()
         {
             QCloudServer instance = QCloudServer.Instance();
 

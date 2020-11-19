@@ -30,7 +30,7 @@ namespace COSXMLTests
             string bucket = QCloudServer.Instance().bucketForBucketTest;
             photoKey = "example_photo.jpg";
 
-            localTempPhotoFilePath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.SECONDS) + ".jpg", 1);
+            localTempPhotoFilePath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".jpg", 1);
             FileInfo fileInfo = new FileInfo(localTempPhotoFilePath);
 
             DirectoryInfo directoryInfo = fileInfo.Directory;
@@ -98,7 +98,7 @@ namespace COSXMLTests
 
             SensitiveContentRecognitionRequest request = new SensitiveContentRecognitionRequest(bucket, key, "politics");
 
-            SensitiveContentRecognitionResult result = QCloudServer.Instance().cosXml.sensitiveContentRecognition(request);
+            SensitiveContentRecognitionResult result = QCloudServer.Instance().cosXml.SensitiveContentRecognition(request);
 
 
             Console.WriteLine(result.GetResultInfo());
@@ -133,7 +133,7 @@ namespace COSXMLTests
 
             ImageProcessRequest request = new ImageProcessRequest(bucket, key, ruleString);
 
-            ImageProcessResult result = QCloudServer.Instance().cosXml.imageProcess(request);
+            ImageProcessResult result = QCloudServer.Instance().cosXml.ImageProcess(request);
 
 
             Console.WriteLine(result.GetResultInfo());

@@ -16,7 +16,7 @@ namespace COSXML.Model.CI
 
             if (type == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "type = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "type = null");
             }
 
             this.method = CosRequestMethod.GET;

@@ -72,7 +72,7 @@ namespace COSXML.Model.Bucket
 
             if (lifecycleConfiguration.rules.Count == 0)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "lifecycleConfiguration.rules.Count = 0");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "lifecycleConfiguration.rules.Count = 0");
             }
         }
     }

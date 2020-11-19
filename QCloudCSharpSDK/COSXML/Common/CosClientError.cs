@@ -10,33 +10,33 @@ namespace COSXML.Common
     public enum CosClientError
     {
         [CosValue("InvalidArgument")]
-        INVALID_ARGUMENT = 10000,
+        InvalidArgument = 10000,
 
         [CosValue("InvalidCredentials")]
-        INVALID_CREDENTIALS = 10001,
+        InvalidCredentials = 10001,
 
         [CosValue("BadRequest")]
-        BAD_REQUEST = 10002,
+        BadRequest = 10002,
 
         [CosValue("SinkSourceNotFound")]
-        SINK_SOURCE_NOT_FOUND = 10003,
+        SinkSourceNotFound = 10003,
 
         [CosValue("InternalError")]
-        INTERNA_LERROR = 20000,
+        InternalError = 20000,
 
         [CosValue("ServerError")]
-        SERVER_ERROR = 20001,
+        ServerError = 20001,
 
         [CosValue("IOError")]
-        IO_ERROR = 20002,
+        IOError = 20002,
 
         [CosValue("PoorNetwork")]
-        POOR_NETWORK = 20003,
+        PoorNetwork = 20003,
 
         [CosValue("UserCancelled")]
-        USER_CANCELLED = 30000,
+        UserCancelled = 30000,
 
         [CosValue("AlreadyFinished")]
-        ALREADY_FINISHED = 30001,
+        AlredyFinished = 30001,
     }
 }

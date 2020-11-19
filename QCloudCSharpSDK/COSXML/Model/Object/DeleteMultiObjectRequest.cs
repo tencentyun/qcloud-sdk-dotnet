@@ -125,7 +125,7 @@ namespace COSXML.Model.Object
 
             if (delete.deleteObjects.Count == 0)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "delete keys（null or empty) is invalid");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "delete keys（null or empty) is invalid");
             }
 
             base.CheckParameters();

@@ -11,7 +11,7 @@ using COSXML.Common;
 
 namespace COSXML.Transfer
 {
-    public sealed class COSXMLCopyTask : COSXMLTask, OnMultipartUploadStateListener
+    public sealed class COSXMLCopyTask : COSXMLTask, IOnMultipartUploadStateListener
     {
         private long divisionSize;
 
@@ -69,7 +69,7 @@ namespace COSXML.Transfer
 
         internal void Copy()
         {
-            UpdateTaskState(TaskState.WAITTING);
+            UpdateTaskState(TaskState.Waiting);
             //源对象是否存在
             if (copySource == null)
             {
@@ -83,12 +83,12 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.FAILED))
+                if (UpdateTaskState(TaskState.Failed))
                 {
 
                     if (failCallback != null)
                     {
-                        failCallback(new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copySource = null"), null);
+                        failCallback(new CosClientException((int)CosClientError.InvalidArgument, "copySource = null"), null);
                     }
 
                 }
@@ -111,7 +111,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.RUNNING))
+                if (UpdateTaskState(TaskState.Running))
                 {
                     HeadObjectResult result = cosResult as HeadObjectResult;
 
@@ -141,7 +141,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.FAILED))
+                if (UpdateTaskState(TaskState.Failed))
                 {
 
                     if (failCallback != null)
@@ -167,7 +167,7 @@ namespace COSXML.Transfer
                     if (isExit)
                     {
 
-                        if (taskState == TaskState.CANCEL)
+                        if (taskState == TaskState.Cancel)
                         {
                             DeleteObject();
                         }
@@ -176,7 +176,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.COMPLETED))
+                if (UpdateTaskState(TaskState.Completed))
                 {
                     CopyObjectResult result = cosResult as CopyObjectResult;
                     CopyTaskResult copyTaskResult = new CopyTaskResult();
@@ -201,7 +201,7 @@ namespace COSXML.Transfer
                         }
                     }
 
-                    if (UpdateTaskState(TaskState.FAILED))
+                    if (UpdateTaskState(TaskState.Failed))
                     {
 
                         if (failCallback != null)
@@ -264,7 +264,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.FAILED))
+                if (UpdateTaskState(TaskState.Failed))
                 {
                     OnFailed(clientEx, serverEx);
                 }
@@ -306,7 +306,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.FAILED))
+                if (UpdateTaskState(TaskState.Failed))
                 {
                     OnFailed(clientEx, serverEx);
                 }
@@ -377,7 +377,7 @@ namespace COSXML.Transfer
                             }
                         }
 
-                        if (UpdateTaskState(TaskState.FAILED))
+                        if (UpdateTaskState(TaskState.Failed))
                         {
                             OnFailed(clientEx, serverEx);
                         }
@@ -477,9 +477,9 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.FAILED))
+                if (UpdateTaskState(TaskState.Failed))
                 {
-                    OnFailed(new CosClientException((int)CosClientError.INTERNA_LERROR, ex.Message, ex), null);
+                    OnFailed(new CosClientException((int)CosClientError.InternalError, ex.Message, ex), null);
                 }
             }
 
@@ -507,7 +507,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.COMPLETED))
+                if (UpdateTaskState(TaskState.Completed))
                 {
                     CompleteMultipartUploadResult completeMultiUploadResult = result as CompleteMultipartUploadResult;
 
@@ -525,7 +525,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (UpdateTaskState(TaskState.FAILED))
+                if (UpdateTaskState(TaskState.Failed))
                 {
                     OnFailed(clientEx, serverEx);
                 }
@@ -589,7 +589,7 @@ namespace COSXML.Transfer
                 { 
 
                 },
-                
+
                 delegate (CosClientException cosClientException, CosServerException cosServerException) 
                 { 
                     DeleteObject(); 
@@ -634,7 +634,7 @@ namespace COSXML.Transfer
         public override void Pause()
         {
 
-            if (UpdateTaskState(TaskState.PAUSE))
+            if (UpdateTaskState(TaskState.Pause))
             {
                 //exit copy
                 lock (syncExit)
@@ -651,7 +651,7 @@ namespace COSXML.Transfer
         public override void Cancel()
         {
 
-            if (UpdateTaskState(TaskState.CANCEL))
+            if (UpdateTaskState(TaskState.Cancel))
             {
                 //exit copy
                 lock (syncExit)
@@ -670,7 +670,7 @@ namespace COSXML.Transfer
         public override void Resume()
         {
 
-            if (UpdateTaskState(TaskState.RESUME))
+            if (UpdateTaskState(TaskState.Resume))
             {
                 lock (syncExit)
                 {

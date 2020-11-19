@@ -98,7 +98,7 @@ namespace COSXML.Model.Bucket
 
             if (replicationConfiguration.rules.Count == 0)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "replicationConfiguration.rules.Count = 0");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "replicationConfiguration.rules.Count = 0");
             }
         }
 

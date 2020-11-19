@@ -110,7 +110,7 @@ namespace COSXML.Network
                     //QLog.D("XIAO", "request close");
                 }
 
-                QLog.D(TAG, "close");
+                QLog.Debug(TAG, "close");
             }
 
         }
@@ -202,14 +202,14 @@ namespace COSXML.Network
                 response.OnFinish(false, webEx);
                 //abort
                 requestState.Clear();
-                QLog.D(TAG, webEx.Message, webEx);
+                QLog.Debug(TAG, webEx.Message, webEx);
             }
             catch (Exception ex)
             {
                 response.OnFinish(false, ex);
                 //abort
                 requestState.Clear();
-                QLog.E(TAG, ex.Message, ex);
+                QLog.Error(TAG, ex.Message, ex);
             }
 
         }
@@ -240,7 +240,7 @@ namespace COSXML.Network
                         requestState.response.OnFinish(false, exception);
                         //abort
                         requestState.Clear();
-                        QLog.E(TAG, exception.Message, exception);
+                        QLog.Error(TAG, exception.Message, exception);
                     }
                     else
                     {
@@ -255,7 +255,7 @@ namespace COSXML.Network
                 requestState.response.OnFinish(false, ex);
                 //abort
                 requestState.Clear();
-                QLog.E(TAG, ex.Message, ex);
+                QLog.Error(TAG, ex.Message, ex);
             }
 
         }
@@ -319,7 +319,7 @@ namespace COSXML.Network
                     requestState.response.OnFinish(false, webEx);
                     //abort
                     requestState.Clear();
-                    QLog.E(TAG, webEx.Message, webEx);
+                    QLog.Error(TAG, webEx.Message, webEx);
                 }
 
             }
@@ -328,7 +328,7 @@ namespace COSXML.Network
                 requestState.response.OnFinish(false, ex);
                 //abort
                 requestState.Clear();
-                QLog.E(TAG, ex.Message, ex);
+                QLog.Error(TAG, ex.Message, ex);
             }
         }
 
@@ -493,7 +493,7 @@ namespace COSXML.Network
             requestLog.Append("AllowWriteStreamBuffering: " + httpWebRequest.AllowWriteStreamBuffering).Append('\n');
             //requestLog.Append("proxy: " + (httpWebRequest.Proxy == null ? "null" : ((WebProxy)httpWebRequest.Proxy).Address.ToString()));
             requestLog.Append("<---");
-            QLog.D(TAG, requestLog.ToString());
+            QLog.Debug(TAG, requestLog.ToString());
         }
 
         /// <summary>
@@ -514,7 +514,7 @@ namespace COSXML.Network
             }
 
             responseLog.Append("<---");
-            QLog.D(TAG, responseLog.ToString());
+            QLog.Debug(TAG, responseLog.ToString());
         }
 
         internal static class HttpHeaderHandle
@@ -548,7 +548,7 @@ namespace COSXML.Network
                     //var internalMethodName = (isMonoPlatform == false) ? "AddWithoutValidate" : "AddInternal";
                     var internalMethodName = "AddWithoutValidate";
 
-                    QLog.D(TAG, internalMethodName.ToString());
+                    QLog.Debug(TAG, internalMethodName.ToString());
                     var method = typeof(WebHeaderCollection).GetMethod(
                         internalMethodName,
                         BindingFlags.NonPublic | BindingFlags.Instance,
@@ -595,7 +595,7 @@ namespace COSXML.Network
                     httpWebResponse.Close();
                 }
 
-                QLog.D(TAG, "Close");
+                QLog.Debug(TAG, "Close");
             }
         }
     }

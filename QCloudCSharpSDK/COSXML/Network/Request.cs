@@ -127,7 +127,7 @@ namespace COSXML.Network
             }
             catch (ArgumentNullException)
             {
-                QLog.D(TAG, "AddHeader: name is null");
+                QLog.Debug(TAG, "AddHeader: name is null");
             }
             catch (ArgumentException)
             {
@@ -159,7 +159,7 @@ namespace COSXML.Network
             }
             catch (ArgumentNullException)
             {
-                QLog.D(TAG, "SetHeader: name is null");
+                QLog.Debug(TAG, "SetHeader: name is null");
             }
             catch (ArgumentException)
             {

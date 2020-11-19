@@ -70,12 +70,12 @@ namespace COSXML.Model.Tag
 
             if (bucket == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source bucket = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "copy source bucket = null");
             }
 
             if (key == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source cosPath = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "copy source cosPath = null");
             }
             // if (appid == null)
             // {
@@ -83,7 +83,7 @@ namespace COSXML.Model.Tag
             // }
             if (region == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source region = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "copy source region = null");
             }
         }
 

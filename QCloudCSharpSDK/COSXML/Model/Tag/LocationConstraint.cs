@@ -13,7 +13,6 @@ namespace COSXML.Model.Tag
     {
         /// <summary>
         ///  Bucket 所在地域
-        ///  <see cref="COSXML.Common.CosRegion"/>
         /// </summary>
         public string location;
 

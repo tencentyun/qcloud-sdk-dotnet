@@ -17,19 +17,19 @@ namespace COSXML.Utils
 
             switch (timeUnit)
             {
-                case TimeUnit.DAYS:
+                case TimeUnit.Days:
                     result = (long)timeSpan.TotalDays;
                     break;
-                case TimeUnit.HOURS:
+                case TimeUnit.Hours:
                     result = (long)timeSpan.TotalHours;
                     break;
-                case TimeUnit.MINUTES:
+                case TimeUnit.Minutes:
                     result = (long)timeSpan.TotalMinutes;
                     break;
-                case TimeUnit.SECONDS:
+                case TimeUnit.Seconds:
                     result = (long)timeSpan.TotalSeconds;
                     break;
-                case TimeUnit.MILLISECONDS:
+                case TimeUnit.Milliseconds:
                     result = (long)timeSpan.TotalMilliseconds;
                     break;
             }
@@ -44,22 +44,23 @@ namespace COSXML.Utils
 
             switch (timeUnit)
             {
-                case TimeUnit.DAYS:
+                case TimeUnit.Days:
                     end = start.AddDays(time);
                     break;
-                case TimeUnit.HOURS:
+                case TimeUnit.Hours:
                     end = start.AddHours(time);
                     break;
-                case TimeUnit.MINUTES:
+                case TimeUnit.Minutes:
                     end = start.AddMinutes(time);
                     break;
-                case TimeUnit.SECONDS:
+                case TimeUnit.Seconds:
                     end = start.AddSeconds(time);
                     break;
-                case TimeUnit.MILLISECONDS:
+                case TimeUnit.Milliseconds:
                     end = start.AddMilliseconds(time);
                     break;
             }
+
             end = TimeZone.CurrentTimeZone.ToLocalTime(end);
 
             return end.ToString(format);
@@ -68,14 +69,14 @@ namespace COSXML.Utils
 
     public enum TimeUnit
     {
-        MILLISECONDS = 0,
+        Milliseconds = 0,
 
-        SECONDS,
+        Seconds,
 
-        MINUTES,
+        Minutes,
 
-        HOURS,
+        Hours,
 
-        DAYS,
+        Days,
     }
 }

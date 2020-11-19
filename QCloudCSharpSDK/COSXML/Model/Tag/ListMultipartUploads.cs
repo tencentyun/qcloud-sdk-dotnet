@@ -137,7 +137,6 @@ namespace COSXML.Model.Tag
 
             /// <summary>
             /// 用来表示分块的存储级别，枚举值：STANDARD，STANDARD_IA，ARCHIVE
-            /// <see cref="COSXML.Common.CosRegion"/>
             /// </summary>
             public string storageClass;
 

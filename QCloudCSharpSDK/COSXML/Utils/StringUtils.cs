@@ -13,7 +13,7 @@ namespace COSXML.Utils
 
             if (strA == null || strB == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "strA = null or strA = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "strA = null or strA = null");
             }
 
             if (ignoreCase)

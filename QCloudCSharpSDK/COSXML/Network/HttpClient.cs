@@ -59,7 +59,7 @@ namespace COSXML.Network
 
                 if (config == null)
                 {
-                    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "HttpClientConfig = null");
+                    throw new CosClientException((int)CosClientError.InvalidArgument, "HttpClientConfig = null");
                 }
 
                 HttpClient.config = config;
@@ -75,7 +75,7 @@ namespace COSXML.Network
 
             if (config == null)
             {
-                throw new CosClientException((int)CosClientError.INTERNA_LERROR, "need to call Init(HttpClientConfig, QCloudCredentialProvider) before");
+                throw new CosClientException((int)CosClientError.InternalError, "need to call Init(HttpClientConfig, QCloudCredentialProvider) before");
             }
         }
 
@@ -152,7 +152,7 @@ namespace COSXML.Network
             }
             catch (Exception ex)
             {
-                throw new CosClientException((int)CosClientError.BAD_REQUEST, ex.Message, ex);
+                throw new CosClientException((int)CosClientError.BadRequest, ex.Message, ex);
             }
 
         }
@@ -174,7 +174,7 @@ namespace COSXML.Network
             }
             catch (Exception ex)
             {
-                throw new CosClientException((int)CosClientError.BAD_REQUEST, ex.Message, ex);
+                throw new CosClientException((int)CosClientError.BadRequest, ex.Message, ex);
             }
         }
 
@@ -215,7 +215,7 @@ namespace COSXML.Network
             catch (Exception ex)
             {
                 //throw new CosClientException((int)CosClientError.BAD_REQUEST, ex.Message, ex);
-                failCallback(new CosClientException((int)CosClientError.BAD_REQUEST, ex.Message, ex), null);
+                failCallback(new CosClientException((int)CosClientError.BadRequest, ex.Message, ex), null);
             }
         }
 
@@ -300,12 +300,12 @@ namespace COSXML.Network
         /// </summary>
         /// <param name="qcloudSignSource">QCloudSignSource</param>
         /// <param name="request"></param>
-        private void CheckSign(QCloudSignSource qcloudSignSource, Request request)
+        private void CheckSign(IQCloudSignSource qcloudSignSource, Request request)
         {
             // has authorizaiton, notice: using request.Headers， otherwise, error
             if (request.Headers.ContainsKey(CosRequestHeaderKey.AUTHORIZAIION))
             {
-                QLog.D(TAG, "has add authorizaiton in headers");
+                QLog.Debug(TAG, "has add authorizaiton in headers");
 
                 return;
             }
@@ -313,7 +313,7 @@ namespace COSXML.Network
             //has no authorization, but signSourceProvider == null
             if (qcloudSignSource == null)
             {
-                QLog.D(TAG, "signSourceProvider == null");
+                QLog.Debug(TAG, "signSourceProvider == null");
 
                 return;
             }
@@ -434,7 +434,7 @@ namespace COSXML.Network
                     }
                     catch (Exception ex)
                     {
-                        QLog.D(TAG, ex.Message);
+                        QLog.Debug(TAG, ex.Message);
 
                     }
                 }
@@ -469,7 +469,7 @@ if (ex is CosServerException)
                     }
                     else
                     {
-                        faileCallback(new CosClientException((int)CosClientError.INTERNA_LERROR, ex.Message, ex), null);
+                        faileCallback(new CosClientException((int)CosClientError.InternalError, ex.Message, ex), null);
                     }
                 }
 

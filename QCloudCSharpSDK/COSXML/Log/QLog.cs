@@ -18,9 +18,9 @@ namespace COSXML.Log
 
         private static List<Log> logImplList = new List<Log>();
 
-        private static LEVEL level = LEVEL.V;
+        private static Level level = Level.V;
 
-        public static void SetLogLevel(LEVEL level)
+        public static void SetLogLevel(Level level)
         {
             QLog.level = level;
         }
@@ -47,82 +47,82 @@ namespace COSXML.Log
             logImplList.Add(log);
         }
 
-        public static void V(string tag, string message)
+        public static void Verbose(string tag, string message)
         {
-            V(tag, message, null);
+            Verbose(tag, message, null);
         }
 
-        public static void V(string tag, string message, Exception exception)
+        public static void Verbose(string tag, string message, Exception exception)
         {
 
-            if (LEVEL.V >= QLog.level)
+            if (Level.V >= QLog.level)
             {
-                Print(LEVEL.V, tag, message, exception);
+                Print(Level.V, tag, message, exception);
             }
 
         }
 
-        public static void D(string tag, string message)
+        public static void Debug(string tag, string message)
         {
-            D(tag, message, null);
+            Debug(tag, message, null);
         }
 
-        public static void D(string tag, string message, Exception exception)
+        public static void Debug(string tag, string message, Exception exception)
         {
 
-            if (LEVEL.D >= QLog.level)
+            if (Level.D >= QLog.level)
             {
-                Print(LEVEL.D, tag, message, exception);
+                Print(Level.D, tag, message, exception);
             }
 
         }
 
-        public static void I(string tag, string message)
+        public static void Info(string tag, string message)
         {
-            I(tag, message, null);
+            Info(tag, message, null);
         }
 
-        public static void I(string tag, string message, Exception exception)
+        public static void Info(string tag, string message, Exception exception)
         {
 
-            if (LEVEL.I >= QLog.level)
+            if (Level.I >= QLog.level)
             {
-                Print(LEVEL.I, tag, message, exception);
+                Print(Level.I, tag, message, exception);
             }
 
         }
 
-        public static void W(string tag, string message)
+        public static void Warn(string tag, string message)
         {
-            W(tag, message, null);
+            Warn(tag, message, null);
         }
 
-        public static void W(string tag, string message, Exception exception)
+        public static void Warn(string tag, string message, Exception exception)
         {
 
-            if (LEVEL.W >= QLog.level)
+            if (Level.W >= QLog.level)
             {
-                Print(LEVEL.W, tag, message, exception);
+                Print(Level.W, tag, message, exception);
             }
 
         }
 
-        public static void E(string tag, string message)
+        public static void Error(string tag, string message)
         {
-            E(tag, message, null);
+            Error(tag, message, null);
         }
 
-        public static void E(string tag, string message, Exception exception)
+        public static void Error(string tag, string message, Exception exception)
         {
 
-            if (LEVEL.E >= QLog.level)
+            if (Level.E >= QLog.level)
             {
-                Print(LEVEL.E, tag, message, exception);
+                Print(Level.E, tag, message, exception);
             }
 
         }
 
-        private static void Print(LEVEL level, string tag, string message, Exception exception)
+        private static void Print(Level level, string tag, string message, Exception exception)
         {
             StringBuilder messageBuilder = new StringBuilder();
 
@@ -162,7 +162,7 @@ namespace COSXML.Log
         //}
     }
 
-    public enum LEVEL
+    public enum Level
     {
         V = 0,
 

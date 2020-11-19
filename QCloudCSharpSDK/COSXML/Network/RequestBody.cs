@@ -289,7 +289,7 @@ if (complete < total)
                     outputStream.Close();
                 }
 
-                QLog.E(TAG, ex.Message, ex);
+                QLog.Error(TAG, ex.Message, ex);
                 requestBodyState.endRequestBody(ex);
                 requestBodyState = null;
             }
@@ -363,7 +363,7 @@ if (complete < total)
             }
             catch (Exception ex)
             {
-                QLog.E(TAG, ex.Message, ex);
+                QLog.Error(TAG, ex.Message, ex);
                 throw;
             }
             finally
@@ -400,7 +400,7 @@ if (complete < total)
             }
             catch (Exception ex)
             {
-                QLog.E(TAG, ex.Message, ex);
+                QLog.Error(TAG, ex.Message, ex);
                 throw;
             }
             finally
@@ -466,7 +466,7 @@ if (complete < total)
             }
             catch (Exception ex)
             {
-                QLog.E(TAG, ex.Message, ex);
+                QLog.Error(TAG, ex.Message, ex);
                 endRequestBody(ex);
             }
             finally
@@ -548,7 +548,7 @@ if (complete < total)
                     outputStream.Close();
                 }
 
-                QLog.E(TAG, ex.Message, ex);
+                QLog.Error(TAG, ex.Message, ex);
                 requestBodyState.endRequestBody(ex);
                 requestBodyState = null;
             }
@@ -1081,7 +1081,7 @@ if (data != null)
                     outputStream.Close();
                 }
 
-                QLog.E(TAG, ex.Message, ex);
+                QLog.Error(TAG, ex.Message, ex);
                 requestBodyState.endRequestBody(ex);
             }
         }
