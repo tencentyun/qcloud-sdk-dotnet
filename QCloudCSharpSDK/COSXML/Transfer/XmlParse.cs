@@ -2195,20 +2195,17 @@ if ("RequestFrequent".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase)
                             {
                                 parentNode = 1;
                             }
-                            else
-if ("ImageInfo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("ImageInfo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 parentNode = 2;
                             }
-                            else
-if ("Object".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("Object".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 parentNode = 3;
                             }
 
                             // value node type
-                            else
-if ("Key".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("Key".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
 
@@ -2216,14 +2213,12 @@ if ("Key".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                                 {
                                     originalInfo.Key = xmlReader.Value;
                                 }
-                                else
-if (parentNode == 3)
+                                else if (parentNode == 3)
                                 {
                                     aProcessResult.Key = xmlReader.Value;
                                 }
                             }
-                            else
-if ("Location".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("Location".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
 
@@ -2231,14 +2226,12 @@ if ("Location".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                                 {
                                     originalInfo.Location = xmlReader.Value;
                                 }
-                                else
-if (parentNode == 3)
+                                else if (parentNode == 3)
                                 {
                                     aProcessResult.Location = xmlReader.Value;
                                 }
                             }
-                            else
-if ("ETag".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("ETag".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
 
@@ -2246,14 +2239,12 @@ if ("ETag".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                                 {
                                     originalInfo.ETag = xmlReader.Value;
                                 }
-                                else
-if (parentNode == 3)
+                                else if (parentNode == 3)
                                 {
                                     aProcessResult.ETag = xmlReader.Value;
                                 }
                             }
-                            else
-if ("Format".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("Format".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
 
@@ -2261,14 +2252,12 @@ if ("Format".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                                 {
                                     imageInfo.Format = xmlReader.Value;
                                 }
-                                else
-if (parentNode == 3)
+                                else if (parentNode == 3)
                                 {
                                     aProcessResult.Format = xmlReader.Value;
                                 }
                             }
-                            else
-if ("Width".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("Width".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
 
@@ -2276,14 +2265,12 @@ if ("Width".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                                 {
                                     Int32.TryParse(xmlReader.Value, out imageInfo.Width);
                                 }
-                                else
-if (parentNode == 3)
+                                else if (parentNode == 3)
                                 {
                                     Int32.TryParse(xmlReader.Value, out aProcessResult.Width);
                                 }
                             }
-                            else
-if ("Height".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("Height".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
 
@@ -2291,14 +2278,12 @@ if ("Height".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                                 {
                                     Int32.TryParse(xmlReader.Value, out imageInfo.Height);
                                 }
-                                else
-if (parentNode == 3)
+                                else if (parentNode == 3)
                                 {
                                     Int32.TryParse(xmlReader.Value, out aProcessResult.Height);
                                 }
                             }
-                            else
-if ("Quality".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("Quality".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
 
@@ -2306,14 +2291,12 @@ if ("Quality".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                                 {
                                     Int32.TryParse(xmlReader.Value, out imageInfo.Quality);
                                 }
-                                else
-if (parentNode == 3)
+                                else if (parentNode == 3)
                                 {
                                     Int32.TryParse(xmlReader.Value, out aProcessResult.Quality);
                                 }
                             }
-                            else
-if ("Orientation".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("Orientation".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
 
@@ -2322,8 +2305,7 @@ if ("Orientation".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                                     Int32.TryParse(xmlReader.Value, out imageInfo.Orientation);
                                 }
                             }
-                            else
-if ("Size".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("Size".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
 
@@ -2332,8 +2314,7 @@ if ("Size".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                                     Int32.TryParse(xmlReader.Value, out aProcessResult.Size);
                                 }
                             }
-                            else
-if ("Ave".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("Ave".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
 
@@ -2342,8 +2323,7 @@ if ("Ave".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                                     imageInfo.Ave = xmlReader.Value;
                                 }
                             }
-                            else
-if ("WatermarkStatus".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("WatermarkStatus".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 xmlReader.Read();
 
@@ -2360,14 +2340,12 @@ if ("WatermarkStatus".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase)
                                 uploadResult.originalInfo = originalInfo;
                                 parentNode = 0;
                             }
-                            else
-if ("ImageInfo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("ImageInfo".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 originalInfo.imageInfo = imageInfo;
                                 parentNode = 0;
                             }
-                            else
-if ("Object".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
+                            else if ("Object".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase))
                             {
                                 uploadResult.processResults.results.Add(aProcessResult);
                                 aProcessResult = new PicOperationUploadResult.ProcessResult();
