@@ -828,7 +828,8 @@ if ("RequestFrequent".Equals(xmlReader.Name, StringComparison.OrdinalIgnoreCase)
             return configuration;
         }
 
-        public static T Deserialize<T>(Stream inStream) {
+        public static T Deserialize<T>(Stream inStream) 
+        {
             XmlSerializer serializer = new XmlSerializer(typeof(T));
             using (inStream)
             {

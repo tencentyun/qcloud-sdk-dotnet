@@ -740,7 +740,8 @@ if (outputFormat.jsonFormat != null)
             return xmlContent;
         }
 
-        public static String Serialize<T>(Object o) {
+        public static String Serialize<T>(Object o) 
+        {
             XmlSerializer serializer = new XmlSerializer(typeof(T));
             StringWriter writer = new StringWriter();
             serializer.Serialize(writer, o);
