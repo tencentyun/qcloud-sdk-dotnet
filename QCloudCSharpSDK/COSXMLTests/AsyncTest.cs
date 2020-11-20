@@ -33,9 +33,9 @@ namespace COSXMLTests
 
                     Assert.True(result.httpCode == 200);
                     manualResetEvent.Set();
-                }
+                },
                 
-                ,delegate (CosClientException clientEx, CosServerException serverEx)
+                delegate (CosClientException clientEx, CosServerException serverEx)
                 {
 
                     if (clientEx != null)

@@ -265,6 +265,7 @@ namespace COSXML.Transfer
                 OnInit();
 
             },
+            
             delegate (CosClientException clientEx, CosServerException serverEx)
             {
                 lock (syncExit)
