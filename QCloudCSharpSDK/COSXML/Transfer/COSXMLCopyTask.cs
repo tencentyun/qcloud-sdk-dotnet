@@ -190,9 +190,9 @@ namespace COSXML.Transfer
                             successCallback(copyTaskResult);
                         }
                     }
-                }
+                },
                 
-                ,delegate (CosClientException clientEx, CosServerException serverEx)
+                delegate (CosClientException clientEx, CosServerException serverEx)
                 {
                     lock (syncExit)
                     {
