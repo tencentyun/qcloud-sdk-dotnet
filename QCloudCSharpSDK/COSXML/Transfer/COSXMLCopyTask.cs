@@ -128,9 +128,9 @@ namespace COSXML.Transfer
                     }
                 }
 
-            }
+            },
             
-            ,delegate (CosClientException clientEx, CosServerException serverEx)
+            delegate (CosClientException clientEx, CosServerException serverEx)
             {
                 lock (syncExit)
                 {
@@ -160,37 +160,39 @@ namespace COSXML.Transfer
             copyObjectRequest = new CopyObjectRequest(bucket, key);
             copyObjectRequest.SetCopyMetaDataDirective(Common.CosMetaDataDirective.Copy);
             copyObjectRequest.SetCopySource(copySource);
-            cosXmlServer.CopyObject(copyObjectRequest, delegate (CosResult cosResult)
-            {
-                lock (syncExit)
+            cosXmlServer.CopyObject(copyObjectRequest, 
+                delegate (CosResult cosResult)
                 {
-
-                    if (isExit)
+                    lock (syncExit)
                     {
 
-                        if (taskState == TaskState.Cancel)
+                        if (isExit)
                         {
-                            DeleteObject();
+
+                            if (taskState == TaskState.Cancel)
+                            {
+                                DeleteObject();
+                            }
+
+                            return;
                         }
-
-                        return;
                     }
-                }
 
-                if (UpdateTaskState(TaskState.Completed))
-                {
-                    CopyObjectResult result = cosResult as CopyObjectResult;
-                    CopyTaskResult copyTaskResult = new CopyTaskResult();
-
-                    copyTaskResult.SetResult(result);
-
-                    if (successCallback != null)
+                    if (UpdateTaskState(TaskState.Completed))
                     {
-                        successCallback(copyTaskResult);
+                        CopyObjectResult result = cosResult as CopyObjectResult;
+                        CopyTaskResult copyTaskResult = new CopyTaskResult();
+
+                        copyTaskResult.SetResult(result);
+
+                        if (successCallback != null)
+                        {
+                            successCallback(copyTaskResult);
+                        }
                     }
                 }
-            },
-                delegate (CosClientException clientEx, CosServerException serverEx)
+                
+                ,delegate (CosClientException clientEx, CosServerException serverEx)
                 {
                     lock (syncExit)
                     {
@@ -210,7 +212,8 @@ namespace COSXML.Transfer
                             failCallback(clientEx, serverEx);
                         }
                     }
-                });
+                }
+            );
         }
 
         private void MultiPartCopy()

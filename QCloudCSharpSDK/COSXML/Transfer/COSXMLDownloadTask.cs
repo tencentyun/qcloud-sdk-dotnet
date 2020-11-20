@@ -85,9 +85,9 @@ namespace COSXML.Transfer
                     GetObject();
                 }
 
-            }
+            },
             
-            ,delegate (CosClientException clientEx, CosServerException serverEx)
+            delegate (CosClientException clientEx, CosServerException serverEx)
             {
                 lock (syncExit)
                 {
@@ -150,7 +150,9 @@ namespace COSXML.Transfer
                         successCallback(downloadTaskResult);
                     }
                 }
-            }, delegate (CosClientException clientEx, CosServerException serverEx)
+            }
+            
+            , delegate (CosClientException clientEx, CosServerException serverEx)
             {
                 lock (syncExit)
                 {

@@ -349,7 +349,8 @@ namespace COSXML.Auth
                 result = result.Substring(0, result.Length - 1);
                 keyResult = keyResult.Substring(0, keyResult.Length - 1);
 
-                return new string[] { 
+                return new string[] 
+                { 
                     result, keyResult 
                 };
             }
