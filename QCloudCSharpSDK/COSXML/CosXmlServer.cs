@@ -120,21 +120,25 @@ namespace COSXML
             var t = new TaskCompletionSource<T>();
 
 
-            Schedue(request, result, delegate (CosResult cosResult)
-            {
-                t.TrySetResult(result as T);
-            }, delegate (CosClientException clientException, CosServerException serverException)
-            {
+            Schedue(request, result, 
+                delegate (CosResult cosResult)
+                {
+                    t.TrySetResult(result as T);
+                }
+            
+                , delegate (CosClientException clientException, CosServerException serverException)
+                {
 
-                if (clientException != null)
-                {
-                    t.TrySetException(clientException);
+                    if (clientException != null)
+                    {
+                        t.TrySetException(clientException);
+                    }
+                    else
+                    {
+                        t.TrySetException(serverException);
+                    }
                 }
-                else
-                {
-                    t.TrySetException(serverException);
-                }
-            });
+            );
 
             return t.Task;
         }

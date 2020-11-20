@@ -33,23 +33,25 @@ namespace COSXMLTests
 
                     Assert.True(result.httpCode == 200);
                     manualResetEvent.Set();
-                },
-            delegate (CosClientException clientEx, CosServerException serverEx)
-            {
-
-                if (clientEx != null)
-                {
-                    Console.WriteLine("CosClientException: " + clientEx.Message);
                 }
-
-                if (serverEx != null)
+                
+                ,delegate (CosClientException clientEx, CosServerException serverEx)
                 {
-                    Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                }
 
-                Assert.Fail();
-                manualResetEvent.Set();
-            });
+                    if (clientEx != null)
+                    {
+                        Console.WriteLine("CosClientException: " + clientEx.Message);
+                    }
+
+                    if (serverEx != null)
+                    {
+                        Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                    }
+
+                    Assert.Fail();
+                    manualResetEvent.Set();
+                }
+            );
 
             manualResetEvent.WaitOne();
 

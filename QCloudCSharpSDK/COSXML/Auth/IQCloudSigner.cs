@@ -349,7 +349,9 @@ namespace COSXML.Auth
                 result = result.Substring(0, result.Length - 1);
                 keyResult = keyResult.Substring(0, keyResult.Length - 1);
 
-                return new string[] { result, keyResult };
+                return new string[] { 
+                    result, keyResult 
+                };
             }
 
             return null;
@@ -370,7 +372,7 @@ namespace COSXML.Auth
                     list[i] = list[i].ToLower();
                 }
 
-                list.Sort(delegate (string strA, string strB)
+                list.Sort(delegate(string strA, string strB)
                 {
 
                     return StringUtils.Compare(strA, strB, false);

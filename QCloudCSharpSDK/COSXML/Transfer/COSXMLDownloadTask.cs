@@ -85,8 +85,9 @@ namespace COSXML.Transfer
                     GetObject();
                 }
 
-            },
-            delegate (CosClientException clientEx, CosServerException serverEx)
+            }
+            
+            ,delegate (CosClientException clientEx, CosServerException serverEx)
             {
                 lock (syncExit)
                 {

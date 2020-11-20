@@ -198,28 +198,29 @@ namespace COSXML.Transfer
                     }
                 }
 
-            },
-                delegate (CosClientException clientEx, CosServerException serverEx)
+            }
+            
+            ,delegate (CosClientException clientEx, CosServerException serverEx)
+            {
+                lock (syncExit)
                 {
-                    lock (syncExit)
+
+                    if (isExit)
                     {
 
-                        if (isExit)
-                        {
-
-                            return;
-                        }
+                        return;
                     }
+                }
 
-                    if (UpdateTaskState(TaskState.Failed))
+                if (UpdateTaskState(TaskState.Failed))
+                {
+
+                    if (failCallback != null)
                     {
-
-                        if (failCallback != null)
-                        {
-                            failCallback(clientEx, serverEx);
-                        }
+                        failCallback(clientEx, serverEx);
                     }
-                });
+                }
+            });
         }
 
         private void MultiUpload()
@@ -371,17 +372,19 @@ namespace COSXML.Transfer
                     }
 
                     //打印进度
-                    uploadPartRequest.SetCosProgressCallback(delegate (long completed, long total)
-                    {
-                        lock (syncProgress)
+                    uploadPartRequest.SetCosProgressCallback(
+                        delegate (long completed, long total)
                         {
-                            long dataLen = hasReceiveDataLength + completed - uploadPartRequestMap[uploadPartRequest];
+                            lock (syncProgress)
+                            {
+                                long dataLen = hasReceiveDataLength + completed - uploadPartRequestMap[uploadPartRequest];
 
-                            UpdateProgress(dataLen, sendContentLength, false);
-                            hasReceiveDataLength = dataLen;
-                            uploadPartRequestMap[uploadPartRequest] = completed;
+                                UpdateProgress(dataLen, sendContentLength, false);
+                                hasReceiveDataLength = dataLen;
+                                uploadPartRequestMap[uploadPartRequest] = completed;
+                            }
                         }
-                    });
+                    );
 
                     uploadPartRequestMap.Add(uploadPartRequest, 0);
                     uploadPartRequestList.Add(uploadPartRequest);
