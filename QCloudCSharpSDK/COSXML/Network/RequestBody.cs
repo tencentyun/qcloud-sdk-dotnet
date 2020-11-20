@@ -172,6 +172,7 @@ if (complete < total)
             {
                 throw ex;
             }
+            
             finally
             {
 

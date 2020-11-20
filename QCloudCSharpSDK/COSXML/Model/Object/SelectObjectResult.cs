@@ -210,8 +210,8 @@ if ("error".Equals(messageType))
 
 
         while (remainReadCount > 0 && maxRead > 0 && inputStream.CanRead)
-            maxRead--;
             {
+                maxRead--;
                 read = inputStream.Read(buffer, count - remainReadCount, remainReadCount);
                 remainReadCount -= read;
             }

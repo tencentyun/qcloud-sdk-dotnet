@@ -93,6 +93,7 @@ namespace COSXML.Network
                 //QLog.E(TAG, ex.Message, ex);
                 throw;
             }
+            
             finally
             {
 
@@ -521,7 +522,10 @@ namespace COSXML.Network
         {
             private static MethodInfo addHeaderMethod;
 
-            private static readonly ICollection<PlatformID> monoPlatforms = new List<PlatformID> { PlatformID.MacOSX, PlatformID.Unix };
+            private static readonly ICollection<PlatformID> monoPlatforms = new List<PlatformID> 
+            {
+                 PlatformID.MacOSX, PlatformID.Unix 
+            };
 
             private static bool? isMonoPlatform;
 

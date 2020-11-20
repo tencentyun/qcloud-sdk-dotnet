@@ -429,11 +429,13 @@ namespace COSXMLTests
 
 
                 //设置进度回调
-                uploadPartRequest.SetCosProgressCallback(delegate (long completed, long total)
-                {
-                    Console.WriteLine(String.Format("{0} progress = {1} / {2} : {3:##.##}%",
-                        DateTime.Now.ToString(), completed, total, completed * 100.0 / total));
-                });
+                uploadPartRequest.SetCosProgressCallback(
+                    delegate (long completed, long total)
+                    {
+                        Console.WriteLine(String.Format("{0} progress = {1} / {2} : {3:##.##}%",
+                            DateTime.Now.ToString(), completed, total, completed * 100.0 / total));
+                    }
+                );
 
                 //执行请求
                 UploadPartResult uploadPartResult = cosXml.UploadPart(uploadPartRequest);

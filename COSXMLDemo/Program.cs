@@ -70,7 +70,8 @@ namespace COSXMLDemo
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-            } 
+            }
+            
             finally 
             {
                 // 删除存储桶

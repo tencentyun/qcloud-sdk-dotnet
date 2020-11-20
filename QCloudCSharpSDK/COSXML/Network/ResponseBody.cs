@@ -136,6 +136,7 @@ namespace COSXML.Network
                 QLog.Error("ResponseBody", ex.Message, ex);
                 throw;
             }
+            
             finally
             {
 
