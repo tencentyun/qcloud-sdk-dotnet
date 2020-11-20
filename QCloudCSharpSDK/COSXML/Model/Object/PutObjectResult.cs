@@ -39,7 +39,7 @@ namespace COSXML.Model.Object
             if (contentLength > 0)
             {
                 // 图片处理会返回 body
-                uploadResult = XmlParse.ParsePicOpeartionResult(inputStream);
+                uploadResult = XmlParse.Deserialize<PicOperationUploadResult>(inputStream);
             }
         }
     }

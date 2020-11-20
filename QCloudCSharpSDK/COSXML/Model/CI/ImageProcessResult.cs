@@ -20,7 +20,7 @@ namespace COSXML.Model.CI
 
         internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength)
         {
-            uploadResult = XmlParse.ParsePicOpeartionResult(inputStream);
+            uploadResult = XmlParse.Deserialize<PicOperationUploadResult>(inputStream);
         }
     }
 }

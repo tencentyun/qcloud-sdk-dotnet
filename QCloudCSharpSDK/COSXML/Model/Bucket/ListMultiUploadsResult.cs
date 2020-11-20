@@ -21,8 +21,7 @@ namespace COSXML.Model.Bucket
 
         internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
         {
-            listMultipartUploads = new ListMultipartUploads();
-            XmlParse.ParseListMultipartUploads(inputStream, listMultipartUploads);
+            listMultipartUploads = XmlParse.Deserialize<ListMultipartUploads>(inputStream);
         }
 
         public override string GetResultInfo()

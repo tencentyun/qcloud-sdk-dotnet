@@ -22,8 +22,7 @@ namespace COSXML.Model.Bucket
 
         internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
         {
-            listBucket = new ListBucket();
-            XmlParse.ParseListBucket(inputStream, listBucket);
+            listBucket = XmlParse.Deserialize<ListBucket>(inputStream);
         }
 
         public override string GetResultInfo()

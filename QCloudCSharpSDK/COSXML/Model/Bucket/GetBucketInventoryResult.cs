@@ -9,8 +9,7 @@ namespace COSXML.Model.Bucket
 
         internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
         {
-            inventoryConfiguration = new InventoryConfiguration();
-            XmlParse.ParseInventoryConfiguration(inputStream, inventoryConfiguration);
+            inventoryConfiguration = XmlParse.Deserialize<InventoryConfiguration>(inputStream);
         }
 
         public override string GetResultInfo()

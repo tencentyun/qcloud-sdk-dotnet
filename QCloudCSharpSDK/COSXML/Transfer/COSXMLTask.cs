@@ -81,12 +81,6 @@ namespace COSXML.Transfer
                 {
                     case TaskState.Waiting:
                         taskState = newTaskState;
-
-                        if (onState != null)
-                        {
-                            onState(taskState);
-                        }
-                        
                         result = true;
                         break;
                     case TaskState.Running:
@@ -94,12 +88,6 @@ namespace COSXML.Transfer
                         if (taskState == TaskState.Waiting)
                         {
                             taskState = newTaskState;
-
-                            if (onState != null)
-                            {
-                                onState(taskState);
-                            }
-
                             result = true;
                         }
                         break;
@@ -108,12 +96,6 @@ namespace COSXML.Transfer
                         if (taskState == TaskState.Running)
                         {
                             taskState = newTaskState;
-
-                            if (onState != null)
-                            {
-                                onState(taskState);
-                            }
-
                             result = true;
                         }
                         break;
@@ -122,12 +104,6 @@ namespace COSXML.Transfer
                         if (taskState == TaskState.Waiting || taskState == TaskState.Running)
                         {
                             taskState = newTaskState;
-
-                            if (onState != null)
-                            {
-                                onState(taskState);
-                            }
-
                             result = true;
                         }
                         break;
@@ -136,12 +112,6 @@ namespace COSXML.Transfer
                         if (taskState == TaskState.Waiting || taskState == TaskState.Running)
                         {
                             taskState = newTaskState;
-
-                            if (onState != null)
-                            {
-                                onState(taskState);
-                            }
-
                             result = true;
                         }
                         break;
@@ -150,12 +120,6 @@ namespace COSXML.Transfer
                         if (taskState != TaskState.Completed || taskState != TaskState.Cancel)
                         {
                             taskState = newTaskState;
-
-                            if (onState != null)
-                            {
-                                onState(taskState);
-                            }
-
                             result = true;
                         }
                         break;
@@ -164,16 +128,15 @@ namespace COSXML.Transfer
                         if (taskState == TaskState.Pause || taskState == TaskState.Failed)
                         {
                             taskState = newTaskState;
-
-                            if (onState != null)
-                            {
-                                onState(taskState);
-                            }
-
                             result = true;
                         }
                         break;
                 }
+            }
+
+            if (result && onState != null)
+            {
+                onState(taskState);
             }
 
             return result;

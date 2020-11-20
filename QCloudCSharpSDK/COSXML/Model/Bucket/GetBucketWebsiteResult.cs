@@ -9,8 +9,7 @@ namespace COSXML.Model.Bucket
 
         internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
         {
-            websiteConfiguration = new WebsiteConfiguration();
-            XmlParse.ParseWebsiteConfig(inputStream, websiteConfiguration);
+            websiteConfiguration = XmlParse.Deserialize<WebsiteConfiguration>(inputStream);
         }
 
         public override string GetResultInfo()

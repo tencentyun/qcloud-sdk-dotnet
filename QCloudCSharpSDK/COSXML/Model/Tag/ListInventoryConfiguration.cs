@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace COSXML.Model.Tag
 {
+    [XmlRoot("ListInventoryConfigurationResult")]
     public sealed class ListInventoryConfiguration
     {
+        [XmlElement("InventoryConfiguration")]
         public List<InventoryConfiguration> inventoryConfigurations;
 
         public bool isTruncated = false;

@@ -21,8 +21,7 @@ namespace COSXML.Model.Bucket
 
         internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
         {
-            lifecycleConfiguration = new LifecycleConfiguration();
-            XmlParse.ParseLifecycleConfiguration(inputStream, lifecycleConfiguration);
+            lifecycleConfiguration = XmlParse.Deserialize<LifecycleConfiguration>(inputStream);
         }
 
         public override string GetResultInfo()

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Xml.Serialization;
 using System.Text;
 using COSXML.Model.Tag;
 using System.Xml;
@@ -86,172 +86,6 @@ namespace COSXML.Transfer
         internal static string BuildWebsiteConfiguration(BucketLoggingStatus bucketLoggingStatus)
         {
             throw new NotImplementedException();
-        }
-
-        public static string BuildLifecycleConfiguration(LifecycleConfiguration lifecycleConfiguration)
-        {
-            StringWriter stringWriter = new StringWriter();
-            XmlWriterSettings xmlWriterSetting = new XmlWriterSettings();
-
-            xmlWriterSetting.Indent = true;
-
-            XmlWriter xmlWriter = XmlWriter.Create(stringWriter, xmlWriterSetting);
-
-            xmlWriter.WriteStartDocument();
-
-            //start to write element
-            xmlWriter.WriteStartElement("LifecycleConfiguration");
-
-            if (lifecycleConfiguration.rules != null)
-            {
-
-                foreach (LifecycleConfiguration.Rule rule in lifecycleConfiguration.rules)
-                {
-
-                    if (rule == null)
-                    {
-
-                        continue;
-                    }
-
-                    xmlWriter.WriteStartElement("Rule");
-
-                    if (rule.id != null)
-                    {
-                        xmlWriter.WriteElementString("ID", rule.id);
-                    }
-
-                    if (rule.filter != null)
-                    {
-                        xmlWriter.WriteStartElement("Filter");
-
-                        if (rule.filter.prefix != null)
-                        {
-                            xmlWriter.WriteElementString("Prefix", rule.filter.prefix);
-                        }
-
-                        if (rule.filter.filterAnd != null)
-                        {
-                            xmlWriter.WriteStartElement("And");
-
-                            if (rule.filter.filterAnd.prefix != null)
-                            {
-                                xmlWriter.WriteElementString("Prefix", rule.filter.filterAnd.prefix);
-                            }
-
-                            xmlWriter.WriteEndElement();
-                        }
-
-                        xmlWriter.WriteEndElement();
-                    }
-
-                    if (rule.status != null)
-                    {
-                        xmlWriter.WriteElementString("Status", rule.status);
-                    }
-
-                    if (rule.transition != null)
-                    {
-                        xmlWriter.WriteStartElement("Transition");
-
-                        if (rule.transition.days > 0)
-                        {
-                            xmlWriter.WriteElementString("Days", rule.transition.days.ToString());
-                        }
-
-                        if (rule.transition.storageClass != null)
-                        {
-                            xmlWriter.WriteElementString("StorageClass", rule.transition.storageClass);
-                        }
-
-                        if (rule.transition.date != null)
-                        {
-                            xmlWriter.WriteElementString("Date", rule.transition.date);
-                        }
-
-                        xmlWriter.WriteEndElement();
-                    }
-
-                    if (rule.expiration != null)
-                    {
-                        xmlWriter.WriteStartElement("Expiration");
-
-                        if (rule.expiration.days > 0)
-                        {
-                            xmlWriter.WriteElementString("Days", rule.expiration.days.ToString());
-                        }
-
-                        if (rule.expiration.expiredObjectDeleteMarker != null)
-                        {
-
-                            if ((bool)rule.expiration.expiredObjectDeleteMarker)
-                            {
-                                xmlWriter.WriteElementString("ExpiredObjectDeleteMarker", "true");
-                            }
-                            else
-                            {
-                                xmlWriter.WriteElementString("ExpiredObjectDeleteMarker", "false");
-                            }
-                        }
-
-                        if (rule.expiration.date != null)
-                        {
-                            xmlWriter.WriteElementString("Date", rule.expiration.date);
-                        }
-
-                        xmlWriter.WriteEndElement();
-                    }
-
-                    if (rule.noncurrentVersionTransition != null)
-                    {
-                        xmlWriter.WriteStartElement("NoncurrentVersionTransition");
-
-                        if (rule.noncurrentVersionTransition.noncurrentDays > 0)
-                        {
-                            xmlWriter.WriteElementString("NoncurrentDays", rule.noncurrentVersionTransition.noncurrentDays.ToString());
-                        }
-
-                        if (rule.noncurrentVersionTransition.storageClass != null)
-                        {
-                            xmlWriter.WriteElementString("StorageClass", rule.noncurrentVersionTransition.storageClass);
-                        }
-
-                        xmlWriter.WriteEndElement();
-                    }
-
-                    if (rule.noncurrentVersionExpiration != null)
-                    {
-                        xmlWriter.WriteStartElement("NoncurrentVersionExpiration");
-
-                        if (rule.noncurrentVersionExpiration.noncurrentDays > 0)
-                        {
-                            xmlWriter.WriteElementString("NoncurrentDays", rule.noncurrentVersionExpiration.noncurrentDays.ToString());
-                        }
-
-                        xmlWriter.WriteEndElement();
-                    }
-
-                    if (rule.abortIncompleteMultiUpload != null)
-                    {
-                        xmlWriter.WriteStartElement("AbortIncompleteMultipartUpload");
-
-                        if (rule.abortIncompleteMultiUpload.daysAfterInitiation > 0)
-                        {
-                            xmlWriter.WriteElementString("DaysAfterInitiation", rule.abortIncompleteMultiUpload.daysAfterInitiation.ToString());
-                        }
-
-                        xmlWriter.WriteEndElement();
-                    }
-                }
-            }
-
-            // end to element
-            xmlWriter.WriteEndElement();
-
-            xmlWriter.WriteEndDocument();
-            xmlWriter.Flush();
-
-            return RemoveXMLHeader(stringWriter.ToString());
         }
 
         public static string BuildReplicationConfiguration(ReplicationConfiguration replicationConfiguration)
@@ -904,6 +738,13 @@ if (outputFormat.jsonFormat != null)
             }
 
             return xmlContent;
+        }
+
+        public static String Serialize<T>(Object o) {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            StringWriter writer = new StringWriter();
+            serializer.Serialize(writer, o);
+            return writer.ToString();
         }
 
     }
