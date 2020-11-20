@@ -1,23 +1,32 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace COSXML.Model.Tag
 {
+    [XmlRoot]
     public sealed class InventoryConfiguration
     {
+        [XmlElement("Id")]
         public string id;
 
+        [XmlElement("IsEnabled")]
         public bool isEnabled;
 
+        [XmlElement("IncludedObjectVersions")]
         public string includedObjectVersions;
 
+        [XmlElement("Filter")]
         public Filter filter;
 
+        [XmlElement("OptionalFields")]
         public OptionalFields optionalFields;
 
+        [XmlElement("Schedule")]
         public Schedule schedule;
 
+        [XmlElement("Destination")]
         public Destination destination;
 
 
@@ -57,6 +66,7 @@ namespace COSXML.Model.Tag
 
         public sealed class Filter
         {
+            [XmlElement("Prefix")]
             public string prefix;
 
             public string GetInfo()
@@ -72,6 +82,7 @@ namespace COSXML.Model.Tag
 
         public sealed class OptionalFields
         {
+            [XmlArrayItem("Field")]
             public List<string> fields;
 
             public string GetInfo()
@@ -95,6 +106,7 @@ namespace COSXML.Model.Tag
 
         public sealed class Schedule
         {
+            [XmlElement("Frequency")]
             public string frequency;
 
             public string GetInfo()
@@ -110,6 +122,7 @@ namespace COSXML.Model.Tag
 
         public sealed class Destination
         {
+            [XmlElement("COSBucketDestination")]
             public COSBucketDestination cosBucketDestination;
 
             public string GetInfo()
@@ -129,14 +142,19 @@ namespace COSXML.Model.Tag
 
         public sealed class COSBucketDestination
         {
+            [XmlElement("Format")]
             public string format;
 
+            [XmlElement("AccountId")]
             public string accountId;
 
+            [XmlElement("Bucket")]
             public string bucket;
 
+            [XmlElement("Prefix")]
             public string prefix;
 
+            [XmlElement("Encryption")]
             public Encryption encryption;
 
             public void SetBucket(String region, String bucket)
@@ -170,6 +188,7 @@ namespace COSXML.Model.Tag
 
         public sealed class Encryption
         {
+            [XmlElement("SSE-COS")]
             public string sSECOS;
 
             public String GetInfo()

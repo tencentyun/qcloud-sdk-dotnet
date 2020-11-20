@@ -116,7 +116,7 @@ namespace COSXMLTests
             JObject o = new JObject();
 
             // 不返回原图
-            o["is_pic_info"] = 0;
+            o["is_pic_info"] = 1;
             JArray rules = new JArray();
             JObject rule = new JObject();
 

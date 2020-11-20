@@ -21,8 +21,7 @@ namespace COSXML.Model.Object
 
         internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
         {
-            listParts = new ListParts();
-            XmlParse.ParseListParts(inputStream, listParts);
+            listParts = XmlParse.Deserialize<ListParts>(inputStream);
         }
 
         public override string GetResultInfo()

@@ -13,8 +13,7 @@ namespace COSXML.Model.Bucket
 
         internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
         {
-            listBucketVersions = new ListBucketVersions();
-            XmlParse.ParseListBucketVersions(inputStream, listBucketVersions);
+            listBucketVersions = XmlParse.Deserialize<ListBucketVersions>(inputStream);
         }
 
         public override string GetResultInfo()

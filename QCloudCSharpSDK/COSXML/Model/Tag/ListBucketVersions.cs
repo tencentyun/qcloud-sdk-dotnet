@@ -1,35 +1,51 @@
 using System;
 using System.Collections.Generic;
-
 using System.Text;
+using System.Xml.Serialization;
 
 namespace COSXML.Model.Tag
 {
+    [XmlRoot("ListVersionsResult")]
     public sealed class ListBucketVersions
     {
+        [XmlElement("EncodingType")]
         public string encodingType;
 
+        [XmlElement("Name")]
         public string name;
 
+        [XmlElement("Prefix")]
         public string prefix;
 
+        [XmlElement("KeyMarker")]
         public string keyMarker;
 
+        [XmlElement("VersionIdMarker")]
         public string versionIdMarker;
 
+        [XmlElement("MaxKeys")]
         public long maxKeys;
 
+        [XmlElement("IsTruncated")]
         public bool isTruncated;
 
+        [XmlElement("NextKeyMarker")]
         public string nextKeyMarker;
 
+        [XmlElement("Delimiter")]
         public string delimiter;
 
+        [XmlElement("NextVersionIdMarker")]
         public string nextVersionIdMarker;
 
+        [XmlArray("Version")]
         public List<ObjectVersion> objectVersionList;
 
+        [XmlArray("CommonPrefixes")]
         public List<CommonPrefixes> commonPrefixesList;
+
+        [XmlArray("DeleteMarker")]
+        public List<DeleteMarker> deleteMarkers;
 
         public string GetInfo()
         {
@@ -79,14 +95,19 @@ namespace COSXML.Model.Tag
 
         public abstract class ObjectVersion
         {
+            [XmlElement("Key")]
             public string key;
 
+            [XmlElement("VersionId")]
             public string versionId;
 
+            [XmlElement("IsLatest")]
             public bool isLatest;
 
+            [XmlElement("LastModified")]
             public string lastModified;
 
+            [XmlElement("Owner")]
             public Owner owner;
 
             public abstract string GetInfo();
@@ -94,7 +115,11 @@ namespace COSXML.Model.Tag
 
         public sealed class Owner
         {
+            [XmlElement("ID")]
             public string uid;
+
+            [XmlElement("DisplayName")]
+            public string displayName;
 
             public string GetInfo()
             {
@@ -132,10 +157,13 @@ namespace COSXML.Model.Tag
 
         public sealed class Version : ObjectVersion
         {
+            [XmlElement("ETag")]
             public string eTag;
 
+            [XmlElement("Size")]
             public long size;
 
+            [XmlElement("StorageClass")]
             public string storageClass;
 
 
@@ -167,6 +195,7 @@ namespace COSXML.Model.Tag
             /// <summary>
             /// 显示具体的 CommonPrefixes
             /// </summary>
+            [XmlElement("Prefix")]
             public string prefix;
 
             public string GetInfo()
