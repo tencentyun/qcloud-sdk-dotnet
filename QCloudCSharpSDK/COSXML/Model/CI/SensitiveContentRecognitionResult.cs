@@ -20,7 +20,7 @@ namespace COSXML.Model.CI
 
         internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength)
         {
-            recognitionResult = XmlParse.ParseSensitiveRecognitionResult(inputStream);
+            recognitionResult = XmlParse.Deserialize<SensitiveRecognitionResult>(inputStream);
         }
     }
 }

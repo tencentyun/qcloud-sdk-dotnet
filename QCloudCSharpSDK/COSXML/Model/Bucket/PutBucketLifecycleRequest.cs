@@ -29,7 +29,7 @@ namespace COSXML.Model.Bucket
 
         public override Network.RequestBody GetRequestBody()
         {
-            string content = Transfer.XmlBuilder.BuildLifecycleConfiguration(lifecycleConfiguration);
+            string content = Transfer.XmlBuilder.Serialize<LifecycleConfiguration>(lifecycleConfiguration);
 
             byte[] data = Encoding.UTF8.GetBytes(content);
 
