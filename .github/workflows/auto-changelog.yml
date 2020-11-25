@@ -18,8 +18,8 @@ jobs:
         node-version: '12'
     - name: Install dependencies
       uses: actions/checkout@v2
-        with:
-          repository: konakonall/auto-changelog
+      with:
+        repository: konakonall/auto-changelog
     - name: Build Tool
       run: |
         cd auto-chagnelog
