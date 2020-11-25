@@ -30,6 +30,7 @@ jobs:
     - name: Generate ChangeLog
       env: # Or as an environment variable
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: auto-change --token $TOKEN
+      run: |
+        auto-changelog --token $TOKEN
     - name: Cat ChangeLog
       run: cat CHANGELOG.md
