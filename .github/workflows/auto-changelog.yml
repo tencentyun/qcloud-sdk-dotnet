@@ -12,29 +12,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0  
     - uses: actions/setup-node@v2-beta
       with:
         node-version: '12'
-#     - name: Install dependencies
-#       uses: actions/checkout@v2
-#       with:
-#         repository: konakonall/auto-changelog
-#         path: 'auto-changelog'
-#     - name: Build Tool
-#       run: |
-#         ls -l
-#         cd auto-changelog
-#         npm install
-#         npm link
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 
+    - name: Checkout Tool
+      uses: actions/checkout@v2
+      with:
+        repository: konakonall/auto-changelog
+        path: 'auto-changelog'
+    - name: Build Tool
+      run: |
+        cd auto-changelog
+        npm install
+        npm link
     - name: Generate ChangeLog
       env: # Or as an environment variable
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        ls -al
-        git tag -l
-        git branch -a
+        auto-changelog --token $TOKEN
     - name: Cat ChangeLog
-      run: git tag -l
+      run: cat CHANGELOG.md
