@@ -20,6 +20,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: konakonall/auto-changelog
+        path: 'auto-changelog'
     - name: Build Tool
       run: |
         ls -l
