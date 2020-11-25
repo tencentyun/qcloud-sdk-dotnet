@@ -34,4 +34,4 @@ jobs:
         ls -al
         git tag -l
     - name: Cat ChangeLog
-      run: cat CHANGELOG.md
+      run: git tag -l
