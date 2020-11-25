@@ -18,6 +18,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0 
+    
     - name: Checkout Tool
       uses: actions/checkout@v2
       with:
@@ -28,6 +29,7 @@ jobs:
         cd auto-changelog
         npm install
         npm link
+        
     - name: Generate ChangeLog
       env: # Or as an environment variable
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -35,3 +37,20 @@ jobs:
         auto-changelog --token $TOKEN
     - name: Cat ChangeLog
       run: cat CHANGELOG.md
+    
+    - name: Commit files
+      env:
+        CI_USER: ${{ wjielai }}
+        CI_EMAIL: ${{ wjielai@tencent.com }}
+      run: |
+        git config --local user.email "$CI_EMAIL"
+        git config --local user.name "$CI_USER"
+        git add CHANGELOG.md && git commit -m 'Updated CHANGELOG.md' && echo ::set-env name=push::1 || echo "No changes to CHANGELOG.md"
+
+    - name: Push changes
+      if: env.push == 1
+      env:
+        CI_USER: ${{ wjielai }}
+        CI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git push "https://$CI_USER:$CI_TOKEN@github.com/$GITHUB_REPOSITORY.git" HEAD:master
