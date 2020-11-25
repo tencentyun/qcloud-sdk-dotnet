@@ -16,22 +16,22 @@ jobs:
     - uses: actions/setup-node@v2-beta
       with:
         node-version: '12'
-    - name: Install dependencies
-      uses: actions/checkout@v2
-      with:
-        repository: konakonall/auto-changelog
-        path: 'auto-changelog'
-    - name: Build Tool
-      run: |
-        ls -l
-        cd auto-changelog
-        npm install
-        npm link
+#     - name: Install dependencies
+#       uses: actions/checkout@v2
+#       with:
+#         repository: konakonall/auto-changelog
+#         path: 'auto-changelog'
+#     - name: Build Tool
+#       run: |
+#         ls -l
+#         cd auto-changelog
+#         npm install
+#         npm link
     - name: Generate ChangeLog
       env: # Or as an environment variable
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         ls -l
-        auto-changelog --token $TOKEN
+        get tag -l
     - name: Cat ChangeLog
       run: cat CHANGELOG.md
