@@ -16,7 +16,6 @@ namespace COSXML.Model.Tag
         public RedirectAllRequestTo redirectAllRequestTo;
 
         [XmlArray("RoutingRules")]
-        [XmlArrayItem("RoutingRule")]
         public List<RoutingRule> routingRules;
 
         public sealed class IndexDocument

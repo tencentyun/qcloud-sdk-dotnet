@@ -742,10 +742,19 @@ if (outputFormat.jsonFormat != null)
 
         public static String Serialize<T>(Object o) 
         {
+            var emptyNs = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+            var settings = new XmlWriterSettings();
+            settings.Indent = true;
+            settings.OmitXmlDeclaration = true;
+
             XmlSerializer serializer = new XmlSerializer(typeof(T));
-            StringWriter writer = new StringWriter();
-            serializer.Serialize(writer, o);
-            return writer.ToString();
+
+            using (var stream = new StringWriter())
+            using (var writer = XmlWriter.Create(stream, settings))
+            {
+                serializer.Serialize(writer, o, emptyNs);
+                return stream.ToString();
+            }
         }
 
     }

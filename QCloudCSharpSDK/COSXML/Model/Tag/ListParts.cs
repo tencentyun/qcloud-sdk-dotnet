@@ -79,7 +79,7 @@ namespace COSXML.Model.Tag
         /// 表示每一个块的信息
         /// <see cref="Part"/>
         /// </summary>
-        [XmlArray("Part")]
+        [XmlElement("Part")]
         public List<Part> parts;
 
 

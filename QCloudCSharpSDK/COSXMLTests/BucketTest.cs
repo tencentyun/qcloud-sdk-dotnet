@@ -1002,37 +1002,68 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void TestBucket()
+        public void TestBucketLifecycle()
         {
             QCloudServer instance = QCloudServer.Instance();
 
+            PutBucketLifeCycle(instance.cosXml, instance.bucketForBucketTest);
+            Thread.Sleep(1000);
+            GetBucketLifeCycle(instance.cosXml, instance.bucketForBucketTest);
+            DeleteBucketLifeCycle(instance.cosXml, instance.bucketForBucketTest);
+        }
 
-            HeadBucket(instance.cosXml, instance.bucketForBucketTest);
-
-            GetBucket(instance.cosXml, instance.bucketForBucketTest);
+        [Test()]
+        public void TestBucketACL()
+        {
+            QCloudServer instance = QCloudServer.Instance();
 
             PutBucketACL(instance.cosXml, instance.bucketForBucketTest);
             GetBucketACL(instance.cosXml, instance.bucketForBucketTest);
+        }
+
+        [Test()]
+        public void TestBucketCORS()
+        {
+            QCloudServer instance = QCloudServer.Instance();
 
             DeleteBucketCORS(instance.cosXml, instance.bucketForBucketTest);
             Thread.Sleep(300);
             PutBucketCORS(instance.cosXml, instance.bucketForBucketTest);
             Thread.Sleep(300);
             GetBucketCORS(instance.cosXml, instance.bucketForBucketTest);
+        }
 
-            PutBucketLifeCycle(instance.cosXml, instance.bucketForBucketTest);
-            Thread.Sleep(1000);
-            GetBucketLifeCycle(instance.cosXml, instance.bucketForBucketTest);
-            DeleteBucketLifeCycle(instance.cosXml, instance.bucketForBucketTest);
+        [Test()]
+        public void TestBucketReplication()
+        {
+            QCloudServer instance = QCloudServer.Instance();
 
             PutBucketReplication(instance.cosXml, instance.bucketForBucketTest);
+            Thread.Sleep(300);
             GetBucketReplication(instance.cosXml, instance.bucketForBucketTest);
             DeleteBucketReplication(instance.cosXml, instance.bucketForBucketTest);
+        }
+
+        [Test()]
+        public void TestBucketVersioning()
+        {
+            QCloudServer instance = QCloudServer.Instance();
 
             PutBucketVersioning(instance.cosXml, instance.bucketForBucketTest);
+            Thread.Sleep(300);
             GetBucketVersioning(instance.cosXml, instance.bucketForBucketTest);
 
             ListBucketVersions(instance.cosXml, instance.bucketForBucketTest);
+        }
+
+        [Test()]
+        public void TestBucketSimple()
+        {
+            QCloudServer instance = QCloudServer.Instance();
+
+            HeadBucket(instance.cosXml, instance.bucketForBucketTest);
+
+            GetBucket(instance.cosXml, instance.bucketForBucketTest);
 
             ListMultiUploads(instance.cosXml, instance.bucketForBucketTest);
 

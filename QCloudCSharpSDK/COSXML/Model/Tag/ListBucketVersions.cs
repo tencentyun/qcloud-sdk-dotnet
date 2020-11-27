@@ -38,13 +38,13 @@ namespace COSXML.Model.Tag
         [XmlElement("NextVersionIdMarker")]
         public string nextVersionIdMarker;
 
-        [XmlArray("Version")]
+        [XmlElement("Version")]
         public List<ObjectVersion> objectVersionList;
 
-        [XmlArray("CommonPrefixes")]
+        [XmlElement("CommonPrefixes")]
         public List<CommonPrefixes> commonPrefixesList;
 
-        [XmlArray("DeleteMarker")]
+        [XmlElement("DeleteMarker")]
         public List<DeleteMarker> deleteMarkers;
 
         public string GetInfo()
@@ -93,7 +93,7 @@ namespace COSXML.Model.Tag
             return stringBuilder.ToString();
         }
 
-        public abstract class ObjectVersion
+        public class ObjectVersion
         {
             [XmlElement("Key")]
             public string key;
@@ -110,7 +110,9 @@ namespace COSXML.Model.Tag
             [XmlElement("Owner")]
             public Owner owner;
 
-            public abstract string GetInfo();
+            public virtual string GetInfo() {
+                return "";
+            }
         }
 
         public sealed class Owner

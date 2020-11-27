@@ -12,7 +12,7 @@ namespace COSXML.Model.Tag
         /// 规则描述
         /// <see cref="Rule"/>
         /// </summary>
-        [XmlArray("Rule")]
+        [XmlElement("Rule")]
         public List<Rule> rules;
 
         public string GetInfo()
@@ -90,7 +90,7 @@ namespace COSXML.Model.Tag
             /// 设置允许分片上传保持运行的最长时间
             /// <see cref="AbortIncompleteMultiUpload"/>
             /// </summary>
-            [XmlElement("AbortIncompleteMultiUpload")]
+            [XmlElement("AbortIncompleteMultipartUpload")]
             public AbortIncompleteMultiUpload abortIncompleteMultiUpload;
 
             public string GetInfo()

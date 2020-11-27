@@ -54,7 +54,7 @@ namespace COSXML.Model.Tag
         [XmlElement("NextMarker")]
         public string nextMarker;
 
-        [XmlArray("Contents")]
+        [XmlElement("Contents")]
         /// <summary>
         /// 对象元数据信息列表
         /// <see cref="Contents"/>
@@ -65,7 +65,7 @@ namespace COSXML.Model.Tag
         /// 将 Prefix 到 delimiter 之间的相同路径归为一类，定义为 Common Prefix
         /// <see cref="CommonPrefixes"/>
         /// </summary>
-        [XmlArray("CommonPrefixes")]
+        [XmlElement("CommonPrefixes")]
         public List<CommonPrefixes> commonPrefixesList;
 
         [XmlElement("Delimiter")]

@@ -82,7 +82,7 @@ namespace COSXML.Model.Tag
 
         public sealed class OptionalFields
         {
-            [XmlArrayItem("Field")]
+            [XmlElement("Field")]
             public List<string> fields;
 
             public string GetInfo()
