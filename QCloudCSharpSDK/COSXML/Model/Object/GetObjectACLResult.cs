@@ -17,6 +17,6 @@ namespace COSXML.Model.Object
         /// 访问权限信息
         /// <see cref="Model.Tag.AccessControlPolicy"/>
         /// </summary>
-        public AccessControlPolicy accessControlPolicy {get => _data;}
+        public AccessControlPolicy accessControlPolicy {get => _data; }
     }
 }

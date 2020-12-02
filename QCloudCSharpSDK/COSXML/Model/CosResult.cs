@@ -109,9 +109,11 @@ namespace COSXML.Model
         {
             var info = base.GetResultInfo();
             var methodInfo = typeof(T).GetMethod("GetInfo");
-            if (methodInfo != null && _data != null) {
+            if (methodInfo != null && _data != null) 
+            {
                 info = info + "\n" + methodInfo.Invoke(_data, null);
             }
+            
             return info;
         }
     }

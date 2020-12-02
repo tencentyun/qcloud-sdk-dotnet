@@ -27,7 +27,7 @@ namespace COSXML.Model.Object
         /// post object返回的信息
         /// <see cref="Model.Tag.PostResponse"/>
         /// </summary>
-        public PostResponse postResponse {get => _data;}
+        public PostResponse postResponse {get => _data; }
 
         internal override void InternalParseResponseHeaders()
         {

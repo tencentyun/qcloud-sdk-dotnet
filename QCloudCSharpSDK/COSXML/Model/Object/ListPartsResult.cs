@@ -17,7 +17,7 @@ namespace COSXML.Model.Object
         /// 已上传块的所有信息
         /// <see cref="Model.Tag.ListParts"/>
         /// </summary>
-        public ListParts listParts {get => _data;}
+        public ListParts listParts {get => _data; }
 
     }
 }

@@ -17,6 +17,6 @@ namespace COSXML.Model.Object
         /// 返回信息
         /// <see cref="Model.Tag.InitiateMultipartUpload"/>
         /// </summary>
-        public InitiateMultipartUpload initMultipartUpload {get => _data;}
+        public InitiateMultipartUpload initMultipartUpload {get => _data; }
     }
 }

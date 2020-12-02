@@ -18,6 +18,6 @@ namespace COSXML.Model.Service
         /// list all buckets for users
         /// <see cref="COSXML.Model.Tag.ListAllMyBuckets"/>
         /// </summary>
-        public ListAllMyBuckets listAllMyBuckets {get => _data;}
+        public ListAllMyBuckets listAllMyBuckets {get => _data; }
     }
 }

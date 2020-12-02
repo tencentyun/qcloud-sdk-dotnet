@@ -17,6 +17,6 @@ namespace COSXML.Model.Object
         /// Complete返回信息
         /// <see cref="Model.Tag.CompleteResult"/>
         /// </summary>
-        public CompleteResult completeResult {get => _data;}
+        public CompleteResult completeResult {get => _data; }
     }
 }

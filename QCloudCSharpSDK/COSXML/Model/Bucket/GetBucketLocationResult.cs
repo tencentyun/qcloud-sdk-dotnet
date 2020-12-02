@@ -17,6 +17,6 @@ namespace COSXML.Model.Bucket
         /// 地域信息
         /// <see cref="COSXML.Model.Tag.LocationConstraint"/>
         /// </summary>
-        public LocationConstraint locationConstraint {get => _data;}
+        public LocationConstraint locationConstraint {get => _data; }
     }
 }

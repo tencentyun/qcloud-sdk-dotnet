@@ -16,6 +16,6 @@ namespace COSXML.Model.CI
         /// 图片处理结果
         /// </summary>
         /// <value></value>
-        public PicOperationUploadResult uploadResult { get => _data; }
+        public PicOperationUploadResult uploadResult { get => _data;  }
     }
 }
