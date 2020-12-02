@@ -410,11 +410,10 @@ namespace COSXML.Network
 
                 if (inputStream != null)
                 {
-                    CosServerError cosServerError = new CosServerError();
 
                     try
                     {
-                        XmlParse.ParseCosError(inputStream, cosServerError);
+                        CosServerError cosServerError = XmlParse.Deserialize<CosServerError>(inputStream);
 
                         if (cosServerException.requestId != null)
                         {

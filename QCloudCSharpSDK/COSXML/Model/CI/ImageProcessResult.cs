@@ -9,18 +9,13 @@ namespace COSXML.Model.CI
     /// <summary>
     /// 图片处理结果
     /// </summary>
-    public sealed class ImageProcessResult : CosResult
+    public sealed class ImageProcessResult : CosDataResult<PicOperationUploadResult>
     {
 
         /// <summary>
         /// 图片处理结果
         /// </summary>
         /// <value></value>
-        public PicOperationUploadResult uploadResult { get; private set; }
-
-        internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength)
-        {
-            uploadResult = XmlParse.Deserialize<PicOperationUploadResult>(inputStream);
-        }
+        public PicOperationUploadResult uploadResult { get => _data; }
     }
 }

@@ -62,7 +62,7 @@ namespace COSXMLTests
             copykey = commonKey;
             imageKey = commonKey;
 
-            // PutObject();
+            PutObject();
         }
 
         [TearDown()]

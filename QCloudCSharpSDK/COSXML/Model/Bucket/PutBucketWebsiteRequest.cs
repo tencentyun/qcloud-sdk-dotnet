@@ -84,13 +84,7 @@ namespace COSXML.Model.Bucket
 
         public override Network.RequestBody GetRequestBody()
         {
-            string content = Transfer.XmlBuilder.BuildWebsiteConfiguration(websiteConfiguration);
-
-            byte[] data = Encoding.UTF8.GetBytes(content);
-
-            ByteRequestBody body = new ByteRequestBody(data);
-
-            return body;
+            return GetXmlRequestBody(websiteConfiguration);
         }
     }
 }

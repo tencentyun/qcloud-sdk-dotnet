@@ -110,7 +110,8 @@ namespace COSXML.Model.Tag
             [XmlElement("Owner")]
             public Owner owner;
 
-            public virtual string GetInfo() {
+            public virtual string GetInfo() 
+            {
                 return "";
             }
         }

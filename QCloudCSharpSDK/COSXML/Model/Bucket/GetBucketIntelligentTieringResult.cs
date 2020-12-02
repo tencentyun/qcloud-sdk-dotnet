@@ -3,13 +3,8 @@ using COSXML.Transfer;
 
 namespace COSXML.Model.Bucket
 {
-    public sealed class GetBucketIntelligentTieringResult : CosResult
+    public sealed class GetBucketIntelligentTieringResult : CosDataResult<IntelligentTieringConfiguration>
     {
-        public IntelligentTieringConfiguration configuration;
-
-        internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
-        {
-            configuration = XmlParse.ParseBucketIntelligentTiering(inputStream);
-        }
+        public IntelligentTieringConfiguration configuration {get => _data;}
     }
 }

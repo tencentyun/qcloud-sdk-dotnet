@@ -33,13 +33,7 @@ namespace COSXML.Model.Bucket
 
         public override Network.RequestBody GetRequestBody()
         {
-            string content = Transfer.XmlBuilder.BuildCORSConfigXML(corsConfiguration);
-
-            byte[] data = Encoding.UTF8.GetBytes(content);
-
-            ByteRequestBody body = new ByteRequestBody(data);
-
-            return body;
+            return GetXmlRequestBody(corsConfiguration);
         }
 
         /// <summary>

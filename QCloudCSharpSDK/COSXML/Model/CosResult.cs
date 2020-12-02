@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using COSXML.Network;
 using System.IO;
+using COSXML.Transfer;
 
 namespace COSXML.Model
 {
@@ -86,6 +87,32 @@ namespace COSXML.Model
             }
 
             return resultBuilder.ToString();
+        }
+    }
+
+    public class CosDataResult<T> : CosResult
+    {
+        /// <summary>
+        /// body数据
+        /// </summary>
+        protected T _data;
+
+        internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength)
+        {
+            if (contentLength > 0)
+            {
+                _data = XmlParse.Deserialize<T>(inputStream);
+            }
+        }
+
+        public override string GetResultInfo()
+        {
+            var info = base.GetResultInfo();
+            var methodInfo = typeof(T).GetMethod("GetInfo");
+            if (methodInfo != null && _data != null) {
+                info = info + "\n" + methodInfo.Invoke(_data, null);
+            }
+            return info;
         }
     }
 }

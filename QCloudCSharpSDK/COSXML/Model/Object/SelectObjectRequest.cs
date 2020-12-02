@@ -8,13 +8,7 @@ namespace COSXML.Model.Object
 {
     public sealed class SelectObjectRequest : ObjectRequest
     {
-        private string expression;
-
-        private string expressionType = "SQL";
-
-        private ObjectSelectionFormat inputFormat;
-
-        private ObjectSelectionFormat outputFormat;
+        private SelectObject selectObject;
 
         internal COSXML.Callback.OnProgressCallback progressCallback;
 
@@ -27,6 +21,8 @@ namespace COSXML.Model.Object
             this.method = CosRequestMethod.POST;
             this.queryParameters.Add("select", null);
             this.queryParameters.Add("select-type", "2");
+            this.selectObject = new SelectObject();
+            selectObject.ExpressionType = "SQL";
         }
 
         public SelectObjectRequest OutputToFile(string filePath)
@@ -38,28 +34,28 @@ namespace COSXML.Model.Object
 
         public SelectObjectRequest SetExpression(string expression)
         {
-            this.expression = expression;
+            selectObject.Expression = expression;
 
             return this;
         }
 
         public SelectObjectRequest SetExpressionType(string expressionType)
         {
-            this.expressionType = expressionType;
+            selectObject.ExpressionType = expressionType;
 
             return this;
         }
 
         public SelectObjectRequest SetInputFormat(ObjectSelectionFormat inputFormat)
         {
-            this.inputFormat = inputFormat;
+            selectObject.InputFormat = inputFormat;
 
             return this;
         }
 
         public SelectObjectRequest SetOutputFormat(ObjectSelectionFormat outputFormat)
         {
-            this.outputFormat = outputFormat;
+            selectObject.OutputFormat = outputFormat;
 
             return this;
         }
@@ -75,19 +71,19 @@ namespace COSXML.Model.Object
         {
             base.CheckParameters();
 
-            if (expression == null)
+            if (selectObject.Expression == null)
             {
                 throw new CosClientException((int)CosClientError.InvalidArgument,
                   "expression is null");
             }
 
-            if (inputFormat == null)
+            if (selectObject.InputFormat == null)
             {
                 throw new CosClientException((int)CosClientError.InvalidArgument,
                   "inputFormat is null");
             }
 
-            if (outputFormat == null)
+            if (selectObject.OutputFormat == null)
             {
                 throw new CosClientException((int)CosClientError.InvalidArgument,
                   "outputFormat is null");
@@ -96,14 +92,7 @@ namespace COSXML.Model.Object
 
         public override Network.RequestBody GetRequestBody()
         {
-            string content = Transfer.XmlBuilder.BuildSelection(expression, expressionType, inputFormat,
-              outputFormat, progressCallback != null);
-
-            byte[] data = Encoding.UTF8.GetBytes(content);
-
-            ByteRequestBody body = new ByteRequestBody(data);
-
-            return body;
+            return GetXmlRequestBody(selectObject);
         }
     }
 }

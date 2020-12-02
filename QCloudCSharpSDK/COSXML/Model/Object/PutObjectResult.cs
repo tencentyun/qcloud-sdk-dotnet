@@ -12,14 +12,14 @@ namespace COSXML.Model.Object
     /// 简单上传对象返回的结果
     /// <see cref="https://cloud.tencent.com/document/product/436/7749"/>
     /// </summary>
-    public sealed class PutObjectResult : CosResult
+    public sealed class PutObjectResult : CosDataResult<PicOperationUploadResult>
     {
         /// <summary>
         /// 对象的eTag
         /// </summary>
         public string eTag;
 
-        public PicOperationUploadResult uploadResult;
+        public PicOperationUploadResult uploadResult {get => _data;}
 
         internal override void InternalParseResponseHeaders()
         {
@@ -30,16 +30,6 @@ namespace COSXML.Model.Object
             if (values != null && values.Count > 0)
             {
                 eTag = values[0];
-            }
-        }
-
-        internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength)
-        {
-
-            if (contentLength > 0)
-            {
-                // 图片处理会返回 body
-                uploadResult = XmlParse.Deserialize<PicOperationUploadResult>(inputStream);
             }
         }
     }

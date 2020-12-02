@@ -11,25 +11,13 @@ namespace COSXML.Model.Bucket
     /// 获取 Bucket CORS 返回的结果
     /// <see cref="https://cloud.tencent.com/document/product/436/8274"/>
     /// </summary>
-    public class GetBucketCORSResult : CosResult
+    public class GetBucketCORSResult : CosDataResult<CORSConfiguration>
     {
         /// <summary>
         /// 跨域资源共享配置的所有信息，最多可以包含100条 CORSRule
         /// <see cref="COSXML.Model.Tag.CORSConfiguration"/>
         /// </summary>
-        public CORSConfiguration corsConfiguration;
-
-        internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
-        {
-            corsConfiguration = new CORSConfiguration();
-            XmlParse.ParseCORSConfiguration(inputStream, corsConfiguration);
-        }
-
-        public override string GetResultInfo()
-        {
-
-            return base.GetResultInfo() + (corsConfiguration == null ? "" : "\n " + corsConfiguration.GetInfo());
-        }
+        public CORSConfiguration corsConfiguration {get => _data;}
 
     }
 }

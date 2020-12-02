@@ -82,13 +82,7 @@ namespace COSXML.Model.Object
 
         public override Network.RequestBody GetRequestBody()
         {
-            string content = Transfer.XmlBuilder.BuildCompleteMultipartUpload(completeMultipartUpload);
-
-            byte[] data = Encoding.UTF8.GetBytes(content);
-
-            ByteRequestBody body = new ByteRequestBody(data);
-
-            return body;
+            return GetXmlRequestBody(completeMultipartUpload);
         }
 
         public override void CheckParameters()

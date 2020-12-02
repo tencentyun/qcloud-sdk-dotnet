@@ -11,7 +11,7 @@ namespace COSXML.Model.Object
     /// 使用者用表单的形式将文件（Object）上传至指定 Bucket 中.
     /// <see cref="https://cloud.tencent.com/document/product/436/14690"/>
     /// </summary>
-    public sealed class PostObjectResult : CosResult
+    public sealed class PostObjectResult : CosDataResult<PostResponse>
     {
         /// <summary>
         /// 对象的eTag
@@ -27,7 +27,7 @@ namespace COSXML.Model.Object
         /// post object返回的信息
         /// <see cref="Model.Tag.PostResponse"/>
         /// </summary>
-        public PostResponse postResponse;
+        public PostResponse postResponse {get => _data;}
 
         internal override void InternalParseResponseHeaders()
         {
@@ -47,25 +47,6 @@ namespace COSXML.Model.Object
                 location = values[0];
             }
 
-        }
-
-        internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
-        {
-
-            if (contentLength <= 0)
-            {
-
-                return;
-            }
-
-            postResponse = new PostResponse();
-            XmlParse.ParsePostResponse(inputStream, postResponse);
-        }
-
-        public override string GetResultInfo()
-        {
-
-            return base.GetResultInfo() + (postResponse == null ? "" : ('\n' + postResponse.GetInfo()));
         }
     }
 }

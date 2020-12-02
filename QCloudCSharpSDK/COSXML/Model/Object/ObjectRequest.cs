@@ -5,6 +5,7 @@ using System.Text;
 using COSXML.CosException;
 using COSXML.Common;
 using COSXML.Utils;
+using COSXML.Network;
 
 namespace COSXML.Model.Object
 {

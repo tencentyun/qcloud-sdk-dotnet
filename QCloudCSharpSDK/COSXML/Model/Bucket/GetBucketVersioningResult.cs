@@ -7,20 +7,8 @@ using COSXML.Transfer;
 
 namespace COSXML.Model.Bucket
 {
-    public sealed class GetBucketVersioningResult : CosResult
+    public sealed class GetBucketVersioningResult : CosDataResult<VersioningConfiguration>
     {
-        public VersioningConfiguration versioningConfiguration;
-
-        internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
-        {
-            versioningConfiguration = new VersioningConfiguration();
-            XmlParse.ParseVersioningConfiguration(inputStream, versioningConfiguration);
-        }
-
-        public override string GetResultInfo()
-        {
-
-            return base.GetResultInfo() + (versioningConfiguration == null ? "" : "\n" + versioningConfiguration.GetInfo());
-        }
+        public VersioningConfiguration versioningConfiguration {get => _data;}
     }
 }

@@ -228,7 +228,6 @@ namespace COSXMLTests
             {
                 GetBucketACLRequest request = new GetBucketACLRequest(bucket);
 
-
                 //执行请求
                 GetBucketACLResult result = cosXml.GetBucketACL(request);
 

@@ -3,20 +3,8 @@ using COSXML.Transfer;
 
 namespace COSXML.Model.Bucket
 {
-    public sealed class GetBucketDomainResult : CosResult
+    public sealed class GetBucketDomainResult : CosDataResult<DomainConfiguration>
     {
-        public DomainConfiguration domainConfiguration;
-
-        internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
-        {
-            domainConfiguration = new DomainConfiguration();
-            XmlParse.ParseBucketDomain(inputStream, domainConfiguration);
-        }
-
-        public override string GetResultInfo()
-        {
-
-            return base.GetResultInfo() + (domainConfiguration == null ? "" : "\n" + domainConfiguration.ToString());
-        }
+        public DomainConfiguration domainConfiguration {get => _data;}
     }
 }

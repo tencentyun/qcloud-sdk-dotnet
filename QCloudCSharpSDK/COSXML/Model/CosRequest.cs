@@ -269,6 +269,20 @@ namespace COSXML.Model
         /// <returns> <see cref="COSXML.Network.RequestBody"/></returns>
         public abstract RequestBody GetRequestBody();
 
+        /// <summary>
+        /// 返回 xml 格式的 requestBody
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        protected Network.RequestBody GetXmlRequestBody(object d)
+        {
+            string content = Transfer.XmlBuilder.Serialize(d);
+            byte[] data = Encoding.UTF8.GetBytes(content);
+            ByteRequestBody body = new ByteRequestBody(data);
+            return body;
+        }
+
+
         /// <summary>    
         ///   check parameter for cos.
         /// </summary>

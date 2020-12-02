@@ -2,20 +2,9 @@ using COSXML.Model.Tag;
 using COSXML.Transfer;
 namespace COSXML.Model.Bucket
 {
-    public sealed class GetBucketInventoryResult : CosResult
+    public sealed class GetBucketInventoryResult : CosDataResult<InventoryConfiguration>
     {
 
-        public InventoryConfiguration inventoryConfiguration;
-
-        internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
-        {
-            inventoryConfiguration = XmlParse.Deserialize<InventoryConfiguration>(inputStream);
-        }
-
-        public override string GetResultInfo()
-        {
-
-            return base.GetResultInfo() + (inventoryConfiguration == null ? "" : "\n" + inventoryConfiguration.GetInfo());
-        }
+        public InventoryConfiguration inventoryConfiguration {get => _data;}
     }
 }
