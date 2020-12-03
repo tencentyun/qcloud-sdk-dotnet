@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace COSXML.Model.Tag
 {
+    [XmlRoot("Tagging")]
     public sealed class Tagging
     {
-
-        public readonly TagSet tagSet;
+        [XmlElement("TagSet")]
+        public TagSet tagSet;
 
         public Tagging()
         {
@@ -19,7 +21,8 @@ namespace COSXML.Model.Tag
 
         public sealed class TagSet
         {
-            public readonly List<Tag> tags;
+            [XmlElement("Tag")]
+            public List<Tag> tags;
 
             public TagSet()
             {
@@ -29,9 +32,16 @@ namespace COSXML.Model.Tag
 
         public sealed class Tag
         {
-            public readonly string key;
+            [XmlElement("Key")]
+            public string key;
 
-            public readonly string value;
+            [XmlElement("Value")]
+            public string value;
+
+            public Tag()
+            {
+                
+            }
 
             public Tag(string key, string value)
             {

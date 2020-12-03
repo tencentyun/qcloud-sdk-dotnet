@@ -7,5 +7,7 @@ QCloudCSharpSDK/COSXML/bin
 QCloudCSharpSDK/COSXML/obj
 QCloudCSharpSDK/COSXMLTests/obj
 QCloudCSharpSDK/COSXMLTests/bin
+QCloudCSharpSDK/COSXMLTests/TestResults
+QCloudCSharpSDK/COSXMLTests/coveragereport
 *.vs
 .vscode

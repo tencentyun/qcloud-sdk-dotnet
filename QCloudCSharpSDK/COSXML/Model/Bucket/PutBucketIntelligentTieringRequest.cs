@@ -24,15 +24,20 @@ namespace COSXML.Model.Bucket
             {
                 configuration.Status = "Enabled";
             }
-
-            if (configuration.Days < 1)
+            
+            if (configuration.Transition == null)
             {
-                configuration.Days = 30;
+                configuration.Transition = new IntelligentTieringConfiguration.IntelligentTieringTransition();
             }
 
-            if (configuration.RequestFrequent < 1)
+            if (configuration.Transition.Days < 1)
             {
-                configuration.RequestFrequent = 1;
+                configuration.Transition.Days = 30;
+            }
+
+            if (configuration.Transition.RequestFrequent < 1)
+            {
+                configuration.Transition.RequestFrequent = 1;
             }
 
             this.method = CosRequestMethod.PUT;

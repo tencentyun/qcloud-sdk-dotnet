@@ -9,7 +9,7 @@ namespace COSXML.Model.Tag
     public sealed class ListParts
     {
         /// <summary>
-        /// 分块上传的目标 Bucke
+        /// 分块上传的目标 Bucket
         /// </summary>
         [XmlElement("Bucket")]
         public string bucket;

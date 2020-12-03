@@ -39,6 +39,15 @@ namespace COSXML.Model
         }
 
         /// <summary>
+        /// check successful
+        /// </summary>
+        /// <returns></returns>
+        public bool isSuccessful()
+        {
+            return httpCode >= 200 && httpCode < 300;
+        }
+
+        /// <summary>
         /// exchange infor between request and result
         /// </summary>
         /// <param name="cosRequest"></param>
@@ -99,7 +108,7 @@ namespace COSXML.Model
 
         internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength)
         {
-            if (contentLength > 0)
+            if (contentLength != 0)
             {
                 _data = XmlParse.Deserialize<T>(inputStream);
             }

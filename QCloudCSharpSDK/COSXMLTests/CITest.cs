@@ -23,11 +23,12 @@ namespace COSXMLTests
         private string localTempPhotoFilePath;
 
         private string photoKey;
+        private string bucket;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
-            string bucket = QCloudServer.Instance().bucketForBucketTest;
+            bucket = QCloudServer.Instance().bucketForObjectTest;
             photoKey = "example_photo.jpg";
 
             localTempPhotoFilePath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".jpg", 1);
@@ -41,7 +42,7 @@ namespace COSXMLTests
             QCloudServer.Instance().cosXml.GetObject(request);
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void Clear()
         {
             QCloudServer.DeleteFile(localTempPhotoFilePath);
@@ -51,17 +52,15 @@ namespace COSXMLTests
         [Test]
         public void PutObjectWithDeSample()
         {
-            string bucket = QCloudServer.Instance().bucketForBucketTest;
             string key = "original_photo.jpg";
             string srcPath = localTempPhotoFilePath;
-
 
             PutObjectRequest request = new PutObjectRequest(bucket, key, srcPath);
 
             JObject o = new JObject();
 
-            // 不返回原图
-            o["is_pic_info"] = 0;
+            // 返回原图
+            o["is_pic_info"] = 1;
             JArray rules = new JArray();
             JObject rule = new JObject();
 
@@ -79,43 +78,70 @@ namespace COSXMLTests
             request.SetRequestHeader("Pic-Operations", ruleString);
             //执行请求
             PutObjectResult result = QCloudServer.Instance().cosXml.PutObject(request);
+            var uploadResult = result.uploadResult;
+            // Console.WriteLine(result.GetResultInfo());
+            Assert.IsNotEmpty((result.GetResultInfo()));
 
-            Console.WriteLine(result.GetResultInfo());
+            Assert.True(result.isSuccessful());
+            Assert.NotNull(uploadResult);
 
-            Assert.True(result.uploadResult != null);
-            Assert.True(result.uploadResult.processResults.results[0].Width <= 400);
-            Assert.True(result.uploadResult.processResults.results[0].Height <= 400);
+            Assert.NotNull(uploadResult.originalInfo);
+            Assert.NotNull(uploadResult.originalInfo.ETag);
+            Assert.NotNull(uploadResult.originalInfo.Key);
+            Assert.NotNull(uploadResult.originalInfo.Location);
+            Assert.NotNull(uploadResult.originalInfo.imageInfo.Ave);
+            Assert.NotNull(uploadResult.originalInfo.imageInfo.Format);
+            Assert.NotNull(uploadResult.originalInfo.imageInfo.Orientation);
+            Assert.NotZero(uploadResult.originalInfo.imageInfo.Width);
+            Assert.NotZero(uploadResult.originalInfo.imageInfo.Height);
+            Assert.NotZero(uploadResult.originalInfo.imageInfo.Quality);
+
+            Assert.NotNull(uploadResult.processResults);
+            Assert.NotZero(uploadResult.processResults.results.Count);
+            Assert.True(uploadResult.processResults.results[0].Width <= 400);
+            Assert.True(uploadResult.processResults.results[0].Height <= 400);
+            Assert.NotNull(uploadResult.processResults.results[0].ETag);
+            Assert.NotNull(uploadResult.processResults.results[0].Format);
+            Assert.NotNull(uploadResult.processResults.results[0].Key);
+            Assert.NotNull(uploadResult.processResults.results[0].Location);
+            Assert.NotZero(uploadResult.processResults.results[0].Quality);
+            Assert.NotZero(uploadResult.processResults.results[0].Size);
+            Assert.Zero(uploadResult.processResults.results[0].WatermarkStatus);
         }
 
         [Test]
         public void SensitiveRecognition()
         {
-            string bucket = QCloudServer.Instance().bucketForBucketTest;
             //对象键
             //对象键
             string key = photoKey;
-
 
             SensitiveContentRecognitionRequest request = new SensitiveContentRecognitionRequest(bucket, key, "politics");
 
             SensitiveContentRecognitionResult result = QCloudServer.Instance().cosXml.SensitiveContentRecognition(request);
 
-
-            Console.WriteLine(result.GetResultInfo());
+            // Console.WriteLine(result.GetResultInfo());
+            Assert.IsNotEmpty((result.GetResultInfo()));
 
             Assert.True(result.httpCode == 200);
-            Assert.True(result.recognitionResult != null && result.recognitionResult.PoliticsInfo != null);
+            Assert.NotNull(result.recognitionResult);
+            Assert.NotNull(result.recognitionResult.PoliticsInfo);
+            Assert.Zero(result.recognitionResult.PoliticsInfo.Code);
+            Assert.NotNull(result.recognitionResult.PoliticsInfo.Score);
+            Assert.NotNull(result.recognitionResult.PoliticsInfo.Count);
+            Assert.NotNull(result.recognitionResult.PoliticsInfo.Msg);
+            Assert.NotNull(result.recognitionResult.PoliticsInfo.Label);
+            Assert.NotNull(result.recognitionResult.PoliticsInfo.HitFlag);
         }
 
         [Test]
         public void ImageProcess()
         {
-            string bucket = QCloudServer.Instance().bucketForBucketTest;
             string key = photoKey;
 
             JObject o = new JObject();
 
-            // 不返回原图
+            // 返回原图
             o["is_pic_info"] = 1;
             JArray rules = new JArray();
             JObject rule = new JObject();
@@ -134,13 +160,35 @@ namespace COSXMLTests
             ImageProcessRequest request = new ImageProcessRequest(bucket, key, ruleString);
 
             ImageProcessResult result = QCloudServer.Instance().cosXml.ImageProcess(request);
+            var uploadResult = result.uploadResult;
 
+            // Console.WriteLine(result.GetResultInfo());
+            Assert.IsNotEmpty((result.GetResultInfo()));
+            Assert.True(result.isSuccessful());
+            Assert.NotNull(uploadResult);
 
-            Console.WriteLine(result.GetResultInfo());
+            Assert.NotNull(uploadResult.originalInfo);
+            Assert.NotNull(uploadResult.originalInfo.ETag);
+            Assert.NotNull(uploadResult.originalInfo.Key);
+            Assert.NotNull(uploadResult.originalInfo.Location);
+            Assert.NotNull(uploadResult.originalInfo.imageInfo.Ave);
+            Assert.NotNull(uploadResult.originalInfo.imageInfo.Format);
+            Assert.NotNull(uploadResult.originalInfo.imageInfo.Orientation);
+            Assert.NotZero(uploadResult.originalInfo.imageInfo.Width);
+            Assert.NotZero(uploadResult.originalInfo.imageInfo.Height);
+            Assert.NotZero(uploadResult.originalInfo.imageInfo.Quality);
 
-            Assert.True(result.httpCode == 200);
-            Assert.True(result.uploadResult.processResults.results[0].Width <= 400);
-            Assert.True(result.uploadResult.processResults.results[0].Height <= 400);
+            Assert.NotNull(uploadResult.processResults);
+            Assert.NotZero(uploadResult.processResults.results.Count);
+            Assert.True(uploadResult.processResults.results[0].Width <= 400);
+            Assert.True(uploadResult.processResults.results[0].Height <= 400);
+            Assert.NotNull(uploadResult.processResults.results[0].ETag);
+            Assert.NotNull(uploadResult.processResults.results[0].Format);
+            Assert.NotNull(uploadResult.processResults.results[0].Key);
+            Assert.NotNull(uploadResult.processResults.results[0].Location);
+            Assert.NotZero(uploadResult.processResults.results[0].Quality);
+            Assert.NotZero(uploadResult.processResults.results[0].Size);
+            Assert.Zero(uploadResult.processResults.results[0].WatermarkStatus);
         }
     }
 }

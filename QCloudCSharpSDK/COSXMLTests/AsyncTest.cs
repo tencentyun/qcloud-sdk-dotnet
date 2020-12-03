@@ -22,7 +22,7 @@ namespace COSXMLTests
         {
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
-            GetBucketRequest request = new GetBucketRequest(QCloudServer.Instance().bucketForBucketTest);
+            GetBucketRequest request = new GetBucketRequest(QCloudServer.Instance().bucketForObjectTest);
             List<string> queryParameters = new List<string>();
 
             ///执行请求

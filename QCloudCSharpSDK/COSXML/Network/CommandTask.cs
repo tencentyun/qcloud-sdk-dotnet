@@ -387,6 +387,8 @@ namespace COSXML.Network
 
             WebHeaderCollection headers = httpWebResponse.Headers;
 
+            // Transfer-Encoding: chunked
+            bool isChunked = false; 
             if (headers != null)
             {
                 Dictionary<string, List<string>> result = new Dictionary<string, List<string>>(headers.Count);
@@ -394,6 +396,7 @@ namespace COSXML.Network
                 for (int i = 0; i < headers.Count; i++)
                 {
                     List<string> values = null;
+                    string key = headers.GetKey(i);
 
                     if (headers.GetValues(i) != null)
                     {
@@ -405,18 +408,29 @@ namespace COSXML.Network
                         }
                     }
 
-                    result.Add(headers.GetKey(i), values);
+                    result.Add(key, values);
+
+                    if ("Transfer-Encoding".EndsWith(key, StringComparison.OrdinalIgnoreCase) && values.Contains("chunked")) 
+                    {
+                        isChunked = true;
+                    }
                 }
 
                 response.Headers = result;
             }
 
-            response.ContentLength = httpWebResponse.ContentLength;
+            if (!isChunked) 
+            {
+                response.ContentLength = httpWebResponse.ContentLength;
+            }
             response.ContentType = httpWebResponse.ContentType;
 
             if (response.Body != null)
             {
-                response.Body.ContentLength = httpWebResponse.ContentLength;
+                if (!isChunked)
+                {
+                    response.Body.ContentLength = httpWebResponse.ContentLength;
+                }
                 response.Body.ContentType = httpWebResponse.ContentType;
             }
 

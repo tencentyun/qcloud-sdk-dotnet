@@ -1,15 +1,23 @@
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace COSXML.Model.Tag
 {
     public sealed class ObjectSelectionFormat
     {
 
-        public readonly string compressionType;
+        [XmlElement("CompressionType")]
+        public string compressionType;
 
-        public readonly CSVFormat csvFormat;
+        [XmlElement("CSV")]
+        public CSVFormat csvFormat;
 
-        public readonly JSONFormat jsonFormat;
+        [XmlElement("JSON")]
+        public JSONFormat jsonFormat;
+
+        public ObjectSelectionFormat()
+        {
+        }
 
         public ObjectSelectionFormat(string compressionType, CSVFormat csv)
         {
@@ -27,27 +35,37 @@ namespace COSXML.Model.Tag
 
         public sealed class CSVFormat
         {
+            [XmlElement]
             public string FileHeaderInfo;
 
+            [XmlElement]
             public string RecordDelimiter;
 
+            [XmlElement]
             public string FieldDelimiter;
 
+            [XmlElement]
             public string QuoteCharacter;
 
+            [XmlElement]
             public string QuoteEscapeCharacter;
 
+            [XmlElement]
             public string Comments;
 
+            [XmlElement]
             public bool AllowQuotedRecordDelimiter;
 
+            [XmlElement]
             public string QuoteFields;
         }
 
         public sealed class JSONFormat
         {
+            [XmlElement]
             public string Type;
 
+            [XmlElement]
             public string RecordDelimiter;
         }
     }

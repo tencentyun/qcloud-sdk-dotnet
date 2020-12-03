@@ -90,6 +90,16 @@ namespace COSXML.Model.Object
             this.progressCallback = progressCallback;
         }
 
+        /// <summary>
+        /// 设置 Object 的存储级别
+        /// <see cref="Common.CosStorageClass"/>
+        /// </summary>
+        /// <param name="cosStorageClass"></param>
+        public void SetCosStorageClass(string cosStorageClass)
+        {
+            SetRequestHeader(CosRequestHeaderKey.X_COS_STORAGE_CLASS, cosStorageClass);
+        }
+
         public override void CheckParameters()
         {
 

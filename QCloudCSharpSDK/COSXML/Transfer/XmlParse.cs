@@ -11,10 +11,14 @@ namespace COSXML.Transfer
     {
         public static T Deserialize<T>(Stream inStream) 
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
             using (inStream)
             {
-                return (T) serializer.Deserialize(inStream);
+                using (XmlTextReader reader = new XmlTextReader(inStream))
+                {
+                    reader.Namespaces = false;
+                    XmlSerializer serializer = new XmlSerializer(typeof(T));
+                    return (T) serializer.Deserialize(reader);
+                }
             }
         }
     }

@@ -147,7 +147,7 @@ namespace COSXML.Model.Tag
             /// <summary>
             /// 示本次分块上传的 ID
             /// </summary>
-            [XmlElement("UploadID")]
+            [XmlElement("UploadId")]
             public string uploadID;
 
             /// <summary>

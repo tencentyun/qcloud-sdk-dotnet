@@ -1,11 +1,13 @@
 using System;
-using System.Collections.Generic;
+using System.Xml.Serialization;
 using System.Text;
 
 namespace COSXML.Model.Tag
 {
+    [XmlRoot("BucketLoggingStatus")]
     public sealed class BucketLoggingStatus
     {
+        [XmlElement("LoggingEnabled")]
         public LoggingEnabled loggingEnabled;
 
         public string GetInfo()
@@ -24,8 +26,10 @@ namespace COSXML.Model.Tag
 
         public sealed class LoggingEnabled
         {
+            [XmlElement("TargetBucket")]
             public string targetBucket;
 
+            [XmlElement("TargetPrefix")]
             public string targetPrefix;
 
             public string GetInfo()

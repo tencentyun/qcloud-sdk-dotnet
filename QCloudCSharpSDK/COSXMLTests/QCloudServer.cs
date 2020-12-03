@@ -13,37 +13,45 @@ namespace COSXMLTests
     {
         internal CosXml cosXml;
 
-        internal string bucketForBucketTest;
+        internal string bucketForBucketTest 
+        {
+            get 
+            {
+                return "dotnet-ut-temp-" + TimeUtils.GetCurrentTime(TimeUnit.Seconds) + "-1253653367";
+            }
+        }
 
         internal string bucketForObjectTest;
+
+        internal string bucketVersioning;
+        internal string regionForBucketVersioning;
 
         internal string region;
 
         internal string appid;
 
+        internal string uin;
+
         private static QCloudServer instance;
+
+        private string secretId;
+        private string secretKey;
 
         private QCloudServer()
         {
-            appid = Environment.GetEnvironmentVariable("COS_APPID");
-            string secretId = Environment.GetEnvironmentVariable("COS_KEY");
-            string secretKey = Environment.GetEnvironmentVariable("COS_SECRET");
-            region = Environment.GetEnvironmentVariable("COS_REGION");
-            bucketForBucketTest = Environment.GetEnvironmentVariable("COS_BUCKET");
+            uin = "1278687956";
+            appid = "1253653367";
+            bucketVersioning = "dotnet-ut-versioning-1253653367";
+            regionForBucketVersioning = "ap-beijing";
+            bucketForObjectTest = "dotnet-ut-obj-1253653367";
+            region = "ap-guangzhou";
 
-            if (bucketForBucketTest == null)
+            secretId = Environment.GetEnvironmentVariable("COS_KEY");
+            secretKey = Environment.GetEnvironmentVariable("COS_SECRET");
+            if (secretId == null)
             {
-                bucketForBucketTest = "bucket-4-csharp-test-1253653367";
-            }
-
-            bucketForObjectTest = bucketForBucketTest;
-
-            if (appid == null)
-            {
-                appid = Environment.GetEnvironmentVariable("COS_APPID", EnvironmentVariableTarget.Machine);
                 secretId = Environment.GetEnvironmentVariable("COS_KEY", EnvironmentVariableTarget.Machine);
                 secretKey = Environment.GetEnvironmentVariable("COS_SECRET", EnvironmentVariableTarget.Machine);
-                region = Environment.GetEnvironmentVariable("COS_REGION", EnvironmentVariableTarget.Machine);
             }
 
             CosXmlConfig config = new CosXmlConfig.Builder()
@@ -60,6 +68,20 @@ namespace COSXMLTests
 
 
             cosXml = new CosXmlServer(config, qCloudCredentialProvider);
+        }
+
+        public CosXml newService(string newRegion)
+        {
+            CosXmlConfig config = new CosXmlConfig.Builder()
+                .SetAppid(appid)
+                .SetRegion(newRegion)
+                .SetDebugLog(true)
+                .SetConnectionLimit(512)
+                .Build();
+
+            QCloudCredentialProvider qCloudCredentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, 600);
+
+            return new CosXmlServer(config, qCloudCredentialProvider);
         }
 
         public static QCloudServer Instance()

@@ -16,6 +16,7 @@ using COSXML.CosException;
 using COSXML.Common;
 using COSXML.Model.Tag;
 using COSXML.Callback;
+using System.Diagnostics.CodeAnalysis;
 
 namespace COSXML
 {
@@ -177,6 +178,7 @@ namespace COSXML
             return (Model.Service.GetServiceResult)Excute(request, new Model.Service.GetServiceResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetService(Model.Service.GetServiceRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
@@ -189,6 +191,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketResult)Excute(request, new Model.Bucket.PutBucketResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucket(PutBucketRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
@@ -201,6 +204,7 @@ namespace COSXML
             return (Model.Bucket.DeleteBucketResult)Excute(request, new Model.Bucket.DeleteBucketResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteBucket(DeleteBucketRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -213,6 +217,7 @@ namespace COSXML
             return (Model.Bucket.HeadBucketResult)Excute(request, new Model.Bucket.HeadBucketResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void HeadBucket(HeadBucketRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -225,22 +230,11 @@ namespace COSXML
             return (Model.Bucket.GetBucketResult)Excute(request, new Model.Bucket.GetBucketResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucket(GetBucketRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             Schedue(request, new GetBucketResult(), successCallback, failCallback);
-        }
-
-        public GetBucketLocationResult GetBucketLocation(GetBucketLocationRequest request)
-        {
-
-            return (Model.Bucket.GetBucketLocationResult)Excute(request, new Model.Bucket.GetBucketLocationResult());
-        }
-
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
-        public void GetBucketLocation(GetBucketLocationRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
-        {
-            Schedue(request, new GetBucketLocationResult(), successCallback, failCallback);
         }
 
         public PutBucketACLResult PutBucketACL(PutBucketACLRequest request)
@@ -249,6 +243,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketACLResult)Excute(request, new Model.Bucket.PutBucketACLResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketACL(PutBucketACLRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -261,6 +256,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketACLResult)Excute(request, new Model.Bucket.GetBucketACLResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketACL(GetBucketACLRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -273,6 +269,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketCORSResult)Excute(request, new Model.Bucket.PutBucketCORSResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketCORS(PutBucketCORSRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -285,6 +282,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketCORSResult)Excute(request, new Model.Bucket.GetBucketCORSResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketCORS(GetBucketCORSRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -297,6 +295,7 @@ namespace COSXML
             return (Model.Bucket.DeleteBucketCORSResult)Excute(request, new Model.Bucket.DeleteBucketCORSResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteBucketCORS(DeleteBucketCORSRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -309,6 +308,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketLifecycleResult)Excute(request, new Model.Bucket.PutBucketLifecycleResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketLifecycle(PutBucketLifecycleRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -321,6 +321,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketLifecycleResult)Excute(request, new Model.Bucket.GetBucketLifecycleResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketLifecycle(GetBucketLifecycleRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -333,6 +334,7 @@ namespace COSXML
             return (Model.Bucket.DeleteBucketLifecycleResult)Excute(request, new Model.Bucket.DeleteBucketLifecycleResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteBucketLifecycle(DeleteBucketLifecycleRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -345,6 +347,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketReplicationResult)Excute(request, new Model.Bucket.PutBucketReplicationResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketReplication(PutBucketReplicationRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -357,6 +360,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketReplicationResult)Excute(request, new Model.Bucket.GetBucketReplicationResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketReplication(GetBucketReplicationRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -369,6 +373,7 @@ namespace COSXML
             return (Model.Bucket.DeleteBucketReplicationResult)Excute(request, new Model.Bucket.DeleteBucketReplicationResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteBucketReplication(DeleteBucketReplicationRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -381,6 +386,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketVersioningResult)Excute(request, new Model.Bucket.PutBucketVersioningResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketVersioning(PutBucketVersioningRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -393,6 +399,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketVersioningResult)Excute(request, new Model.Bucket.GetBucketVersioningResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketVersioning(GetBucketVersioningRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -405,6 +412,7 @@ namespace COSXML
             return (Model.Bucket.ListBucketVersionsResult)Excute(request, new Model.Bucket.ListBucketVersionsResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void ListBucketVersions(ListBucketVersionsRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -417,6 +425,7 @@ namespace COSXML
             return (Model.Bucket.ListMultiUploadsResult)Excute(request, new Model.Bucket.ListMultiUploadsResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void ListMultiUploads(ListMultiUploadsRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -429,6 +438,7 @@ namespace COSXML
             return (Model.Bucket.DeleteBucketPolicyResult)Excute(request, new Model.Bucket.DeleteBucketPolicyResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteBucketPolicy(DeleteBucketPolicyRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -441,6 +451,7 @@ namespace COSXML
             return (Model.Object.PutObjectResult)Excute(request, new Model.Object.PutObjectResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutObject(PutObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -453,6 +464,7 @@ namespace COSXML
             return (Model.Object.HeadObjectResult)Excute(request, new Model.Object.HeadObjectResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void HeadObject(HeadObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -465,6 +477,7 @@ namespace COSXML
             return (Model.Object.GetObjectResult)Excute(request, new Model.Object.GetObjectResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetObject(GetObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -477,6 +490,7 @@ namespace COSXML
             return (Model.Object.PutObjectACLResult)Excute(request, new Model.Object.PutObjectACLResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutObjectACL(PutObjectACLRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -489,6 +503,7 @@ namespace COSXML
             return (Model.Object.GetObjectACLResult)Excute(request, new Model.Object.GetObjectACLResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetObjectACL(GetObjectACLRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -501,6 +516,7 @@ namespace COSXML
             return (Model.Object.DeleteObjectResult)Excute(request, new Model.Object.DeleteObjectResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteObject(DeleteObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -513,6 +529,7 @@ namespace COSXML
             return (Model.Object.DeleteMultiObjectResult)Excute(request, new Model.Object.DeleteMultiObjectResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteMultiObjects(DeleteMultiObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -525,6 +542,7 @@ namespace COSXML
             return (Model.Object.InitMultipartUploadResult)Excute(request, new Model.Object.InitMultipartUploadResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void InitMultipartUpload(InitMultipartUploadRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -537,6 +555,7 @@ namespace COSXML
             return (Model.Object.ListPartsResult)Excute(request, new Model.Object.ListPartsResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void ListParts(ListPartsRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -549,6 +568,7 @@ namespace COSXML
             return (Model.Object.UploadPartResult)Excute(request, new Model.Object.UploadPartResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void UploadPart(UploadPartRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -561,6 +581,7 @@ namespace COSXML
             return (Model.Object.CompleteMultipartUploadResult)Excute(request, new Model.Object.CompleteMultipartUploadResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void CompleteMultiUpload(CompleteMultipartUploadRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -573,6 +594,7 @@ namespace COSXML
             return (Model.Object.AbortMultipartUploadResult)Excute(request, new Model.Object.AbortMultipartUploadResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void AbortMultiUpload(AbortMultipartUploadRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -585,6 +607,7 @@ namespace COSXML
             return (Model.Object.CopyObjectResult)Excute(request, new Model.Object.CopyObjectResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void CopyObject(CopyObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -597,6 +620,7 @@ namespace COSXML
             return (Model.Object.UploadPartCopyResult)Excute(request, new Model.Object.UploadPartCopyResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PartCopy(UploadPartCopyRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -609,6 +633,7 @@ namespace COSXML
             return (Model.Object.OptionObjectResult)Excute(request, new Model.Object.OptionObjectResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void OptionObject(OptionObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -621,6 +646,7 @@ namespace COSXML
             return (Model.Object.PostObjectResult)Excute(request, new Model.Object.PostObjectResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PostObject(PostObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -633,6 +659,7 @@ namespace COSXML
             return (Model.Object.RestoreObjectResult)Excute(request, new Model.Object.RestoreObjectResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void RestoreObject(RestoreObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -816,6 +843,7 @@ namespace COSXML
             return (Model.Object.GetObjectBytesResult)Excute(request, new Model.Object.GetObjectBytesResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetObject(GetObjectBytesRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
@@ -828,6 +856,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketWebsiteResult)Excute(request, new Model.Bucket.PutBucketWebsiteResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketWebsiteAsync(PutBucketWebsiteRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
@@ -840,6 +869,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketWebsiteResult)Excute(request, new Model.Bucket.GetBucketWebsiteResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketWebsiteAsync(GetBucketWebsiteRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
@@ -852,6 +882,7 @@ namespace COSXML
             return (Model.Bucket.DeleteBucketWebsiteResult)Excute(request, new Model.Bucket.DeleteBucketWebsiteResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteBucketWebsiteAsync(DeleteBucketWebsiteRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
@@ -864,6 +895,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketLoggingResult)Excute(request, new Model.Bucket.PutBucketLoggingResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketLoggingAsync(PutBucketLoggingRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
@@ -876,6 +908,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketLoggingResult)Excute(request, new Model.Bucket.GetBucketLoggingResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketLoggingAsync(GetBucketLoggingRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
@@ -888,6 +921,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketInventoryResult)Excute(request, new Model.Bucket.PutBucketInventoryResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketInventoryAsync(PutBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
@@ -900,6 +934,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketInventoryResult)Excute(request, new Model.Bucket.GetBucketInventoryResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketInventoryAsync(GetBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
@@ -912,6 +947,7 @@ namespace COSXML
             return (Model.Bucket.DeleteBucketInventoryResult)Excute(request, new Model.Bucket.DeleteBucketInventoryResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteInventoryAsync(DeleteBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
@@ -924,6 +960,7 @@ namespace COSXML
             return (Model.Bucket.ListBucketInventoryResult)Excute(request, new Model.Bucket.ListBucketInventoryResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void ListBucketInventoryAsync(ListBucketInventoryRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
@@ -936,6 +973,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketTaggingResult)Excute(request, new Model.Bucket.PutBucketTaggingResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketTaggingAsync(PutBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
@@ -948,6 +986,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketTaggingResult)Excute(request, new Model.Bucket.GetBucketTaggingResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketTaggingAsync(GetBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
@@ -960,6 +999,7 @@ namespace COSXML
             return (Model.Bucket.DeleteBucketTaggingResult)Excute(request, new Model.Bucket.DeleteBucketTaggingResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void DeleteBucketTaggingAsync(DeleteBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
@@ -972,6 +1012,7 @@ namespace COSXML
             return (Model.Bucket.PutBucketDomainResult)Excute(request, new Model.Bucket.PutBucketDomainResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void PutBucketDomainAsync(PutBucketDomainRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
@@ -984,6 +1025,7 @@ namespace COSXML
             return (Model.Bucket.GetBucketDomainResult)Excute(request, new Model.Bucket.GetBucketDomainResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         public void GetBucketDomainAsync(GetBucketDomainRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
@@ -996,6 +1038,7 @@ namespace COSXML
             return (Model.Object.SelectObjectResult)Excute(request, new Model.Object.SelectObjectResult());
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
         void CosXml.SelectObjectAsync(SelectObjectRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {

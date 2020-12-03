@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace COSXMLTests
 {
-    [TestFixture()]
+    [TestFixture]
     public class ObjectTest
     {
 
@@ -32,8 +32,6 @@ namespace COSXMLTests
 
         internal string commonKey;
 
-        internal string imageKey;
-
         internal string copykey;
 
         internal string multiKey;
@@ -42,7 +40,7 @@ namespace COSXMLTests
 
         internal string localFileName;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Init()
         {
             cosXml = QCloudServer.Instance().cosXml;
@@ -59,16 +57,14 @@ namespace COSXMLTests
 
             commonKey = "simpleObject" + TimeUtils.GetCurrentTime(TimeUnit.Seconds);
             multiKey = "bigObject" + TimeUtils.GetCurrentTime(TimeUnit.Seconds);
-            copykey = commonKey;
-            imageKey = commonKey;
+            copykey = "copy_objecttest.txt";
 
             PutObject();
         }
 
-        [TearDown()]
+        [OneTimeTearDown]
         public void Clear()
         {
-            DeleteObject();
             MultiDeleteObject();
 
             QCloudServer.DeleteAllFile(localDir, "*.txt");
@@ -91,17 +87,18 @@ namespace COSXMLTests
                 PutObjectResult result = cosXml.PutObject(request);
 
 
-                Console.WriteLine(result.GetResultInfo());
+                Assert.True(result.httpCode == 200);
+                Assert.NotNull(result.eTag);
             }
             catch (CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.StackTrace);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -125,17 +122,18 @@ namespace COSXMLTests
                 PutObjectResult result = cosXml.PutObject(request);
 
 
-                Console.WriteLine(result.GetResultInfo());
+                Assert.True(result.httpCode == 200);
+                Assert.NotNull(result.eTag);
             }
             catch (CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -155,12 +153,13 @@ namespace COSXMLTests
                 PutObjectResult result = cosXml.PutObject(request);
 
 
-                Console.WriteLine(result.GetResultInfo());
+                Assert.True(result.httpCode == 200);
+                Assert.NotNull(result.eTag);
             }
             catch (CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                //Assert.True(false);
+                //Assert.Fail();
             }
             catch (CosServerException serverEx)
             {
@@ -182,17 +181,18 @@ namespace COSXMLTests
                 PutObjectResult result = cosXml.PutObject(request);
 
 
-                Console.WriteLine(result.GetResultInfo());
+                Assert.True(result.httpCode == 200);
+                Assert.NotNull(result.eTag);
             }
             catch (CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -211,17 +211,18 @@ namespace COSXMLTests
                 PutObjectResult result = cosXml.PutObject(request);
 
 
-                Console.WriteLine(result.GetResultInfo());
+                Assert.True(result.httpCode == 200);
+                Assert.NotNull(result.eTag);
             }
             catch (CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -238,22 +239,26 @@ namespace COSXMLTests
                 HeadObjectResult result = cosXml.HeadObject(request);
 
 
-                Console.WriteLine(result.GetResultInfo());
+                Assert.True(result.httpCode == 200);
+                Assert.Null(result.cosObjectType);
+                Assert.Null(result.cosStorageClass);
+                Assert.NotZero(result.size);
+                Assert.NotNull(result.eTag);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.StackTrace);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
         [Test()]
-        public void PutObjectACL()
+        public void TestObjectACL()
         {
 
             try
@@ -277,44 +282,39 @@ namespace COSXMLTests
                 //执行请求
                 PutObjectACLResult result = cosXml.PutObjectACL(request);
 
+                Assert.True(result.httpCode == 200);
 
-                Console.WriteLine(result.GetResultInfo());
-            }
-            catch (COSXML.CosException.CosClientException clientEx)
-            {
-                Console.WriteLine("CosClientException: " + clientEx.StackTrace);
-                Assert.True(false);
-            }
-            catch (COSXML.CosException.CosServerException serverEx)
-            {
-                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
-            }
-        }
-
-        [Test()]
-        public void GetObjectACL()
-        {
-
-            try
-            {
-                GetObjectACLRequest request = new GetObjectACLRequest(bucket, commonKey);
+                GetObjectACLRequest getRequest = new GetObjectACLRequest(bucket, commonKey);
 
                 //执行请求
-                GetObjectACLResult result = cosXml.GetObjectACL(request);
+                GetObjectACLResult getResult = cosXml.GetObjectACL(getRequest);
 
+                AccessControlPolicy acl = getResult.accessControlPolicy;
 
-                Console.WriteLine(result.GetResultInfo());
+                // Console.WriteLine(result.GetResultInfo());
+                Assert.IsNotEmpty((result.GetResultInfo()));
+
+                Assert.AreEqual(result.httpCode, 200);
+                Assert.NotNull(acl.owner);
+                Assert.NotNull(acl.owner.id);
+                Assert.NotNull(acl.owner.displayName);
+                Assert.NotNull(acl.accessControlList);
+                Assert.NotNull(acl.accessControlList.grants);
+                Assert.NotZero(acl.accessControlList.grants.Count);
+                Assert.NotNull(acl.accessControlList.grants[0].permission);
+                Assert.NotNull(acl.accessControlList.grants[0].grantee);
+                Assert.NotNull(acl.accessControlList.grants[0].grantee.id);
+                Assert.NotNull(acl.accessControlList.grants[0].grantee.displayName);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.StackTrace);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -332,19 +332,25 @@ namespace COSXMLTests
 
                 //执行请求
                 OptionObjectResult result = cosXml.OptionObject(request);
+                // Console.WriteLine(result.GetResultInfo());
+                Assert.IsNotEmpty((result.GetResultInfo()));
 
-
-                Console.WriteLine(result.GetResultInfo());
+                Assert.AreEqual(result.httpCode, 200);
+                Assert.NotNull(result.accessControlAllowExposeHeaders);
+                Assert.Null(result.accessControlAllowHeaders);
+                Assert.NotNull(result.accessControlAllowMethods);
+                Assert.NotNull(result.accessControlAllowOrigin);
+                Assert.NotZero(result.accessControlMaxAge);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.StackTrace);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -355,41 +361,34 @@ namespace COSXMLTests
             try
             {
                 CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
-                    bucket, QCloudServer.Instance().region, "copy_objecttest.txt");
+                    bucket, QCloudServer.Instance().region, copykey);
 
-                string tempBucket = "a-bucket-for-temp" + TimeUtils.GetCurrentTime(TimeUnit.Seconds);
-
-
-                PutBucketRequest request = new PutBucketRequest(tempBucket);
-
-
-                //执行请求
-                PutBucketResult putBucketResult = cosXml.PutBucket(request);
-
-
-                Console.WriteLine(putBucketResult.GetResultInfo());
-
-                CopyObjectRequest copyObjectRequest = new CopyObjectRequest(tempBucket, multiKey);
-
+                CopyObjectRequest copyObjectRequest = new CopyObjectRequest(bucket, multiKey);
 
                 //设置拷贝源
                 copyObjectRequest.SetCopySource(copySource);
 
                 //执行请求
                 CopyObjectResult result = cosXml.CopyObject(copyObjectRequest);
+                var copyObject = result.copyObject;
 
-
-                Console.WriteLine(result.GetResultInfo());
+                // Console.WriteLine(result.GetResultInfo());
+                Assert.IsNotEmpty((result.GetResultInfo()));
+                Assert.AreEqual(result.httpCode, 200);
+                Assert.NotNull(copyObject.crc64);
+                Assert.NotNull(copyObject.eTag);
+                Assert.NotNull(copyObject.lastModified);
+                Assert.Null(copyObject.versionId);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.StackTrace);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -398,75 +397,91 @@ namespace COSXMLTests
         {
             string key = multiKey;
 
-
             try
             {
                 InitMultipartUploadRequest initMultipartUploadRequest = new InitMultipartUploadRequest(bucket, multiKey);
-
-
                 //执行请求
                 InitMultipartUploadResult initMultipartUploadResult = cosXml.InitMultipartUpload(initMultipartUploadRequest);
-
-
-                Console.WriteLine(initMultipartUploadResult.GetResultInfo());
+                Assert.AreEqual(initMultipartUploadResult.httpCode, 200);
+                Assert.IsNotEmpty((initMultipartUploadResult.GetResultInfo()));
 
                 string uploadId = initMultipartUploadResult.initMultipartUpload.uploadId;
+                Assert.NotNull(uploadId);
 
+                var sliceSize = 1024 * 1024;
+                var bigFile = new FileInfo(bigFileSrcPath);
+                var sliceCount = bigFile.Length / sliceSize;
+
+                for (int partNumber = 1; partNumber <= sliceCount; partNumber++) {
+                    UploadPartRequest uploadPartRequest = new UploadPartRequest(bucket, key, partNumber, uploadId, bigFileSrcPath, sliceSize * (partNumber - 1), sliceSize);
+                    //设置进度回调
+                    uploadPartRequest.SetCosProgressCallback(
+                        delegate (long completed, long total)
+                        {
+                            Console.WriteLine(String.Format("{0} progress = {1} / {2} : {3:##.##}%",
+                                DateTime.Now.ToString(), completed, total, completed * 100.0 / total));
+                        }
+                    );
+                    //执行请求
+                    UploadPartResult uploadPartResult = cosXml.UploadPart(uploadPartRequest);
+                    Assert.AreEqual(uploadPartResult.httpCode, 200);
+                    Assert.IsNotEmpty((uploadPartResult.GetResultInfo()));
+
+                    Assert.NotNull(uploadPartResult.eTag);
+                }
+                
 
                 ListPartsRequest listPartsRequest = new ListPartsRequest(bucket, key, uploadId);
-
-
                 //执行请求
                 ListPartsResult listPartsResult = cosXml.ListParts(listPartsRequest);
+                var parts = listPartsResult.listParts;
 
-
-                Console.WriteLine(listPartsResult.GetResultInfo());
-
-                int partNumber = 1;
-
-
-                UploadPartRequest uploadPartRequest = new UploadPartRequest(bucket, key, partNumber, uploadId, bigFileSrcPath);
-
-
-                //设置进度回调
-                uploadPartRequest.SetCosProgressCallback(
-                    delegate (long completed, long total)
-                    {
-                        Console.WriteLine(String.Format("{0} progress = {1} / {2} : {3:##.##}%",
-                            DateTime.Now.ToString(), completed, total, completed * 100.0 / total));
-                    }
-                );
-
-                //执行请求
-                UploadPartResult uploadPartResult = cosXml.UploadPart(uploadPartRequest);
-
-
-                Console.WriteLine(uploadPartResult.GetResultInfo());
-
-                string eTag = uploadPartResult.eTag;
+                Assert.IsNotEmpty((listPartsResult.GetResultInfo()));
+                Assert.AreEqual(listPartsResult.httpCode, 200);
+                Assert.NotNull(parts.bucket);
+                Assert.NotNull(parts.key);
+                Assert.NotNull(parts.uploadId);
+                Assert.NotNull(parts.owner.id);
+                Assert.NotNull(parts.owner.disPlayName);
+                Assert.NotNull(parts.initiator.id);
+                Assert.NotNull(parts.initiator.disPlayName);
+                Assert.NotNull(parts.storageClass);
+                Assert.NotNull(parts.maxParts);
+                Assert.False(parts.isTruncated);
+                Assert.AreEqual(parts.parts.Count, sliceCount);
 
                 CompleteMultipartUploadRequest completeMultiUploadRequest = new CompleteMultipartUploadRequest(bucket, key, uploadId);
 
-
-                //设置已上传的parts
-                completeMultiUploadRequest.SetPartNumberAndETag(partNumber, eTag);
+                foreach (var part in parts.parts) {
+                    Assert.NotNull(part.lastModified);
+                    Assert.AreEqual(Int32.Parse(part.size), sliceSize);
+                    Assert.NotZero(Int32.Parse(part.partNumber));
+                    Assert.NotNull(part.eTag);
+                    //设置已上传的parts
+                    completeMultiUploadRequest.SetPartNumberAndETag(Int32.Parse(part.partNumber), part.eTag);
+                }
 
                 //执行请求
                 CompleteMultipartUploadResult completeMultiUploadResult = cosXml.CompleteMultiUpload(completeMultiUploadRequest);
+                var completeResult = completeMultiUploadResult.completeResult;
 
-
-                Console.WriteLine(completeMultiUploadResult.GetResultInfo());
+                Assert.IsNotEmpty((completeMultiUploadResult.GetResultInfo()));
+                Assert.AreEqual(completeMultiUploadResult.httpCode, 200);
+                Assert.NotNull(completeResult.location);
+                Assert.NotNull(completeResult.bucket);
+                Assert.NotNull(completeResult.key);
+                Assert.NotNull(completeResult.eTag);
 
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.StackTrace);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -475,40 +490,33 @@ namespace COSXMLTests
         {
             string key = multiKey;
 
-
             try
             {
                 InitMultipartUploadRequest initMultipartUploadRequest = new InitMultipartUploadRequest(bucket, key);
 
-
                 //执行请求
                 InitMultipartUploadResult initMultipartUploadResult = cosXml.InitMultipartUpload(initMultipartUploadRequest);
 
-
-                Console.WriteLine(initMultipartUploadResult.GetResultInfo());
-
                 string uploadId = initMultipartUploadResult.initMultipartUpload.uploadId;
-
+                Assert.AreEqual(initMultipartUploadResult.httpCode, 200);
+                Assert.IsNotEmpty((initMultipartUploadResult.GetResultInfo()));
+                Assert.NotNull(uploadId);
 
                 AbortMultipartUploadRequest request = new AbortMultipartUploadRequest(bucket, key, uploadId);
 
-
-
                 //执行请求
                 AbortMultipartUploadResult result = cosXml.AbortMultiUpload(request);
-
-
-                Console.WriteLine(result.GetResultInfo());
+                Assert.True(result.isSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -519,90 +527,103 @@ namespace COSXMLTests
             CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
                 bucket, QCloudServer.Instance().region, copykey);
 
-
             try
             {
                 InitMultipartUploadRequest initMultipartUploadRequest = new InitMultipartUploadRequest(bucket, key);
-
-
                 //执行请求
                 InitMultipartUploadResult initMultipartUploadResult = cosXml.InitMultipartUpload(initMultipartUploadRequest);
-
-
-                Console.WriteLine(initMultipartUploadResult.GetResultInfo());
+                Assert.AreEqual(initMultipartUploadResult.httpCode, 200);
+                Assert.IsNotEmpty((initMultipartUploadResult.GetResultInfo()));
 
                 string uploadId = initMultipartUploadResult.initMultipartUpload.uploadId;
+                Assert.NotNull(uploadId);
 
-                int partNumber = 1;
+                var sliceSize = 1024 * 1024;
+                var etags = new List<string>();
 
+                for (int partNumber = 1; partNumber <= 2; partNumber++) {
+                    UploadPartCopyRequest uploadPartCopyRequest = new UploadPartCopyRequest(bucket, key, partNumber, uploadId);
 
-                UploadPartCopyRequest uploadPartCopyRequest = new UploadPartCopyRequest(bucket, key, partNumber, uploadId);
+                    //设置拷贝源
+                    uploadPartCopyRequest.SetCopySource(copySource);
+                    //设置拷贝范围
+                    uploadPartCopyRequest.SetCopyRange((partNumber - 1) * sliceSize, partNumber * sliceSize);
+                    //执行请求
+                    UploadPartCopyResult uploadPartCopyResult = cosXml.PartCopy(uploadPartCopyRequest);
 
+                    Assert.IsNotEmpty((uploadPartCopyResult.GetResultInfo()));
+                    Assert.AreEqual(uploadPartCopyResult.httpCode, 200);
 
-                //设置拷贝源
-                uploadPartCopyRequest.SetCopySource(copySource);
-
-                //设置拷贝范围
-                uploadPartCopyRequest.SetCopyRange(0, 10);
-
-                //执行请求
-                UploadPartCopyResult uploadPartCopyResult = cosXml.PartCopy(uploadPartCopyRequest);
-
-
-                Console.WriteLine(uploadPartCopyResult.GetResultInfo());
-
-                string eTag = uploadPartCopyResult.copyObject.eTag;
+                    Assert.NotNull(uploadPartCopyResult.copyPart.eTag);
+                    etags.Add(uploadPartCopyResult.copyPart.eTag);
+                }
+                
 
                 CompleteMultipartUploadRequest completeMultiUploadRequest = new CompleteMultipartUploadRequest(bucket, key, uploadId);
 
-
                 //设置已上传的parts
-                completeMultiUploadRequest.SetPartNumberAndETag(partNumber, eTag);
-
+                for (int i = 0; i < etags.Count; i++) {
+                    completeMultiUploadRequest.SetPartNumberAndETag(i + 1, etags[i]);
+                }
                 //执行请求
                 CompleteMultipartUploadResult completeMultiUploadResult = cosXml.CompleteMultiUpload(completeMultiUploadRequest);
+                var completeResult = completeMultiUploadResult.completeResult;
 
-
-                Console.WriteLine(completeMultiUploadResult.GetResultInfo());
+                Assert.IsNotEmpty((completeMultiUploadResult.GetResultInfo()));
+                Assert.AreEqual(completeMultiUploadResult.httpCode, 200);
+                Assert.NotNull(completeResult.location);
+                Assert.NotNull(completeResult.bucket);
+                Assert.NotNull(completeResult.key);
+                Assert.NotNull(completeResult.eTag);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
+        [Test()]
         public void RestoreObject()
         {
+            string objectKey = "archive_object";
 
             try
             {
-                RestoreObjectRequest request = new RestoreObjectRequest(bucket, commonKey);
+                byte[] data = File.ReadAllBytes(smallFileSrcPath);
+                PutObjectRequest putRequest = new PutObjectRequest(bucket, objectKey, data);
+                putRequest.SetCosStorageClass("ARCHIVE");
+                cosXml.PutObject(putRequest);
 
+                RestoreObjectRequest request = new RestoreObjectRequest(bucket, objectKey);
                 //恢复时间
                 request.SetExpireDays(3);
-                request.SetTier(COSXML.Model.Tag.RestoreConfigure.Tier.Bulk);
+                request.SetTier(COSXML.Model.Tag.RestoreConfigure.Tier.Standard);
 
                 //执行请求
                 RestoreObjectResult result = cosXml.RestoreObject(request);
 
+                Assert.True(result.isSuccessful());
 
-                Console.WriteLine(result.GetResultInfo());
+                DeleteObjectRequest deleteRequest = new DeleteObjectRequest(bucket, objectKey);
+                DeleteObjectResult deleteObjectResult = cosXml.DeleteObject(deleteRequest);
+
+                Assert.True(deleteObjectResult.isSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -624,22 +645,26 @@ namespace COSXMLTests
 
                 //设置policy
                 request.SetPolicy(null);
+                request.SetCacheControl("no-cache");
+                request.SetContentType("text/plain");
+                request.SetContentDisposition("inline");
+                request.SetContentEncoding("gzip");
+                request.SetExpires("Wed, 21 Oct 2021 07:28:00 GMT");
 
                 //执行请求
                 PostObjectResult result = cosXml.PostObject(request);
 
-
-                Console.WriteLine(result.GetResultInfo());
+                Assert.True(result.isSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -655,17 +680,17 @@ namespace COSXMLTests
                 DeleteObjectResult result = cosXml.DeleteObject(request);
 
 
-                Console.WriteLine(result.GetResultInfo());
+                Assert.True(result.isSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -675,7 +700,6 @@ namespace COSXMLTests
             try
             {
                 DeleteMultiObjectRequest request = new DeleteMultiObjectRequest(bucket);
-
 
                 //设置返回结果形式
                 request.SetDeleteQuiet(false);
@@ -689,19 +713,27 @@ namespace COSXMLTests
 
                 //执行请求
                 DeleteMultiObjectResult result = cosXml.DeleteMultiObjects(request);
+                var deleteResult = result.deleteResult;
 
+                Assert.True(result.isSuccessful());
+                Assert.IsNotEmpty((result.GetResultInfo()));
+                Assert.AreEqual(deleteResult.deletedList.Count, 2);
+                Assert.AreEqual(deleteResult.errorList.Count, 0);
+                foreach (var deleted in deleteResult.deletedList)
+                {
+                    Assert.NotNull(deleted.key);
+                }
 
-                Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -714,22 +746,20 @@ namespace COSXMLTests
                 PutObjectRequest request = new PutObjectRequest(bucket,
                     "dir/", new byte[0]);
 
-
                 //执行请求
                 PutObjectResult result = cosXml.PutObject(request);
 
-
-                Console.WriteLine(result.GetResultInfo());
+                Assert.AreEqual(result.httpCode, 200);
             }
             catch (CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -750,17 +780,21 @@ namespace COSXMLTests
                 //执行请求
                 GetObjectResult result = cosXml.GetObject(request);
 
-                Console.WriteLine(result.GetResultInfo());
+                Assert.AreEqual(result.httpCode, 200);
+                Assert.NotNull(result.eTag);
+                
+                var localFileInfo = new FileInfo(localDir + "/" + localFileName);
+                Assert.AreEqual(localFileInfo.Length, new FileInfo(smallFileSrcPath).Length);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
 
         }
@@ -789,22 +823,22 @@ namespace COSXMLTests
 
                 GetObjectBytesResult getObjectBytesResult = cosXml.GetObject(getObjectBytesRequest);
 
-
                 byte[] content = getObjectBytesResult.content;
 
 
+                Assert.AreEqual(result.httpCode, 200);
                 Assert.AreEqual(content.Length, contentLength);
 
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -839,21 +873,23 @@ namespace COSXMLTests
 
                 SelectObjectResult selectObjectResult = cosXml.SelectObject(request);
 
-
-                Console.WriteLine(selectObjectResult.stat);
-
+                Assert.AreEqual(selectObjectResult.httpCode, 200);
+                Assert.Null(selectObjectResult.searchContent);
+                Assert.NotZero(selectObjectResult.stat.BytesProcessed);
+                Assert.NotZero(selectObjectResult.stat.BytesReturned);
+                Assert.NotZero(selectObjectResult.stat.BytesScanned);
                 Assert.AreEqual(selectObjectResult.stat.BytesReturned, new FileInfo(outputFile).Length);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.StackTrace);
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -884,9 +920,10 @@ namespace COSXMLTests
 
                 SelectObjectResult selectObjectResult = cosXml.SelectObject(request);
 
-
-                Console.WriteLine(selectObjectResult.stat);
-
+                Assert.AreEqual(selectObjectResult.httpCode, 200);
+                Assert.NotZero(selectObjectResult.stat.BytesProcessed);
+                Assert.NotZero(selectObjectResult.stat.BytesReturned);
+                Assert.NotZero(selectObjectResult.stat.BytesScanned);
                 Assert.AreEqual(selectObjectResult.stat.BytesReturned, Encoding.UTF8.GetByteCount(
                     selectObjectResult.searchContent));
             }
@@ -894,12 +931,12 @@ namespace COSXMLTests
             {
                 Console.WriteLine("CosClientException: " + clientEx.StackTrace);
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -917,8 +954,6 @@ namespace COSXMLTests
 
             uploadTask.SetSrcPath(bigFileSrcPath);
 
-            string eTag = null;
-
             uploadTask.progressCallback = delegate (long completed, long total)
             {
                 Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
@@ -926,8 +961,8 @@ namespace COSXMLTests
 
             COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
 
-            eTag = result.eTag;
-            Assert.NotNull(eTag);
+            Assert.AreEqual(result.httpCode, 200);
+            Assert.NotNull(result.eTag);
         }
 
         [Test()]
@@ -937,8 +972,6 @@ namespace COSXMLTests
             GetObjectRequest request = new GetObjectRequest(bucket,
                 commonKey, localDir, localFileName);
 
-
-            request.LimitTraffic(8 * 1000 * 1024);
             //执行请求
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
 
@@ -953,6 +986,7 @@ namespace COSXMLTests
             COSXMLDownloadTask.DownloadTaskResult result = await transferManager.DownloadAsync(downloadTask);
 
             Assert.True(result.httpCode == 200);
+            Assert.NotNull(result.eTag);
         }
 
         [Test()]
@@ -974,6 +1008,7 @@ namespace COSXMLTests
             COSXMLCopyTask.CopyTaskResult result = await transferManager.CopyAsync(copyTask);
 
             Assert.True(result.httpCode == 200);
+            Assert.NotNull(result.eTag);
         }
 
         [Test()]
@@ -992,22 +1027,20 @@ namespace COSXMLTests
                 PutObjectResult result = cosXml.PutObject(request);
                 long costTime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() - now;
 
-
-                Console.WriteLine("costTime = " + costTime + "ms");
-                Console.WriteLine(result.GetResultInfo());
+                Console.WriteLine("[TestPutObjectUploadTrafficLimit] costTime = " + costTime + "ms");
 
                 Assert.True(result.httpCode == 200);
-                // Assert.True(costTime > 8000 && costTime < 14000);
+                Assert.NotNull(result.eTag);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
 
         }
@@ -1028,22 +1061,19 @@ namespace COSXMLTests
                 PostObjectResult result = cosXml.PostObject(request);
                 long costTime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() - now;
 
+                Console.WriteLine("[TestPostObjectTrafficLimit] costTime = " + costTime + "ms");
 
-                Console.WriteLine("costTime = " + costTime + "ms");
-                Console.WriteLine(result.GetResultInfo());
-
-                Assert.True(result.httpCode == 204);
-                // Assert.True(costTime > 8000 && costTime < 14000);
+                Assert.True(result.isSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(false);
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.True(false);
+                Assert.Fail();
             }
         }
 
@@ -1062,7 +1092,6 @@ namespace COSXMLTests
             signatureStruct.headers = new Dictionary<string, string>();
             string url = instance.cosXml.GenerateSignURL(signatureStruct);
 
-            Console.WriteLine(url);
             Assert.NotNull(url);
         }
 
@@ -1074,8 +1103,8 @@ namespace COSXMLTests
 
             PutObjectResult result = await cosXml.ExecuteAsync<PutObjectResult>(request);
 
-
-            Assert.NotNull(result.GetResultInfo());
+            Assert.True(result.httpCode == 200);
+            Assert.NotNull(result.eTag);
         }
 
         [Test()]
@@ -1098,9 +1127,50 @@ namespace COSXMLTests
             }
             catch (Exception e)
             {
-                Console.WriteLine("CosException: " + e);
-                Assert.NotNull(e);
+                Assert.Pass();
             }
+        }
+
+        [Test()]
+        public void TestListUploads()
+        {
+            try
+            {
+                ListMultiUploadsRequest request = new ListMultiUploadsRequest(bucket);
+
+                //执行请求
+                ListMultiUploadsResult result = cosXml.ListMultiUploads(request);
+                var uploads = result.listMultipartUploads;
+
+                Assert.IsNotEmpty(result.GetResultInfo());
+                Assert.NotNull(uploads.bucket);
+                Assert.True(result.httpCode == 200);
+
+                if(uploads.uploads != null && uploads.uploads.Count > 0) {
+                    foreach (var upload in uploads.uploads) {
+                        Assert.NotNull(upload.key);
+                        Assert.NotNull(upload.uploadID);
+                        Assert.NotNull(upload.storageClass);
+                        Assert.NotNull(upload.initiator.id);
+                        Assert.NotNull(upload.initiator.displayName);
+                        Assert.NotNull(upload.initiated);
+                        Assert.NotNull(upload.owner.id);
+                        Assert.NotNull(upload.owner.displayName);
+                    }
+                }
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+
+
         }
     }
 }

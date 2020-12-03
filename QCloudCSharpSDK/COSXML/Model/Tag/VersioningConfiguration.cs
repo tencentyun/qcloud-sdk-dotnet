@@ -1,12 +1,14 @@
 using System;
-using System.Collections.Generic;
+using System.Xml.Serialization;
 
 using System.Text;
 
 namespace COSXML.Model.Tag
 {
+    [XmlRoot]
     public sealed class VersioningConfiguration
     {
+        [XmlElement("Status")]
         public string status;
 
         public string GetInfo()

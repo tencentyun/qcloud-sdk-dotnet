@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
-
+using System.Xml.Serialization;
 using System.Text;
 
 namespace COSXML.Model.Tag
 {
+    [XmlRoot("ReplicationConfiguration")]
     public sealed class ReplicationConfiguration
     {
+        [XmlElement("Role")]
         public string role;
 
+        [XmlElement("Rule")]
         public List<Rule> rules;
 
         public string GetInfo()
@@ -37,12 +40,16 @@ namespace COSXML.Model.Tag
 
         public sealed class Rule
         {
+            [XmlElement("ID")]
             public string id;
 
+            [XmlElement("Status")]
             public string status;
 
+            [XmlElement("Prefix")]
             public string prefix;
 
+            [XmlElement("Destination")]
             public Destination destination;
 
             public string GetInfo()
@@ -66,8 +73,10 @@ namespace COSXML.Model.Tag
 
         public sealed class Destination
         {
+            [XmlElement("Bucket")]
             public string bucket;
 
+            [XmlElement("StorageClass")]
             public string storageClass;
 
             public string GetInfo()

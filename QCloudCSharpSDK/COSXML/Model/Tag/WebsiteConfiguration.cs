@@ -12,7 +12,7 @@ namespace COSXML.Model.Tag
         [XmlElement("ErrorDocument")]
         public ErrorDocument errorDocument;
 
-        [XmlElement("RedirectAllRequestTo")]
+        [XmlElement("RedirectAllRequestsTo")]
         public RedirectAllRequestTo redirectAllRequestTo;
 
         [XmlArray("RoutingRules")]

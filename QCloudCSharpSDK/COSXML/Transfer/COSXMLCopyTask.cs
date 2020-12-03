@@ -357,7 +357,7 @@ namespace COSXML.Transfer
 
                         UploadPartCopyResult uploadPartCopyResult = result as UploadPartCopyResult;
 
-                        sliceStruct.eTag = uploadPartCopyResult.copyObject.eTag;
+                        sliceStruct.eTag = uploadPartCopyResult.copyPart.eTag;
                         lock (syncPartCopyCount)
                         {
                             sliceCount--;

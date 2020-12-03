@@ -171,6 +171,9 @@ namespace COSXML.Model.Tag
             [XmlElement("Prefix")]
             public string prefix;
 
+            [XmlElement("Tag")]
+            public List<Tagging.Tag> tags;
+
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{And:\n");
@@ -214,6 +217,11 @@ namespace COSXML.Model.Tag
 
                 return stringBuilder.ToString();
             }
+
+            public bool ShouldSerializedays()
+            {
+                return days > 0;
+            }
         }
 
         public sealed class Expiration
@@ -234,7 +242,7 @@ namespace COSXML.Model.Tag
             /// 删除过期对象删除标记，取值为 true，false
             /// </summary>
             [XmlElement("ExpiredObjectDeleteMarker")]
-            public bool? expiredObjectDeleteMarker;
+            public bool expiredObjectDeleteMarker;
 
             public string GetInfo()
             {
@@ -246,6 +254,16 @@ namespace COSXML.Model.Tag
                 stringBuilder.Append("}");
 
                 return stringBuilder.ToString();
+            }
+
+            public bool ShouldSerializedays()
+            {
+                return days > 0;
+            }
+
+            public bool ShouldSerializeexpiredObjectDeleteMarker()
+            {
+                return expiredObjectDeleteMarker;
             }
         }
 

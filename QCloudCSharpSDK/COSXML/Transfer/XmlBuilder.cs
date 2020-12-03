@@ -24,7 +24,8 @@ namespace COSXML.Transfer
             using (var writer = XmlWriter.Create(stream, settings))
             {
                 serializer.Serialize(writer, o, emptyNs);
-                return RemoveXMLHeader(stream.ToString());
+                string xml = RemoveXMLHeader(stream.ToString());
+                return xml;
             }
         }
 

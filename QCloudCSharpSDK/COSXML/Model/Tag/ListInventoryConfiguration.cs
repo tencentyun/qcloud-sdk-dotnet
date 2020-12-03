@@ -11,10 +11,13 @@ namespace COSXML.Model.Tag
         [XmlElement("InventoryConfiguration")]
         public List<InventoryConfiguration> inventoryConfigurations;
 
+        [XmlElement("IsTruncated")]
         public bool isTruncated = false;
 
+        [XmlElement("ContinuationToken")]
         public string continuationToken;
 
+        [XmlElement("NextContinuationToken")]
         public string nextContinuationToken;
 
         public String GetInfo()

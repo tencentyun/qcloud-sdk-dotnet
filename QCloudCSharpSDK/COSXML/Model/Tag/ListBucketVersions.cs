@@ -39,7 +39,7 @@ namespace COSXML.Model.Tag
         public string nextVersionIdMarker;
 
         [XmlElement("Version")]
-        public List<ObjectVersion> objectVersionList;
+        public List<Version> objectVersionList;
 
         [XmlElement("CommonPrefixes")]
         public List<CommonPrefixes> commonPrefixesList;
