@@ -543,7 +543,8 @@ namespace COSXMLTests
                 var sliceSize = 1024 * 1024;
                 var etags = new List<string>();
 
-                for (int partNumber = 1; partNumber <= 2; partNumber++) {
+                for (int partNumber = 1; partNumber <= 2; partNumber++) 
+                {
                     UploadPartCopyRequest uploadPartCopyRequest = new UploadPartCopyRequest(bucket, key, partNumber, uploadId);
 
                     //设置拷贝源
@@ -564,7 +565,8 @@ namespace COSXMLTests
                 CompleteMultipartUploadRequest completeMultiUploadRequest = new CompleteMultipartUploadRequest(bucket, key, uploadId);
 
                 //设置已上传的parts
-                for (int i = 0; i < etags.Count; i++) {
+                for (int i = 0; i < etags.Count; i++) 
+                {
                     completeMultiUploadRequest.SetPartNumberAndETag(i + 1, etags[i]);
                 }
                 //执行请求
