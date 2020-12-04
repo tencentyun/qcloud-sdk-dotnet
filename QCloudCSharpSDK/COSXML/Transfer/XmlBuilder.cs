@@ -25,6 +25,7 @@ namespace COSXML.Transfer
             {
                 serializer.Serialize(writer, o, emptyNs);
                 string xml = RemoveXMLHeader(stream.ToString());
+                
                 return xml;
             }
         }

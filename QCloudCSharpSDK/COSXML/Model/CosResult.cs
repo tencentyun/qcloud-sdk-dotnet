@@ -42,7 +42,7 @@ namespace COSXML.Model
         /// check successful
         /// </summary>
         /// <returns></returns>
-        public bool isSuccessful()
+        public bool IsSuccessful()
         {
             return httpCode >= 200 && httpCode < 300;
         }

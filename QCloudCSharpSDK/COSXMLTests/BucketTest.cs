@@ -101,7 +101,7 @@ namespace COSXMLTests
                 //执行请求
                 DeleteBucketResult result = cosXml.DeleteBucket(request);
 
-                Assert.True(result.isSuccessful());
+                Assert.True(result.IsSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -350,7 +350,7 @@ namespace COSXMLTests
                 //执行请求
                 DeleteBucketCORSResult result = cosXml.DeleteBucketCORS(request);
 
-                Assert.True(result.isSuccessful());
+                Assert.True(result.IsSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -533,7 +533,7 @@ namespace COSXMLTests
                 DeleteBucketLifecycleResult result = cosXml.DeleteBucketLifecycle(request);
 
 
-                Assert.True(result.isSuccessful());
+                Assert.True(result.IsSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -715,7 +715,7 @@ namespace COSXMLTests
                 DeleteBucketReplicationResult result = cosXml.DeleteBucketReplication(request);
 
 
-                Assert.True(result.isSuccessful());
+                Assert.True(result.IsSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -749,7 +749,7 @@ namespace COSXMLTests
 
                 PutBucketTaggingResult result = cosXml.PutBucketTagging(request);
 
-                Assert.True(result.isSuccessful());
+                Assert.True(result.IsSuccessful());
 
                 // 获取 tag
                 GetBucketTaggingRequest getRequest = new GetBucketTaggingRequest(bucket);
@@ -785,7 +785,7 @@ namespace COSXMLTests
                 DeleteBucketTaggingRequest deleteRequest = new DeleteBucketTaggingRequest(bucket);
 
                 DeleteBucketTaggingResult deleteResult = cosXml.DeleteBucketTagging(deleteRequest);
-                Assert.True(deleteResult.isSuccessful());
+                Assert.True(deleteResult.IsSuccessful());
 
             }
             catch (COSXML.CosException.CosClientException clientEx)
@@ -994,7 +994,7 @@ namespace COSXMLTests
 
                 DeleteBucketWebsiteResult deleteResult = cosXml.DeleteBucketWebsite(deleteRequest);
 
-                Assert.IsTrue(deleteResult.isSuccessful());
+                Assert.IsTrue(deleteResult.IsSuccessful());
 
             }
             catch (COSXML.CosException.CosClientException clientEx)
