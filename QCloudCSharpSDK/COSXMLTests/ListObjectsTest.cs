@@ -55,7 +55,8 @@ namespace COSXMLTests
                 Assert.That(listObjects.nextMarker, Is.Null.Or.Empty);
 
                 Assert.NotZero(listObjects.commonPrefixesList.Count);
-                foreach (var commonPrefix in listObjects.commonPrefixesList) {
+                foreach (var commonPrefix in listObjects.commonPrefixesList) 
+                {
                     Assert.NotNull(commonPrefix.prefix);
                 }
 

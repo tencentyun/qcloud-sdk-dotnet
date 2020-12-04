@@ -412,7 +412,8 @@ namespace COSXMLTests
                 var bigFile = new FileInfo(bigFileSrcPath);
                 var sliceCount = bigFile.Length / sliceSize;
 
-                for (int partNumber = 1; partNumber <= sliceCount; partNumber++) {
+                for (int partNumber = 1; partNumber <= sliceCount; partNumber++) 
+                {
                     UploadPartRequest uploadPartRequest = new UploadPartRequest(bucket, key, partNumber, uploadId, bigFileSrcPath, sliceSize * (partNumber - 1), sliceSize);
                     //设置进度回调
                     uploadPartRequest.SetCosProgressCallback(
@@ -506,7 +507,7 @@ namespace COSXMLTests
 
                 //执行请求
                 AbortMultipartUploadResult result = cosXml.AbortMultiUpload(request);
-                Assert.True(result.isSuccessful());
+                Assert.True(result.IsSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -608,12 +609,12 @@ namespace COSXMLTests
                 //执行请求
                 RestoreObjectResult result = cosXml.RestoreObject(request);
 
-                Assert.True(result.isSuccessful());
+                Assert.True(result.IsSuccessful());
 
                 DeleteObjectRequest deleteRequest = new DeleteObjectRequest(bucket, objectKey);
                 DeleteObjectResult deleteObjectResult = cosXml.DeleteObject(deleteRequest);
 
-                Assert.True(deleteObjectResult.isSuccessful());
+                Assert.True(deleteObjectResult.IsSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -654,7 +655,7 @@ namespace COSXMLTests
                 //执行请求
                 PostObjectResult result = cosXml.PostObject(request);
 
-                Assert.True(result.isSuccessful());
+                Assert.True(result.IsSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -680,7 +681,7 @@ namespace COSXMLTests
                 DeleteObjectResult result = cosXml.DeleteObject(request);
 
 
-                Assert.True(result.isSuccessful());
+                Assert.True(result.IsSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -715,7 +716,7 @@ namespace COSXMLTests
                 DeleteMultiObjectResult result = cosXml.DeleteMultiObjects(request);
                 var deleteResult = result.deleteResult;
 
-                Assert.True(result.isSuccessful());
+                Assert.True(result.IsSuccessful());
                 Assert.IsNotEmpty((result.GetResultInfo()));
                 Assert.AreEqual(deleteResult.deletedList.Count, 2);
                 Assert.AreEqual(deleteResult.errorList.Count, 0);
@@ -1063,7 +1064,7 @@ namespace COSXMLTests
 
                 Console.WriteLine("[TestPostObjectTrafficLimit] costTime = " + costTime + "ms");
 
-                Assert.True(result.isSuccessful());
+                Assert.True(result.IsSuccessful());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -1146,8 +1147,10 @@ namespace COSXMLTests
                 Assert.NotNull(uploads.bucket);
                 Assert.True(result.httpCode == 200);
 
-                if(uploads.uploads != null && uploads.uploads.Count > 0) {
-                    foreach (var upload in uploads.uploads) {
+                if(uploads.uploads != null && uploads.uploads.Count > 0) 
+                {
+                    foreach (var upload in uploads.uploads) 
+                    {
                         Assert.NotNull(upload.key);
                         Assert.NotNull(upload.uploadID);
                         Assert.NotNull(upload.storageClass);

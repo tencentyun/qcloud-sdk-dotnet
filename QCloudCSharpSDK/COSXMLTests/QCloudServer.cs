@@ -70,7 +70,7 @@ namespace COSXMLTests
             cosXml = new CosXmlServer(config, qCloudCredentialProvider);
         }
 
-        public CosXml newService(string newRegion)
+        public CosXml NewService(string newRegion)
         {
             CosXmlConfig config = new CosXmlConfig.Builder()
                 .SetAppid(appid)

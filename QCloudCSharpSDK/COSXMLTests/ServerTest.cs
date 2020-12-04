@@ -27,7 +27,7 @@ namespace COSXMLTests
                 Assert.True(result.httpCode == 200);
                 // Console.WriteLine(result.GetResultInfo());
                 Assert.IsNotEmpty((result.GetResultInfo()));
-                validateBucketList(result.listAllMyBuckets);
+                ValidateBucketList(result.listAllMyBuckets);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -53,17 +53,18 @@ namespace COSXMLTests
             Assert.True(result.httpCode == 200);
             // Console.WriteLine(result.GetResultInfo());
             Assert.IsNotEmpty((result.GetResultInfo()));
-            validateBucketList(result.listAllMyBuckets);
+            ValidateBucketList(result.listAllMyBuckets);
         }
 
-        private void validateBucketList(ListAllMyBuckets bucketList)
+        private void ValidateBucketList(ListAllMyBuckets bucketList)
         {
             Assert.True(bucketList.buckets.Count > 0);
             Assert.NotNull(bucketList.owner);
             Assert.NotNull(bucketList.owner.id);
             Assert.NotNull(bucketList.owner.disPlayName);
 
-            foreach (var bucket in bucketList.buckets) {
+            foreach (var bucket in bucketList.buckets) 
+            {
                 Assert.NotNull(bucket.createDate);
                 Assert.NotNull(bucket.name);
                 Assert.NotNull(bucket.location);

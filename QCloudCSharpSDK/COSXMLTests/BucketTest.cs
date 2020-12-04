@@ -871,7 +871,8 @@ namespace COSXMLTests
                     Assert.NotNull(getResult.domainConfiguration.rule.Type);
                     Assert.NotNull(getResult.domainConfiguration.rule.Replace);
 
-                } else 
+                } 
+                else 
                 {
                     Assert.Null(getResult.domainConfiguration);
                 }
@@ -911,6 +912,7 @@ namespace COSXMLTests
                 Assert.IsNotEmpty((getResult.GetResultInfo()));
 
                 BucketLoggingStatus status = getResult.bucketLoggingStatus;
+
                 Assert.NotNull(status);
                 Assert.NotNull(status.loggingEnabled);
 
@@ -1108,7 +1110,7 @@ namespace COSXMLTests
                 getRequest = new GetBucketIntelligentTieringRequest(bucket);
                 getResult = cosXml.GetBucketIntelligentTieringConfiguration(getRequest);
                 IntelligentTieringConfiguration newConf = getResult.configuration;
-                
+
                 // Console.WriteLine(getResult.GetResultInfo());
                 Assert.IsNotEmpty((getResult.GetResultInfo()));
 
