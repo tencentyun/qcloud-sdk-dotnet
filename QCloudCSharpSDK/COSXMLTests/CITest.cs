@@ -82,7 +82,7 @@ namespace COSXMLTests
             // Console.WriteLine(result.GetResultInfo());
             Assert.IsNotEmpty((result.GetResultInfo()));
 
-            Assert.True(result.isSuccessful());
+            Assert.True(result.IsSuccessful());
             Assert.NotNull(uploadResult);
 
             Assert.NotNull(uploadResult.originalInfo);
@@ -164,7 +164,7 @@ namespace COSXMLTests
 
             // Console.WriteLine(result.GetResultInfo());
             Assert.IsNotEmpty((result.GetResultInfo()));
-            Assert.True(result.isSuccessful());
+            Assert.True(result.IsSuccessful());
             Assert.NotNull(uploadResult);
 
             Assert.NotNull(uploadResult.originalInfo);

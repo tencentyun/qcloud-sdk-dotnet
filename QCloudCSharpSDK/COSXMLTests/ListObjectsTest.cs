@@ -91,7 +91,7 @@ namespace COSXMLTests
 
             try
             {
-                var service = QCloudServer.Instance().newService(QCloudServer.Instance().regionForBucketVersioning);
+                var service = QCloudServer.Instance().NewService(QCloudServer.Instance().regionForBucketVersioning);
 
                 ListBucketVersionsRequest request = new ListBucketVersionsRequest(QCloudServer.Instance().bucketVersioning);
                 request.SetDelimiter("/");
