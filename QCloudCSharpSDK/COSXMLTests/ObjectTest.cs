@@ -453,7 +453,8 @@ namespace COSXMLTests
 
                 CompleteMultipartUploadRequest completeMultiUploadRequest = new CompleteMultipartUploadRequest(bucket, key, uploadId);
 
-                foreach (var part in parts.parts) {
+                foreach (var part in parts.parts) 
+                {
                     Assert.NotNull(part.lastModified);
                     Assert.AreEqual(Int32.Parse(part.size), sliceSize);
                     Assert.NotZero(Int32.Parse(part.partNumber));
@@ -1147,7 +1148,7 @@ namespace COSXMLTests
                 Assert.NotNull(uploads.bucket);
                 Assert.True(result.httpCode == 200);
 
-                if(uploads.uploads != null && uploads.uploads.Count > 0) 
+                if (uploads.uploads != null && uploads.uploads.Count > 0) 
                 {
                     foreach (var upload in uploads.uploads) 
                     {
