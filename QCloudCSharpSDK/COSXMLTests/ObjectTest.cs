@@ -33,6 +33,7 @@ namespace COSXMLTests
         internal string commonKey;
 
         internal string copykey;
+        internal string copyKeySmall;
 
         internal string multiKey;
 
@@ -46,8 +47,8 @@ namespace COSXMLTests
             cosXml = QCloudServer.Instance().cosXml;
             bucket = QCloudServer.Instance().bucketForObjectTest;
             transferManager = new TransferManager(cosXml, new TransferConfig());
-            smallFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".txt", 1024 * 1024 * 1);
-            bigFileSrcPath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".txt", 1024 * 1024 * 10);
+            smallFileSrcPath = QCloudServer.CreateFile("small_" + TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".txt", 1024 * 1024 * 1);
+            bigFileSrcPath = QCloudServer.CreateFile("big_" + TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".txt", 1024 * 1024 * 10);
             FileInfo fileInfo = new FileInfo(smallFileSrcPath);
 
             DirectoryInfo directoryInfo = fileInfo.Directory;
@@ -58,6 +59,7 @@ namespace COSXMLTests
             commonKey = "simpleObject" + TimeUtils.GetCurrentTime(TimeUnit.Seconds);
             multiKey = "bigObject" + TimeUtils.GetCurrentTime(TimeUnit.Seconds);
             copykey = "copy_objecttest.txt";
+            copyKeySmall = "copy_target";
 
             PutObject();
         }
@@ -205,7 +207,6 @@ namespace COSXMLTests
                 byte[] data = File.ReadAllBytes(smallFileSrcPath);
 
                 PutObjectRequest request = new PutObjectRequest(bucket, commonKey, data);
-
 
                 //执行请求
                 PutObjectResult result = cosXml.PutObject(request);
@@ -945,7 +946,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public async Task TestUploadTask()
+        public async Task TestUploadTaskWithBigFile()
         {
             string key = multiKey;
 
@@ -967,6 +968,88 @@ namespace COSXMLTests
 
             Assert.AreEqual(result.httpCode, 200);
             Assert.NotNull(result.eTag);
+        }
+
+        [Test()]
+        public async Task TestUploadTaskWithSmallFile()
+        {
+            string key = commonKey;
+
+            COSXMLUploadTask uploadTask = new COSXMLUploadTask(bucket, key);
+
+            uploadTask.SetSrcPath(smallFileSrcPath);
+
+            uploadTask.progressCallback = delegate (long completed, long total)
+            {
+                Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+            };
+
+            COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
+
+            Assert.AreEqual(result.httpCode, 200);
+            Assert.NotNull(result.eTag);
+        }
+
+
+        [Test()]
+        public void TestUploadTaskWithInteractive()
+        {
+            string key = multiKey;
+
+            COSXMLUploadTask uploadTask = new COSXMLUploadTask(bucket, key);
+
+            uploadTask.SetSrcPath(bigFileSrcPath);
+
+            uploadTask.progressCallback = delegate (long completed, long total)
+            {
+                Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+            };
+
+            transferManager.UploadAsync(uploadTask);
+
+            Thread.Sleep(3000);
+            uploadTask.Pause();
+
+            uploadTask.Resume();
+            Thread.Sleep(2000);
+            uploadTask.Pause();
+
+            // new task
+            COSXMLUploadTask uploadTask2 = new COSXMLUploadTask(bucket, key);
+
+            uploadTask2.SetSrcPath(bigFileSrcPath);
+            uploadTask2.SetUploadId(uploadTask.GetUploadId());
+
+            uploadTask2.progressCallback = delegate (long completed, long total)
+            {
+                Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+            };
+            var asyncTask = transferManager.UploadAsync(uploadTask2);
+            asyncTask.Wait();
+            COSXMLUploadTask.UploadTaskResult result = asyncTask.Result;
+
+            Assert.True(result.httpCode == 200);
+            Assert.NotNull(result.eTag);
+            Assert.NotNull(result.GetResultInfo());
+        }
+
+        [Test()]
+        public void TestUploadTaskCancelled()
+        {
+            string key = multiKey;
+
+            COSXMLUploadTask uploadTask = new COSXMLUploadTask(bucket, key);
+
+            uploadTask.SetSrcPath(bigFileSrcPath);
+            uploadTask.MaxConcurrent = 1;
+            uploadTask.StorageClass = "Standard_IA";
+
+            var asyncTask = transferManager.UploadAsync(uploadTask);
+
+            Thread.Sleep(3000);
+            uploadTask.Cancel();
+            Thread.Sleep(500);
+            Assert.Pass();
         }
 
         [Test()]
@@ -994,15 +1077,62 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public async Task TestCopyTask()
+        public void TestDownloadTaskInteractive()
+        {
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, multiKey, bigFileSrcPath);
+            cosXml.PutObject(putObjectRequest);
+
+            GetObjectRequest request = new GetObjectRequest(bucket,
+                multiKey, localDir, localFileName);
+
+            //执行请求
+            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
+
+            downloadTask.progressCallback = delegate (long completed, long total)
+            {
+                Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+            };
+
+            var asyncTask = transferManager.DownloadAsync(downloadTask);
+
+            Thread.Sleep(2000);
+            downloadTask.Pause();
+
+            Thread.Sleep(200);
+            downloadTask.Resume();
+            asyncTask = downloadTask.asyncTask<COSXMLDownloadTask.DownloadTaskResult>();
+            asyncTask.Wait();
+            COSXMLDownloadTask.DownloadTaskResult result = asyncTask.Result;
+
+            Assert.True(result.httpCode == 200);
+            Assert.NotNull(result.GetResultInfo());
+        }
+
+        [Test()]
+        public void TestDownloadTaskCancelled()
+        {
+            GetObjectRequest request = new GetObjectRequest(bucket,
+                commonKey, localDir, localFileName);
+
+            //执行请求
+            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
+
+            var asyncTask = transferManager.DownloadAsync(downloadTask);
+
+            Thread.Sleep(2000);
+            downloadTask.Cancel();
+            Thread.Sleep(200);
+            Assert.Pass();
+        }
+
+        [Test()]
+        public async Task TestCopyTaskWithBigFile()
         {
             CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
                     bucket, QCloudServer.Instance().region, copykey);
 
 
             COSXMLCopyTask copyTask = new COSXMLCopyTask(bucket, multiKey, copySource);
-
-            var autoEvent = new AutoResetEvent(false);
 
             copyTask.progressCallback = delegate (long completed, long total)
             {
@@ -1013,6 +1143,70 @@ namespace COSXMLTests
 
             Assert.True(result.httpCode == 200);
             Assert.NotNull(result.eTag);
+            Assert.NotNull(result.GetResultInfo());
+        }
+
+        [Test()]
+        public async Task TestCopyTaskWithSmallFile()
+        {
+            CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
+                    bucket, QCloudServer.Instance().region, copyKeySmall);
+
+            COSXMLCopyTask copyTask = new COSXMLCopyTask(bucket, multiKey, copySource);
+
+            copyTask.progressCallback = delegate (long completed, long total)
+            {
+                Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+            };
+
+            COSXMLCopyTask.CopyTaskResult result = await transferManager.CopyAsync(copyTask);
+
+            Assert.True(result.httpCode == 200);
+            Assert.NotNull(result.eTag);
+        }
+
+        [Test()]
+        public void TestCopyTaskWithInteractive()
+        {
+            CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
+                    bucket, QCloudServer.Instance().region, copykey);
+
+
+            COSXMLCopyTask copyTask = new COSXMLCopyTask(bucket, multiKey, copySource);
+
+            copyTask.progressCallback = delegate (long completed, long total)
+            {
+                Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+            };
+
+            var asyncTask = transferManager.CopyAsync(copyTask);
+
+            Thread.Sleep(3000);
+            copyTask.Pause();
+
+            copyTask.Resume();
+            asyncTask = copyTask.asyncTask<COSXMLCopyTask.CopyTaskResult>();
+            asyncTask.Wait();
+            COSXMLCopyTask.CopyTaskResult result = asyncTask.Result;
+
+            Assert.True(result.httpCode == 200);
+            Assert.NotNull(result.eTag);
+        }
+
+        [Test()]
+        public void TestCopyTaskCancelled()
+        {
+            CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
+                    bucket, QCloudServer.Instance().region, copykey);
+
+            COSXMLCopyTask copyTask = new COSXMLCopyTask(bucket, multiKey, copySource);
+
+            var asyncTask = transferManager.CopyAsync(copyTask);
+
+            Thread.Sleep(3000);
+            copyTask.Cancel();
+            Thread.Sleep(500);
+            Assert.Pass();
         }
 
         [Test()]
@@ -1084,17 +1278,20 @@ namespace COSXMLTests
         [Test()]
         public void GenerateSignUrl()
         {
-            QCloudServer instance = QCloudServer.Instance();
             string key = commonKey;
             PreSignatureStruct signatureStruct = new PreSignatureStruct();
 
-            signatureStruct.bucket = instance.bucketForObjectTest;
-            signatureStruct.appid = instance.appid;
-            signatureStruct.region = instance.region;
+            signatureStruct.bucket = bucket;
+            signatureStruct.appid = QCloudServer.Instance().appid;
+            signatureStruct.region = QCloudServer.Instance().region;
             signatureStruct.key = key;
             signatureStruct.httpMethod = "GET";
+            signatureStruct.isHttps = true;
+            signatureStruct.signDurationSecond = 600;
+            signatureStruct.queryParameters = new Dictionary<string, string>();
+            signatureStruct.queryParameters.Add("a", "1");
             signatureStruct.headers = new Dictionary<string, string>();
-            string url = instance.cosXml.GenerateSignURL(signatureStruct);
+            string url = cosXml.GenerateSignURL(signatureStruct);
 
             Assert.NotNull(url);
         }
@@ -1109,30 +1306,6 @@ namespace COSXMLTests
 
             Assert.True(result.httpCode == 200);
             Assert.NotNull(result.eTag);
-        }
-
-        [Test()]
-        public async Task TestUploadTaskWithError()
-        {
-            string key = multiKey;
-
-
-            PutObjectRequest request = new PutObjectRequest("3838" + bucket, key, bigFileSrcPath);
-
-
-            COSXMLUploadTask uploadTask = new COSXMLUploadTask(request);
-
-            uploadTask.SetSrcPath(bigFileSrcPath);
-
-            try
-            {
-                COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
-                Assert.Fail();
-            }
-            catch (Exception e)
-            {
-                Assert.Pass();
-            }
         }
 
         [Test()]

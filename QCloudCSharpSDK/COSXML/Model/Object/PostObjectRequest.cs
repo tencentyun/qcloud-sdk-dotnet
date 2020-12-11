@@ -269,8 +269,7 @@ namespace COSXML.Model.Object
             {
                 requestBody.AddData(formStruct.data, "file", "tmp");
             }
-            else
-if (formStruct.srcPath != null)
+            else if (formStruct.srcPath != null)
             {
                 FileInfo fileInfo = new FileInfo(this.formStruct.srcPath);
 

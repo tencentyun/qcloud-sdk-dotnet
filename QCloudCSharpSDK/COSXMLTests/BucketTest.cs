@@ -1094,7 +1094,7 @@ namespace COSXMLTests
 
             var getResult = cosXml.GetBucketIntelligentTieringConfiguration(getRequest);
 
-            Console.WriteLine(getResult.GetResultInfo());
+            // Console.WriteLine(getResult.GetResultInfo());
 
             if (getResult.configuration == null || !getResult.configuration.IsEnabled())
             {

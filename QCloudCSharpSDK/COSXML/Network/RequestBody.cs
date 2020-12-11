@@ -246,56 +246,56 @@ if (complete < total)
 
         }
 
-        private void AsyncStreamCallback(IAsyncResult ar)
-        {
-            RequestBodyState requestBodyState = ar.AsyncState as RequestBodyState;
-            Stream outputStream = null;
+        // private void AsyncStreamCallback(IAsyncResult ar)
+        // {
+        //     RequestBodyState requestBodyState = ar.AsyncState as RequestBodyState;
+        //     Stream outputStream = null;
 
-            try
-            {
-                outputStream = requestBodyState.outputStream;
-                outputStream.EndWrite(ar);
+        //     try
+        //     {
+        //         outputStream = requestBodyState.outputStream;
+        //         outputStream.EndWrite(ar);
 
-                if (progressCallback != null)
-                {
-                    UpdateProgress(requestBodyState.complete, contentLength);
-                }
+        //         if (progressCallback != null)
+        //         {
+        //             UpdateProgress(requestBodyState.complete, contentLength);
+        //         }
 
-                if (requestBodyState.complete < contentLength)
-                {
-                    long remain = contentLength - requestBodyState.complete;
+        //         if (requestBodyState.complete < contentLength)
+        //         {
+        //             long remain = contentLength - requestBodyState.complete;
 
-                    int count = (int)(remain > SEGMENT_SIZE ? SEGMENT_SIZE : remain);
-                    int offset = (int)requestBodyState.complete;
-                    requestBodyState.complete += count;
-                    outputStream.BeginWrite(requestBodyState.buffer, offset, count, AsyncStreamCallback, requestBodyState);
-                }
-                else
-                {
+        //             int count = (int)(remain > SEGMENT_SIZE ? SEGMENT_SIZE : remain);
+        //             int offset = (int)requestBodyState.complete;
+        //             requestBodyState.complete += count;
+        //             outputStream.BeginWrite(requestBodyState.buffer, offset, count, AsyncStreamCallback, requestBodyState);
+        //         }
+        //         else
+        //         {
 
-                    if (outputStream != null)
-                    {
-                        outputStream.Close();
-                    }
-                    //write over
-                    requestBodyState.endRequestBody(null);
-                    requestBodyState = null;
-                }
-            }
-            catch (Exception ex)
-            {
+        //             if (outputStream != null)
+        //             {
+        //                 outputStream.Close();
+        //             }
+        //             //write over
+        //             requestBodyState.endRequestBody(null);
+        //             requestBodyState = null;
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
 
-                if (outputStream != null)
-                {
-                    outputStream.Close();
-                }
+        //         if (outputStream != null)
+        //         {
+        //             outputStream.Close();
+        //         }
 
-                QLog.Error(TAG, ex.Message, ex);
-                requestBodyState.endRequestBody(ex);
-                requestBodyState = null;
-            }
+        //         QLog.Error(TAG, ex.Message, ex);
+        //         requestBodyState.endRequestBody(ex);
+        //         requestBodyState = null;
+        //     }
 
-        }
+        // }
     }
 
     public class FileRequestBody : RequestBody
@@ -493,68 +493,68 @@ if (complete < total)
 
         }
 
-        private void AsyncStreamCallback(IAsyncResult ar)
-        {
-            RequestBodyState requestBodyState = ar.AsyncState as RequestBodyState;
-            Stream outputStream = null;
+        // private void AsyncStreamCallback(IAsyncResult ar)
+        // {
+        //     RequestBodyState requestBodyState = ar.AsyncState as RequestBodyState;
+        //     Stream outputStream = null;
 
-            try
-            {
-                outputStream = requestBodyState.outputStream;
-                outputStream.EndWrite(ar);
-                outputStream.Flush();
+        //     try
+        //     {
+        //         outputStream = requestBodyState.outputStream;
+        //         outputStream.EndWrite(ar);
+        //         outputStream.Flush();
 
-                if (progressCallback != null)
-                {
-                    UpdateProgress(requestBodyState.complete, contentLength);
-                }
+        //         if (progressCallback != null)
+        //         {
+        //             UpdateProgress(requestBodyState.complete, contentLength);
+        //         }
 
-                if (requestBodyState.complete < contentLength)
-                {
-                    long remain = contentLength - requestBodyState.complete;
+        //         if (requestBodyState.complete < contentLength)
+        //         {
+        //             long remain = contentLength - requestBodyState.complete;
 
-                    int count = fileStream.Read(requestBodyState.buffer, 0, (int)(requestBodyState.buffer.Length > remain ? remain : requestBodyState.buffer.Length));
+        //             int count = fileStream.Read(requestBodyState.buffer, 0, (int)(requestBodyState.buffer.Length > remain ? remain : requestBodyState.buffer.Length));
 
-                    requestBodyState.complete += count;
-                    outputStream.BeginWrite(requestBodyState.buffer, 0, count, AsyncStreamCallback, requestBodyState);
-                }
-                else
-                {
+        //             requestBodyState.complete += count;
+        //             outputStream.BeginWrite(requestBodyState.buffer, 0, count, AsyncStreamCallback, requestBodyState);
+        //         }
+        //         else
+        //         {
 
-                    if (fileStream != null)
-                    {
-                        fileStream.Close();
-                    }
+        //             if (fileStream != null)
+        //             {
+        //                 fileStream.Close();
+        //             }
 
-                    if (outputStream != null)
-                    {
-                        outputStream.Close();
-                    }
-                    //write over
-                    requestBodyState.endRequestBody(null);
-                    requestBodyState = null;
-                }
+        //             if (outputStream != null)
+        //             {
+        //                 outputStream.Close();
+        //             }
+        //             //write over
+        //             requestBodyState.endRequestBody(null);
+        //             requestBodyState = null;
+        //         }
 
-            }
-            catch (Exception ex)
-            {
+        //     }
+        //     catch (Exception ex)
+        //     {
 
-                if (fileStream != null)
-                {
-                    fileStream.Close();
-                }
+        //         if (fileStream != null)
+        //         {
+        //             fileStream.Close();
+        //         }
 
-                if (outputStream != null)
-                {
-                    outputStream.Close();
-                }
+        //         if (outputStream != null)
+        //         {
+        //             outputStream.Close();
+        //         }
 
-                QLog.Error(TAG, ex.Message, ex);
-                requestBodyState.endRequestBody(ex);
-                requestBodyState = null;
-            }
+        //         QLog.Error(TAG, ex.Message, ex);
+        //         requestBodyState.endRequestBody(ex);
+        //         requestBodyState = null;
+        //     }
 
-        }
+        // }
     }
 
     public class MultipartRequestBody : RequestBody
@@ -1010,82 +1010,82 @@ if (srcPath != null)
 
         }
 
-        private void AsyncStreamCallback(IAsyncResult ar)
-        {
-            RequestBodyState requestBodyState = ar.AsyncState as RequestBodyState;
-            Stream outputStream = null;
+//         private void AsyncStreamCallback(IAsyncResult ar)
+//         {
+//             RequestBodyState requestBodyState = ar.AsyncState as RequestBodyState;
+//             Stream outputStream = null;
 
-            try
-            {
-                outputStream = requestBodyState.outputStream;
-                outputStream.EndWrite(ar);
+//             try
+//             {
+//                 outputStream = requestBodyState.outputStream;
+//                 outputStream.EndWrite(ar);
 
-                if (progressCallback != null)
-                {
-                    UpdateProgress(requestBodyState.complete, realContentLength);
-                }
+//                 if (progressCallback != null)
+//                 {
+//                     UpdateProgress(requestBodyState.complete, realContentLength);
+//                 }
 
-                if (requestBodyState.complete < realContentLength)
-                {
+//                 if (requestBodyState.complete < realContentLength)
+//                 {
 
-                    if (srcPath != null)
-                    {
-                        long remain = realContentLength - requestBodyState.complete;
+//                     if (srcPath != null)
+//                     {
+//                         long remain = realContentLength - requestBodyState.complete;
 
-                        int count = fileStream.Read(requestBodyState.buffer, 0, (int)(requestBodyState.buffer.Length > remain ? remain : requestBodyState.buffer.Length));
+//                         int count = fileStream.Read(requestBodyState.buffer, 0, (int)(requestBodyState.buffer.Length > remain ? remain : requestBodyState.buffer.Length));
 
-                        requestBodyState.complete += count;
-                        outputStream.BeginWrite(requestBodyState.buffer, 0, count, AsyncStreamCallback, requestBodyState);
-                    }
-                    else
-if (data != null)
-                    {
-                        long remain = realContentLength - requestBodyState.complete;
+//                         requestBodyState.complete += count;
+//                         outputStream.BeginWrite(requestBodyState.buffer, 0, count, AsyncStreamCallback, requestBodyState);
+//                     }
+//                     else
+// if (data != null)
+//                     {
+//                         long remain = realContentLength - requestBodyState.complete;
 
-                        int count = (int)(remain > SEGMENT_SIZE ? SEGMENT_SIZE : remain);
-                        int offset = (int)requestBodyState.complete;
-                        requestBodyState.complete += count;
-                        outputStream.BeginWrite(requestBodyState.buffer, offset, count, AsyncStreamCallback, requestBodyState);
-                    }
+//                         int count = (int)(remain > SEGMENT_SIZE ? SEGMENT_SIZE : remain);
+//                         int offset = (int)requestBodyState.complete;
+//                         requestBodyState.complete += count;
+//                         outputStream.BeginWrite(requestBodyState.buffer, offset, count, AsyncStreamCallback, requestBodyState);
+//                     }
 
-                    outputStream.Flush();
-                }
-                else
-                {
-                    WriteEndLine(outputStream);
-                    outputStream.Flush();
+//                     outputStream.Flush();
+//                 }
+//                 else
+//                 {
+//                     WriteEndLine(outputStream);
+//                     outputStream.Flush();
 
-                    if (fileStream != null)
-                    {
-                        fileStream.Close();
-                    }
+//                     if (fileStream != null)
+//                     {
+//                         fileStream.Close();
+//                     }
 
-                    if (outputStream != null)
-                    {
-                        outputStream.Close();
-                    }
-                    //write over
-                    requestBodyState.endRequestBody(null);
-                }
+//                     if (outputStream != null)
+//                     {
+//                         outputStream.Close();
+//                     }
+//                     //write over
+//                     requestBodyState.endRequestBody(null);
+//                 }
 
-            }
-            catch (Exception ex)
-            {
+//             }
+//             catch (Exception ex)
+//             {
 
-                if (fileStream != null)
-                {
-                    fileStream.Close();
-                }
+//                 if (fileStream != null)
+//                 {
+//                     fileStream.Close();
+//                 }
 
-                if (outputStream != null)
-                {
-                    outputStream.Close();
-                }
+//                 if (outputStream != null)
+//                 {
+//                     outputStream.Close();
+//                 }
 
-                QLog.Error(TAG, ex.Message, ex);
-                requestBodyState.endRequestBody(ex);
-            }
-        }
+//                 QLog.Error(TAG, ex.Message, ex);
+//                 requestBodyState.endRequestBody(ex);
+//             }
+//         }
 
     }
 }

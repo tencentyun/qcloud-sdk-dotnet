@@ -35,6 +35,19 @@ namespace COSXML.Model.Object
         }
 
         /// <summary>
+        /// 设置 Object 的存储级别
+        /// <see cref="Common.CosStorageClass"/>
+        /// </summary>
+        /// <param name="cosStorageClass"></param>
+        public void SetCosStorageClass(string cosStorageClass)
+        {
+            if (cosStorageClass != null)
+            {
+                SetRequestHeader(CosRequestHeaderKey.X_COS_STORAGE_CLASS, cosStorageClass);
+            }
+        }
+
+        /// <summary>
         /// 定义的文件名称，将作为 Object 元数据保存
         /// </summary>
         /// <param name="contentDisposition"></param>

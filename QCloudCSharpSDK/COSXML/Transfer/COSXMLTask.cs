@@ -4,6 +4,7 @@ using System.Text;
 using COSXML.Model;
 using COSXML.Model.Object;
 using COSXML.CosException;
+using System.Threading.Tasks;
 
 namespace COSXML.Transfer
 {
@@ -141,6 +142,43 @@ namespace COSXML.Transfer
 
             return result;
 
+        }
+
+
+        /// <summary>
+        /// 等待任务
+        /// </summary>
+        /// <param name="task"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Task<T> asyncTask<T>() where T : CosResult
+        {
+            return NewTaskCompletion<T>().Task;
+        }
+
+        private TaskCompletionSource<T> NewTaskCompletion<T>() where T : CosResult
+        {
+            var t = new TaskCompletionSource<T>();
+
+            successCallback = delegate (CosResult cosResult)
+            {
+                t.TrySetResult(cosResult as T);
+            };
+
+            failCallback = delegate (CosClientException clientException, CosServerException serverException)
+            {
+
+                if (clientException != null)
+                {
+                    t.TrySetException(clientException);
+                }
+                else
+                {
+                    t.TrySetException(serverException);
+                }
+            };
+
+            return t;
         }
 
     }

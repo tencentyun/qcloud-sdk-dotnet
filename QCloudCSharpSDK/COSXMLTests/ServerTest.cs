@@ -43,6 +43,19 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public void SyncGetServerTest()
+        {
+            QCloudServer instance = QCloudServer.Instance();
+            GetServiceRequest request = new GetServiceRequest();
+
+            GetServiceResult result = instance.cosXml.Execute<GetServiceResult>(request);
+
+            Assert.True(result.httpCode == 200);
+            Assert.IsNotEmpty((result.GetResultInfo()));
+            ValidateBucketList(result.listAllMyBuckets);
+        }
+
+        [Test()]
         public async Task AsyncGetServerTest()
         {
             QCloudServer instance = QCloudServer.Instance();

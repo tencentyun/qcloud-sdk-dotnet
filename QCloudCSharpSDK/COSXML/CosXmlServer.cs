@@ -39,14 +39,11 @@ namespace COSXML
         public CosXmlServer(CosXmlConfig config, QCloudCredentialProvider qcloudCredentailProvider)
         {
 
-            if (config != null)
+            if (config == null)
             {
-                this.config = config;
+                throw new CosClientException((int) CosClientError.InvalidArgument, "Config is null.");
             }
-            else
-            {
-                this.config = new CosXmlConfig.Builder().Build();
-            }
+            this.config = config;
 
             if (this.config.IsDebugLog)
             {
@@ -782,39 +779,6 @@ namespace COSXML
 
                 queryBuilder.Append(sign);
                 urlBuilder.Append("?").Append(queryBuilder.ToString());
-
-                return urlBuilder.ToString();
-            }
-            catch (CosClientException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new CosClientException((int)CosClientError.InvalidArgument, ex.Message, ex);
-            }
-        }
-
-        public string GetAccessURL(CosRequest request)
-        {
-
-            try
-            {
-                CheckAppidAndRegion(request);
-                request.CheckParameters();
-                StringBuilder urlBuilder = new StringBuilder();
-
-                if (request.IsHttps != null && (bool)request.IsHttps)
-                {
-                    urlBuilder.Append("https://");
-                }
-                else
-                {
-                    urlBuilder.Append("http://");
-                }
-
-                urlBuilder.Append(request.GetHost());
-                urlBuilder.Append(request.RequestPath);
 
                 return urlBuilder.ToString();
             }

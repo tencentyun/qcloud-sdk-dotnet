@@ -14,7 +14,7 @@ namespace COSXMLTests
 {
 
     [TestFixture()]
-    public class AsyncTest
+    public class ObsoleteAsyncTest
     {
 
         [Test()]

@@ -61,10 +61,9 @@ namespace COSXML.Transfer
         /// <returns></returns>
         public Task<COSXMLUploadTask.UploadTaskResult> UploadAsync(COSXMLUploadTask uploader)
         {
-            var t = NewTaskCompletion<COSXMLUploadTask.UploadTaskResult>(uploader);
+            var task = uploader.asyncTask<COSXMLUploadTask.UploadTaskResult>();
             Upload(uploader);
-
-            return t.Task;
+            return task;
         }
 
         /// <summary>
@@ -85,10 +84,9 @@ namespace COSXML.Transfer
         /// <returns></returns>
         public Task<COSXMLDownloadTask.DownloadTaskResult> DownloadAsync(COSXMLDownloadTask downloader)
         {
-            var t = NewTaskCompletion<COSXMLDownloadTask.DownloadTaskResult>(downloader);
+            var task = downloader.asyncTask<COSXMLDownloadTask.DownloadTaskResult>();
             Download(downloader);
-
-            return t.Task;
+            return task;
         }
 
         /// <summary>
@@ -110,36 +108,9 @@ namespace COSXML.Transfer
         /// <returns></returns>
         public Task<COSXMLCopyTask.CopyTaskResult> CopyAsync(COSXMLCopyTask copyTask)
         {
-            var t = NewTaskCompletion<COSXMLCopyTask.CopyTaskResult>(copyTask);
+            var task = copyTask.asyncTask<COSXMLCopyTask.CopyTaskResult>();
             Copy(copyTask);
-
-            return t.Task;
-        }
-
-        private TaskCompletionSource<T> NewTaskCompletion<T>(COSXMLTask task) where T : CosResult
-        {
-            var t = new TaskCompletionSource<T>();
-
-
-            task.successCallback = delegate (CosResult cosResult)
-            {
-                t.TrySetResult(cosResult as T);
-            };
-
-            task.failCallback = delegate (CosClientException clientException, CosServerException serverException)
-            {
-
-                if (clientException != null)
-                {
-                    t.TrySetException(clientException);
-                }
-                else
-                {
-                    t.TrySetException(serverException);
-                }
-            };
-
-            return t;
+            return task;
         }
     }
 

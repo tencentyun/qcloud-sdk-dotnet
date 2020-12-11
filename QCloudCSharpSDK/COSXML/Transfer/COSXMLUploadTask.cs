@@ -60,6 +60,10 @@ namespace COSXML.Transfer
 
         private AbortMultipartUploadRequest abortMultiUploadRequest;
 
+        public int MaxConcurrent {private get; set;} = MAX_ACTIVIE_TASKS;
+
+        public string StorageClass {private get; set;}
+
         public COSXMLUploadTask(string bucket, string region, string key)
             : base(bucket, region, key)
         {
@@ -97,6 +101,11 @@ namespace COSXML.Transfer
         public void SetUploadId(string uploadId)
         {
             this.uploadId = uploadId;
+        }
+
+        public string GetUploadId()
+        {
+            return uploadId;
         }
 
         internal void Upload()
@@ -166,6 +175,11 @@ namespace COSXML.Transfer
             if (progressCallback != null)
             {
                 putObjectRequest.SetCosProgressCallback(progressCallback);
+            }
+
+            if (StorageClass != null) 
+            {
+                putObjectRequest.SetCosStorageClass(StorageClass);
             }
 
             cosXmlServer.PutObject(putObjectRequest, delegate (CosResult cosResult)
@@ -244,6 +258,11 @@ namespace COSXML.Transfer
             if (customHeaders != null)
             {
                 initMultiUploadRequest.SetRequestHeaders(customHeaders);
+            }
+
+            if (StorageClass != null) 
+            {
+                initMultiUploadRequest.SetCosStorageClass(StorageClass);
             }
 
             cosXmlServer.InitMultipartUpload(initMultiUploadRequest, delegate (CosResult cosResult)
@@ -343,7 +362,7 @@ namespace COSXML.Transfer
             for (int i = 0; i < size; i++)
             {
 
-                if (activieTasks > MAX_ACTIVIE_TASKS)
+                if (activieTasks > MaxConcurrent)
                 {
                     resetEvent.WaitOne();
                 }
@@ -365,7 +384,7 @@ namespace COSXML.Transfer
                     UploadPartRequest uploadPartRequest = new UploadPartRequest(bucket, key, sliceStruct.partNumber, uploadId, srcPath,
                         sliceStruct.sliceStart, sliceStruct.sliceLength);
 
-                    if (customHeaders.ContainsKey(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT))
+                    if (customHeaders != null && customHeaders.ContainsKey(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT))
                     {
                         string trafficLimit = customHeaders[CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT];
 
