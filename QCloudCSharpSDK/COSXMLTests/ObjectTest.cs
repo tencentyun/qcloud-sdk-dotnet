@@ -1056,7 +1056,7 @@ namespace COSXMLTests
 
             transferManager.UploadAsync(uploadTask);
 
-            Thread.Sleep(3000);
+            Thread.Sleep(2000);
             uploadTask.Pause();
             Thread.Sleep(200);
             uploadTask.Resume();
@@ -1064,27 +1064,34 @@ namespace COSXMLTests
             uploadTask.Pause();
             Thread.Sleep(1000);
 
-            QCloudServer.TestWithServerFailTolerance(() =>
+            if (uploadTask.state() != TaskState.Completed)
             {
-                // new task
-                COSXMLUploadTask uploadTask2 = new COSXMLUploadTask(bucket, key);
 
-                uploadTask2.SetSrcPath(bigFileSrcPath);
-                uploadTask2.SetUploadId(uploadTask.GetUploadId());
-
-                uploadTask2.progressCallback = delegate (long completed, long total)
+                QCloudServer.TestWithServerFailTolerance(() =>
                 {
-                    // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
-                };
-                var asyncTask = transferManager.UploadAsync(uploadTask2);
-                asyncTask.Wait(10000);
-                COSXMLUploadTask.UploadTaskResult result = asyncTask.Result;
+                    // new task
+                    COSXMLUploadTask uploadTask2 = new COSXMLUploadTask(bucket, key);
 
-                Assert.True(result.httpCode == 200);
-                Assert.NotNull(result.eTag);
-                Assert.NotNull(result.GetResultInfo());
+                    uploadTask2.SetSrcPath(bigFileSrcPath);
+                    uploadTask2.SetUploadId(uploadTask.GetUploadId());
+
+                    uploadTask2.progressCallback = delegate (long completed, long total)
+                    {
+                        // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+                    };
+                    var asyncTask = transferManager.UploadAsync(uploadTask2);
+                    asyncTask.Wait(10000);
+                    COSXMLUploadTask.UploadTaskResult result = asyncTask.Result;
+
+                    Assert.True(result.httpCode == 200);
+                    Assert.NotNull(result.eTag);
+                    Assert.NotNull(result.GetResultInfo());
+                }
+                );
+            } else {
+                Console.WriteLine("Uplaod is Complete");
+                Assert.Pass();
             }
-            );
         }
 
         [Test()]
@@ -1100,7 +1107,7 @@ namespace COSXMLTests
 
             var asyncTask = transferManager.UploadAsync(uploadTask);
 
-            Thread.Sleep(3000);
+            Thread.Sleep(2000);
             uploadTask.Cancel();
             Thread.Sleep(500);
             Assert.Pass();
@@ -1164,17 +1171,23 @@ namespace COSXMLTests
 
             var asyncTask = transferManager.DownloadAsync(downloadTask);
 
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
             downloadTask.Pause();
 
             Thread.Sleep(200);
             downloadTask.Resume();
-            asyncTask = downloadTask.AsyncTask<COSXMLDownloadTask.DownloadTaskResult>();
-            asyncTask.Wait(10000);
-            COSXMLDownloadTask.DownloadTaskResult result = asyncTask.Result;
+            if (downloadTask.state() != TaskState.Completed)
+            {
+                asyncTask = downloadTask.AsyncTask<COSXMLDownloadTask.DownloadTaskResult>();
+                asyncTask.Wait(10000);
+                COSXMLDownloadTask.DownloadTaskResult result = asyncTask.Result;
 
-            Assert.True(result.httpCode == 200);
-            Assert.NotNull(result.GetResultInfo());
+                Assert.True(result.httpCode == 200);
+                Assert.NotNull(result.GetResultInfo());
+            } else {
+                Console.WriteLine("Download is Complete");
+                Assert.Pass();
+            }
         }
 
         [Test()]
@@ -1245,7 +1258,7 @@ namespace COSXMLTests
 
             var asyncTask = transferManager.CopyAsync(copyTask);
 
-            Thread.Sleep(3000);
+            Thread.Sleep(2000);
             copyTask.Pause();
 
             Thread.Sleep(200);
@@ -1262,6 +1275,7 @@ namespace COSXMLTests
             else 
             {
                 Console.WriteLine("Copy is Completed");
+                Assert.Pass();
             }
         }
 
@@ -1275,7 +1289,7 @@ namespace COSXMLTests
 
             var asyncTask = transferManager.CopyAsync(copyTask);
 
-            Thread.Sleep(3000);
+            Thread.Sleep(2000);
             copyTask.Cancel();
             Thread.Sleep(500);
             Assert.Pass();
