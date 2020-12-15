@@ -205,7 +205,7 @@ namespace COSXMLTests
             DeleteBucketCORS();
             PutBucketCORS();
             Thread.Sleep(100);
-            GetBucketCORS();
+            QCloudServer.TestWithServerFailTolerance(() => GetBucketCORS());
         }
 
         private void PutBucketCORS()
@@ -937,34 +937,38 @@ namespace COSXMLTests
 
                 Assert.IsTrue(putResult.httpCode == 200);
 
-                GetBucketWebsiteRequest getRequest = new GetBucketWebsiteRequest(bucket);
+                QCloudServer.TestWithServerFailTolerance(() => 
+                {
+                    GetBucketWebsiteRequest getRequest = new GetBucketWebsiteRequest(bucket);
 
-                GetBucketWebsiteResult getResult = cosXml.GetBucketWebsite(getRequest);
-                // Console.WriteLine(getResult.GetResultInfo());
-                Assert.IsNotEmpty((getResult.GetResultInfo()));
+                    GetBucketWebsiteResult getResult = cosXml.GetBucketWebsite(getRequest);
+                    // Console.WriteLine(getResult.GetResultInfo());
+                    Assert.IsNotEmpty((getResult.GetResultInfo()));
 
-                WebsiteConfiguration configuration = getResult.websiteConfiguration;
+                    WebsiteConfiguration configuration = getResult.websiteConfiguration;
 
-                Assert.NotNull(configuration);
-                Assert.NotNull(configuration.indexDocument);
-                Assert.NotNull(configuration.indexDocument.suffix);
-                Assert.NotNull(configuration.errorDocument);
-                Assert.NotNull(configuration.redirectAllRequestTo);
-                Assert.NotNull(configuration.redirectAllRequestTo.protocol);
-                Assert.NotZero(configuration.routingRules.Count);
-                Assert.NotNull(configuration.routingRules[0].contidion);
-                Assert.NotNull(configuration.routingRules[0].contidion.httpErrorCodeReturnedEquals);
-                // Assert.NotNull(configuration.routingRules[0].contidion.keyPrefixEquals);
-                Assert.NotNull(configuration.routingRules[0].redirect);
-                Assert.NotNull(configuration.routingRules[0].redirect.protocol);
-                // Assert.NotNull(configuration.routingRules[0].redirect.replaceKeyPrefixWith);
-                Assert.NotNull(configuration.routingRules[0].redirect.replaceKeyWith);
+                    Assert.NotNull(configuration);
+                    Assert.NotNull(configuration.indexDocument);
+                    Assert.NotNull(configuration.indexDocument.suffix);
+                    Assert.NotNull(configuration.errorDocument);
+                    Assert.NotNull(configuration.redirectAllRequestTo);
+                    Assert.NotNull(configuration.redirectAllRequestTo.protocol);
+                    Assert.NotZero(configuration.routingRules.Count);
+                    Assert.NotNull(configuration.routingRules[0].contidion);
+                    Assert.NotNull(configuration.routingRules[0].contidion.httpErrorCodeReturnedEquals);
+                    // Assert.NotNull(configuration.routingRules[0].contidion.keyPrefixEquals);
+                    Assert.NotNull(configuration.routingRules[0].redirect);
+                    Assert.NotNull(configuration.routingRules[0].redirect.protocol);
+                    // Assert.NotNull(configuration.routingRules[0].redirect.replaceKeyPrefixWith);
+                    Assert.NotNull(configuration.routingRules[0].redirect.replaceKeyWith);
 
-                DeleteBucketWebsiteRequest deleteRequest = new DeleteBucketWebsiteRequest(bucket);
+                    DeleteBucketWebsiteRequest deleteRequest = new DeleteBucketWebsiteRequest(bucket);
 
-                DeleteBucketWebsiteResult deleteResult = cosXml.DeleteBucketWebsite(deleteRequest);
+                    DeleteBucketWebsiteResult deleteResult = cosXml.DeleteBucketWebsite(deleteRequest);
 
-                Assert.IsTrue(deleteResult.IsSuccessful());
+                    Assert.IsTrue(deleteResult.IsSuccessful());
+                }
+                );
 
             }
             catch (COSXML.CosException.CosClientException clientEx)

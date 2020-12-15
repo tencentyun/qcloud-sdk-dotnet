@@ -1064,45 +1064,27 @@ namespace COSXMLTests
             uploadTask.Pause();
             Thread.Sleep(1000);
 
-            // try 3 times
-            for (var i = 0; i < 3; i++)
+            QCloudServer.TestWithServerFailTolerance(() =>
             {
-                try 
+                // new task
+                COSXMLUploadTask uploadTask2 = new COSXMLUploadTask(bucket, key);
+
+                uploadTask2.SetSrcPath(bigFileSrcPath);
+                uploadTask2.SetUploadId(uploadTask.GetUploadId());
+
+                uploadTask2.progressCallback = delegate (long completed, long total)
                 {
-                    // new task
-                    COSXMLUploadTask uploadTask2 = new COSXMLUploadTask(bucket, key);
+                    // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+                };
+                var asyncTask = transferManager.UploadAsync(uploadTask2);
+                asyncTask.Wait();
+                COSXMLUploadTask.UploadTaskResult result = asyncTask.Result;
 
-                    uploadTask2.SetSrcPath(bigFileSrcPath);
-                    uploadTask2.SetUploadId(uploadTask.GetUploadId());
-
-                    uploadTask2.progressCallback = delegate (long completed, long total)
-                    {
-                        // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
-                    };
-                    var asyncTask = transferManager.UploadAsync(uploadTask2);
-                    asyncTask.Wait();
-                    COSXMLUploadTask.UploadTaskResult result = asyncTask.Result;
-
-                    Assert.True(result.httpCode == 200);
-                    Assert.NotNull(result.eTag);
-                    Assert.NotNull(result.GetResultInfo());
-
-                    break;
-                } 
-                catch (CosServerException e)
-                {
-                    if (e.statusCode != 404)
-                    {
-                        throw;
-                    } 
-                    else 
-                    {
-                        Thread.Sleep(500);
-                    }
-                }
+                Assert.True(result.httpCode == 200);
+                Assert.NotNull(result.eTag);
+                Assert.NotNull(result.GetResultInfo());
             }
-
-            
+            );
         }
 
         [Test()]

@@ -3,6 +3,7 @@ using COSXML.Auth;
 using COSXML.Log;
 using COSXML.Common;
 using COSXML.Utils;
+using COSXML.CosException;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,8 @@ namespace COSXMLTests
     public class QCloudServer
     {
         internal CosXml cosXml;
+
+        const int ServerFailTolerance = 3;
 
         internal string bucketForBucketTest 
         {
@@ -137,7 +140,7 @@ namespace COSXMLTests
             COSXML.Model.Tag.GrantAccount writeAccount = new COSXML.Model.Tag.GrantAccount();
             writeAccount.AddGrantAccount("1131975903", "1131975903");
             var writeMethod = request.GetType().GetMethod("SetXCosGrantWrite");
-            
+
             if (writeMethod != null)
             {
                 writeMethod.Invoke(request, new object[] { writeAccount });
@@ -174,6 +177,22 @@ namespace COSXMLTests
                         Console.WriteLine(files[i].Name);
                         files[i].Delete();
                     }
+                }
+            }
+        }
+
+        internal static void TestWithServerFailTolerance(Action action) 
+        {
+            for (int i = 0; i < ServerFailTolerance; i++)
+            {
+                try
+                {
+                    action.Invoke();
+                    break;
+                }
+                catch (CosServerException ex)
+                {
+                    Console.WriteLine("Fail But With Tolerance: " +  ex.StackTrace);
                 }
             }
         }
