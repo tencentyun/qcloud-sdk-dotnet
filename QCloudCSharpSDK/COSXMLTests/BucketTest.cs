@@ -523,11 +523,19 @@ namespace COSXMLTests
         {
             PutBucketVersioning(true);
             Thread.Sleep(200);
-            GetBucketVersioning();
+            QCloudServer.TestWithServerFailTolerance(() => 
+            {
+                GetBucketVersioning();
+            }
+            );
 
             PutBucketReplication();
             Thread.Sleep(100);
-            GetBucketReplication();
+            QCloudServer.TestWithServerFailTolerance(() => 
+            {
+                GetBucketReplication();
+            }
+            );
             DeleteBucketReplication();
 
             PutBucketVersioning(false);

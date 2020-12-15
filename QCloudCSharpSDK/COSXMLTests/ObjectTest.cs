@@ -1047,7 +1047,7 @@ namespace COSXMLTests
 
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, key, bigFileSrcPath);
 
-            putObjectRequest.LimitTraffic(819200);
+            putObjectRequest.LimitTraffic(8192000);
 
             COSXMLUploadTask uploadTask = new COSXMLUploadTask(putObjectRequest);
 
@@ -1055,7 +1055,7 @@ namespace COSXMLTests
 
             uploadTask.progressCallback = delegate (long completed, long total)
             {
-                Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+                // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
             };
 
             transferManager.UploadAsync(uploadTask);
@@ -1166,18 +1166,18 @@ namespace COSXMLTests
 
             //执行请求
             GetObjectRequest getRequest = new GetObjectRequest(bucket, multiKey, localDir, localFileName);
-            getRequest.LimitTraffic(819200);
+            getRequest.LimitTraffic(8192000);
 
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(getRequest);
 
             downloadTask.progressCallback = delegate (long completed, long total)
             {
-                Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+                // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
             };
 
             var asyncTask = transferManager.DownloadAsync(downloadTask);
 
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
             downloadTask.Pause();
 
             Thread.Sleep(200);
