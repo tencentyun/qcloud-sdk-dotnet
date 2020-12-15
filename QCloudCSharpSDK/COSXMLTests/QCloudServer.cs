@@ -16,7 +16,7 @@ namespace COSXMLTests
     {
         internal CosXml cosXml;
 
-        const int ServerFailTolerance = 3;
+        private const int ServerFailTolerance = 3;
 
         internal string bucketForBucketTest 
         {
