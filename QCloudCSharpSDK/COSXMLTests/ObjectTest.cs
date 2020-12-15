@@ -685,7 +685,7 @@ namespace COSXMLTests
                 var policy = new PostObjectRequest.Policy();
                 policy.SetExpiration(new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() + 60000);
                 policy.AddConditions("acl", "private", false);
-                policy.AddConditions( "$Content-Type", "image/", true);
+                policy.AddConditions("$Content-Type", "image/", true);
                 policy.AddContentConditions(0, data.Length + 1);
                 request.SetPolicy(policy);
 
@@ -1187,7 +1187,7 @@ namespace COSXMLTests
 
             Thread.Sleep(200);
             downloadTask.Resume();
-            asyncTask = downloadTask.asyncTask<COSXMLDownloadTask.DownloadTaskResult>();
+            asyncTask = downloadTask.AsyncTask<COSXMLDownloadTask.DownloadTaskResult>();
             asyncTask.Wait();
             COSXMLDownloadTask.DownloadTaskResult result = asyncTask.Result;
 
@@ -1267,7 +1267,7 @@ namespace COSXMLTests
             copyTask.Pause();
 
             copyTask.Resume();
-            asyncTask = copyTask.asyncTask<COSXMLCopyTask.CopyTaskResult>();
+            asyncTask = copyTask.AsyncTask<COSXMLCopyTask.CopyTaskResult>();
             asyncTask.Wait();
             COSXMLCopyTask.CopyTaskResult result = asyncTask.Result;
 

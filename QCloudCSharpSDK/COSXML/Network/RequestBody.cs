@@ -52,7 +52,8 @@ namespace COSXML.Network
         /// calculation content md5
         /// </summary>
         /// <returns></returns>
-        public virtual string GetMD5() {
+        public virtual string GetMD5() 
+        {
             throw new NotImplementedException();
         }
 
@@ -192,7 +193,8 @@ if (complete < total)
                 if (endRequestBody != null)
                 {
                     endRequestBody(ex);
-                } else 
+                } 
+                else 
                 {
                     throw;
                 }
@@ -317,7 +319,8 @@ if (complete < total)
                 if (endRequestBody != null)
                 {
                     endRequestBody(ex);
-                } else 
+                } 
+                else 
                 {
                     throw;
                 }
@@ -657,7 +660,8 @@ if (complete < total)
                 if (endRequestBody != null)
                 {
                     endRequestBody(ex);
-                } else 
+                } 
+                else 
                 {
                     throw;
                 }

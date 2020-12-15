@@ -316,7 +316,8 @@ namespace COSXML.Model
         public virtual CosXmlSignSourceProvider GetSignSourceProvider()
         {
             // 默认签署的头部跟参数
-            cosXmlSignSourceProvider.AddHeaderKeys(new List<string>() {
+            cosXmlSignSourceProvider.AddHeaderKeys(new List<string>() 
+            {
                 "content-type",
                 "content-length",
                 "content-md5",

@@ -408,6 +408,7 @@ namespace COSXML.Network
                     try
                     {
                         CosServerError cosServerError = XmlParse.Deserialize<CosServerError>(inputStream);
+                        
                         cosServerException.SetCosServerError(cosServerError);
                     }
                     catch (Exception ex)

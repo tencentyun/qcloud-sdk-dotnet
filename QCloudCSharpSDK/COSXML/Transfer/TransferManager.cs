@@ -61,7 +61,7 @@ namespace COSXML.Transfer
         /// <returns></returns>
         public Task<COSXMLUploadTask.UploadTaskResult> UploadAsync(COSXMLUploadTask uploader)
         {
-            var task = uploader.asyncTask<COSXMLUploadTask.UploadTaskResult>();
+            var task = uploader.AsyncTask<COSXMLUploadTask.UploadTaskResult>();
             Upload(uploader);
             return task;
         }
@@ -84,7 +84,7 @@ namespace COSXML.Transfer
         /// <returns></returns>
         public Task<COSXMLDownloadTask.DownloadTaskResult> DownloadAsync(COSXMLDownloadTask downloader)
         {
-            var task = downloader.asyncTask<COSXMLDownloadTask.DownloadTaskResult>();
+            var task = downloader.AsyncTask<COSXMLDownloadTask.DownloadTaskResult>();
             Download(downloader);
             return task;
         }
@@ -108,7 +108,7 @@ namespace COSXML.Transfer
         /// <returns></returns>
         public Task<COSXMLCopyTask.CopyTaskResult> CopyAsync(COSXMLCopyTask copyTask)
         {
-            var task = copyTask.asyncTask<COSXMLCopyTask.CopyTaskResult>();
+            var task = copyTask.AsyncTask<COSXMLCopyTask.CopyTaskResult>();
             Copy(copyTask);
             return task;
         }

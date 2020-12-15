@@ -43,6 +43,7 @@ namespace COSXML
             {
                 throw new CosClientException((int) CosClientError.InvalidArgument, "Config is null.");
             }
+            
             this.config = config;
 
             if (this.config.IsDebugLog)

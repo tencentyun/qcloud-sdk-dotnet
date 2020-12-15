@@ -60,9 +60,9 @@ namespace COSXML.Transfer
 
         private AbortMultipartUploadRequest abortMultiUploadRequest;
 
-        public int MaxConcurrent {private get; set;} = MAX_ACTIVIE_TASKS;
+        public int MaxConcurrent { private get; set; } = MAX_ACTIVIE_TASKS;
 
-        public string StorageClass {private get; set;}
+        public string StorageClass { private get; set; }
 
         public COSXMLUploadTask(string bucket, string key)
             : base(bucket, key)

@@ -149,7 +149,7 @@ namespace COSXML.Transfer
         /// <param name="task"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Task<T> asyncTask<T>() where T : CosResult
+        public Task<T> AsyncTask<T>() where T : CosResult
         {
             return NewTaskCompletion<T>().Task;
         }

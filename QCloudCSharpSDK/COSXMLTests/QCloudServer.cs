@@ -137,6 +137,7 @@ namespace COSXMLTests
             COSXML.Model.Tag.GrantAccount writeAccount = new COSXML.Model.Tag.GrantAccount();
             writeAccount.AddGrantAccount("1131975903", "1131975903");
             var writeMethod = request.GetType().GetMethod("SetXCosGrantWrite");
+            
             if (writeMethod != null)
             {
                 writeMethod.Invoke(request, new object[] { writeAccount });

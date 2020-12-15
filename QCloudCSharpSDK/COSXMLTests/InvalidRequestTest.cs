@@ -28,7 +28,7 @@ namespace COSXMLTests
         private string localFilePath;
 
         [OneTimeSetUp]
-        public void setup()
+        public void Setup()
         {
             notExistBucket = "not-exist-bucket-suwjsdjwujehdfkd-" + QCloudServer.Instance().appid;
             cosXml = QCloudServer.Instance().cosXml;
@@ -46,7 +46,7 @@ namespace COSXMLTests
         {
             GetBucketRequest request = new GetBucketRequest(notExistBucket);
 
-            Assert.ThrowsAsync<CosServerException>(async () => await cosXml.ExecuteAsync<GetBucketResult>(request));
+            Assert.ThrowsAsync<CosServerException>(async() => await cosXml.ExecuteAsync<GetBucketResult>(request));
         }
 
         [Test()]
@@ -56,7 +56,7 @@ namespace COSXMLTests
 
             COSXMLUploadTask uploadTask = new COSXMLUploadTask(request);
 
-            Assert.ThrowsAsync<CosClientException>(async () => await transferManager.UploadAsync(uploadTask));
+            Assert.ThrowsAsync<CosClientException>(async() => await transferManager.UploadAsync(uploadTask));
         }
 
         [Test()]
@@ -64,14 +64,14 @@ namespace COSXMLTests
         {
             COSXMLCopyTask copyTask = new COSXMLCopyTask(notExistBucket, "remote_key", null);
 
-            Assert.ThrowsAsync<CosClientException>(async () => await transferManager.CopyAsync(copyTask));
+            Assert.ThrowsAsync<CosClientException>(async() => await transferManager.CopyAsync(copyTask));
             
             CopySourceStruct notExistSource = new CopySourceStruct(QCloudServer.Instance().appid,
                     notExistBucket, QCloudServer.Instance().region, "example_key");
 
             COSXMLCopyTask copyTask2 = new COSXMLCopyTask(notExistBucket, "remote_key", notExistSource);
 
-            Assert.ThrowsAsync<CosServerException>(async () => await transferManager.CopyAsync(copyTask2));
+            Assert.ThrowsAsync<CosServerException>(async() => await transferManager.CopyAsync(copyTask2));
         }
     }
 }
