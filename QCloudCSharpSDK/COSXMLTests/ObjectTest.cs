@@ -1077,7 +1077,7 @@ namespace COSXMLTests
                     // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
                 };
                 var asyncTask = transferManager.UploadAsync(uploadTask2);
-                asyncTask.Wait();
+                asyncTask.Wait(10000);
                 COSXMLUploadTask.UploadTaskResult result = asyncTask.Result;
 
                 Assert.True(result.httpCode == 200);
@@ -1170,7 +1170,7 @@ namespace COSXMLTests
             Thread.Sleep(200);
             downloadTask.Resume();
             asyncTask = downloadTask.AsyncTask<COSXMLDownloadTask.DownloadTaskResult>();
-            asyncTask.Wait();
+            asyncTask.Wait(10000);
             COSXMLDownloadTask.DownloadTaskResult result = asyncTask.Result;
 
             Assert.True(result.httpCode == 200);
@@ -1248,9 +1248,10 @@ namespace COSXMLTests
             Thread.Sleep(3000);
             copyTask.Pause();
 
+            Thread.Sleep(200);
             copyTask.Resume();
             asyncTask = copyTask.AsyncTask<COSXMLCopyTask.CopyTaskResult>();
-            asyncTask.Wait();
+            asyncTask.Wait(10000);
             COSXMLCopyTask.CopyTaskResult result = asyncTask.Result;
 
             Assert.True(result.httpCode == 200);
