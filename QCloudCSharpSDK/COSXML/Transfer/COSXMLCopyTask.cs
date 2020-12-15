@@ -49,6 +49,8 @@ namespace COSXML.Transfer
 
         private AbortMultipartUploadRequest abortMultiUploadRequest;
 
+        public bool CompleteOnAllPartsCopyed { get; set; } = true;
+
         public COSXMLCopyTask(string bucket, string key, CopySourceStruct copySource)
             : base(bucket, key)
         {
@@ -352,6 +354,7 @@ namespace COSXML.Transfer
                         UploadPartCopyResult uploadPartCopyResult = result as UploadPartCopyResult;
 
                         sliceStruct.eTag = uploadPartCopyResult.copyPart.eTag;
+
                         lock (syncPartCopyCount)
                         {
                             sliceCount--;
@@ -539,8 +542,11 @@ namespace COSXML.Transfer
 
         public void OnPart()
         {
-            //获取了 part ETag
-            CompleteMultipartUpload();
+            if (CompleteOnAllPartsCopyed)
+            {
+                //获取了 part ETag
+                CompleteMultipartUpload();
+            }
 
         }
 
