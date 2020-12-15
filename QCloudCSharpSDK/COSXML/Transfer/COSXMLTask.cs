@@ -64,6 +64,11 @@ namespace COSXML.Transfer
 
         public abstract void Resume();
 
+        public TaskState state()
+        {
+            return taskState;
+        }
+
         protected void SetHeaders(Dictionary<string, string> headers)
         {
             this.customHeaders = headers;

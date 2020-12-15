@@ -1250,12 +1250,19 @@ namespace COSXMLTests
 
             Thread.Sleep(200);
             copyTask.Resume();
-            asyncTask = copyTask.AsyncTask<COSXMLCopyTask.CopyTaskResult>();
-            asyncTask.Wait(10000);
-            COSXMLCopyTask.CopyTaskResult result = asyncTask.Result;
+            if (copyTask.state() != TaskState.Completed)
+            {
+                asyncTask = copyTask.AsyncTask<COSXMLCopyTask.CopyTaskResult>();
+                asyncTask.Wait(10000);
+                COSXMLCopyTask.CopyTaskResult result = asyncTask.Result;
 
-            Assert.True(result.httpCode == 200);
-            Assert.NotNull(result.eTag);
+                Assert.True(result.httpCode == 200);
+                Assert.NotNull(result.eTag);
+            }
+            else 
+            {
+                Console.WriteLine("Copy is Completed");
+            }
         }
 
         [Test()]
