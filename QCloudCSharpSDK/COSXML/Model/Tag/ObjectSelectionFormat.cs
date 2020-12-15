@@ -1,42 +1,72 @@
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
-namespace COSXML.Model.Tag {
-  public sealed class ObjectSelectionFormat {
+namespace COSXML.Model.Tag
+{
+    public sealed class ObjectSelectionFormat
+    {
 
-    public readonly string CompressionType;
+        [XmlElement("CompressionType")]
+        public string compressionType;
 
-    public readonly CSVFormat csvFormat;
+        [XmlElement("CSV")]
+        public CSVFormat csvFormat;
 
-    public readonly JSONFormat jsonFormat;
+        [XmlElement("JSON")]
+        public JSONFormat jsonFormat;
 
-    public ObjectSelectionFormat(string CompressionType, CSVFormat csv) {
-      this.CompressionType = CompressionType;
-      this.csvFormat = csv;
-      this.jsonFormat = null;
+        public ObjectSelectionFormat()
+        {
+        }
+
+        public ObjectSelectionFormat(string compressionType, CSVFormat csv)
+        {
+            this.compressionType = compressionType;
+            this.csvFormat = csv;
+            this.jsonFormat = null;
+        }
+
+        public ObjectSelectionFormat(string compressionType, JSONFormat json)
+        {
+            this.compressionType = compressionType;
+            this.csvFormat = null;
+            this.jsonFormat = json;
+        }
+
+        public sealed class CSVFormat
+        {
+            [XmlElement]
+            public string FileHeaderInfo;
+
+            [XmlElement]
+            public string RecordDelimiter;
+
+            [XmlElement]
+            public string FieldDelimiter;
+
+            [XmlElement]
+            public string QuoteCharacter;
+
+            [XmlElement]
+            public string QuoteEscapeCharacter;
+
+            [XmlElement]
+            public string Comments;
+
+            [XmlElement]
+            public bool AllowQuotedRecordDelimiter;
+
+            [XmlElement]
+            public string QuoteFields;
+        }
+
+        public sealed class JSONFormat
+        {
+            [XmlElement]
+            public string Type;
+
+            [XmlElement]
+            public string RecordDelimiter;
+        }
     }
-
-    public ObjectSelectionFormat(string CompressionType, JSONFormat json) {
-      this.CompressionType = CompressionType;
-      this.csvFormat = null;
-      this.jsonFormat = json;
-    }
-
-    public sealed class CSVFormat {
-      public string FileHeaderInfo;
-      public string RecordDelimiter;
-      public string FieldDelimiter;
-      public string QuoteCharacter;
-      public string QuoteEscapeCharacter;
-      public string Comments;
-      public bool AllowQuotedRecordDelimiter;
-
-      public string QuoteFields;
-    }
-
-    public sealed class JSONFormat {
-      public string Type;
-
-      public string RecordDelimiter;
-    }
-  }
 }

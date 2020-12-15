@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using COSXML.Utils;
 using System.Collections.Generic;
 using System.Text;
@@ -11,25 +11,16 @@ namespace COSXML.Utils.Tests
         [Test()]
         public void GetCurrentTimeTest()
         {
-            long days = TimeUtils.GetCurrentTime(TimeUnit.DAYS);
-            long hours = TimeUtils.GetCurrentTime(TimeUnit.HOURS);
-            long minutes = TimeUtils.GetCurrentTime(TimeUnit.MINUTES);
-            long seconds = TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
-            
-
+            long days = TimeUtils.GetCurrentTime(TimeUnit.Days);
+            long hours = TimeUtils.GetCurrentTime(TimeUnit.Hours);
+            long minutes = TimeUtils.GetCurrentTime(TimeUnit.Minutes);
+            long seconds = TimeUtils.GetCurrentTime(TimeUnit.Seconds);
         }
 
         [Test()]
         public void GetFormatTimeTest()
         {
-            
+
         }
     }
 }
-
-
-/* ============================================================================== 
-* Copyright 2016-2019 Tencent Cloud. All Rights Reserved.
-* Auth：bradyxiao 
-* Date：2019/1/22 17:32:45 
-* ==============================================================================*/

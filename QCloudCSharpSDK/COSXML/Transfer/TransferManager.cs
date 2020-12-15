@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -6,50 +6,9 @@ using System.Threading.Tasks;
 using COSXML.Model;
 using COSXML.CosException;
 
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/29/2018 5:09:07 PM
-* bradyxiao
-*/
+
 namespace COSXML.Transfer
 {
-    /// <summary>
-    /// 高级传输任务设置
-    /// </summary>
-    public sealed class TransferConfig
-    {
-        internal long divisionForCopy = 5242880; // 5M
-
-        internal long sliceSizeForCopy = 2097152; // 2M
-
-        internal long divisionForUpload = 5242880; // 5M
-
-        internal long sliceSizeForUpload = 1048576; // 1M
-
-        /// <summary>
-        /// 多大的文件会自动使用分片拷贝
-        /// </summary>
-        /// <value>默认是 5MB</value>
-        public long DdivisionForCopy { get { return divisionForCopy; } set { divisionForCopy = value; } }
-
-        /// <summary>
-        /// 多大的文件会自动使用分片上传
-        /// </summary>
-        /// <value>默认是 2MB</value>
-        public long DivisionForUpload { get { return divisionForUpload; } set { divisionForUpload = value; } }
-
-        /// <summary>
-        /// 每个分片拷贝任务的分片大小
-        /// </summary>
-        /// <value>默认是 5MB</value>
-        public long SliceSizeForCopy { get { return sliceSizeForCopy; } set { sliceSizeForCopy = value; } }
-
-        /// <summary>
-        /// 每个分片上传任务的分片大小
-        /// </summary>
-        /// <value>默认是 1MB</value>
-        public long SliceSizeForUpload { get { return sliceSizeForUpload; } set { sliceSizeForUpload = value; } }
-    }
 
     /// <summary>
     /// 高级传输，提供更方便的对象上传、下载、拷贝功能
@@ -57,6 +16,7 @@ namespace COSXML.Transfer
     public sealed class TransferManager
     {
         private TransferConfig transferConfig;
+
         private CosXml cosXml;
 
         /// <summary>
@@ -66,8 +26,17 @@ namespace COSXML.Transfer
         /// <param name="transferConfig">高级传输设置</param>
         public TransferManager(CosXml cosXmlServer, TransferConfig transferConfig)
         {
-            if (cosXmlServer == null) throw new ArgumentNullException("CosXmlServer = null");
-            if (transferConfig == null) throw new ArgumentNullException("TransferConfig = null");
+
+            if (cosXmlServer == null)
+            {
+                throw new ArgumentNullException("CosXmlServer = null");
+            }
+
+            if (transferConfig == null)
+            {
+                throw new ArgumentNullException("TransferConfig = null");
+            }
+
             this.transferConfig = transferConfig;
             //COSXMLTask.InitCosXmlServer(cosXmlServer);
             this.cosXml = cosXmlServer;
@@ -81,7 +50,7 @@ namespace COSXML.Transfer
         public void Upload(COSXMLUploadTask uploader)
         {
             uploader.InitCosXmlServer(cosXml);
-            uploader.SetDivision(transferConfig.divisionForUpload, transferConfig.sliceSizeForUpload);
+            uploader.SetDivision(transferConfig.DivisionForUpload, transferConfig.SliceSizeForUpload);
             uploader.Upload();
         }
 
@@ -90,10 +59,11 @@ namespace COSXML.Transfer
         /// </summary>
         /// <param name="uploader"></param>
         /// <returns></returns>
-        public Task<COSXMLUploadTask.UploadTaskResult> UploadAsync(COSXMLUploadTask uploader) {
-            var t = newTaskCompletion<COSXMLUploadTask.UploadTaskResult>(uploader);
+        public Task<COSXMLUploadTask.UploadTaskResult> UploadAsync(COSXMLUploadTask uploader)
+        {
+            var task = uploader.AsyncTask<COSXMLUploadTask.UploadTaskResult>();
             Upload(uploader);
-            return t.Task;
+            return task;
         }
 
         /// <summary>
@@ -112,10 +82,11 @@ namespace COSXML.Transfer
         /// </summary>
         /// <param name="downloader"></param>
         /// <returns></returns>
-        public Task<COSXMLDownloadTask.DownloadTaskResult> DownloadAsync(COSXMLDownloadTask downloader) {
-            var t = newTaskCompletion<COSXMLDownloadTask.DownloadTaskResult>(downloader);
+        public Task<COSXMLDownloadTask.DownloadTaskResult> DownloadAsync(COSXMLDownloadTask downloader)
+        {
+            var task = downloader.AsyncTask<COSXMLDownloadTask.DownloadTaskResult>();
             Download(downloader);
-            return t.Task;
+            return task;
         }
 
         /// <summary>
@@ -126,7 +97,7 @@ namespace COSXML.Transfer
         public void Copy(COSXMLCopyTask copy)
         {
             copy.InitCosXmlServer(cosXml);
-            copy.SetDivision(transferConfig.DdivisionForCopy, transferConfig.sliceSizeForCopy);
+            copy.SetDivision(transferConfig.DdivisionForCopy, transferConfig.SliceSizeForCopy);
             copy.Copy();
         }
 
@@ -135,28 +106,81 @@ namespace COSXML.Transfer
         /// </summary>
         /// <param name="copyTask"></param>
         /// <returns></returns>
-        public Task<COSXMLCopyTask.CopyTaskResult> CopyAsync(COSXMLCopyTask copyTask) {
-            var t = newTaskCompletion<COSXMLCopyTask.CopyTaskResult>(copyTask);
+        public Task<COSXMLCopyTask.CopyTaskResult> CopyAsync(COSXMLCopyTask copyTask)
+        {
+            var task = copyTask.AsyncTask<COSXMLCopyTask.CopyTaskResult>();
             Copy(copyTask);
-            return t.Task;
+            return task;
+        }
+    }
+
+    /// <summary>
+    /// 高级传输任务设置
+    /// </summary>
+    public sealed class TransferConfig
+    {
+        // 5M
+        private long divisionForCopy = 5242880;
+
+        // 2M
+        private long sliceSizeForCopy = 2097152;
+
+        // 5M
+        private long divisionForUpload = 5242880;
+
+        // 1M
+        private long sliceSizeForUpload = 1048576;
+
+        /// <summary>
+        /// 多大的文件会自动使用分片拷贝
+        /// </summary>
+        /// <value>默认是 5MB</value>
+        public long DdivisionForCopy
+        {
+            get
+            {
+                return divisionForCopy;
+            }
+            set { divisionForCopy = value; }
         }
 
-        private TaskCompletionSource<T> newTaskCompletion<T>(COSXMLTask task) where T: CosResult {
-            var t = new TaskCompletionSource<T>();
+        /// <summary>
+        /// 多大的文件会自动使用分片上传
+        /// </summary>
+        /// <value>默认是 2MB</value>
+        public long DivisionForUpload
+        {
+            get
+            {
+                return divisionForUpload;
+            }
+            set { divisionForUpload = value; }
+        }
 
-            task.successCallback = delegate(CosResult cosResult) {
-                t.TrySetResult(cosResult as T);
-            };
+        /// <summary>
+        /// 每个分片拷贝任务的分片大小
+        /// </summary>
+        /// <value>默认是 5MB</value>
+        public long SliceSizeForCopy
+        {
+            get
+            {
+                return sliceSizeForCopy;
+            }
+            set { sliceSizeForCopy = value; }
+        }
 
-            task.failCallback = delegate(CosClientException clientException, CosServerException serverException) {
-                if (clientException != null) {
-                    t.TrySetException(clientException);
-                } else {
-                    t.TrySetException(serverException);
-                }
-            };
-
-            return t;
+        /// <summary>
+        /// 每个分片上传任务的分片大小
+        /// </summary>
+        /// <value>默认是 1MB</value>
+        public long SliceSizeForUpload
+        {
+            get
+            {
+                return sliceSizeForUpload;
+            }
+            set { sliceSizeForUpload = value; }
         }
     }
 }

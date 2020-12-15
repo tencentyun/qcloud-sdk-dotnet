@@ -1,12 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/2/2018 11:26:53 AM
-* bradyxiao
-*/
+
 namespace COSXML.CosException
 {
     /// <summary>
@@ -27,8 +23,8 @@ namespace COSXML.CosException
             this.errorCode = errorCode;
         }
 
-        public CosClientException(int errorCode, string message, Exception cause) 
-            :base(message, cause)
+        public CosClientException(int errorCode, string message, Exception cause)
+            : base(message, cause)
         {
             this.errorCode = errorCode;
         }

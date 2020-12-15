@@ -1,4 +1,4 @@
-﻿using COSXML.Common;
+using COSXML.Common;
 using COSXML.Model.Tag;
 using COSXML.Network;
 using System;
@@ -10,12 +10,12 @@ namespace COSXML.Model.Bucket
     public sealed class PutBucketInventoryRequest : BucketRequest
     {
         private InventoryConfiguration inventoryConfiguration;
+
         public PutBucketInventoryRequest(string bucket, string id) : base(bucket)
         {
             this.method = CosRequestMethod.PUT;
             this.queryParameters.Add("inventory", null);
             this.queryParameters.Add("id", id);
-            this.IsNeedMD5 = true;
             inventoryConfiguration = new InventoryConfiguration();
             inventoryConfiguration.isEnabled = true;
             inventoryConfiguration.id = id;
@@ -31,6 +31,7 @@ namespace COSXML.Model.Bucket
 
         public void SetFilter(string prefix)
         {
+
             if (!String.IsNullOrEmpty(prefix))
             {
                 inventoryConfiguration.filter = new InventoryConfiguration.Filter();
@@ -40,23 +41,40 @@ namespace COSXML.Model.Bucket
 
         public void SetDestination(string format, string accountId, string bucket, string region, string prefix)
         {
-            if (format != null) inventoryConfiguration.destination.cosBucketDestination.format = format;
-            if (accountId != null) inventoryConfiguration.destination.cosBucketDestination.accountId = accountId;
+
+            if (format != null)
+            {
+                inventoryConfiguration.destination.cosBucketDestination.format = format;
+            }
+
+            if (accountId != null)
+            {
+                inventoryConfiguration.destination.cosBucketDestination.accountId = accountId;
+            }
+
             if (bucket != null && region != null)
             {
                 inventoryConfiguration.destination.cosBucketDestination.bucket = "qcs::cos:" + region
                         + "::" + bucket;
             }
-            if (prefix != null) inventoryConfiguration.destination.cosBucketDestination.prefix = prefix;
+
+            if (prefix != null)
+            {
+                inventoryConfiguration.destination.cosBucketDestination.prefix = prefix;
+            }
         }
 
-        public void enableSSE() {
+        public void EnableSSE()
+        {
             inventoryConfiguration.destination.cosBucketDestination.encryption = new InventoryConfiguration.Encryption();
-            inventoryConfiguration.destination.cosBucketDestination.encryption.sSECOS = ""; //默认不填
+            //默认不填
+            //默认不填
+            inventoryConfiguration.destination.cosBucketDestination.encryption.sSECOS = "";
         }
 
         public void SetScheduleFrequency(String frequency)
         {
+
             if (frequency != null)
             {
                 inventoryConfiguration.schedule.frequency = frequency;
@@ -65,19 +83,23 @@ namespace COSXML.Model.Bucket
 
         public void SetOptionalFields(string field)
         {
+
             if (field != null)
             {
+
                 if (inventoryConfiguration.optionalFields == null)
                 {
                     inventoryConfiguration.optionalFields = new InventoryConfiguration.OptionalFields();
                     inventoryConfiguration.optionalFields.fields = new List<string>(6);
                 }
+
                 inventoryConfiguration.optionalFields.fields.Add(field);
             }
         }
 
         public void SetIncludedObjectVersions(string includedObjectVersions)
         {
+
             if (includedObjectVersions != null)
             {
                 inventoryConfiguration.includedObjectVersions = includedObjectVersions;
@@ -86,10 +108,7 @@ namespace COSXML.Model.Bucket
 
         public override Network.RequestBody GetRequestBody()
         {
-            string content = Transfer.XmlBuilder.BuildInventoryConfiguration(inventoryConfiguration);
-            byte[] data = Encoding.UTF8.GetBytes(content);
-            ByteRequestBody body = new ByteRequestBody(data);
-            return body;
+            return GetXmlRequestBody(inventoryConfiguration);
         }
 
     }

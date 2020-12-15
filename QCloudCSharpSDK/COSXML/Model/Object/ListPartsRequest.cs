@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -25,10 +25,6 @@ namespace COSXML.Model.Object
             this.uploadId = uploadId;
         }
 
-        public void SetUploadId(string uploadId)
-        {
-            this.uploadId = uploadId;
-        }
         /// <summary>
         /// 单次返回最大的条目数量，默认 1000
         /// </summary>
@@ -37,14 +33,16 @@ namespace COSXML.Model.Object
         {
             SetQueryParameter(CosRequestHeaderKey.MAX_PARTS, maxParts.ToString());
         }
+
         /// <summary>
         /// 默认以 UTF-8 二进制顺序列出条目，所有列出条目从 marker 开始
         /// </summary>
         /// <param name="partNumberMarker"></param>
         public void SetPartNumberMarker(int partNumberMarker)
         {
-           SetQueryParameter(CosRequestHeaderKey.PART_NUMBER_MARKER, partNumberMarker.ToString());
+            SetQueryParameter(CosRequestHeaderKey.PART_NUMBER_MARKER, partNumberMarker.ToString());
         }
+
         /// <summary>
         /// 规定返回值的编码方式
         /// </summary>
@@ -56,16 +54,24 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
-            if (requestUrlWithSign != null) return;
+
+            if (requestUrlWithSign != null)
+            {
+
+                return;
+            }
+
             base.CheckParameters();
+
             if (uploadId == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "uploadId = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "uploadId = null");
             }
         }
 
         protected override void InternalUpdateQueryParameters()
         {
+
             try
             {
                 queryParameters.Add("uploadId", uploadId);
@@ -74,7 +80,7 @@ namespace COSXML.Model.Object
             {
                 queryParameters["uploadId"] = uploadId;
             }
-            
+
         }
 
 

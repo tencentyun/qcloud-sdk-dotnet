@@ -1,13 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
 using COSXML.Common;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/6/2018 8:58:18 PM
-* bradyxiao
-*/
+
 namespace COSXML.Network
 {
     public class HttpClientConfig
@@ -49,84 +45,85 @@ namespace COSXML.Network
             this.proxyDomain = builder.proxyDomain;
         }
 
-        public string UserAgnet 
+        public string UserAgnet
         {
             get
             {
+
                 return userAgent;
             }
-            
+
         }
 
         public bool AllowAutoRedirect
         {
-            get { return allowAutoRedirect; }
-            
+            get
+            {
+                return allowAutoRedirect;
+            }
+
         }
 
         public int ConnectionTimeoutMs
         {
             get
             {
+
                 return connectionTimeoutMs;
             }
 
-           
+
         }
 
         public int ReadWriteTimeoutMs
         {
             get
             {
+
                 return readWriteTimeoutMs;
             }
 
-            
-        }
 
-        public int MaxRery
-        {
-            get
-            {
-                return maxRetry;
-            }
-            
         }
 
         public int ConnectionLimit
         {
             get
             {
+
                 return connectionLimit;
             }
-            
+
         }
 
         public string ProxyHost
         {
             get
             {
+
                 return proxyHost;
             }
-            
+
         }
 
         public int ProxyPort
         {
             get
             {
+
                 return proxyPort;
             }
-           
+
         }
 
         public string ProxyUserName
         {
             get
             {
+
                 return proxyUserName;
             }
-            
+
         }
 
 
@@ -134,18 +131,20 @@ namespace COSXML.Network
         {
             get
             {
+
                 return proxyUserPassword;
             }
-           
+
         }
 
         public string ProxyDomain
         {
             get
             {
+
                 return proxyDomain;
             }
-            
+
         }
 
         public class Builder
@@ -172,85 +171,92 @@ namespace COSXML.Network
 
             internal string proxyDomain;
 
-            public Builder() { }
+            public Builder() 
+            { 
+                
+            }
 
             public Builder AllowAutoRedirect(bool allow)
             {
                 this.allowAutoRedirect = allow;
+
                 return this;
             }
 
             public Builder SetConnectionLimit(int connectionLimit)
             {
-                if (connectionLimit > 0) 
+
+                if (connectionLimit > 0)
                 {
                     this.connectionLimit = connectionLimit;
                 }
-                return this;
-            }
 
-            public Builder SetMaxRetry(int maxRetry)
-            {
-                if (maxRetry > 0)
-                {
-                    this.maxRetry = maxRetry;
-                }
                 return this;
             }
 
             public Builder SetConnectionTimeoutMs(int connectionTimeoutMs)
             {
+
                 if (connectionTimeoutMs > 0)
                 {
                     this.connectionTimeoutMs = connectionTimeoutMs;
                 }
+
                 return this;
             }
 
             public Builder SetReadWriteTimeoutMs(int readWriteTimeoutMs)
             {
+
                 if (readWriteTimeoutMs > 0)
                 {
                     this.readWriteTimeoutMs = readWriteTimeoutMs;
                 }
+
                 return this;
             }
 
             public Builder SetProxyHost(string host)
             {
                 this.proxyHost = host;
+
                 return this;
             }
 
             public Builder SetProxyPort(int port)
             {
                 this.proxyPort = port;
+
                 return this;
             }
 
             public Builder SetProxyUserName(string userName)
             {
                 this.proxyUserName = userName;
+
                 return this;
             }
 
             public Builder SetProxyUserPassword(string password)
             {
                 this.proxyUserPassword = password;
+
                 return this;
             }
 
             public Builder SetProxyDomain(string domain)
             {
                 this.proxyDomain = domain;
+
                 return this;
             }
 
             public HttpClientConfig Build()
             {
+
                 return new HttpClientConfig(this);
             }
- 
+
         }
     }
 }

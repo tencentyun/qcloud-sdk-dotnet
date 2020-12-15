@@ -1,11 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/9/2018 12:09:40 PM
-* bradyxiao
-*/
+
 namespace COSXML.Auth
 {
     public class QCloudCredentials
@@ -34,7 +30,7 @@ namespace COSXML.Auth
             base(secretId, signKey, keyTime)
         {
             this.Token = token;
-            
+
         }
 
         public string Token

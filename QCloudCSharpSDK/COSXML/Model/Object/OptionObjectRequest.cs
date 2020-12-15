@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -17,6 +17,7 @@ namespace COSXML.Model.Object
         /// 模拟跨域访问的请求来源域名
         /// </summary>
         private string origin;
+
         /// <summary>
         /// 模拟跨域访问的请求 HTTP 方法
         /// </summary>
@@ -27,44 +28,35 @@ namespace COSXML.Model.Object
         {
             this.method = CosRequestMethod.OPTIONS;
             this.origin = origin;
+
             if (accessControlMethod != null)
             {
                 this.accessControlMethod = accessControlMethod.ToUpper();
             }
         }
-        /// <summary>
-        /// 模拟跨域访问的请求来源域名
-        /// </summary>
-        /// <param name="origin"></param>
-        public void SetOrigin(string origin)
-        {
-            this.origin = origin;
-        }
-        /// <summary>
-        /// 模拟跨域访问的请求 HTTP 方法
-        /// </summary>
-        /// <param name="accessControlMethod"></param>
-        public void SetAccessControlMethod(string accessControlMethod)
-        {
-            if (accessControlMethod != null)
-            {
-                this.accessControlMethod = accessControlMethod.ToUpper();
-            }
-        }
+
         /// <summary>
         /// 模拟跨域访问的请求头部
         /// </summary>
         /// <param name="accessControlHeaders"></param>
         public void SetAccessControlHeaders(List<string> accessControlHeaders)
         {
+
             if (accessControlHeaders != null)
             {
                 StringBuilder headers = new StringBuilder();
+
                 foreach (string accessControlHeader in accessControlHeaders)
                 {
-                    if(accessControlHeader != null) headers.Append(accessControlHeader).Append(",");
+
+                    if (accessControlHeader != null)
+                    {
+                        headers.Append(accessControlHeader).Append(",");
+                    }
                 }
+
                 string result = headers.ToString();
+
                 if (result.EndsWith(","))
                 {
                     result = result.Substring(0, result.Length - 1);
@@ -75,19 +67,23 @@ namespace COSXML.Model.Object
 
         public override void CheckParameters()
         {
+
             if (origin == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "origin = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "origin = null");
             }
+
             if (accessControlMethod == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "accessControlMethod = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "accessControlMethod = null");
             }
+
             base.CheckParameters();
         }
 
         protected override void InteranlUpdateHeaders()
         {
+
             try
             {
                 this.headers.Add(CosRequestHeaderKey.ORIGIN, origin);
@@ -96,6 +92,7 @@ namespace COSXML.Model.Object
             {
                 this.headers[CosRequestHeaderKey.ORIGIN] = origin;
             }
+
             try
             {
                 this.headers.Add(CosRequestHeaderKey.ACCESS_CONTROL_REQUEST_METHOD, accessControlMethod);

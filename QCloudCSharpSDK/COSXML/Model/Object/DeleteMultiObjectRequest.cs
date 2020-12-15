@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -25,26 +25,22 @@ namespace COSXML.Model.Object
             : base(bucket, "/")
         {
             this.method = CosRequestMethod.POST;
-            this.needMD5 = true;
             this.queryParameters.Add("delete", null);
             delete = new Delete();
             delete.deleteObjects = new List<Delete.DeleteObject>();
         }
 
-        public override void SetCosPath(string key)
-        {
-            // do nothing for delete multi objects api
-        }
         /// <summary>
         /// 返回模式
         /// verbose 模式和 quiet 模式，默认为 verbose 模式。
         /// verbose 模式返回每个 key 的删除情况，quiet 模式只返回删除失败的 key 的情况；
         /// </summary>
         /// <param name="quiet"></param>
-        public void SetDeleteQuiet(bool quiet) 
+        public void SetDeleteQuiet(bool quiet)
         {
             delete.quiet = quiet;
         }
+
         /// <summary>
         /// 删除对象
         /// </summary>
@@ -53,6 +49,7 @@ namespace COSXML.Model.Object
         {
             SetDeleteKey(key, null);
         }
+
         /// <summary>
         /// 删除指定版本的对象
         /// </summary>
@@ -60,63 +57,60 @@ namespace COSXML.Model.Object
         /// <param name="versionId"></param>
         public void SetDeleteKey(string key, string versionId)
         {
+
             if (!String.IsNullOrEmpty(key))
             {
+
                 if (key.StartsWith("/"))
                 {
                     key = key.Substring(1);
                 }
+
                 Delete.DeleteObject deleteObject = new Delete.DeleteObject();
+
                 deleteObject.key = key;
+
                 if (versionId != null)
                 {
                     deleteObject.versionId = versionId;
                 }
+
                 delete.deleteObjects.Add(deleteObject);
             }
-            
+
         }
+
         /// <summary>
         /// 删除对象
         /// </summary>
         /// <param name="keys"></param>
         public void SetObjectKeys(List<string> keys)
         {
+
             if (keys != null)
             {
+
                 foreach (string key in keys)
                 {
                     SetDeleteKey(key, null);
                 }
             }
         }
-        /// <summary>
-        /// 删除指定版本的对象
-        /// </summary>
-        /// <param name="versionIdAndKey"></param>
-        public void SetObjectKeys(Dictionary<string, string> versionIdAndKey)
-        {
-            if (versionIdAndKey != null)
-            {
-                foreach (KeyValuePair<string, string> pair in versionIdAndKey)
-                {
-                    SetDeleteKey(pair.Value, pair.Key);
-                }
-            }
-        }
 
         public override void CheckParameters()
         {
-            if (delete.deleteObjects.Count == 0) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "delete keys（null or empty) is invalid");
+
+            if (delete.deleteObjects.Count == 0)
+            {
+                throw new CosClientException((int)CosClientError.InvalidArgument, "delete keys（null or empty) is invalid");
+            }
+
             base.CheckParameters();
         }
 
         public override Network.RequestBody GetRequestBody()
         {
-            string content = Transfer.XmlBuilder.BuildDelete(delete);
-            byte[] data = Encoding.UTF8.GetBytes(content);
-            ByteRequestBody body = new ByteRequestBody(data);
-            return body;
+            return GetXmlRequestBody(delete);
         }
 
     }

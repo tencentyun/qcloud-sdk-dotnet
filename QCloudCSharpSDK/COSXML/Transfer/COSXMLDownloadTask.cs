@@ -1,24 +1,23 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using COSXML.Model.Object;
 using COSXML.Utils;
 using COSXML.Model;
 using COSXML.CosException;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/29/2018 4:58:58 PM
-* bradyxiao
-*/
+
 namespace COSXML.Transfer
 {
     public sealed class COSXMLDownloadTask : COSXMLTask
     {
         private string localDir;
+
         private string localFileName;
+
         private long localFileOffset;
 
         private long rangeStart = -1L;
+
         private long rangeEnd = -1L;
 
         private HeadObjectRequest headObjectRequest;
@@ -26,17 +25,11 @@ namespace COSXML.Transfer
         private GetObjectRequest getObjectRequest;
 
         private Object syncExit = new Object();
+
         private bool isExit = false;
 
         public COSXMLDownloadTask(string bucket, string key, string localDir, string localFileName)
             : base(bucket, key)
-        {
-            this.localDir = localDir;
-            this.localFileName = localFileName;
-        }
-
-        public COSXMLDownloadTask(string bucket, string region, string key, string localDir, string localFileName)
-            : base(bucket, region, key)
         {
             this.localDir = localDir;
             this.localFileName = localFileName;
@@ -61,19 +54,22 @@ namespace COSXML.Transfer
 
         internal void Download()
         {
-            UpdateTaskState(TaskState.WAITTING);
+            UpdateTaskState(TaskState.Waiting);
             //对象是否存在
             headObjectRequest = new HeadObjectRequest(bucket, key);
-            cosXmlServer.HeadObject(headObjectRequest, delegate(CosResult cosResult)
+            cosXmlServer.HeadObject(headObjectRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
-                if (UpdateTaskState(TaskState.RUNNING))
+
+                if (UpdateTaskState(TaskState.Running))
                 {
                     HeadObjectResult result = cosResult as HeadObjectResult;
                     //计算range
@@ -83,17 +79,22 @@ namespace COSXML.Transfer
                 }
 
             },
-            delegate(CosClientException clientEx, CosServerException serverEx)
+            
+            delegate (CosClientException clientEx, CosServerException serverEx)
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
-                if (UpdateTaskState(TaskState.FAILED))
+
+                if (UpdateTaskState(TaskState.Failed))
                 {
+
                     if (failCallback != null)
                     {
                         failCallback(clientEx, serverEx);
@@ -105,28 +106,36 @@ namespace COSXML.Transfer
 
         private void GetObject()
         {
-            if (getObjectRequest == null) {
+
+            if (getObjectRequest == null)
+            {
                 getObjectRequest = new GetObjectRequest(bucket, key, localDir, localFileName);
             }
+
             if (progressCallback != null)
             {
                 getObjectRequest.SetCosProgressCallback(progressCallback);
             }
+
             getObjectRequest.SetRange(rangeStart, rangeEnd);
             getObjectRequest.SetLocalFileOffset(localFileOffset);
-            cosXmlServer.GetObject(getObjectRequest, delegate(CosResult result)
+            cosXmlServer.GetObject(getObjectRequest, delegate (CosResult result)
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
-                if (UpdateTaskState(TaskState.COMPLETED))
+
+                if (UpdateTaskState(TaskState.Completed))
                 {
                     GetObjectResult getObjectResult = result as GetObjectResult;
                     DownloadTaskResult downloadTaskResult = new DownloadTaskResult();
+
                     downloadTaskResult.SetResult(getObjectResult);
 
                     if (successCallback != null)
@@ -134,17 +143,23 @@ namespace COSXML.Transfer
                         successCallback(downloadTaskResult);
                     }
                 }
-            }, delegate(CosClientException clientEx, CosServerException serverEx)
+            }
+            
+            , delegate (CosClientException clientEx, CosServerException serverEx)
             {
                 lock (syncExit)
                 {
+
                     if (isExit)
                     {
+
                         return;
                     }
                 }
-                if (UpdateTaskState(TaskState.FAILED))
+
+                if (UpdateTaskState(TaskState.Failed))
                 {
+
                     if (failCallback != null)
                     {
                         failCallback(clientEx, serverEx);
@@ -159,7 +174,7 @@ namespace COSXML.Transfer
             cosXmlServer.Cancel(headObjectRequest);
             cosXmlServer.Cancel(getObjectRequest);
         }
-        
+
         private void Clear()
         {
 
@@ -167,9 +182,15 @@ namespace COSXML.Transfer
 
         public override void Pause()
         {
-            if (UpdateTaskState(TaskState.PAUSE))
+
+            if (UpdateTaskState(TaskState.Pause))
             {
-                lock (syncExit) { isExit = true; }//exit download
+                //exit download
+                lock (syncExit) 
+                { 
+                    isExit = true; 
+                }
+
                 //cancle request
                 RealCancle();
             }
@@ -177,9 +198,15 @@ namespace COSXML.Transfer
 
         public override void Cancel()
         {
-            if (UpdateTaskState(TaskState.CANCEL))
+
+            if (UpdateTaskState(TaskState.Cancel))
             {
-                lock (syncExit) { isExit = true; }//exit copy
+                //exit copy
+                lock (syncExit) 
+                { 
+                    isExit = true; 
+                }
+
                 //cancle request
                 RealCancle();
                 //clear recoder
@@ -189,12 +216,16 @@ namespace COSXML.Transfer
 
         public override void Resume()
         {
-            if (UpdateTaskState(TaskState.RESUME))
+
+            if (UpdateTaskState(TaskState.Resume))
             {
                 lock (syncExit)
                 {
-                    isExit = false;//continue to download
+                    //continue to download
+                    //continue to download
+                    isExit = false;
                 }
+
                 Download();
             }
         }
@@ -213,6 +244,7 @@ namespace COSXML.Transfer
 
             public override string GetResultInfo()
             {
+
                 return base.GetResultInfo() + ("\n : ETag: " + eTag);
             }
         }

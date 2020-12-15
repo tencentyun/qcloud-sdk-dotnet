@@ -1,4 +1,4 @@
-﻿using COSXML.Common;
+using COSXML.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace COSXML.Model.Bucket
 {
-    public sealed class GetBucketDomainRequest :BucketRequest
+    public sealed class GetBucketDomainRequest : BucketRequest
     {
         public GetBucketDomainRequest(string bucket) : base(bucket)
         {

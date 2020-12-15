@@ -1,14 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Diagnostics;
 
 using System.Text;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/2/2018 2:34:04 PM
-* bradyxiao
-*/
+
 namespace COSXML.Common
 {
     public sealed class CosVersion
@@ -18,8 +14,10 @@ namespace COSXML.Common
         public static string GetUserAgent()
         {
             StringBuilder userAgent = new StringBuilder();
+
             userAgent.Append("cos-net-sdk").Append('.')
                 .Append(SDKVersion);
+
             return userAgent.ToString();
         }
 

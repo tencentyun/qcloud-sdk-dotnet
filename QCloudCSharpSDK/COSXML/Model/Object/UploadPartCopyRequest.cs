@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -19,9 +19,9 @@ namespace COSXML.Model.Object
         /// <see cref="Model.Tag.CopySourceStruct"/>
         /// </summary>
         private CopySourceStruct copySourceStruct;
-        /**Specified part number*/
+
         private int partNumber = -1;
-        /**init upload generate' s uploadId by service*/
+
         private String uploadId = null;
 
         public UploadPartCopyRequest(string bucket, string key, int partNumber, string uploadId)
@@ -31,6 +31,7 @@ namespace COSXML.Model.Object
             this.partNumber = partNumber;
             this.uploadId = uploadId;
         }
+
         /// <summary>
         /// 设置拷贝数据源
         /// <see cref="Model.Tag.CopySourceStruct"/>
@@ -40,6 +41,7 @@ namespace COSXML.Model.Object
         {
             this.copySourceStruct = copySource;
         }
+
         /// <summary>
         /// 设置拷贝的分片范围
         /// </summary>
@@ -47,85 +49,49 @@ namespace COSXML.Model.Object
         /// <param name="end"></param>
         public void SetCopyRange(long start, long end)
         {
+
             if (start >= 0 && end >= start)
             {
                 string bytes = String.Format("bytes={0}-{1}", start, end);
+
                 SetRequestHeader(CosRequestHeaderKey.X_COS_COPY_SOURCE_RANGE, bytes);
-            }
-        }
-        /// <summary>
-        /// 当 Object 在指定时间后被修改，则执行操作，否则返回 412。
-        /// 可与 x-cos-copy-source-If-None-Match 一起使用，与其他条件联合使用返回冲突
-        /// </summary>
-        /// <param name="sourceIfModifiedSince"></param>
-        public void SetCopyIfModifiedSince(string sourceIfModifiedSince)
-        {
-            if (sourceIfModifiedSince != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.X_COS_COPY_SOURCE_IF_MODIFIED_SINCE, sourceIfModifiedSince);
-            }
-        }
-        /// <summary>
-        /// 当 Object 在指定时间后未被修改，则执行操作，否则返回 412。
-        /// 可与 x-cos-copy-source-If-Match 一起使用，与其他条件联合使用返回冲突。
-        /// </summary>
-        /// <param name="sourceIfUnmodifiedSince"></param>
-        public void SetCopyIfUnmodifiedSince(string sourceIfUnmodifiedSince)
-        {
-            if (sourceIfUnmodifiedSince != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.X_COS_COPY_SOURCE_IF_UNMODIFIED_SINCE, sourceIfUnmodifiedSince);
-            }
-        }
-        /// <summary>
-        ///  Object 的 Etag 和给定一致时，则执行操作，否则返回 412。
-        ///  可与 x-cos-copy-source-If-Unmodified-Since 一起使用，与其他条件联合使用返回冲突。
-        /// </summary>
-        /// <param name="eTag"></param>
-        public void SetCopyIfMatch(string eTag)
-        {
-            if (eTag != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.X_COS_COPY_SOURCE_IF_MATCH, eTag);
-            }
-        }
-        /// <summary>
-        /// 当 Object 的 Etag 和给定不一致时，则执行操作，否则返回 412。
-        /// 可与 x-cos-copy-source-If-Modified-Since 一起使用，与其他条件联合使用返回冲突
-        /// </summary>
-        /// <param name="eTag"></param>
-        public void SetCopyIfNoneMatch(string eTag)
-        {
-            if (eTag != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.X_COS_COPY_SOURCE_IF_NONE_MATCH, eTag);
             }
         }
 
         public override void CheckParameters()
         {
+
             if (copySourceStruct == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "copy source = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "copy source = null");
             }
             else
             {
                 copySourceStruct.CheckParameters();
             }
-            if (requestUrlWithSign != null) return;
+
+            if (requestUrlWithSign != null)
+            {
+
+                return;
+            }
+
             base.CheckParameters();
+
             if (partNumber <= 0)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "partNumber < 1");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "partNumber < 1");
             }
+
             if (uploadId == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "uploadID = null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "uploadID = null");
             }
         }
 
         protected override void InternalUpdateQueryParameters()
         {
+
             try
             {
                 this.queryParameters.Add("partNumber", partNumber.ToString());
@@ -134,6 +100,7 @@ namespace COSXML.Model.Object
             {
                 this.queryParameters["partNumber"] = partNumber.ToString();
             }
+
             try
             {
                 this.queryParameters.Add("uploadId", uploadId);
@@ -146,6 +113,7 @@ namespace COSXML.Model.Object
 
         protected override void InteranlUpdateHeaders()
         {
+
             try
             {
                 this.headers.Add(CosRequestHeaderKey.X_COS_COPY_SOURCE, copySourceStruct.GetCopySouce());

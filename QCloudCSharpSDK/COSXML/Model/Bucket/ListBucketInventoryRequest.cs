@@ -1,13 +1,14 @@
-﻿using COSXML.Common;
+using COSXML.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace COSXML.Model.Bucket
 {
-    public sealed class ListBucketInventoryRequest: BucketRequest
+    public sealed class ListBucketInventoryRequest : BucketRequest
     {
         private String continuationToken;
+
         public ListBucketInventoryRequest(string bucket) : base(bucket)
         {
             this.method = CosRequestMethod.GET;
@@ -16,6 +17,7 @@ namespace COSXML.Model.Bucket
 
         public void SetContinuationToken(String continuationToken)
         {
+
             if (continuationToken != null)
             {
                 SetQueryParameter("continuation-token", continuationToken);

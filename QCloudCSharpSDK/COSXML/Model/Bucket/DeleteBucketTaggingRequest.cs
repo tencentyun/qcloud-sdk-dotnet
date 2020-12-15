@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace COSXML.Model.Bucket
 {
-    public sealed class DeleteBucketTaggingRequest:BucketRequest
+    public sealed class DeleteBucketTaggingRequest : BucketRequest
     {
         public DeleteBucketTaggingRequest(string bucket) : base(bucket)
         {

@@ -1,87 +1,126 @@
-﻿using COSXML;
+using COSXML;
 using COSXML.Auth;
+using COSXML.Log;
 using COSXML.Common;
 using COSXML.Utils;
+using COSXML.CosException;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
-
-/* ============================================================================== 
-* Copyright 2016-2019 Tencent Cloud. All Rights Reserved.
-* Auth：bradyxiao 
-* Date：2019/1/22 19:34:45 
-* ==============================================================================*/
+using COSXML.Model;
 
 namespace COSXMLTests
 {
     public class QCloudServer
     {
         internal CosXml cosXml;
-        internal string bucketForBucketTest;
+
+        private const int ServerFailTolerance = 3;
+
+        internal string bucketForBucketTest 
+        {
+            get 
+            {
+                return "dotnet-ut-temp-" + TimeUtils.GetCurrentTime(TimeUnit.Seconds) + "-1253653367";
+            }
+        }
+
         internal string bucketForObjectTest;
+
+        internal string bucketVersioning;
+        internal string regionForBucketVersioning;
+
         internal string region;
+
         internal string appid;
+
+        internal string uin;
 
         private static QCloudServer instance;
 
+        private string secretId;
+        private string secretKey;
+
         private QCloudServer()
         {
-            appid = Environment.GetEnvironmentVariable("COS_APPID");
-            string secretId = Environment.GetEnvironmentVariable("COS_KEY");
-            string secretKey = Environment.GetEnvironmentVariable("COS_SECRET");
-            region = Environment.GetEnvironmentVariable("COS_REGION");
-            bucketForBucketTest = Environment.GetEnvironmentVariable("COS_BUCKET");
-            if (bucketForBucketTest == null) {
-                bucketForBucketTest = "bucket-4-csharp-test-1253653367";
-            }
-            bucketForObjectTest = bucketForBucketTest;
+            QLog.SetLogLevel(Level.V);
 
-            if (appid == null)
+            uin = "1278687956";
+            appid = "1253653367";
+            bucketVersioning = "dotnet-ut-versioning-1253653367";
+            regionForBucketVersioning = "ap-beijing";
+            bucketForObjectTest = "dotnet-ut-obj-1253653367";
+            region = "ap-guangzhou";
+
+            secretId = Environment.GetEnvironmentVariable("COS_KEY");
+            secretKey = Environment.GetEnvironmentVariable("COS_SECRET");
+            if (secretId == null)
             {
-                appid = Environment.GetEnvironmentVariable("COS_APPID", EnvironmentVariableTarget.Machine);
                 secretId = Environment.GetEnvironmentVariable("COS_KEY", EnvironmentVariableTarget.Machine);
                 secretKey = Environment.GetEnvironmentVariable("COS_SECRET", EnvironmentVariableTarget.Machine);
-                region = Environment.GetEnvironmentVariable("COS_REGION", EnvironmentVariableTarget.Machine);
             }
-           
+
             CosXmlConfig config = new CosXmlConfig.Builder()
                 .SetAppid(appid)
                 .SetRegion(region)
                 .SetDebugLog(true)
+                .IsHttps(true)
                 .SetConnectionLimit(512)
+                .SetConnectionTimeoutMs(10 * 1000)
+                .SetReadWriteTimeoutMs(10 * 1000)
                 .Build();
 
 
             long keyDurationSecond = 600;
+
             QCloudCredentialProvider qCloudCredentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, keyDurationSecond);
 
+
             cosXml = new CosXmlServer(config, qCloudCredentialProvider);
+        }
+
+        public CosXml NewService(string newRegion)
+        {
+            CosXmlConfig config = new CosXmlConfig.Builder()
+                .SetAppid(appid)
+                .SetRegion(newRegion)
+                .SetDebugLog(true)
+                .SetConnectionLimit(512)
+                .Build();
+
+            QCloudCredentialProvider qCloudCredentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, 600);
+
+            return new CosXmlServer(config, qCloudCredentialProvider);
         }
 
         public static QCloudServer Instance()
         {
             lock (typeof(QCloudServer))
             {
+
                 if (instance == null)
                 {
                     instance = new QCloudServer();
                 }
 
             }
+
             return instance;
         }
 
         public static string CreateFile(string filename, long size)
         {
+
             try
             {
                 string path = null;
                 FileStream fs = new FileStream(filename, FileMode.Create);
+
                 fs.SetLength(size);
                 path = fs.Name;
                 fs.Close();
+
                 return path;
             }
             catch (Exception)
@@ -90,9 +129,32 @@ namespace COSXMLTests
             }
         }
 
+        public static void SetRequestACLData(CosRequest request)
+        {
+            request.GetType().GetMethod("SetCosACL", new [] {typeof(CosACL)}).Invoke(request, new object[] { CosACL.Private });
+
+            COSXML.Model.Tag.GrantAccount readAccount = new COSXML.Model.Tag.GrantAccount();
+            readAccount.AddGrantAccount("1131975903", "1131975903");
+            request.GetType().GetMethod("SetXCosGrantRead").Invoke(request, new object[] { readAccount });
+
+            COSXML.Model.Tag.GrantAccount writeAccount = new COSXML.Model.Tag.GrantAccount();
+            writeAccount.AddGrantAccount("1131975903", "1131975903");
+            var writeMethod = request.GetType().GetMethod("SetXCosGrantWrite");
+
+            if (writeMethod != null)
+            {
+                writeMethod.Invoke(request, new object[] { writeAccount });
+            }
+
+            COSXML.Model.Tag.GrantAccount fullControlAccount = new COSXML.Model.Tag.GrantAccount();
+            fullControlAccount.AddGrantAccount("2832742109", "2832742109");
+            request.GetType().GetMethod("SetXCosReadWrite").Invoke(request, new object[] { fullControlAccount });
+        }
+
         public static void DeleteFile(string path)
         {
             FileInfo fileInfo = new FileInfo(path);
+
             if (fileInfo.Exists)
             {
                 fileInfo.Delete();
@@ -102,16 +164,35 @@ namespace COSXMLTests
         public static void DeleteAllFile(string dirPath, string regix)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(dirPath);
+
             if (directoryInfo.Exists)
             {
                 FileInfo[] files = directoryInfo.GetFiles(regix);
+
                 if (files != null && files.Length > 0)
                 {
+
                     for (int i = 0, count = files.Length; i < count; i++)
                     {
                         Console.WriteLine(files[i].Name);
                         files[i].Delete();
                     }
+                }
+            }
+        }
+
+        internal static void TestWithServerFailTolerance(Action action) 
+        {
+            for (int i = 0; i < ServerFailTolerance; i++)
+            {
+                try
+                {
+                    action.Invoke();
+                    break;
+                }
+                catch (CosServerException ex)
+                {
+                    Console.WriteLine("Fail But With Tolerance: " +  ex.StackTrace);
                 }
             }
         }

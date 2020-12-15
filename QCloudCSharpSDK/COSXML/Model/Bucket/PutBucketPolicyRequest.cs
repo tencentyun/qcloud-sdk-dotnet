@@ -1,4 +1,4 @@
-﻿using COSXML.Common;
+using COSXML.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +12,6 @@ namespace COSXML.Model.Bucket
         {
             this.method = CosRequestMethod.PUT;
             this.queryParameters.Add("policy ", null);
-            this.needMD5 = true;
         }
     }
 }

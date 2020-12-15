@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using System.Text;
 using COSXML.Common;
@@ -19,34 +19,45 @@ namespace COSXML.Model.Bucket
         public PutBucketIntelligentTieringRequest(string bucket, IntelligentTieringConfiguration configuration)
             : base(bucket)
         {
-            if (String.IsNullOrEmpty(configuration.Status)) {
+
+            if (String.IsNullOrEmpty(configuration.Status))
+            {
                 configuration.Status = "Enabled";
             }
-            if (configuration.Days < 1) {
-                configuration.Days = 30;
-            }
-            if (configuration.RequestFrequent < 1) {
-                configuration.RequestFrequent = 1;
-            }
             
+            if (configuration.Transition == null)
+            {
+                configuration.Transition = new IntelligentTieringConfiguration.IntelligentTieringTransition();
+            }
+
+            if (configuration.Transition.Days < 1)
+            {
+                configuration.Transition.Days = 30;
+            }
+
+            if (configuration.Transition.RequestFrequent < 1)
+            {
+                configuration.Transition.RequestFrequent = 1;
+            }
+
             this.method = CosRequestMethod.PUT;
             this.queryParameters.Add("intelligenttiering", null);
             this.configuration = configuration;
-            this.needMD5 = true;
         }
 
         public override Network.RequestBody GetRequestBody()
         {
-            string content = Transfer.XmlBuilder.BuildIntelligentTieringConfiguration(configuration);
-            byte[] data = Encoding.UTF8.GetBytes(content);
-            ByteRequestBody body = new ByteRequestBody(data);
-            return body;
+            return GetXmlRequestBody(configuration);
         }
 
         public override void CheckParameters()
         {
             base.CheckParameters();
-            if (String.IsNullOrEmpty(configuration.Status)) throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "Status 不能为空");
+
+            if (String.IsNullOrEmpty(configuration.Status))
+            {
+                throw new CosClientException((int)CosClientError.InvalidArgument, "Status 不能为空");
+            }
         }
     }
 }

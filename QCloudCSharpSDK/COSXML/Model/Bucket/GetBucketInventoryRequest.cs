@@ -1,4 +1,4 @@
-﻿using COSXML.Common;
+using COSXML.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,6 +15,7 @@ namespace COSXML.Model.Bucket
 
         public void SetInventoryId(string inventoryId)
         {
+
             if (inventoryId != null)
             {
                 SetQueryParameter("id", inventoryId);

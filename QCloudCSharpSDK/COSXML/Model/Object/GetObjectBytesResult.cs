@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,13 +17,16 @@ namespace COSXML.Model.Object
         internal override void ExternInfo(CosRequest cosRequest)
         {
             GetObjectBytesRequest getObjectBytesRequest = cosRequest as GetObjectBytesRequest;
+
             this.progressCallback = getObjectBytesRequest.GetCosProgressCallback();
         }
 
         internal override void InternalParseResponseHeaders()
         {
             List<string> values;
+
             this.responseHeaders.TryGetValue("ETag", out values);
+
             if (values != null && values.Count > 0)
             {
                 eTag = values[0];
@@ -35,10 +38,13 @@ namespace COSXML.Model.Object
         {
             content = new byte[contentLength];
             int completed = 0;
+
             while (completed < contentLength)
             {
-                int recvLen = inputStream.Read(content, completed, (int) Math.Min(2048, contentLength - completed));
+                int recvLen = inputStream.Read(content, completed, (int)Math.Min(2048, contentLength - completed));
+
                 completed += recvLen;
+
                 if (progressCallback != null)
                 {
                     progressCallback(completed, content.Length);
@@ -50,7 +56,7 @@ namespace COSXML.Model.Object
             //     inputStream.CopyTo(memoryStream);
             //     content = memoryStream.ToArray();
             // }
-           
+
         }
 
     }

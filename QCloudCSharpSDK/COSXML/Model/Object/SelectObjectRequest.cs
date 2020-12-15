@@ -8,83 +8,91 @@ namespace COSXML.Model.Object
 {
     public sealed class SelectObjectRequest : ObjectRequest
     {
-        private string expression;
-
-        private string expressionType = "SQL";
-
-        private ObjectSelectionFormat inputFormat;
-
-        private ObjectSelectionFormat outputFormat;
+        private SelectObject selectObject;
 
         internal COSXML.Callback.OnProgressCallback progressCallback;
 
         internal string outputFilePath;
 
-        
+
         public SelectObjectRequest(string bucket, string key)
             : base(bucket, key)
         {
             this.method = CosRequestMethod.POST;
             this.queryParameters.Add("select", null);
             this.queryParameters.Add("select-type", "2");
+            this.selectObject = new SelectObject();
+            selectObject.ExpressionType = "SQL";
         }
 
-        public SelectObjectRequest outputToFile(string filePath) {
+        public SelectObjectRequest OutputToFile(string filePath)
+        {
             outputFilePath = filePath;
+
             return this;
         }
 
-        public SelectObjectRequest setExpression(string expression) {
-            this.expression = expression;
+        public SelectObjectRequest SetExpression(string expression)
+        {
+            selectObject.Expression = expression;
+
             return this;
         }
 
-        public SelectObjectRequest setExpressionType(string expressionType) {
-            this.expressionType = expressionType;
+        public SelectObjectRequest SetExpressionType(string expressionType)
+        {
+            selectObject.ExpressionType = expressionType;
+
             return this;
         }
 
-        public SelectObjectRequest setInputFormat(ObjectSelectionFormat inputFormat) {
-            this.inputFormat = inputFormat;
+        public SelectObjectRequest SetInputFormat(ObjectSelectionFormat inputFormat)
+        {
+            selectObject.InputFormat = inputFormat;
+
             return this;
         }
 
-        public SelectObjectRequest setOutputFormat(ObjectSelectionFormat outputFormat) {
-            this.outputFormat = outputFormat;
+        public SelectObjectRequest SetOutputFormat(ObjectSelectionFormat outputFormat)
+        {
+            selectObject.OutputFormat = outputFormat;
+
             return this;
         }
 
         public SelectObjectRequest SetCosProgressCallback(COSXML.Callback.OnProgressCallback progressCallback)
         {
             this.progressCallback = progressCallback;
+
             return this;
         }
 
         public override void CheckParameters()
         {
             base.CheckParameters();
-            
-            if (expression == null) {
-              throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, 
-                "expression is null");
+
+            if (selectObject.Expression == null)
+            {
+                throw new CosClientException((int)CosClientError.InvalidArgument,
+                  "expression is null");
             }
-            if (inputFormat == null) {
-              throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, 
-                "inputFormat is null");
+
+            if (selectObject.InputFormat == null)
+            {
+                throw new CosClientException((int)CosClientError.InvalidArgument,
+                  "inputFormat is null");
             }
-            if (outputFormat == null) {
-              throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, 
-                "outputFormat is null");
+
+            if (selectObject.OutputFormat == null)
+            {
+                throw new CosClientException((int)CosClientError.InvalidArgument,
+                  "outputFormat is null");
             }
         }
 
         public override Network.RequestBody GetRequestBody()
         {
-            string content = Transfer.XmlBuilder.BuildSelection(expression, expressionType, inputFormat,
-              outputFormat, progressCallback != null);
-            byte[] data = Encoding.UTF8.GetBytes(content);
-            ByteRequestBody body = new ByteRequestBody(data);
-            return body;
+            return GetXmlRequestBody(selectObject);
         }
     }
 }

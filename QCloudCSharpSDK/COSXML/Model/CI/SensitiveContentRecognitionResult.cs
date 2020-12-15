@@ -9,18 +9,13 @@ namespace COSXML.Model.CI
     /// <summary>
     /// 图片审核结果
     /// </summary>
-    public sealed class SensitiveContentRecognitionResult : CosResult
+    public sealed class SensitiveContentRecognitionResult : CosDataResult<SensitiveRecognitionResult>
     {
 
         /// <summary>
         /// 图片审核结果
         /// </summary>
         /// <value></value>
-        public SensitiveRecognitionResult recognitionResult {get; private set;} 
-
-        internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength)
-        {
-            recognitionResult = XmlParse.ParseSensitiveRecognitionResult(inputStream);
-        }
+        public SensitiveRecognitionResult recognitionResult { get => _data;  }
     }
 }

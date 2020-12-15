@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -6,24 +6,29 @@ using COSXML.Auth;
 using COSXML.Log;
 using COSXML.Common;
 using System.Net;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/2/2018 4:40:14 PM
-* bradyxiao
-*/
+
 namespace COSXML.Network
 {
     public sealed class Request
     {
-        private static string TAG = "Request"; 
-        private string method;  // post put get delete head, etc.
-        private HttpUrl url;  // shceme://host:port/path?query# etc.
-        private Dictionary<string, string> headers; // key : value
-        private RequestBody body; // file or byte, etc.
-        private Object tag; // package tag for request
+        private static string TAG = "Request";
+        // post put get delete head, etc.
+        private string method;
+        // shceme://host:port/path?query# etc.
+        private HttpUrl url;
+        // key : value
+        private Dictionary<string, string> headers;
+        // file or byte, etc.
+        private RequestBody body;
+        // package tag for request
+        private Object tag;
+
         private bool isHttps;
+
         private string userAgent;
+
         private string host;
+
         private string urlString;
 
         private HttpWebRequest realeHttpRequest;
@@ -36,25 +41,37 @@ namespace COSXML.Network
 
         public string Method
         {
-            get { return method; }
+            get
+            {
+                return method;
+            }
             set { method = value; }
         }
 
         public bool IsHttps
         {
-            get { return isHttps; }
+            get
+            {
+                return isHttps;
+            }
             set { isHttps = value; }
         }
 
-        public string UserAgent 
+        public string UserAgent
         {
-            get { return userAgent == null ? CosVersion.GetUserAgent() : userAgent; }
+            get
+            {
+                return userAgent == null ? CosVersion.GetUserAgent() : userAgent;
+            }
             set { userAgent = value; }
         }
 
         public string Host
         {
-            get { return host == null ? url.Host : host; }
+            get
+            {
+                return host == null ? url.Host : host;
+            }
             set { host = value; }
         }
 
@@ -65,9 +82,14 @@ namespace COSXML.Network
                 //if (url == null) throw new ArgumentNullException("httpUrl == null");
                 return url;
             }
-            set 
+            set
             {
-                if (value == null) throw new ArgumentNullException("httpUrl == null");
+
+                if (value == null)
+                {
+                    throw new ArgumentNullException("httpUrl == null");
+                }
+
                 url = value;
             }
         }
@@ -76,10 +98,12 @@ namespace COSXML.Network
         {
             get
             {
+
                 if (urlString == null)
                 {
                     urlString = url.ToString();
                 }
+
                 return urlString;
             }
             set { urlString = value; }
@@ -87,23 +111,32 @@ namespace COSXML.Network
 
         public Dictionary<string, string> Headers
         {
-            get { return headers; }
+            get
+            {
+                return headers;
+            }
+            
             private set { }
         }
 
         public void AddHeader(string name, string value)
         {
+
             try
             {
                 headers.Add(name, value);
             }
             catch (ArgumentNullException)
             {
-                QLog.D(TAG, "AddHeader: name is null");
+                QLog.Debug(TAG, "AddHeader: name is null");
             }
             catch (ArgumentException)
             {
-                if (String.IsNullOrEmpty(value)){ return; }
+
+                if (String.IsNullOrEmpty(value))
+                {
+                    return;
+                }
 
                 if (!String.IsNullOrEmpty(headers[name]))
                 {
@@ -114,52 +147,23 @@ namespace COSXML.Network
                     headers[name] = value;
                 }
             }
-            
-        }
-            
 
-        public void SetHeader(string name, string value)
-        {
-            try
-            {
-                headers.Add(name, value);
-            }
-            catch (ArgumentNullException)
-            {
-                QLog.D(TAG, "SetHeader: name is null");
-            }
-            catch (ArgumentException)
-            {
-                headers[name] = value;
-            }
         }
 
         public RequestBody Body
         {
-            get { return body; }
+            get
+            {
+                return body;
+            }
             set { body = value; }
-        }
-
-        public Object Tag
-        {
-            get { return tag; }
-            set { tag = value; }
-        }
-
-        public override string ToString()
-        {
-            StringBuilder str = new StringBuilder();
-            str.Append("Request{method=").Append(method)
-                .Append(", url=").Append(url)
-                .Append(", tag=").Append(tag)
-                .Append('}');
-            return str.ToString();
         }
 
         public COSXML.Callback.OnNotifyGetResponse onNotifyGetResponse;
 
         private void HandleGetResponse()
         {
+
             if (body != null)
             {
                 body.OnNotifyGetResponse();
@@ -173,6 +177,7 @@ namespace COSXML.Network
 
         public void Cancel()
         {
+
             if (realeHttpRequest != null)
             {
                 realeHttpRequest.Abort();

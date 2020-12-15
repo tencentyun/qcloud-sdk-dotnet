@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -10,11 +10,7 @@ using System.Reflection;
 using System.IO;
 using System.Net.Cache;
 
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/7/2018 9:34:42 AM
-* bradyxiao
-*/
+
 namespace COSXML.Network
 {
     /// <summary>
@@ -49,6 +45,7 @@ namespace COSXML.Network
         {
             HttpWebRequest httpWebRequest = null;
             HttpWebResponse httpWebResponse = null;
+
             try
             {
                 //step1: create HttpWebRequest by request.url
@@ -73,6 +70,7 @@ namespace COSXML.Network
             }
             catch (WebException webEx)
             {
+
                 if (webEx.Response != null && webEx.Response is HttpWebResponse)
                 {
                     //notify has been got response
@@ -88,15 +86,17 @@ namespace COSXML.Network
                     //QLog.E(TAG, webEx.Message, webEx);
                     throw;
                 }
-                
+
             }
             catch (Exception ex)
             {
                 //QLog.E(TAG, ex.Message, ex);
                 throw;
             }
+            
             finally
             {
+
                 if (httpWebResponse != null)
                 {
                     // print log
@@ -104,14 +104,16 @@ namespace COSXML.Network
                     httpWebResponse.Close();
                     //QLog.D("XIAO", "response close");
                 }
+
                 if (httpWebRequest != null)
                 {
                     httpWebRequest.Abort();
                     //QLog.D("XIAO", "request close");
                 }
-                QLog.D(TAG, "close");
+
+                QLog.Debug(TAG, "close");
             }
- 
+
         }
 
         /// <summary>
@@ -162,6 +164,7 @@ namespace COSXML.Network
         {
             HttpWebRequest httpWebRequest = null;
             RequestState requestState = new RequestState();
+
             try
             {
                 requestState.request = request;
@@ -181,7 +184,7 @@ namespace COSXML.Network
                 requestState.httpWebRequest = httpWebRequest;
 
                 //handle request body
-                if(request.Body != null)
+                if (request.Body != null)
                 {
                     httpWebRequest.ContentLength = request.Body.ContentLength;
                     httpWebRequest.BeginGetRequestStream(new AsyncCallback(AsyncRequestCallback), requestState);
@@ -191,7 +194,7 @@ namespace COSXML.Network
                     //wait for response
                     httpWebRequest.BeginGetResponse(new AsyncCallback(AsyncResponseCallback), requestState);
                 }
-                
+
                 //print log
                 PrintReqeustInfo(httpWebRequest);
             }
@@ -200,14 +203,14 @@ namespace COSXML.Network
                 response.OnFinish(false, webEx);
                 //abort
                 requestState.Clear();
-                QLog.D(TAG, webEx.Message, webEx);
+                QLog.Debug(TAG, webEx.Message, webEx);
             }
             catch (Exception ex)
             {
                 response.OnFinish(false, ex);
                 //abort
                 requestState.Clear();
-                QLog.E(TAG, ex.Message, ex);
+                QLog.Error(TAG, ex.Message, ex);
             }
 
         }
@@ -216,9 +219,11 @@ namespace COSXML.Network
         {
             RequestState requestState = ar.AsyncState as RequestState;
             Stream requestStream = null;
+
             try
             {
                 HttpWebRequest httpWebRequest = requestState.httpWebRequest;
+
                 requestStream = httpWebRequest.EndGetRequestStream(ar);
 
                 ////开始写入数据
@@ -227,15 +232,16 @@ namespace COSXML.Network
                 ////wait for response
                 //httpWebRequest.BeginGetResponse(AsyncResponseCallback, requestState);
 
-                requestState.request.Body.StartHandleRequestBody(requestStream, delegate(Exception exception)
+                requestState.request.Body.StartHandleRequestBody(requestStream, delegate (Exception exception)
                 {
+
                     if (exception != null)
                     {
                         // handle request body throw exception
                         requestState.response.OnFinish(false, exception);
                         //abort
                         requestState.Clear();
-                        QLog.E(TAG, exception.Message, exception);
+                        QLog.Error(TAG, exception.Message, exception);
                     }
                     else
                     {
@@ -250,18 +256,20 @@ namespace COSXML.Network
                 requestState.response.OnFinish(false, ex);
                 //abort
                 requestState.Clear();
-                QLog.E(TAG, ex.Message, ex);
+                QLog.Error(TAG, ex.Message, ex);
             }
-            
+
         }
 
         public static void AsyncResponseCallback(IAsyncResult ar)
         {
             RequestState requestState = ar.AsyncState as RequestState;
             HttpWebResponse httpWebResponse = null;
+
             try
             {
                 HttpWebRequest httpWebRequest = requestState.httpWebRequest;
+
                 httpWebResponse = (HttpWebResponse)httpWebRequest.EndGetResponse(ar);
 
                 //nofity get response
@@ -273,15 +281,17 @@ namespace COSXML.Network
 
                 Stream responseStream = httpWebResponse.GetResponseStream();
 
-                requestState.response.Body.StartHandleResponseBody(responseStream, delegate(bool isSuccess, Exception ex)
+
+                requestState.response.Body.StartHandleResponseBody(responseStream, delegate (bool isSuccess, Exception ex)
                     {
                         PrintResponseInfo(httpWebResponse);
-                        requestState.response.OnFinish(isSuccess,ex);
+                        requestState.response.OnFinish(isSuccess, ex);
                         requestState.Clear();
                     });
             }
             catch (WebException webEx)
             {
+
                 if (webEx.Response != null && webEx.Response is HttpWebResponse)
                 {
                     //nofity get response
@@ -297,10 +307,11 @@ namespace COSXML.Network
 
                     Stream responseStream = httpWebResponse.GetResponseStream();
 
-                    requestState.response.Body.StartHandleResponseBody(responseStream, delegate(bool isSuccess, Exception ex)
+
+                    requestState.response.Body.StartHandleResponseBody(responseStream, delegate (bool isSuccess, Exception ex)
                     {
                         PrintResponseInfo(httpWebResponse);
-                        requestState.response.OnFinish(isSuccess,ex);
+                        requestState.response.OnFinish(isSuccess, ex);
                         requestState.Clear();
                     });
                 }
@@ -309,7 +320,7 @@ namespace COSXML.Network
                     requestState.response.OnFinish(false, webEx);
                     //abort
                     requestState.Clear();
-                    QLog.E(TAG, webEx.Message, webEx);
+                    QLog.Error(TAG, webEx.Message, webEx);
                 }
 
             }
@@ -318,7 +329,7 @@ namespace COSXML.Network
                 requestState.response.OnFinish(false, ex);
                 //abort
                 requestState.Clear();
-                QLog.E(TAG, ex.Message, ex);
+                QLog.Error(TAG, ex.Message, ex);
             }
         }
 
@@ -375,31 +386,51 @@ namespace COSXML.Network
             response.Message = httpWebResponse.StatusDescription;
 
             WebHeaderCollection headers = httpWebResponse.Headers;
+
+            // Transfer-Encoding: chunked
+            bool isChunked = false; 
             if (headers != null)
             {
                 Dictionary<string, List<string>> result = new Dictionary<string, List<string>>(headers.Count);
+
                 for (int i = 0; i < headers.Count; i++)
                 {
                     List<string> values = null;
+                    string key = headers.GetKey(i);
+
                     if (headers.GetValues(i) != null)
                     {
                         values = new List<string>();
+
                         foreach (string value in headers.GetValues(i))
                         {
                             values.Add(value);
                         }
                     }
 
-                    result.Add(headers.GetKey(i), values);
+                    result.Add(key, values);
+
+                    if ("Transfer-Encoding".EndsWith(key, StringComparison.OrdinalIgnoreCase) && values.Contains("chunked")) 
+                    {
+                        isChunked = true;
+                    }
                 }
+
                 response.Headers = result;
             }
 
-            response.ContentLength = httpWebResponse.ContentLength;
+            if (!isChunked) 
+            {
+                response.ContentLength = httpWebResponse.ContentLength;
+            }
             response.ContentType = httpWebResponse.ContentType;
+
             if (response.Body != null)
             {
-                response.Body.ContentLength = httpWebResponse.ContentLength;
+                if (!isChunked)
+                {
+                    response.Body.ContentLength = httpWebResponse.ContentLength;
+                }
                 response.Body.ContentType = httpWebResponse.ContentType;
             }
 
@@ -418,6 +449,7 @@ namespace COSXML.Network
 
             if (!String.IsNullOrEmpty(config.ProxyHost))
             {
+
                 if (config.ProxyPort < 0)
                 {
                     httpWebRequest.Proxy = new WebProxy(config.ProxyHost);
@@ -426,6 +458,7 @@ namespace COSXML.Network
                 {
                     httpWebRequest.Proxy = new WebProxy(config.ProxyHost, config.ProxyPort);
                 }
+
                 if (!String.IsNullOrEmpty(config.ProxyUserName))
                 {
                     httpWebRequest.Proxy.Credentials = String.IsNullOrEmpty(config.ProxyDomain) ?
@@ -433,7 +466,9 @@ namespace COSXML.Network
                         new NetworkCredential(config.ProxyUserName, config.ProxyUserPassword ?? String.Empty,
                             config.ProxyDomain);
                 }
-                httpWebRequest.PreAuthenticate = true; // 代理验证
+                // 代理验证
+                // 代理验证
+                httpWebRequest.PreAuthenticate = true;
             }
         }
 
@@ -447,6 +482,7 @@ namespace COSXML.Network
         /// <returns></returns>
         private static bool CheckValidationCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         {
+
             return true;
         }
 
@@ -457,19 +493,22 @@ namespace COSXML.Network
         private static void PrintReqeustInfo(HttpWebRequest httpWebRequest)
         {
             StringBuilder requestLog = new StringBuilder("--->");
+
             requestLog.Append(httpWebRequest.Method).Append(' ').Append(httpWebRequest.Address.AbsoluteUri).Append('\n');
             int count = httpWebRequest.Headers.Count;
+
             for (int i = 0; i < count; i++)
             {
                 requestLog.Append(httpWebRequest.Headers.GetKey(i)).Append(":").Append(httpWebRequest.Headers.GetValues(i)[0]).Append('\n');
             }
+
             requestLog.Append("allow auto redirect: " + httpWebRequest.AllowAutoRedirect).Append('\n');
             requestLog.Append("connect timeout: " + httpWebRequest.Timeout).Append('\n');
             requestLog.Append("read write timeout: " + httpWebRequest.ReadWriteTimeout).Append('\n');
             requestLog.Append("AllowWriteStreamBuffering: " + httpWebRequest.AllowWriteStreamBuffering).Append('\n');
             //requestLog.Append("proxy: " + (httpWebRequest.Proxy == null ? "null" : ((WebProxy)httpWebRequest.Proxy).Address.ToString()));
             requestLog.Append("<---");
-            QLog.D(TAG, requestLog.ToString());
+            QLog.Debug(TAG, requestLog.ToString());
         }
 
         /// <summary>
@@ -477,27 +516,36 @@ namespace COSXML.Network
         /// </summary>
         /// <param name="httpWebResponse"></param>
         private static void PrintResponseInfo(HttpWebResponse httpWebResponse)
-        { 
+        {
             StringBuilder responseLog = new StringBuilder("<---");
+
             responseLog.Append(httpWebResponse.Method).Append(' ').Append(httpWebResponse.ResponseUri.AbsoluteUri).Append('\n');
-            responseLog.Append((int)httpWebResponse.StatusCode).Append(' ').Append(httpWebResponse.StatusDescription).Append('\n'); ;
+            responseLog.Append((int)httpWebResponse.StatusCode).Append(' ').Append(httpWebResponse.StatusDescription).Append('\n');
             int count = httpWebResponse.Headers.Count;
+
             for (int i = 0; i < count; i++)
             {
                 responseLog.Append(httpWebResponse.Headers.GetKey(i)).Append(":").Append(httpWebResponse.Headers.GetValues(i)[0]).Append('\n');
             }
+
             responseLog.Append("<---");
-            QLog.D(TAG, responseLog.ToString());
+            QLog.Debug(TAG, responseLog.ToString());
         }
 
         internal static class HttpHeaderHandle
         {
             private static MethodInfo addHeaderMethod;
-            private static readonly ICollection<PlatformID> monoPlatforms = new List<PlatformID> { PlatformID.MacOSX, PlatformID.Unix };
+
+            private static readonly ICollection<PlatformID> monoPlatforms = new List<PlatformID> 
+            {
+                 PlatformID.MacOSX, PlatformID.Unix 
+            };
+
             private static bool? isMonoPlatform;
 
             internal static void AddHeader(WebHeaderCollection webHeaderCollection, string key, string value)
             {
+
                 if (isMonoPlatform == null)
                 {
                     isMonoPlatform = monoPlatforms.Contains(Environment.OSVersion.Platform);
@@ -509,6 +557,7 @@ namespace COSXML.Network
                     // Encode headers for win platforms.
 
                 }
+
                 if (addHeaderMethod == null)
                 {
                     // Specify the internal method name for adding headers
@@ -516,17 +565,19 @@ namespace COSXML.Network
                     // win: AddInternal
                     //var internalMethodName = (isMonoPlatform == false) ? "AddWithoutValidate" : "AddInternal";
                     var internalMethodName = "AddWithoutValidate";
-                    QLog.D(TAG, internalMethodName.ToString());
+
+                    QLog.Debug(TAG, internalMethodName.ToString());
                     var method = typeof(WebHeaderCollection).GetMethod(
                         internalMethodName,
                         BindingFlags.NonPublic | BindingFlags.Instance,
                         null,
                         new Type[] { typeof(string), typeof(string) },
                         null);
+
                     addHeaderMethod = method;
                 }
 
-                addHeaderMethod.Invoke(webHeaderCollection, new Object[] { key, value });          
+                addHeaderMethod.Invoke(webHeaderCollection, new Object[] { key, value });
             }
 
         }
@@ -534,8 +585,11 @@ namespace COSXML.Network
         internal class RequestState
         {
             public HttpWebRequest httpWebRequest;
+
             public HttpWebResponse httpWebResponse;
+
             public Response response;
+
             public Request request;
 
             public RequestState()
@@ -548,9 +602,18 @@ namespace COSXML.Network
 
             public void Clear()
             {
-                if (httpWebRequest != null) httpWebRequest.Abort();
-                if (httpWebResponse != null) httpWebResponse.Close();
-                QLog.D(TAG, "Close");
+
+                if (httpWebRequest != null)
+                {
+                    httpWebRequest.Abort();
+                }
+
+                if (httpWebResponse != null)
+                {
+                    httpWebResponse.Close();
+                }
+
+                QLog.Debug(TAG, "Close");
             }
         }
     }

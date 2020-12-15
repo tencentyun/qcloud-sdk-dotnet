@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -7,23 +7,9 @@ using COSXML.Network;
 using COSXML.Log;
 using COSXML.Auth;
 using COSXML.Utils;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/2/2018 1:05:09 PM
-* bradyxiao
-*/
+
 namespace COSXML.Model
 {
-    /**
-     * cos request base class, all cos operator must be extended this.
-     * 
-     * request method | request path | query parameters
-     * request headers
-     * request body
-     * 
-     * special:
-     * cos sign;
-     */
     public abstract class CosRequest
     {
         private static string TAG = typeof(CosRequest).FullName;
@@ -48,12 +34,12 @@ namespace COSXML.Model
         /// <summary>
         /// http 请求url中 query 部分.
         /// </summary>
-        protected Dictionary<string, string> queryParameters = new Dictionary<string,string>();
+        protected Dictionary<string, string> queryParameters = new Dictionary<string, string>();
 
         /// <summary>
         /// http 请求 header 部分.
         /// </summary>
-        protected Dictionary<string, string> headers = new Dictionary<string,string>();
+        protected Dictionary<string, string> headers = new Dictionary<string, string>();
 
         /// <summary>
         /// cos 服务的 appid.
@@ -75,14 +61,18 @@ namespace COSXML.Model
         /// </summary>
         protected string requestUrlWithSign = null;
 
-        public CosXmlConfig serviceConfig {get; set;}
+        public CosXmlConfig serviceConfig { get; set; }
 
         /// <summary>
         /// http or https for cos request.
         /// </summary>
-        public bool? IsHttps 
+        public bool? IsHttps
         {
-            get { return isHttps; }
+            get
+            {
+                return isHttps;
+            }
+            
             set { isHttps = value; }
         }
 
@@ -91,16 +81,23 @@ namespace COSXML.Model
         /// </summary>
         public string Method
         {
-            get { return method; }
+            get
+            {
+                return method;
+            }
             set { this.method = value; }
         }
 
         /// <summary>
         /// path of http url.
         /// </summary>
-        public string RequestPath 
+        public string RequestPath
         {
-            get { return path; }
+            get
+            {
+                return path;
+            }
+            
             private set { }
         }
 
@@ -110,6 +107,7 @@ namespace COSXML.Model
         /// <returns></returns>
         public virtual Dictionary<string, string> GetRequestParamters()
         {
+
             return queryParameters;
         }
 
@@ -119,6 +117,7 @@ namespace COSXML.Model
         /// <returns></returns>
         public virtual Dictionary<string, string> GetRequestHeaders()
         {
+
             return headers;
         }
 
@@ -140,22 +139,27 @@ namespace COSXML.Model
         /// <param name="isNeedUrlEncode"></param>
         public void SetQueryParameter(string key, string value, bool isNeedUrlEncode)
         {
+
             try
             {
-                if (value == null) value = "";
+
+                if (value == null)
+                {
+                    value = "";
+                }
+
                 if (isNeedUrlEncode)
                 {
                     value = URLEncodeUtils.Encode(value);
                 }
+
                 queryParameters.Add(key, value);
-            }
-            catch (ArgumentNullException)
-            {
-                QLog.D(TAG, "SetQueryParameter: key ==null");
             }
             catch (ArgumentException)
             {
-                queryParameters[key] = value; // cover the current value
+                // cover the current value
+                // cover the current value
+                queryParameters[key] = value;
             }
         }
 
@@ -168,17 +172,20 @@ namespace COSXML.Model
         {
             SetRequestHeader(key, value, false);
         }
+
         /// <summary>
         /// add headers for cos request, and cover the current value, if it exists with the key.
         /// </summary>
         /// <param name="headers"></param>
         public void SetRequestHeaders(Dictionary<string, string> headers)
         {
-            foreach(KeyValuePair<string, string> entry in headers)
+
+            foreach (KeyValuePair<string, string> entry in headers)
             {
                 SetRequestHeader(entry.Key, entry.Value);
             }
         }
+
         /// <summary>
         /// header 默认不 encode
         /// </summary>
@@ -187,22 +194,27 @@ namespace COSXML.Model
         /// <param name="isNeedUrlEncode"></param>
         public void SetRequestHeader(string key, string value, bool isNeedUrlEncode)
         {
+
             try
             {
-                if (value == null) value = "";
+
+                if (value == null)
+                {
+                    value = "";
+                }
+
                 if (isNeedUrlEncode)
                 {
                     value = URLEncodeUtils.Encode(value);
                 }
+
                 headers.Add(key, value);
-            }
-            catch (ArgumentNullException)
-            {
-                QLog.D(TAG, "SetRequestHeader: key ==null");
             }
             catch (ArgumentException)
             {
-                headers[key] = value; // cover the current value
+                // cover the current value
+                // cover the current value
+                headers[key] = value;
             }
         }
 
@@ -212,7 +224,10 @@ namespace COSXML.Model
         /// <param name="appid"> cos appid </param>
         public string APPID
         {
-            get { return this.appid; }
+            get
+            {
+                return this.appid;
+            }
             set { this.appid = value; }
         }
 
@@ -221,15 +236,12 @@ namespace COSXML.Model
         /// </summary>
         public bool IsNeedMD5
         {
-            get { return needMD5; }
+            get
+            {
+                return needMD5;
+            }
             set { needMD5 = value; }
         }
-
-        /// <summary>
-        /// return the host for cos request
-        /// </summary>
-        /// <returns>host(string)</returns>
-        public abstract string GetCOSHost();
 
         /// <summary>
         /// return the host for cos request
@@ -242,6 +254,20 @@ namespace COSXML.Model
         /// </summary>
         /// <returns> <see cref="COSXML.Network.RequestBody"/></returns>
         public abstract RequestBody GetRequestBody();
+
+        /// <summary>
+        /// 返回 xml 格式的 requestBody
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        protected Network.RequestBody GetXmlRequestBody(object d)
+        {
+            string content = Transfer.XmlBuilder.Serialize(d);
+            byte[] data = Encoding.UTF8.GetBytes(content);
+            ByteRequestBody body = new ByteRequestBody(data);
+            return body;
+        }
+
 
         /// <summary>    
         ///   check parameter for cos.
@@ -256,7 +282,6 @@ namespace COSXML.Model
         /// <param name="durationSecond"></param>
         public virtual void SetSign(long signStartTimeSecond, long durationSecond)
         {
-            if (cosXmlSignSourceProvider == null) cosXmlSignSourceProvider = new CosXmlSignSourceProvider();
             cosXmlSignSourceProvider.SetSignTime(signStartTimeSecond, durationSecond);
         }
 
@@ -270,7 +295,6 @@ namespace COSXML.Model
         /// <param name="queryParameterKeys"></param>
         public virtual void SetSign(long signStartTimeSecond, long durationSecond, List<string> headerKeys, List<string> queryParameterKeys)
         {
-            if (cosXmlSignSourceProvider == null) cosXmlSignSourceProvider = new CosXmlSignSourceProvider();
             cosXmlSignSourceProvider.SetSignTime(signStartTimeSecond, durationSecond);
             cosXmlSignSourceProvider.AddHeaderKeys(headerKeys);
             cosXmlSignSourceProvider.AddParameterKeys(queryParameterKeys);
@@ -291,6 +315,28 @@ namespace COSXML.Model
         /// <returns></returns>
         public virtual CosXmlSignSourceProvider GetSignSourceProvider()
         {
+            // 默认签署的头部跟参数
+            cosXmlSignSourceProvider.AddHeaderKeys(new List<string>() 
+            {
+                "content-type",
+                "content-length",
+                "content-md5",
+                "host"
+            });
+
+            foreach (KeyValuePair<string, string> pair in headers)
+            {
+                if (pair.Key.StartsWith("x-cos-"))
+                {
+                    cosXmlSignSourceProvider.AddHeaderKey(pair.Key.ToLower());
+                }
+            }
+
+            foreach (KeyValuePair<string, string> pair in queryParameters)
+            {
+                cosXmlSignSourceProvider.AddParameterKey(pair.Key.ToLower());
+            }
+
             return cosXmlSignSourceProvider;
         }
 
@@ -300,7 +346,10 @@ namespace COSXML.Model
         /// <param name="requestSignURL"></param>
         public string RequestURLWithSign
         {
-            get { return requestUrlWithSign; }
+            get
+            {
+                return requestUrlWithSign;
+            }
             set { requestUrlWithSign = value; }
         }
 
@@ -311,6 +360,7 @@ namespace COSXML.Model
 
         public void Cancel()
         {
+
             if (realRequest != null)
             {
                 realRequest.Cancel();

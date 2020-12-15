@@ -1,4 +1,4 @@
-﻿using COSXML;
+using COSXML;
 using COSXML.Auth;
 using COSXML.Common;
 using COSXML.Utils;
@@ -13,17 +13,20 @@ using COSXML.CosException;
 
 namespace COSXMLDemo
 {
-    class Program
+    public class Program
     {
         
-        static string bucket = @"bucket-4-csharp-demo-1253653367";
+        internal static string bucket = @"bucket-4-csharp-demo-1253653367";
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
 
-            string secretId = Environment.GetEnvironmentVariable("COS_KEY"); // 腾讯云 SecretId
-            string secretKey = Environment.GetEnvironmentVariable("COS_SECRET"); // 腾讯云 SecretKey
-            string region = "ap-guangzhou"; // 存储桶所在地域
+            // 腾讯云 SecretId
+            string secretId = Environment.GetEnvironmentVariable("COS_KEY");
+            // 腾讯云 SecretKey
+            string secretKey = Environment.GetEnvironmentVariable("COS_SECRET"); 
+            // 存储桶所在地域
+            string region = "ap-guangzhou"; 
 
             // 普通初始化方式
             CosXmlConfig config = new CosXmlConfig.Builder()
@@ -46,18 +49,19 @@ namespace COSXMLDemo
             // service 初始化完成
             CosXmlServer cosXml = new CosXmlServer(config, qCloudCredentialProvider);
 
-            try {
+            try 
+            {
                 // 创建存储痛
                 Console.WriteLine(" ======= Put Bucket ======");
-                putBucket(cosXml);
+                PutBucket(cosXml);
 
                 // 上传对象
                 Console.WriteLine(" ======= Put Object ======");
-                string cosKey = putObject(cosXml);
+                string cosKey = PutObject(cosXml);
 
                 // 删除对象
                 Console.WriteLine(" ======= Delete Object ======");
-                deleteObject(cosXml, cosKey);
+                DeleteObject(cosXml, cosKey);
             } 
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -66,15 +70,20 @@ namespace COSXMLDemo
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-            } finally {
+            }
+            
+            finally 
+            {
                 // 删除存储桶
                 Console.WriteLine(" ======= Delete Bucket ======");
-                deleteBucket(cosXml);
+                DeleteBucket(cosXml);
             }
+
             Console.WriteLine(" ======= Program End. ======");
         }
 
-        static void putBucket(CosXmlServer cosXml) {
+        internal static void PutBucket(CosXmlServer cosXml) 
+        {
             try
             {
                 PutBucketRequest request = new PutBucketRequest(bucket);
@@ -89,13 +98,16 @@ namespace COSXMLDemo
                 if (serverEx.statusCode != 409)
                 {
                     throw serverEx;
-                } else {
+                } 
+                else 
+                {
                     Console.WriteLine("Bucket Already exists.");
                 }
             }
         }
 
-        static void deleteBucket(CosXmlServer cosXml) {
+        internal static void DeleteBucket(CosXmlServer cosXml) 
+        {
             DeleteBucketRequest request = new DeleteBucketRequest(bucket);
 
             DeleteBucketResult result = cosXml.DeleteBucket(request);
@@ -103,7 +115,8 @@ namespace COSXMLDemo
             Console.WriteLine(result.GetResultInfo());
         }
 
-        static string putObject(CosXmlServer cosXml) {
+        internal static string PutObject(CosXmlServer cosXml) 
+        {
             string cosKey = "cosKey";
             byte[] tmpData = new byte[1024];
 
@@ -116,7 +129,8 @@ namespace COSXMLDemo
             return cosKey;
         }
 
-        static void deleteObject(CosXmlServer cosXml, string cosKey) {
+        internal static void DeleteObject(CosXmlServer cosXml, string cosKey) 
+        {
             DeleteObjectRequest request = new DeleteObjectRequest(bucket, cosKey);
 
             DeleteObjectResult result = cosXml.DeleteObject(request);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -18,42 +18,33 @@ namespace COSXML.Model.Object
         /// </summary>
         private string uploadId;
 
-        public AbortMultipartUploadRequest(string bucket, string key, string uploadId) 
+        public AbortMultipartUploadRequest(string bucket, string key, string uploadId)
             : base(bucket, key)
         {
             this.uploadId = uploadId;
             this.method = CosRequestMethod.DELETE;
         }
 
-        /// <summary>
-        /// 分片块上传的UploadId
-        /// </summary>
-        /// <param name="uploadId"></param>
-        public void SetUploadId(string uploadId)
-        {
-            this.uploadId = uploadId;
-        }
-        /// <summary>
-        /// 分片块上传的UploadId
-        /// </summary>
-        /// <returns>uploadId</returns>
-        public string GetUploadId()
-        {
-            return uploadId;
-        }
-
         public override void CheckParameters()
         {
-            if (requestUrlWithSign != null) return;
+
+            if (requestUrlWithSign != null)
+            {
+
+                return;
+            }
+
             base.CheckParameters();
+
             if (uploadId == null)
             {
-                throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "uploadId is null");
+                throw new CosClientException((int)CosClientError.InvalidArgument, "uploadId is null");
             }
         }
 
         protected override void InternalUpdateQueryParameters()
         {
+
             try
             {
                 this.queryParameters.Add("uploadId", uploadId);
@@ -62,7 +53,7 @@ namespace COSXML.Model.Object
             {
                 this.queryParameters["uploadId"] = uploadId;
             }
-            
+
         }
     }
 }

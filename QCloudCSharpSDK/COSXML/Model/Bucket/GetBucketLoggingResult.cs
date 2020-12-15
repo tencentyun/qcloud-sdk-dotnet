@@ -1,4 +1,4 @@
-﻿using COSXML.Model.Tag;
+using COSXML.Model.Tag;
 using COSXML.Transfer;
 using System;
 using System.Collections.Generic;
@@ -6,18 +6,8 @@ using System.Text;
 
 namespace COSXML.Model.Bucket
 {
-    public sealed class GetBucketLoggingResult : CosResult
+    public sealed class GetBucketLoggingResult : CosDataResult<BucketLoggingStatus>
     {
-        public BucketLoggingStatus bucketLoggingStatus;
-        internal override void ParseResponseBody(System.IO.Stream inputStream, string contentType, long contentLength)
-        {
-            bucketLoggingStatus = new BucketLoggingStatus();
-            XmlParse.ParseBucketLoggingStatus(inputStream, bucketLoggingStatus);
-        }
-
-        public override string GetResultInfo()
-        {
-            return base.GetResultInfo() + (bucketLoggingStatus == null ? "" : "\n" + bucketLoggingStatus.GetInfo());
-        }
+        public BucketLoggingStatus bucketLoggingStatus {get => _data; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using System.Text;
 using COSXML.Utils;
@@ -6,11 +6,7 @@ using COSXML.CosException;
 using COSXML.Common;
 using COSXML.Log;
 using System.IO;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/9/2018 12:16:20 PM
-* bradyxiao
-*/
+
 namespace COSXML.Auth
 {
 
@@ -41,19 +37,31 @@ namespace COSXML.Auth
 
         public override QCloudCredentials GetQCloudCredentials()
         {
-            long keyStartTime = TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
+            long keyStartTime = TimeUtils.GetCurrentTime(TimeUnit.Seconds);
+
             long keyEndTime = keyStartTime + keyTimDuration;
+
             string keyTime = String.Format("{0};{1}", keyStartTime, keyEndTime);
-            if (secretId == null) throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretId == null");
-            if (secretKey == null) throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretKey == null");
+
+            if (secretId == null)
+            {
+                throw new CosClientException((int)CosClientError.InvalidCredentials, "secretId == null");
+            }
+
+            if (secretKey == null)
+            {
+                throw new CosClientException((int)CosClientError.InvalidCredentials, "secretKey == null");
+            }
+
             string signKey = DigestUtils.GetHamcSha1ToHexString(keyTime, Encoding.UTF8, secretKey, Encoding.UTF8);
+
             return new QCloudCredentials(secretId, signKey, keyTime);
         }
 
         public override void Refresh()
         {
             //TODO update value
-            QLog.D("DefaultQCloudCredentialProvider", "need to update QCloudCredentials");
+            QLog.Debug("DefaultQCloudCredentialProvider", "need to update QCloudCredentials");
             //invoke SetSetQCloudCredential(string secretId, string secretKey, string keyTime)
         }
     }
@@ -64,12 +72,15 @@ namespace COSXML.Auth
     public class DefaultSessionQCloudCredentialProvider : QCloudCredentialProvider
     {
         private string tmpSecretId;
+
         private string tmpSecretKey;
+
         private string keyTime;
+
         private string token;
 
         public DefaultSessionQCloudCredentialProvider(string tmpSecretId, string tmpSecretKey, long tmpExpiredTime, string sessionToken)
-            :this(tmpSecretId, tmpSecretKey, TimeUtils.GetCurrentTime(TimeUnit.SECONDS),tmpExpiredTime, sessionToken)
+            : this(tmpSecretId, tmpSecretKey, TimeUtils.GetCurrentTime(TimeUnit.Seconds), tmpExpiredTime, sessionToken)
         {
         }
 
@@ -83,32 +94,60 @@ namespace COSXML.Auth
 
         public override QCloudCredentials GetQCloudCredentials()
         {
-            if (IsNeedUpdateNow()) Refresh();
-            if (tmpSecretId == null) throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretId == null");
-            if (tmpSecretKey == null) throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "secretKey == null");
-            if (keyTime == null) throw new CosClientException((int)CosClientError.INVALID_CREDENTIALS, "keyTime == null");
+
+            if (IsNeedUpdateNow())
+            {
+                Refresh();
+            }
+
+            if (tmpSecretId == null)
+            {
+                throw new CosClientException((int)CosClientError.InvalidCredentials, "secretId == null");
+            }
+
+            if (tmpSecretKey == null)
+            {
+                throw new CosClientException((int)CosClientError.InvalidCredentials, "secretKey == null");
+            }
+
+            if (keyTime == null)
+            {
+                throw new CosClientException((int)CosClientError.InvalidCredentials, "keyTime == null");
+            }
+
             string signKey = DigestUtils.GetHamcSha1ToHexString(keyTime, Encoding.UTF8, tmpSecretKey, Encoding.UTF8);
+
             return new SessionQCloudCredentials(tmpSecretId, signKey, token, keyTime);
         }
 
         public override void Refresh()
         {
             //TODO update value
-            QLog.D("DefaultSessionQCloudCredentialProvider", "need to update QCloudCredentials");
+            QLog.Debug("DefaultSessionQCloudCredentialProvider", "need to update QCloudCredentials");
             //invoke SetQCloudCredential(string tmpSecretId, string tmpSecretKey, string tmpkeyTime, string sessionToken)
         }
 
         public bool IsNeedUpdateNow()
         {
+
             if (String.IsNullOrEmpty(keyTime) || String.IsNullOrEmpty(tmpSecretId) || String.IsNullOrEmpty(tmpSecretKey) || String.IsNullOrEmpty(token))
             {
+
                 return true;
             }
+
             int index = keyTime.IndexOf(';');
             long endTime = -1L;
+
             long.TryParse(keyTime.Substring(index + 1), out endTime);
-            long nowTime = TimeUtils.GetCurrentTime(TimeUnit.SECONDS);
-            if (endTime <= nowTime) return true;
+            long nowTime = TimeUtils.GetCurrentTime(TimeUnit.Seconds);
+
+            if (endTime <= nowTime)
+            {
+
+                return true;
+            }
+
             return false;
         }
 
@@ -125,7 +164,7 @@ namespace COSXML.Auth
             this.tmpSecretKey = tmpSecretKey;
             this.token = sessionToken;
             this.keyTime = tmpkeyTime;
-        }   
+        }
     }
 
 

@@ -1,14 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using COSXML.Model;
 using COSXML.Model.Object;
 using COSXML.CosException;
-/**
-* Copyright (c) 2018 Tencent Cloud. All rights reserved.
-* 11/29/2018 5:08:32 PM
-* bradyxiao
-*/
+using System.Threading.Tasks;
+
 namespace COSXML.Transfer
 {
     public abstract class COSXMLTask
@@ -31,17 +28,18 @@ namespace COSXML.Transfer
 
         protected string key;
 
-        protected bool isNeedMd5 = true;
-
         protected Dictionary<string, string> customHeaders;
 
         protected TaskState taskState;
+
         protected Object syncTaskState = new Object();
 
         public void InitCosXmlServer(CosXml cosXml)
         {
             cosXmlServer = cosXml;
-            if (this.region == null) {
+
+            if (this.region == null)
+            {
                 this.region = cosXml.GetConfig().Region;
             }
         }
@@ -66,74 +64,119 @@ namespace COSXML.Transfer
 
         public abstract void Resume();
 
-        protected void setHeaders(Dictionary<string, string> headers) {
+        protected void SetHeaders(Dictionary<string, string> headers)
+        {
             this.customHeaders = headers;
         }
 
         protected bool UpdateTaskState(TaskState newTaskState)
         {
             bool result = false;
+
             lock (syncTaskState)
             {
+
                 switch (newTaskState)
                 {
-                    case TaskState.WAITTING:
+                    case TaskState.Waiting:
                         taskState = newTaskState;
-                        if (onState != null) onState(taskState);
                         result = true;
                         break;
-                    case TaskState.RUNNING:
-                        if (taskState == TaskState.WAITTING)
+                    case TaskState.Running:
+
+                        if (taskState == TaskState.Waiting)
                         {
                             taskState = newTaskState;
-                            if (onState != null) onState(taskState);
                             result = true;
                         }
                         break;
-                    case TaskState.COMPLETED:
-                        if (taskState == TaskState.RUNNING)
+                    case TaskState.Completed:
+
+                        if (taskState == TaskState.Running)
                         {
                             taskState = newTaskState;
-                            if (onState != null) onState(taskState);
                             result = true;
                         }
                         break;
-                    case TaskState.FAILED:
-                        if (taskState == TaskState.WAITTING || taskState == TaskState.RUNNING)
+                    case TaskState.Failed:
+
+                        if (taskState == TaskState.Waiting || taskState == TaskState.Running)
                         {
                             taskState = newTaskState;
-                            if (onState != null) onState(taskState);
                             result = true;
                         }
                         break;
-                    case TaskState.PAUSE:
-                        if (taskState == TaskState.WAITTING || taskState == TaskState.RUNNING)
+                    case TaskState.Pause:
+
+                        if (taskState == TaskState.Waiting || taskState == TaskState.Running)
                         {
                             taskState = newTaskState;
-                            if (onState != null) onState(taskState);
                             result = true;
                         }
                         break;
-                    case TaskState.CANCEL:
-                        if (taskState != TaskState.COMPLETED || taskState != TaskState.CANCEL)
+                    case TaskState.Cancel:
+
+                        if (taskState != TaskState.Completed || taskState != TaskState.Cancel)
                         {
                             taskState = newTaskState;
-                            if (onState != null) onState(taskState);
                             result = true;
                         }
                         break;
-                    case TaskState.RESUME:
-                        if (taskState == TaskState.PAUSE || taskState == TaskState.FAILED)
+                    case TaskState.Resume:
+
+                        if (taskState == TaskState.Pause || taskState == TaskState.Failed)
                         {
                             taskState = newTaskState;
-                            if (onState != null) onState(taskState);
                             result = true;
                         }
                         break;
                 }
             }
+
+            if (result && onState != null)
+            {
+                onState(taskState);
+            }
+
             return result;
-            
+
+        }
+
+
+        /// <summary>
+        /// 等待任务
+        /// </summary>
+        /// <param name="task"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Task<T> AsyncTask<T>() where T : CosResult
+        {
+            return NewTaskCompletion<T>().Task;
+        }
+
+        private TaskCompletionSource<T> NewTaskCompletion<T>() where T : CosResult
+        {
+            var t = new TaskCompletionSource<T>();
+
+            successCallback = delegate (CosResult cosResult)
+            {
+                t.TrySetResult(cosResult as T);
+            };
+
+            failCallback = delegate (CosClientException clientException, CosServerException serverException)
+            {
+
+                if (clientException != null)
+                {
+                    t.TrySetException(clientException);
+                }
+                else
+                {
+                    t.TrySetException(serverException);
+                }
+            };
+
+            return t;
         }
 
     }
@@ -141,33 +184,47 @@ namespace COSXML.Transfer
     internal class SliceStruct
     {
         public int partNumber;
+
         public bool isAlreadyUpload;
+
         public long sliceStart;
+
         public long sliceEnd;
+
         public long sliceLength;
+
         public string eTag;
     }
 
     public enum TaskState
     {
-        WAITTING = 0,
-        RUNNING,
-        COMPLETED,
-        FAILED,
-        CANCEL,
-        PAUSE,
-        RESUME,
+        Waiting = 0,
+
+        Running,
+
+        Completed,
+
+        Failed,
+
+        Cancel,
+
+        Pause,
+
+        Resume,
     }
 
     public delegate void OnState(TaskState taskState);
 
     public delegate void OnInternalHandleBeforExcute(CosRequest cosRequest);
 
-    internal interface OnMultipartUploadStateListener
+    internal interface IOnMultipartUploadStateListener
     {
         void OnInit();
+
         void OnPart();
+
         void OnCompleted(CompleteMultipartUploadResult result);
+
         void OnFailed(CosClientException clientEx, CosServerException serverEx);
     }
 
