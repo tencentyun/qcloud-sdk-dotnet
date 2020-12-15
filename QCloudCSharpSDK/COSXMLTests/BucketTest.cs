@@ -340,7 +340,10 @@ namespace COSXMLTests
         {
             PutBucketLifeCycle();
             Thread.Sleep(100);
-            GetBucketLifeCycle();
+            QCloudServer.TestWithServerFailTolerance(() =>
+            {
+                GetBucketLifeCycle();
+            });
             DeleteBucketLifeCycle();
         }
 
