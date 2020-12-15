@@ -24,7 +24,6 @@ namespace COSXML.Model.Bucket
             this.queryParameters.Add("lifecycle", null);
             lifecycleConfiguration = new LifecycleConfiguration();
             lifecycleConfiguration.rules = new List<LifecycleConfiguration.Rule>();
-            this.needMD5 = true;
         }
 
         public override Network.RequestBody GetRequestBody()

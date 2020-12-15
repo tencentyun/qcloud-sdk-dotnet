@@ -36,28 +36,6 @@ namespace COSXML.Model.Object
         }
 
         /// <summary>
-        /// 模拟跨域访问的请求来源域名
-        /// </summary>
-        /// <param name="origin"></param>
-        public void SetOrigin(string origin)
-        {
-            this.origin = origin;
-        }
-
-        /// <summary>
-        /// 模拟跨域访问的请求 HTTP 方法
-        /// </summary>
-        /// <param name="accessControlMethod"></param>
-        public void SetAccessControlMethod(string accessControlMethod)
-        {
-
-            if (accessControlMethod != null)
-            {
-                this.accessControlMethod = accessControlMethod.ToUpper();
-            }
-        }
-
-        /// <summary>
         /// 模拟跨域访问的请求头部
         /// </summary>
         /// <param name="accessControlHeaders"></param>

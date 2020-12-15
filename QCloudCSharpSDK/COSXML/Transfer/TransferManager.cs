@@ -50,7 +50,7 @@ namespace COSXML.Transfer
         public void Upload(COSXMLUploadTask uploader)
         {
             uploader.InitCosXmlServer(cosXml);
-            uploader.SetDivision(transferConfig.divisionForUpload, transferConfig.sliceSizeForUpload);
+            uploader.SetDivision(transferConfig.DivisionForUpload, transferConfig.SliceSizeForUpload);
             uploader.Upload();
         }
 
@@ -97,7 +97,7 @@ namespace COSXML.Transfer
         public void Copy(COSXMLCopyTask copy)
         {
             copy.InitCosXmlServer(cosXml);
-            copy.SetDivision(transferConfig.DdivisionForCopy, transferConfig.sliceSizeForCopy);
+            copy.SetDivision(transferConfig.DdivisionForCopy, transferConfig.SliceSizeForCopy);
             copy.Copy();
         }
 
@@ -120,16 +120,16 @@ namespace COSXML.Transfer
     public sealed class TransferConfig
     {
         // 5M
-        internal long divisionForCopy = 5242880;
+        private long divisionForCopy = 5242880;
 
         // 2M
-        internal long sliceSizeForCopy = 2097152;
+        private long sliceSizeForCopy = 2097152;
 
         // 5M
-        internal long divisionForUpload = 5242880;
+        private long divisionForUpload = 5242880;
 
         // 1M
-        internal long sliceSizeForUpload = 1048576;
+        private long sliceSizeForUpload = 1048576;
 
         /// <summary>
         /// 多大的文件会自动使用分片拷贝

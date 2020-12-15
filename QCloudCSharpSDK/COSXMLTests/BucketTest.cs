@@ -49,24 +49,7 @@ namespace COSXMLTests
             try
             {
                 PutBucketRequest request = new PutBucketRequest(bucket);
-
-                // 添加acl
-                request.SetCosACL(CosACL.Private);
-
-                COSXML.Model.Tag.GrantAccount readAccount = new COSXML.Model.Tag.GrantAccount();
-
-                readAccount.AddGrantAccount("1131975903", "1131975903");
-                request.SetXCosGrantRead(readAccount);
-
-                COSXML.Model.Tag.GrantAccount writeAccount = new COSXML.Model.Tag.GrantAccount();
-
-                writeAccount.AddGrantAccount("1131975903", "1131975903");
-                request.SetXCosGrantWrite(writeAccount);
-
-                COSXML.Model.Tag.GrantAccount fullAccount = new COSXML.Model.Tag.GrantAccount();
-
-                fullAccount.AddGrantAccount("2832742109", "2832742109");
-                request.SetXCosReadWrite(fullAccount);
+                QCloudServer.SetRequestACLData(request);
 
                 //执行请求
                 PutBucketResult result = cosXml.PutBucket(request);
@@ -154,24 +137,11 @@ namespace COSXMLTests
             try
             {
                 PutBucketACLRequest request = new PutBucketACLRequest(bucket);
-
-                //添加acl
-                request.SetCosACL(CosACL.Private);
-
-                COSXML.Model.Tag.GrantAccount readAccount = new COSXML.Model.Tag.GrantAccount();
-
-                readAccount.AddGrantAccount("1131975903", "1131975903");
-                request.SetXCosGrantRead(readAccount);
-
-                COSXML.Model.Tag.GrantAccount writeAccount = new COSXML.Model.Tag.GrantAccount();
-
-                writeAccount.AddGrantAccount("1131975903", "1131975903");
-                request.SetXCosGrantWrite(writeAccount);
-
-                COSXML.Model.Tag.GrantAccount fullAccount = new COSXML.Model.Tag.GrantAccount();
-
-                fullAccount.AddGrantAccount("2832742109", "2832742109");
-                request.SetXCosReadWrite(fullAccount);
+                request.SetQueryParameter("time", TimeUtils.GetCurrentTime(TimeUnit.Seconds).ToString());
+                request.SetRequestHeader("custom", "value1");
+                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.Seconds), 600, new List<string>() { "custome" },
+                    new List<string>() { "time" } );
+                QCloudServer.SetRequestACLData(request);
 
                 //执行请求
                 PutBucketACLResult result = cosXml.PutBucketACL(request);
@@ -845,8 +815,6 @@ namespace COSXMLTests
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
-                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-
                 if (serverEx.statusCode != 409 && serverEx.statusCode != 451)
                 {
                     Assert.Fail();
@@ -910,11 +878,13 @@ namespace COSXMLTests
 
                 // Console.WriteLine(getResult.GetResultInfo());
                 Assert.IsNotEmpty((getResult.GetResultInfo()));
+                Assert.IsNotEmpty(getResult.RawContentBodyString);
 
                 BucketLoggingStatus status = getResult.bucketLoggingStatus;
 
                 Assert.NotNull(status);
                 Assert.NotNull(status.loggingEnabled);
+                Assert.NotNull(status.GetInfo());
 
                 string targetBucket = status.loggingEnabled.targetBucket;
                 string targetPrefix = status.loggingEnabled.targetPrefix;
@@ -1042,6 +1012,7 @@ namespace COSXMLTests
                 ListBucketInventoryRequest listRequest = new ListBucketInventoryRequest(bucket);
                 ListBucketInventoryResult listResult = cosXml.ListBucketInventory(listRequest);
                 Assert.IsTrue(listResult.httpCode == 200);
+                Assert.NotNull(listResult.GetResultInfo());
                 Assert.IsEmpty(listResult.listInventoryConfiguration.continuationToken);
                 Assert.False(listResult.listInventoryConfiguration.isTruncated);
                 Assert.AreEqual(listResult.listInventoryConfiguration.inventoryConfigurations.Count, 1);

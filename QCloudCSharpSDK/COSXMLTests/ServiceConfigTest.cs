@@ -34,7 +34,7 @@ namespace COSXMLTests
             {
                 cosXml.GetObject(request);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignore
             }
@@ -47,7 +47,7 @@ namespace COSXMLTests
             {
                 cosXml.GetBucket(bucketRequest);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignore
             }
@@ -83,7 +83,7 @@ namespace COSXMLTests
             {
                 cosXml.GetBucket(bucketRequest);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignore
             }
@@ -96,7 +96,7 @@ namespace COSXMLTests
             {
                 cosXml.GetObject(request);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignore
             }

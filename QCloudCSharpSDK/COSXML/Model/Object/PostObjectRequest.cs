@@ -18,7 +18,6 @@ namespace COSXML.Model.Object
     /// </summary>
     public sealed class PostObjectRequest : ObjectRequest
     {
-        private static string TAG = typeof(PostObjectRequest).FullName;
 
         /// <summary>
         /// 表单字段
@@ -91,7 +90,21 @@ namespace COSXML.Model.Object
         /// <param name="cosACL"></param>
         public void SetCosACL(CosACL cosACL)
         {
-            formStruct.acl = EnumUtils.GetValue(cosACL);
+            SetCosACL(EnumUtils.GetValue(cosACL));
+        }
+
+        /// <summary>
+        /// 定义 Object 的 acl 属性。有效值：private，public-read-write，public-read；默认值：private
+        /// <see cref="Common.CosACL"/>
+        /// </summary>
+        /// <param name="cosACL"></param>
+        public void SetCosACL(string cosACL)
+        {
+
+            if (cosACL != null)
+            {
+                formStruct.acl = cosACL;
+            }
         }
 
         /// <summary>
@@ -151,10 +164,6 @@ namespace COSXML.Model.Object
             {
                 formStruct.headers.Add(key, value);
             }
-            catch (ArgumentNullException)
-            {
-                QLog.Debug(TAG, "SetHeader: key ==null");
-            }
             catch (ArgumentException)
             {
                 formStruct.headers[key] = value;
@@ -172,10 +181,6 @@ namespace COSXML.Model.Object
             try
             {
                 formStruct.customHeaders.Add(key, value);
-            }
-            catch (ArgumentNullException)
-            {
-                QLog.Debug(TAG, "SetHeader: key ==null");
             }
             catch (ArgumentException)
             {
@@ -204,7 +209,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 若设置优先生效，返回 303 并提供 Location 头部，
-        /// 会在 URL 尾部加上 bucket={bucket}&key={key}&etag={%22etag%22} 参数。
+        /// 会在 URL 尾部加上 bucket={bucket}&lt;key={key}&gt;etag={%22etag%22} 参数。
         /// </summary>
         /// <param name="redirectHost"></param>
         public void SetSuccessActionRedirect(string redirectHost)
@@ -232,11 +237,6 @@ namespace COSXML.Model.Object
             formStruct.policy = policy;
         }
 
-        public override void SetSign(string sign)
-        {
-            formStruct.sign = sign;
-        }
-
         public override void CheckParameters()
         {
             formStruct.CheckParameter();
@@ -245,18 +245,21 @@ namespace COSXML.Model.Object
 
         public override CosXmlSignSourceProvider GetSignSourceProvider()
         {
-
-            if (this.cosXmlSignSourceProvider != null)
+            var signSourceProvider = base.GetSignSourceProvider();
+            
+            if (signSourceProvider != null)
             {
-                this.cosXmlSignSourceProvider.SetSignAll(false);
-                this.cosXmlSignSourceProvider.onGetSign = delegate (Request request, string sign)
+                signSourceProvider.RemoveHeaderKey("content-type");
+                signSourceProvider.RemoveHeaderKey("content-length");
+                signSourceProvider.RemoveHeaderKey("content-md5");
+                signSourceProvider.onGetSign = delegate (Request request, string sign)
                 {
                     //添加参数 sign
                     ((MultipartRequestBody)request.Body).AddParameter("Signature", sign);
                 };
             }
 
-            return base.GetSignSourceProvider();
+            return signSourceProvider;
         }
 
         public override RequestBody GetRequestBody()
@@ -330,11 +333,6 @@ namespace COSXML.Model.Object
             /// 速度限制
             /// </summary>
             public string xCOSTrafficLimit;
-
-            /// <summary>
-            /// 签名串
-            /// </summary>
-            public string sign;
 
             /// <summary>
             /// 请求检查策略
@@ -415,11 +413,6 @@ namespace COSXML.Model.Object
                     formParameters.Add(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, xCOSTrafficLimit);
                 }
 
-                if (sign != null)
-                {
-                    formParameters.Add("Signature", sign);
-                }
-
                 if (policy != null)
                 {
                     formParameters.Add("policy", DigestUtils.GetBase64(policy.Content(), Encoding.UTF8));
@@ -469,38 +462,43 @@ namespace COSXML.Model.Object
                 this.expiration = TimeUtils.GetFormatTime("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", endTimeMills, TimeUnit.Milliseconds);
             }
 
-            public void SetExpiration(string formatEndTime)
-            {
-                this.expiration = formatEndTime;
-            }
-
             public void AddConditions(string key, string value, bool isPrefixMatch)
             {
+
+                if (conditions.Length > 0)
+                {
+                    conditions.Append(',');
+                }
 
                 if (isPrefixMatch)
                 {
                     conditions.Append('[')
-                        .Append("starts-with")
-                        .Append(',')
+                        .Append("\"starts-with\"")
+                        .Append(",\"")
                         .Append(key)
-                        .Append(',')
+                        .Append("\",\"")
                         .Append(value)
-                        .Append(']');
+                        .Append("\"]");
                 }
                 else
                 {
-                    conditions.Append('{')
+                    conditions.Append("{\"")
                         .Append(key)
-                        .Append(':')
+                        .Append("\":\"")
                         .Append(value)
-                        .Append('}');
+                        .Append("\"}");
                 }
             }
 
             public void AddContentConditions(int start, int end)
             {
+                if (conditions.Length > 0)
+                {
+                    conditions.Append(',');
+                }
+                
                 conditions.Append('[')
-                    .Append("content-length-range")
+                    .Append("\"content-length-range\"")
                     .Append(',')
                     .Append(start)
                     .Append(',')
@@ -516,10 +514,19 @@ namespace COSXML.Model.Object
 
                 if (expiration != null)
                 {
-                    content.Append(String.Format("expiration:{0}", expiration));
+                    content.Append(String.Format("\"expiration\":\"{0}\"", expiration));
                 }
 
-                content.Append(String.Format("conditions:{0}", conditions));
+                if (conditions.Length > 0)
+                {
+                    if (expiration != null) 
+                    {
+                        content.Append(",");
+                    }
+
+                    content.Append(String.Format("\"conditions\":[{0}]", conditions));
+                }
+
                 content.Append('}');
 
                 return content.ToString();

@@ -25,25 +25,6 @@ namespace COSXML.Model.Object
             this.method = CosRequestMethod.DELETE;
         }
 
-        /// <summary>
-        /// 分片块上传的UploadId
-        /// </summary>
-        /// <param name="uploadId"></param>
-        public void SetUploadId(string uploadId)
-        {
-            this.uploadId = uploadId;
-        }
-
-        /// <summary>
-        /// 分片块上传的UploadId
-        /// </summary>
-        /// <returns>uploadId</returns>
-        public string GetUploadId()
-        {
-
-            return uploadId;
-        }
-
         public override void CheckParameters()
         {
 

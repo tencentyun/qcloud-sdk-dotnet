@@ -43,7 +43,6 @@ namespace COSXML.Model.Bucket
             this.method = CosRequestMethod.PUT;
             this.queryParameters.Add("intelligenttiering", null);
             this.configuration = configuration;
-            this.needMD5 = true;
         }
 
         public override Network.RequestBody GetRequestBody()

@@ -32,7 +32,12 @@ namespace COSXMLTests
         {
             notExistBucket = "not-exist-bucket-suwjsdjwujehdfkd-" + QCloudServer.Instance().appid;
             cosXml = QCloudServer.Instance().cosXml;
-            transferManager = new TransferManager(cosXml, new TransferConfig());
+            var config = new TransferConfig();
+            config.DivisionForUpload = 1 * 1024 * 1024;
+            config.DdivisionForCopy = 1 * 1024 * 1024;
+            config.SliceSizeForCopy = 1 * 1024 * 1024;
+            config.SliceSizeForUpload = 1 * 1024 * 1024;
+            transferManager = new TransferManager(cosXml, config);
             localFilePath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".txt", 1024 * 1024 * 1);
         }
 

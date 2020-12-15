@@ -32,23 +32,23 @@ namespace COSXML.Utils
             return hexStr.ToString();
         }
 
-        public static string GetSha1ToHexString(Stream inputStream)
-        {
-            SHA1 sha1 = new SHA1CryptoServiceProvider();
+        // public static string GetSha1ToHexString(Stream inputStream)
+        // {
+        //     SHA1 sha1 = new SHA1CryptoServiceProvider();
 
-            byte[] result = sha1.ComputeHash(inputStream);
-            sha1.Clear();
-            var hexStr = new StringBuilder();
+        //     byte[] result = sha1.ComputeHash(inputStream);
+        //     sha1.Clear();
+        //     var hexStr = new StringBuilder();
 
-            foreach (byte b in result)
-            {
-                // to lower
-                // to lower
-                hexStr.Append(b.ToString("x2"));
-            }
+        //     foreach (byte b in result)
+        //     {
+        //         // to lower
+        //         // to lower
+        //         hexStr.Append(b.ToString("x2"));
+        //     }
 
-            return hexStr.ToString();
-        }
+        //     return hexStr.ToString();
+        // }
 
         public static string GetHamcSha1ToHexString(string content, Encoding contentEncoding, string key, Encoding keyEncoding)
         {

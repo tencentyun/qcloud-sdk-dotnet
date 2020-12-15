@@ -26,9 +26,9 @@ namespace COSXML.Auth
 
     public sealed class CosXmlSignSourceProvider : IQCloudSignSource
     {
-        private HashSet<string> parameterKeys;
+        private HashSet<string> parameterKeysToSign;
 
-        private HashSet<string> headerKeys;
+        private HashSet<string> headerKeysToSign;
 
         private string signTime;
 
@@ -36,20 +36,12 @@ namespace COSXML.Auth
 
         private string parameterList;
 
-        private Boolean signAll;
-
         public OnGetSign onGetSign;
 
         public CosXmlSignSourceProvider()
         {
-            parameterKeys = new HashSet<string>();
-            headerKeys = new HashSet<string>();
-            this.signAll = true;
-        }
-
-        public void SetSignAll(Boolean signAll)
-        {
-            this.signAll = signAll;
+            parameterKeysToSign = new HashSet<string>();
+            headerKeysToSign = new HashSet<string>();
         }
 
         public void AddParameterKey(string key)
@@ -57,7 +49,7 @@ namespace COSXML.Auth
 
             if (key != null)
             {
-                parameterKeys.Add(key);
+                parameterKeysToSign.Add(key);
             }
         }
 
@@ -69,7 +61,7 @@ namespace COSXML.Auth
 
                 foreach (string key in keys)
                 {
-                    this.parameterKeys.Add(key.ToLower());
+                    this.parameterKeysToSign.Add(key.ToLower());
                 }
             }
         }
@@ -79,7 +71,16 @@ namespace COSXML.Auth
 
             if (key != null)
             {
-                headerKeys.Add(key);
+                headerKeysToSign.Add(key);
+            }
+        }
+
+        public void RemoveHeaderKey(string key)
+        {
+
+            if (key != null)
+            {
+                headerKeysToSign.Remove(key);
             }
         }
 
@@ -91,7 +92,7 @@ namespace COSXML.Auth
 
                 foreach (string key in keys)
                 {
-                    this.headerKeys.Add(key.ToLower());
+                    this.headerKeysToSign.Add(key.ToLower());
                 }
             }
         }
@@ -138,30 +139,11 @@ namespace COSXML.Auth
             foreach (KeyValuePair<string, string> pair in sourceHeaders)
             {
                 lowerKeySourceHeaders.Add(pair.Key.ToLower(), pair.Value);
-
-                if (signAll)
-                {
-
-                    if (pair.Key.Equals("content-type", StringComparison.OrdinalIgnoreCase) ||
-                        pair.Key.Equals("content-md5", StringComparison.OrdinalIgnoreCase) ||
-                        pair.Key.StartsWith("x-cos-"))
-                    {
-                        headerKeys.Add(pair.Key.ToLower());
-                    }
-                }
             }
 
-            try
-            {
-                lowerKeySourceHeaders.Add("host", request.Host);
-                headerKeys.Add("host");
-            }
-            catch (Exception)
-            {
+            lowerKeySourceHeaders.Add("host", request.Host);
 
-            }
-
-            if (signAll)
+            if (headerKeysToSign.Contains("content-length"))
             {
 
                 try
@@ -176,7 +158,6 @@ namespace COSXML.Auth
                     if (contentLength > 0)
                     {
                         lowerKeySourceHeaders.Add("content-length", contentLength.ToString());
-                        headerKeys.Add("content-length");
                     }
                 }
                 catch (Exception) 
@@ -192,11 +173,6 @@ namespace COSXML.Auth
             foreach (KeyValuePair<string, string> pair in sourceParameters)
             {
                 lowerKeySourceParameters.Add(pair.Key.ToLower(), pair.Value);
-
-                if (signAll)
-                {
-                    parameterKeys.Add(pair.Key.ToLower());
-                }
             }
 
             string path = URLEncodeUtils.Decode(request.Url.Path);
@@ -264,7 +240,7 @@ namespace COSXML.Auth
             }
 
             //将指定的headers 小写且排序
-            List<String> keys = new List<String>(headerKeys);
+            List<String> keys = new List<String>(headerKeysToSign);
 
             LowerAndSort(keys);
 
@@ -291,7 +267,7 @@ namespace COSXML.Auth
             }
 
             //将指定的parameter key 小写 且 排序
-            List<String> keys = new List<String>(parameterKeys);
+            List<String> keys = new List<String>(parameterKeysToSign);
 
             LowerAndSort(keys);
 

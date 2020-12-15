@@ -44,11 +44,6 @@ namespace COSXML.Model.Object
         private long contentLength = -1L;
 
         /// <summary>
-        /// 上传data数据
-        /// </summary>
-        private byte[] data;
-
-        /// <summary>
         /// 上传回调
         /// </summary>
         private COSXML.Callback.OnProgressCallback progressCallback;
@@ -82,52 +77,6 @@ namespace COSXML.Model.Object
         }
 
         /// <summary>
-        /// 上传整个文件
-        /// </summary>
-        /// <param name="bucket"></param>
-        /// <param name="key"></param>
-        /// <param name="partNumber"></param>
-        /// <param name="uploadId"></param>
-        /// <param name="srcPath"></param>
-        public UploadPartRequest(string bucket, string key, int partNumber, string uploadId, string srcPath)
-            : this(bucket, key, partNumber, uploadId, srcPath, -1L, -1L)
-        {
-
-        }
-
-        /// <summary>
-        /// 上传data数据
-        /// </summary>
-        /// <param name="bucket"></param>
-        /// <param name="key"></param>
-        /// <param name="partNumber"></param>
-        /// <param name="uploadId"></param>
-        /// <param name="data"></param>
-        public UploadPartRequest(string bucket, string key, int partNumber, string uploadId, byte[] data)
-            : this(bucket, key, partNumber, uploadId)
-        {
-            this.data = data;
-        }
-
-        /// <summary>
-        /// 设置分片块编号
-        /// </summary>
-        /// <param name="partNumber"></param>
-        public void SetPartNumber(int partNumber)
-        {
-            this.partNumber = partNumber;
-        }
-
-        /// <summary>
-        /// 设置上传的UploadId
-        /// </summary>
-        /// <param name="uploadId"></param>
-        public void SetUploadId(string uploadId)
-        {
-            this.uploadId = uploadId;
-        }
-
-        /// <summary>
         /// 最大上传速度，单位是 bit/s
         /// </summary>
         /// <param name="start"></param>
@@ -148,7 +97,7 @@ namespace COSXML.Model.Object
         public override void CheckParameters()
         {
 
-            if (srcPath == null && data == null)
+            if (srcPath == null)
             {
                 throw new CosClientException((int)(CosClientError.InvalidArgument), "data source = null");
             }
@@ -217,12 +166,6 @@ namespace COSXML.Model.Object
                 }
 
                 body = new FileRequestBody(srcPath, fileOffset, contentLength);
-                body.ProgressCallback = progressCallback;
-            }
-            else
-if (data != null)
-            {
-                body = new ByteRequestBody(data);
                 body.ProgressCallback = progressCallback;
             }
 

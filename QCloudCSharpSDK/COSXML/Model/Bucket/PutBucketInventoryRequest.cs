@@ -16,7 +16,6 @@ namespace COSXML.Model.Bucket
             this.method = CosRequestMethod.PUT;
             this.queryParameters.Add("inventory", null);
             this.queryParameters.Add("id", id);
-            this.IsNeedMD5 = true;
             inventoryConfiguration = new InventoryConfiguration();
             inventoryConfiguration.isEnabled = true;
             inventoryConfiguration.id = id;

@@ -1,11 +1,13 @@
 using COSXML;
 using COSXML.Auth;
+using COSXML.Log;
 using COSXML.Common;
 using COSXML.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using COSXML.Model;
 
 namespace COSXMLTests
 {
@@ -39,6 +41,8 @@ namespace COSXMLTests
 
         private QCloudServer()
         {
+            QLog.SetLogLevel(Level.V);
+
             uin = "1278687956";
             appid = "1253653367";
             bucketVersioning = "dotnet-ut-versioning-1253653367";
@@ -58,7 +62,10 @@ namespace COSXMLTests
                 .SetAppid(appid)
                 .SetRegion(region)
                 .SetDebugLog(true)
+                .IsHttps(true)
                 .SetConnectionLimit(512)
+                .SetConnectionTimeoutMs(10 * 1000)
+                .SetReadWriteTimeoutMs(10 * 1000)
                 .Build();
 
 
@@ -117,6 +124,27 @@ namespace COSXMLTests
             {
                 throw;
             }
+        }
+
+        public static void SetRequestACLData(CosRequest request)
+        {
+            request.GetType().GetMethod("SetCosACL", new [] {typeof(CosACL)}).Invoke(request, new object[] { CosACL.Private });
+
+            COSXML.Model.Tag.GrantAccount readAccount = new COSXML.Model.Tag.GrantAccount();
+            readAccount.AddGrantAccount("1131975903", "1131975903");
+            request.GetType().GetMethod("SetXCosGrantRead").Invoke(request, new object[] { readAccount });
+
+            COSXML.Model.Tag.GrantAccount writeAccount = new COSXML.Model.Tag.GrantAccount();
+            writeAccount.AddGrantAccount("1131975903", "1131975903");
+            var writeMethod = request.GetType().GetMethod("SetXCosGrantWrite");
+            if (writeMethod != null)
+            {
+                writeMethod.Invoke(request, new object[] { writeAccount });
+            }
+
+            COSXML.Model.Tag.GrantAccount fullControlAccount = new COSXML.Model.Tag.GrantAccount();
+            fullControlAccount.AddGrantAccount("2832742109", "2832742109");
+            request.GetType().GetMethod("SetXCosReadWrite").Invoke(request, new object[] { fullControlAccount });
         }
 
         public static void DeleteFile(string path)

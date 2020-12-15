@@ -22,19 +22,6 @@ namespace COSXML.Model.Object
         }
 
         /// <summary>
-        /// 定义的缓存策略，将作为 Object 元数据保存
-        /// </summary>
-        /// <param name="cacheControl"></param>
-        public void SetCacheControl(string cacheControl)
-        {
-
-            if (cacheControl != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.CACHE_CONTROL, cacheControl);
-            }
-        }
-
-        /// <summary>
         /// 设置 Object 的存储级别
         /// <see cref="Common.CosStorageClass"/>
         /// </summary>
@@ -44,45 +31,6 @@ namespace COSXML.Model.Object
             if (cosStorageClass != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_STORAGE_CLASS, cosStorageClass);
-            }
-        }
-
-        /// <summary>
-        /// 定义的文件名称，将作为 Object 元数据保存
-        /// </summary>
-        /// <param name="contentDisposition"></param>
-        public void SetContentDisposition(string contentDisposition)
-        {
-
-            if (contentDisposition != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.CONTENT_DISPOSITION, contentDisposition);
-            }
-        }
-
-        /// <summary>
-        /// 定义的编码格式，将作为 Object 元数据保存
-        /// </summary>
-        /// <param name="contentEncoding"></param>
-        public void SetContentEncoding(string contentEncoding)
-        {
-
-            if (contentEncoding != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.CONTENT_ENCODING, contentEncoding);
-            }
-        }
-
-        /// <summary>
-        /// 定义的内容类型（MIME），将作为 Object 元数据保存
-        /// </summary>
-        /// <param name="expires"></param>
-        public void SetExpires(string expires)
-        {
-
-            if (expires != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.EXPIRES, expires);
             }
         }
 
@@ -112,7 +60,7 @@ namespace COSXML.Model.Object
         /// <see cref="Common.CosACL"/>
         public void SetCosACL(CosACL cosACL)
         {
-            SetRequestHeader(CosRequestHeaderKey.X_COS_ACL, EnumUtils.GetValue(cosACL));
+            SetCosACL(EnumUtils.GetValue(cosACL));
         }
 
         /// <summary>
@@ -126,20 +74,6 @@ namespace COSXML.Model.Object
             if (grantAccount != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_GRANT_READ, grantAccount.GetGrantAccounts());
-            }
-        }
-
-        /// <summary>
-        /// 赋予被授权者写的权限
-        /// <see cref="Model.Tag.GrantAccount"/>
-        /// </summary>
-        /// <param name="grantAccount"></param>
-        public void SetXCosGrantWrite(GrantAccount grantAccount)
-        {
-
-            if (grantAccount != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.X_COS_GRANT_WRITE, grantAccount.GetGrantAccounts());
             }
         }
 

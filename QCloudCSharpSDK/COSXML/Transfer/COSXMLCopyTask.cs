@@ -55,12 +55,6 @@ namespace COSXML.Transfer
             this.copySource = copySource;
         }
 
-        public COSXMLCopyTask(string bucket, string region, string key, CopySourceStruct copySource)
-            : base(bucket, region, key)
-        {
-            this.copySource = copySource;
-        }
-
         internal void SetDivision(long divisionSize, long sliceSize)
         {
             this.divisionSize = divisionSize;

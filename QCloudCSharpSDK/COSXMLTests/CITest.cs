@@ -72,9 +72,6 @@ namespace COSXMLTests
             o["rules"] = rules;
             string ruleString = o.ToString(Formatting.None);
 
-
-            Console.WriteLine(ruleString);
-
             request.SetRequestHeader("Pic-Operations", ruleString);
             //执行请求
             PutObjectResult result = QCloudServer.Instance().cosXml.PutObject(request);
@@ -153,9 +150,6 @@ namespace COSXMLTests
             rules.Add(rule);
             o["rules"] = rules;
             string ruleString = o.ToString(Formatting.None);
-
-
-            Console.WriteLine(ruleString);
 
             ImageProcessRequest request = new ImageProcessRequest(bucket, key, ruleString);
 

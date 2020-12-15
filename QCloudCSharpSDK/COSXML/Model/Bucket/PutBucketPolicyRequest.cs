@@ -12,7 +12,6 @@ namespace COSXML.Model.Bucket
         {
             this.method = CosRequestMethod.PUT;
             this.queryParameters.Add("policy ", null);
-            this.needMD5 = true;
         }
     }
 }

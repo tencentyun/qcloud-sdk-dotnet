@@ -28,15 +28,7 @@ namespace COSXML.Model
         /// <summary>
         /// raw http response body
         /// </summary>
-        public string rawContentBodyString { set; private get; }
-
-        /// <summary>
-        /// raw http response body
-        /// </summary>
-        public string GetRawContentBodyString()
-        {
-            return rawContentBodyString;
-        }
+        public string RawContentBodyString { set; get; }
 
         /// <summary>
         /// check successful

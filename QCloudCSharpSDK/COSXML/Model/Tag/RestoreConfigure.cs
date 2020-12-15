@@ -23,22 +23,6 @@ namespace COSXML.Model.Tag
         [XmlElement("CASJobParameters")]
         public CASJobParameters casJobParameters;
 
-        public string GetInfo()
-        {
-            StringBuilder stringBuilder = new StringBuilder("{RestoreRequest:\n");
-
-            stringBuilder.Append("Days:").Append(days).Append("\n");
-
-            if (casJobParameters != null)
-            {
-                stringBuilder.Append(casJobParameters.GetInfo()).Append("\n");
-            }
-
-            stringBuilder.Append("}");
-
-            return stringBuilder.ToString();
-        }
-
         public sealed class CASJobParameters
         {
             /// <summary>
@@ -47,16 +31,6 @@ namespace COSXML.Model.Tag
             /// </summary>
             [XmlElement("Tier")]
             public Tier tier = Tier.Standard;
-
-            public string GetInfo()
-            {
-                StringBuilder stringBuilder = new StringBuilder("{CASJobParameters:\n");
-
-                stringBuilder.Append("Tier:").Append(EnumUtils.GetValue(tier)).Append("\n");
-                stringBuilder.Append("}");
-
-                return stringBuilder.ToString();
-            }
         }
 
         public enum Tier

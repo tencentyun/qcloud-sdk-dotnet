@@ -180,18 +180,6 @@ namespace COSXML
             }
 
             /// <summary>
-            /// 设置最大重试次数，默认是 3
-            /// </summary>
-            /// <param name="maxRetry"></param>
-            /// <returns></returns>
-            public Builder SetMaxRetry(int maxRetry)
-            {
-                this.httpClientConfigBuilder.SetMaxRetry(maxRetry);
-
-                return this;
-            }
-
-            /// <summary>
             /// 设置 TCP 连接超时时间，单位是毫秒，默认 45 秒
             /// </summary>
             /// <param name="connectionTimeoutMs"></param>

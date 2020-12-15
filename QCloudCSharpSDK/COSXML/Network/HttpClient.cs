@@ -56,12 +56,6 @@ namespace COSXML.Network
         {
             lock (sync)
             {
-
-                if (config == null)
-                {
-                    throw new CosClientException((int)CosClientError.InvalidArgument, "HttpClientConfig = null");
-                }
-
                 HttpClient.config = config;
                 HttpClient.credentialsProvider = credentialsProvider;
                 // init grobal httpwebreqeust
@@ -156,26 +150,26 @@ namespace COSXML.Network
 
         }
 
-        public void Execute(Request request, Response response)
-        {
+        // public void Execute(Request request, Response response)
+        // {
 
-            try
-            {
-                CommandTask.Excute(request, response, config);
-            }
-            catch (CosServerException)
-            {
-                throw;
-            }
-            catch (CosClientException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new CosClientException((int)CosClientError.BadRequest, ex.Message, ex);
-            }
-        }
+        //     try
+        //     {
+        //         CommandTask.Excute(request, response, config);
+        //     }
+        //     catch (CosServerException)
+        //     {
+        //         throw;
+        //     }
+        //     catch (CosClientException)
+        //     {
+        //         throw;
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         throw new CosClientException((int)CosClientError.BadRequest, ex.Message, ex);
+        //     }
+        // }
 
         public void InternalSchedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
@@ -414,20 +408,7 @@ namespace COSXML.Network
                     try
                     {
                         CosServerError cosServerError = XmlParse.Deserialize<CosServerError>(inputStream);
-
-                        if (cosServerException.requestId != null)
-                        {
-                            cosServerException.requestId = cosServerError.requestId;
-                        }
-
-                        if (cosServerException.traceId != null)
-                        {
-                            cosServerException.traceId = cosServerError.traceId;
-                        }
-
-                        cosServerException.resource = cosServerError.resource;
-                        cosServerException.errorCode = cosServerError.code;
-                        cosServerException.errorMessage = cosServerError.message;
+                        cosServerException.SetCosServerError(cosServerError);
                     }
                     catch (Exception ex)
                     {
@@ -445,7 +426,7 @@ namespace COSXML.Network
             /// <param name="ex"></param>
             public override void OnFinish(bool isSuccess, Exception ex)
             {
-                cosResult.rawContentBodyString = Body.rawContentBodyString;
+                cosResult.RawContentBodyString = Body.rawContentBodyString;
 
                 if (isSuccess && successCallback != null)
                 {

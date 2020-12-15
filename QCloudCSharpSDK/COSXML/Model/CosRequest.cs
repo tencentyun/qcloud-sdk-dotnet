@@ -155,10 +155,6 @@ namespace COSXML.Model
 
                 queryParameters.Add(key, value);
             }
-            catch (ArgumentNullException)
-            {
-                QLog.Debug(TAG, "SetQueryParameter: key ==null");
-            }
             catch (ArgumentException)
             {
                 // cover the current value
@@ -214,10 +210,6 @@ namespace COSXML.Model
 
                 headers.Add(key, value);
             }
-            catch (ArgumentNullException)
-            {
-                QLog.Debug(TAG, "SetRequestHeader: key ==null");
-            }
             catch (ArgumentException)
             {
                 // cover the current value
@@ -250,12 +242,6 @@ namespace COSXML.Model
             }
             set { needMD5 = value; }
         }
-
-        /// <summary>
-        /// return the host for cos request
-        /// </summary>
-        /// <returns>host(string)</returns>
-        public abstract string GetCOSHost();
 
         /// <summary>
         /// return the host for cos request
@@ -296,12 +282,6 @@ namespace COSXML.Model
         /// <param name="durationSecond"></param>
         public virtual void SetSign(long signStartTimeSecond, long durationSecond)
         {
-
-            if (cosXmlSignSourceProvider == null)
-            {
-                cosXmlSignSourceProvider = new CosXmlSignSourceProvider();
-            }
-
             cosXmlSignSourceProvider.SetSignTime(signStartTimeSecond, durationSecond);
         }
 
@@ -315,12 +295,6 @@ namespace COSXML.Model
         /// <param name="queryParameterKeys"></param>
         public virtual void SetSign(long signStartTimeSecond, long durationSecond, List<string> headerKeys, List<string> queryParameterKeys)
         {
-
-            if (cosXmlSignSourceProvider == null)
-            {
-                cosXmlSignSourceProvider = new CosXmlSignSourceProvider();
-            }
-
             cosXmlSignSourceProvider.SetSignTime(signStartTimeSecond, durationSecond);
             cosXmlSignSourceProvider.AddHeaderKeys(headerKeys);
             cosXmlSignSourceProvider.AddParameterKeys(queryParameterKeys);
@@ -341,6 +315,26 @@ namespace COSXML.Model
         /// <returns></returns>
         public virtual CosXmlSignSourceProvider GetSignSourceProvider()
         {
+            // 默认签署的头部跟参数
+            cosXmlSignSourceProvider.AddHeaderKeys(new List<string>() {
+                "content-type",
+                "content-length",
+                "content-md5",
+                "host"
+            });
+
+            foreach (KeyValuePair<string, string> pair in headers)
+            {
+                if (pair.Key.StartsWith("x-cos-"))
+                {
+                    cosXmlSignSourceProvider.AddHeaderKey(pair.Key.ToLower());
+                }
+            }
+
+            foreach (KeyValuePair<string, string> pair in queryParameters)
+            {
+                cosXmlSignSourceProvider.AddParameterKey(pair.Key.ToLower());
+            }
 
             return cosXmlSignSourceProvider;
         }

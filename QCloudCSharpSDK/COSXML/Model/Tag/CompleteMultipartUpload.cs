@@ -19,25 +19,6 @@ namespace COSXML.Model.Tag
         [XmlElement("Part")]
         public List<Part> parts;
 
-        public string GetInfo()
-        {
-            StringBuilder stringBuilder = new StringBuilder("{CompleteMultipartUpload:\n");
-
-            if (parts != null)
-            {
-
-                foreach (Part part in parts)
-                {
-                    stringBuilder.Append(part.GetInfo());
-                }
-
-            }
-
-            stringBuilder.Append("}");
-
-            return stringBuilder.ToString();
-        }
-
         public sealed class Part
         {
             /// <summary>
@@ -51,17 +32,6 @@ namespace COSXML.Model.Tag
             /// </summary>
             [XmlElement("ETag")]
             public string eTag;
-
-            public string GetInfo()
-            {
-                StringBuilder stringBuilder = new StringBuilder("{Part:\n");
-
-                stringBuilder.Append("PartNumber:").Append(partNumber).Append("\n");
-                stringBuilder.Append("ETag:").Append(eTag).Append("\n");
-                stringBuilder.Append("}");
-
-                return stringBuilder.ToString();
-            }
         }
     }
 }

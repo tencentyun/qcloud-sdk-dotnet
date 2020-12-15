@@ -42,7 +42,7 @@ namespace COSXML.Model.Object
         /// <param name="cosACL"></param>
         public void SetCosACL(CosACL cosACL)
         {
-            SetRequestHeader(CosRequestHeaderKey.X_COS_ACL, EnumUtils.GetValue(cosACL));
+            SetCosACL(EnumUtils.GetValue(cosACL));
         }
 
         /// <summary>
@@ -56,20 +56,6 @@ namespace COSXML.Model.Object
             if (grantAccount != null)
             {
                 SetRequestHeader(CosRequestHeaderKey.X_COS_GRANT_READ, grantAccount.GetGrantAccounts());
-            }
-        }
-
-        /// <summary>
-        /// 赋予被授权者写的权限
-        /// <see cref="Model.Tag.GrantAccount"/>
-        /// </summary>
-        /// <param name="grantAccount"></param>
-        public void SetXCosGrantWrite(GrantAccount grantAccount)
-        {
-
-            if (grantAccount != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.X_COS_GRANT_WRITE, grantAccount.GetGrantAccounts());
             }
         }
 

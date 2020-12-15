@@ -24,28 +24,26 @@ namespace COSXML.Transfer
             using (var writer = XmlWriter.Create(stream, settings))
             {
                 serializer.Serialize(writer, o, emptyNs);
-                string xml = RemoveXMLHeader(stream.ToString());
-                
-                return xml;
+                return stream.ToString();
             }
         }
 
-        private static string RemoveXMLHeader(string xmlContent)
-        {
+        // private static string RemoveXMLHeader(string xmlContent)
+        // {
 
-            if (xmlContent != null)
-            {
+        //     if (xmlContent != null)
+        //     {
 
-                if (xmlContent.StartsWith("<?xml"))
-                {
-                    int end = xmlContent.IndexOf("?>");
+        //         if (xmlContent.StartsWith("<?xml"))
+        //         {
+        //             int end = xmlContent.IndexOf("?>");
 
-                    xmlContent = xmlContent.Substring(end + 2);
-                }
-            }
+        //             xmlContent = xmlContent.Substring(end + 2);
+        //         }
+        //     }
 
-            return xmlContent;
-        }
+        //     return xmlContent;
+        // }
 
     }
 }

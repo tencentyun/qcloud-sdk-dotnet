@@ -23,7 +23,6 @@ namespace COSXMLTests
             ManualResetEvent manualResetEvent = new ManualResetEvent(false);
 
             GetBucketRequest request = new GetBucketRequest(QCloudServer.Instance().bucketForObjectTest);
-            List<string> queryParameters = new List<string>();
 
             ///执行请求
             QCloudServer.Instance().cosXml.GetBucket(request,
@@ -55,6 +54,17 @@ namespace COSXMLTests
 
             manualResetEvent.WaitOne();
 
+        }
+
+        [Test()]
+        public void TestSetSign()
+        {
+            GetBucketRequest request = new GetBucketRequest(QCloudServer.Instance().bucketForObjectTest);
+            request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.Seconds), 600);
+
+            ///执行请求
+            GetBucketResult result = QCloudServer.Instance().cosXml.GetBucket(request);
+            Assert.AreEqual(result.httpCode, 200);
         }
     }
 }

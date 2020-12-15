@@ -119,7 +119,7 @@ namespace COSXML.Model.Object
                     string eventType;
 
                     headers.TryGetValue(":event-type", out eventType);
-                    Console.WriteLine("message = " + messageType + ", event = " + eventType);
+                    // Console.WriteLine("message = " + messageType + ", event = " + eventType);
 
                     bool isComplete = false;
 

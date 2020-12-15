@@ -86,16 +86,6 @@ namespace COSXML.Network
 
         }
 
-        public int MaxRery
-        {
-            get
-            {
-
-                return maxRetry;
-            }
-
-        }
-
         public int ConnectionLimit
         {
             get
@@ -199,17 +189,6 @@ namespace COSXML.Network
                 if (connectionLimit > 0)
                 {
                     this.connectionLimit = connectionLimit;
-                }
-
-                return this;
-            }
-
-            public Builder SetMaxRetry(int maxRetry)
-            {
-
-                if (maxRetry > 0)
-                {
-                    this.maxRetry = maxRetry;
                 }
 
                 return this;

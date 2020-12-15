@@ -21,12 +21,6 @@ namespace COSXML.Model.Service
             host = "service.cos.myqcloud.com";
         }
 
-        public override string GetCOSHost()
-        {
-
-            return "service.cos.myqcloud.com";
-        }
-
         public override string GetHost()
         {
 

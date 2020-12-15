@@ -279,8 +279,7 @@ if (value.Equals("https", StringComparison.OrdinalIgnoreCase))
 
                 return 80;
             }
-            else
-if (scheme.Equals("https", StringComparison.OrdinalIgnoreCase))
+            else if (scheme.Equals("https", StringComparison.OrdinalIgnoreCase))
             {
 
                 return 443;
@@ -291,48 +290,6 @@ if (scheme.Equals("https", StringComparison.OrdinalIgnoreCase))
                 return -1;
             }
         }
-
-        //private int DelimiterOffset(string input, int pos, int limit, char delimiter)
-        //{
-        //    for (int i = pos; i < limit; i++)
-        //    {
-        //        if (input[i] == delimiter) return i;
-        //    }
-        //    return limit;
-        //}
-
-        //private int DelimiterOffset(string input, int pos, int limit, string delimiters)
-        //{
-        //    for (int i = pos; i < limit; i++)
-        //    {
-        //        if (delimiters.IndexOf(input[i]) != -1) return i;
-        //    }
-        //    return limit;
-        //}
-
-        //private void PathSegmentToString(StringBuilder outPut, List<string> pathSegments)
-        //{
-        //    foreach (string path in pathSegments)
-        //    {
-        //        outPut.Append('/').Append(path);
-        //    }
-        //}
-
-        //private void NamesAndValuesToQueryString(StringBuilder outPut, List<string> namesAndValues)
-        //{
-        //    for (int i = 0, size = namesAndValues.Count; i < size; i += 2)
-        //    {
-        //        string name = namesAndValues[i];
-        //        string value = namesAndValues[i + 1];
-        //        if (i > 0) outPut.Append('&');
-        //        outPut.Append(name);
-        //        if (value != null)
-        //        {
-        //            outPut.Append('=');
-        //            outPut.Append(value);
-        //        }
-        //    }
-        //}
     }
 
 }

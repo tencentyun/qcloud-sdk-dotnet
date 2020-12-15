@@ -58,62 +58,6 @@ namespace COSXML.Model.Object
             }
         }
 
-        /// <summary>
-        /// 当 Object 在指定时间后被修改，则执行操作，否则返回 412。
-        /// 可与 x-cos-copy-source-If-None-Match 一起使用，与其他条件联合使用返回冲突
-        /// </summary>
-        /// <param name="sourceIfModifiedSince"></param>
-        public void SetCopyIfModifiedSince(string sourceIfModifiedSince)
-        {
-
-            if (sourceIfModifiedSince != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.X_COS_COPY_SOURCE_IF_MODIFIED_SINCE, sourceIfModifiedSince);
-            }
-        }
-
-        /// <summary>
-        /// 当 Object 在指定时间后未被修改，则执行操作，否则返回 412。
-        /// 可与 x-cos-copy-source-If-Match 一起使用，与其他条件联合使用返回冲突。
-        /// </summary>
-        /// <param name="sourceIfUnmodifiedSince"></param>
-        public void SetCopyIfUnmodifiedSince(string sourceIfUnmodifiedSince)
-        {
-
-            if (sourceIfUnmodifiedSince != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.X_COS_COPY_SOURCE_IF_UNMODIFIED_SINCE, sourceIfUnmodifiedSince);
-            }
-        }
-
-        /// <summary>
-        ///  Object 的 Etag 和给定一致时，则执行操作，否则返回 412。
-        ///  可与 x-cos-copy-source-If-Unmodified-Since 一起使用，与其他条件联合使用返回冲突。
-        /// </summary>
-        /// <param name="eTag"></param>
-        public void SetCopyIfMatch(string eTag)
-        {
-
-            if (eTag != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.X_COS_COPY_SOURCE_IF_MATCH, eTag);
-            }
-        }
-
-        /// <summary>
-        /// 当 Object 的 Etag 和给定不一致时，则执行操作，否则返回 412。
-        /// 可与 x-cos-copy-source-If-Modified-Since 一起使用，与其他条件联合使用返回冲突
-        /// </summary>
-        /// <param name="eTag"></param>
-        public void SetCopyIfNoneMatch(string eTag)
-        {
-
-            if (eTag != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.X_COS_COPY_SOURCE_IF_NONE_MATCH, eTag);
-            }
-        }
-
         public override void CheckParameters()
         {
 

@@ -27,6 +27,7 @@ namespace COSXMLTests
 
                 request.SetDelimiter("/");
                 request.SetEncodingType("url");
+                request.SetMaxKeys("1000");
 
                 List<string> headerKeys = new List<string>();
 
@@ -96,6 +97,7 @@ namespace COSXMLTests
                 ListBucketVersionsRequest request = new ListBucketVersionsRequest(QCloudServer.Instance().bucketVersioning);
                 request.SetDelimiter("/");
                 request.SetEncodingType("url");
+                request.SetMaxKeys("500");
 
                 //执行请求
                 ListBucketVersionsResult result = service.ListBucketVersions(request);

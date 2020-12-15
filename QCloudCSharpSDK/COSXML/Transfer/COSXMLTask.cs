@@ -28,8 +28,6 @@ namespace COSXML.Transfer
 
         protected string key;
 
-        protected bool isNeedMd5 = true;
-
         protected Dictionary<string, string> customHeaders;
 
         protected TaskState taskState;

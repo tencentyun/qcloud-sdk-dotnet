@@ -41,19 +41,5 @@ namespace COSXML.Model.Tag
         /// </summary>
         [XmlElement("TraceId")]
         public string traceId;
-
-        public string GetInfo()
-        {
-            StringBuilder stringBuilder = new StringBuilder("{Error:\n");
-
-            stringBuilder.Append("Code:").Append(code).Append("\n");
-            stringBuilder.Append("Message:").Append(message).Append("\n");
-            stringBuilder.Append("Rresource:").Append(resource).Append("\n");
-            stringBuilder.Append("RequestId:").Append(requestId).Append("\n");
-            stringBuilder.Append("TraceId:").Append(traceId).Append("\n");
-            stringBuilder.Append("}");
-
-            return stringBuilder.ToString();
-        }
     }
 }

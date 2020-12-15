@@ -24,7 +24,6 @@ namespace COSXML.Model.Object
             : base(bucket, key)
         {
             this.method = CosRequestMethod.POST;
-            this.needMD5 = true;
             this.queryParameters.Add("restore", null);
             restoreConfigure = new RestoreConfigure();
             restoreConfigure.casJobParameters = new RestoreConfigure.CASJobParameters();

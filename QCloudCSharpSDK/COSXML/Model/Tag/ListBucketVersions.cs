@@ -65,7 +65,7 @@ namespace COSXML.Model.Tag
             if (objectVersionList != null)
             {
 
-                foreach (ObjectVersion objectVersion in objectVersionList)
+                foreach (Version objectVersion in objectVersionList)
                 {
 
                     if (objectVersion != null)
@@ -84,6 +84,19 @@ namespace COSXML.Model.Tag
                     if (commonPrefixes != null)
                     {
                         stringBuilder.Append(commonPrefixes.GetInfo()).Append("\n");
+                    }
+                }
+            }
+
+            if (deleteMarkers != null)
+            {
+
+                foreach (DeleteMarker deleteMarker in deleteMarkers)
+                {
+
+                    if (deleteMarker != null)
+                    {
+                        stringBuilder.Append(deleteMarker.GetInfo()).Append("\n");
                     }
                 }
             }
@@ -109,11 +122,6 @@ namespace COSXML.Model.Tag
 
             [XmlElement("Owner")]
             public Owner owner;
-
-            public virtual string GetInfo() 
-            {
-                return "";
-            }
         }
 
         public sealed class Owner
@@ -138,7 +146,7 @@ namespace COSXML.Model.Tag
         public sealed class DeleteMarker : ObjectVersion
         {
 
-            public override string GetInfo()
+            public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{DeleteMarker:\n");
 
@@ -170,7 +178,7 @@ namespace COSXML.Model.Tag
             public string storageClass;
 
 
-            public override string GetInfo()
+            public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Version:\n");
 

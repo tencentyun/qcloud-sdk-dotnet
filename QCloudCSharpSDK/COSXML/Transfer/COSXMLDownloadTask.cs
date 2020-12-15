@@ -35,13 +35,6 @@ namespace COSXML.Transfer
             this.localFileName = localFileName;
         }
 
-        public COSXMLDownloadTask(string bucket, string region, string key, string localDir, string localFileName)
-            : base(bucket, region, key)
-        {
-            this.localDir = localDir;
-            this.localFileName = localFileName;
-        }
-
         public COSXMLDownloadTask(GetObjectRequest request)
             : base(request.Bucket, request.Key)
         {

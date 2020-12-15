@@ -25,11 +25,6 @@ namespace COSXML.Model.Object
             this.uploadId = uploadId;
         }
 
-        public void SetUploadId(string uploadId)
-        {
-            this.uploadId = uploadId;
-        }
-
         /// <summary>
         /// 单次返回最大的条目数量，默认 1000
         /// </summary>

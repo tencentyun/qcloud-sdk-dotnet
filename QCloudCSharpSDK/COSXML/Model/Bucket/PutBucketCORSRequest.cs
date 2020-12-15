@@ -28,7 +28,6 @@ namespace COSXML.Model.Bucket
             this.queryParameters.Add("cors", null);
             corsConfiguration = new CORSConfiguration();
             corsConfiguration.corsRules = new List<CORSConfiguration.CORSRule>();
-            this.needMD5 = true;
         }
 
         public override Network.RequestBody GetRequestBody()

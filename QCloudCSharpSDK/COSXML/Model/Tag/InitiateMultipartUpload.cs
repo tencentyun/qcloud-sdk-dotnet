@@ -29,17 +29,5 @@ namespace COSXML.Model.Tag
         /// </summary>
         [XmlElement("UploadId")]
         public string uploadId;
-
-        public string GetInfo()
-        {
-            StringBuilder stringBuilder = new StringBuilder("{InitiateMultipartUpload:\n");
-
-            stringBuilder.Append("Bucket:").Append(bucket).Append("\n");
-            stringBuilder.Append("Key:").Append(key).Append("\n");
-            stringBuilder.Append("UploadId:").Append(uploadId).Append("\n");
-            stringBuilder.Append("}");
-
-            return stringBuilder.ToString();
-        }
     }
 }

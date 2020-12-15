@@ -20,7 +20,6 @@ namespace COSXML.Model.Bucket
         {
             this.method = CosRequestMethod.PUT;
             this.tagging = new Tagging();
-            this.IsNeedMD5 = true;
             this.queryParameters.Add("tagging", null);
         }
 

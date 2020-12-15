@@ -82,51 +82,6 @@ namespace COSXML.Model.Tag
         [XmlElement("Part")]
         public List<Part> parts;
 
-
-        public string GetInfo()
-        {
-            StringBuilder stringBuilder = new StringBuilder("{ListParts:\n");
-
-            stringBuilder.Append("Bucket:").Append(bucket).Append("\n");
-            stringBuilder.Append("EncodingType:").Append(encodingType).Append("\n");
-            stringBuilder.Append("Key:").Append(key).Append("\n");
-            stringBuilder.Append("UploadId:").Append(uploadId).Append("\n");
-
-            if (owner != null)
-            {
-                stringBuilder.Append(owner.GetInfo()).Append("\n");
-            }
-
-            stringBuilder.Append("PartNumberMarker:").Append(partNumberMarker).Append("\n");
-
-            if (initiator != null)
-            {
-                stringBuilder.Append(initiator.GetInfo()).Append("\n");
-            }
-
-            stringBuilder.Append("StorageClass:").Append(storageClass).Append("\n");
-            stringBuilder.Append("NextPartNumberMarker:").Append(nextPartNumberMarker).Append("\n");
-            stringBuilder.Append("MaxParts:").Append(maxParts).Append("\n");
-            stringBuilder.Append("IsTruncated:").Append(isTruncated).Append("\n");
-
-            if (parts != null)
-            {
-
-                foreach (Part part in parts)
-                {
-
-                    if (part != null)
-                    {
-                        stringBuilder.Append(part.GetInfo()).Append("\n");
-                    }
-                }
-            }
-
-            stringBuilder.Append("}");
-
-            return stringBuilder.ToString();
-        }
-
         public sealed class Owner
         {
             
@@ -135,18 +90,6 @@ namespace COSXML.Model.Tag
             
             [XmlElement("DisplayName")]
             public string disPlayName;
-
-
-            public string GetInfo()
-            {
-                StringBuilder stringBuilder = new StringBuilder("{Owner:\n");
-
-                stringBuilder.Append("Id:").Append(id).Append("\n");
-                stringBuilder.Append("DisPlayName:").Append(disPlayName).Append("\n");
-                stringBuilder.Append("}");
-
-                return stringBuilder.ToString();
-            }
         }
 
         public sealed class Initiator
@@ -162,18 +105,6 @@ namespace COSXML.Model.Tag
             /// </summary>
             [XmlElement("DisplayName")]
             public string disPlayName;
-
-
-            public string GetInfo()
-            {
-                StringBuilder stringBuilder = new StringBuilder("{Initiator:\n");
-
-                stringBuilder.Append("Id:").Append(id).Append("\n");
-                stringBuilder.Append("DisPlayName:").Append(disPlayName).Append("\n");
-                stringBuilder.Append("}");
-
-                return stringBuilder.ToString();
-            }
         }
 
         public sealed class Part
@@ -201,20 +132,6 @@ namespace COSXML.Model.Tag
             /// </summary>
             [XmlElement("Size")]
             public string size;
-
-
-            public string GetInfo()
-            {
-                StringBuilder stringBuilder = new StringBuilder("{Part:\n");
-
-                stringBuilder.Append("PartNumber:").Append(partNumber).Append("\n");
-                stringBuilder.Append("LastModified:").Append(lastModified).Append("\n");
-                stringBuilder.Append("ETag:").Append(eTag).Append("\n");
-                stringBuilder.Append("Size:").Append(size).Append("\n");
-                stringBuilder.Append("}");
-
-                return stringBuilder.ToString();
-            }
         }
     }
 }

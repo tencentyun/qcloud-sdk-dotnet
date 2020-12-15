@@ -52,7 +52,9 @@ namespace COSXML.Network
         /// calculation content md5
         /// </summary>
         /// <returns></returns>
-        public abstract string GetMD5();
+        public virtual string GetMD5() {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Synchronization method: write data to outputStream 
@@ -139,52 +141,7 @@ if (complete < total)
         public override void OnWrite(Stream outputStream)
         {
 
-            try
-            {
-                int completed = 0;
-
-                while (completed + SEGMENT_SIZE < contentLength)
-                {
-                    outputStream.Write(data, completed, SEGMENT_SIZE);
-                    outputStream.Flush();
-                    completed += SEGMENT_SIZE;
-
-                    if (progressCallback != null)
-                    {
-                        UpdateProgress(completed, contentLength);
-                    }
-                }
-
-                if (completed < contentLength)
-                {
-                    //包括本身
-                    //包括本身
-                    outputStream.Write(data, completed, (int)(contentLength - completed));
-                    outputStream.Flush();
-
-                    if (progressCallback != null)
-                    {
-                        UpdateProgress(contentLength, contentLength);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            
-            finally
-            {
-
-                if (outputStream != null)
-                {
-                    outputStream.Flush();
-                    outputStream.Close();
-                    outputStream.Dispose();
-                    //QLog.D("XIAO", "stream close");
-                    outputStream = null;
-                }
-            }
+            StartHandleRequestBody(outputStream);
         }
 
         public override string GetMD5()
@@ -193,7 +150,7 @@ if (complete < total)
             return DigestUtils.GetMd5ToBase64(data);
         }
 
-        public override void StartHandleRequestBody(Stream outputStream, EndRequestBody endRequestBody)
+        public override void StartHandleRequestBody(Stream outputStream, EndRequestBody endRequestBody = null)
         {
 
             try
@@ -225,11 +182,20 @@ if (complete < total)
                     }
                 }
 
-                endRequestBody(null);
+                if (endRequestBody != null)
+                {
+                    endRequestBody(null);
+                }
             }
             catch (Exception ex)
             {
-                endRequestBody(ex);
+                if (endRequestBody != null)
+                {
+                    endRequestBody(ex);
+                } else 
+                {
+                    throw;
+                }
             }
             finally
             {
@@ -245,57 +211,6 @@ if (complete < total)
             }
 
         }
-
-        // private void AsyncStreamCallback(IAsyncResult ar)
-        // {
-        //     RequestBodyState requestBodyState = ar.AsyncState as RequestBodyState;
-        //     Stream outputStream = null;
-
-        //     try
-        //     {
-        //         outputStream = requestBodyState.outputStream;
-        //         outputStream.EndWrite(ar);
-
-        //         if (progressCallback != null)
-        //         {
-        //             UpdateProgress(requestBodyState.complete, contentLength);
-        //         }
-
-        //         if (requestBodyState.complete < contentLength)
-        //         {
-        //             long remain = contentLength - requestBodyState.complete;
-
-        //             int count = (int)(remain > SEGMENT_SIZE ? SEGMENT_SIZE : remain);
-        //             int offset = (int)requestBodyState.complete;
-        //             requestBodyState.complete += count;
-        //             outputStream.BeginWrite(requestBodyState.buffer, offset, count, AsyncStreamCallback, requestBodyState);
-        //         }
-        //         else
-        //         {
-
-        //             if (outputStream != null)
-        //             {
-        //                 outputStream.Close();
-        //             }
-        //             //write over
-        //             requestBodyState.endRequestBody(null);
-        //             requestBodyState = null;
-        //         }
-        //     }
-        //     catch (Exception ex)
-        //     {
-
-        //         if (outputStream != null)
-        //         {
-        //             outputStream.Close();
-        //         }
-
-        //         QLog.Error(TAG, ex.Message, ex);
-        //         requestBodyState.endRequestBody(ex);
-        //         requestBodyState = null;
-        //     }
-
-        // }
     }
 
     public class FileRequestBody : RequestBody
@@ -315,78 +230,7 @@ if (complete < total)
 
         public override void OnWrite(Stream outputStream)
         {
-            FileStream fileStream = null;
-
-            try
-            {
-                byte[] buffer = new byte[SEGMENT_SIZE];
-                int bytesRead = 0;
-
-                long completed = bytesRead;
-                fileStream = new FileStream(srcPath, FileMode.Open, FileAccess.Read);
-                //seek to designated position
-                //seek to designated position
-                fileStream.Seek(fileOffset, SeekOrigin.Begin);
-                long remain = contentLength - completed;
-
-                if (remain > 0)
-                {
-
-                    while ((bytesRead = fileStream.Read(buffer, 0, (int)(buffer.Length > remain ? remain : buffer.Length))) != 0)
-                    {
-                        outputStream.Write(buffer, 0, bytesRead);
-                        outputStream.Flush();
-                        completed += bytesRead;
-
-                        if (progressCallback != null)
-                        {
-                            UpdateProgress(completed, contentLength);
-                        }
-
-                        remain = contentLength - completed;
-
-                        if (remain == 0)
-                        {
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-
-                    if (progressCallback != null)
-                    {
-                        UpdateProgress(completed, contentLength);
-                    }
-                }
-
-                buffer = null;
-            }
-            catch (Exception ex)
-            {
-                QLog.Error(TAG, ex.Message, ex);
-                throw;
-            }
-            finally
-            {
-
-                if (fileStream != null)
-                {
-                    fileStream.Close();
-                    fileStream.Dispose();
-                    //QLog.D("XIAO", "stream close");
-                    fileStream = null;
-                }
-
-                if (outputStream != null)
-                {
-                    outputStream.Flush();
-                    outputStream.Close();
-                    outputStream.Dispose();
-                    //QLog.D("XIAO", "stream close");
-                    outputStream = null;
-                }
-            }
+            StartHandleRequestBody(outputStream);
         }
 
         public override string GetMD5()
@@ -415,7 +259,7 @@ if (complete < total)
 
         }
 
-        public override void StartHandleRequestBody(Stream outputStream, EndRequestBody endRequestBody)
+        public override void StartHandleRequestBody(Stream outputStream, EndRequestBody endRequestBody = null)
         {
             FileStream fileStream = null;
 
@@ -463,12 +307,20 @@ if (complete < total)
                 }
 
                 buffer = null;
-                endRequestBody(null);
+                if (endRequestBody != null)
+                {
+                    endRequestBody(null);
+                }
             }
             catch (Exception ex)
             {
-                QLog.Error(TAG, ex.Message, ex);
-                endRequestBody(ex);
+                if (endRequestBody != null)
+                {
+                    endRequestBody(ex);
+                } else 
+                {
+                    throw;
+                }
             }
             finally
             {
@@ -492,69 +344,6 @@ if (complete < total)
             }
 
         }
-
-        // private void AsyncStreamCallback(IAsyncResult ar)
-        // {
-        //     RequestBodyState requestBodyState = ar.AsyncState as RequestBodyState;
-        //     Stream outputStream = null;
-
-        //     try
-        //     {
-        //         outputStream = requestBodyState.outputStream;
-        //         outputStream.EndWrite(ar);
-        //         outputStream.Flush();
-
-        //         if (progressCallback != null)
-        //         {
-        //             UpdateProgress(requestBodyState.complete, contentLength);
-        //         }
-
-        //         if (requestBodyState.complete < contentLength)
-        //         {
-        //             long remain = contentLength - requestBodyState.complete;
-
-        //             int count = fileStream.Read(requestBodyState.buffer, 0, (int)(requestBodyState.buffer.Length > remain ? remain : requestBodyState.buffer.Length));
-
-        //             requestBodyState.complete += count;
-        //             outputStream.BeginWrite(requestBodyState.buffer, 0, count, AsyncStreamCallback, requestBodyState);
-        //         }
-        //         else
-        //         {
-
-        //             if (fileStream != null)
-        //             {
-        //                 fileStream.Close();
-        //             }
-
-        //             if (outputStream != null)
-        //             {
-        //                 outputStream.Close();
-        //             }
-        //             //write over
-        //             requestBodyState.endRequestBody(null);
-        //             requestBodyState = null;
-        //         }
-
-        //     }
-        //     catch (Exception ex)
-        //     {
-
-        //         if (fileStream != null)
-        //         {
-        //             fileStream.Close();
-        //         }
-
-        //         if (outputStream != null)
-        //         {
-        //             outputStream.Close();
-        //         }
-
-        //         QLog.Error(TAG, ex.Message, ex);
-        //         requestBodyState.endRequestBody(ex);
-        //         requestBodyState = null;
-        //     }
-
-        // }
     }
 
     public class MultipartRequestBody : RequestBody
@@ -641,7 +430,6 @@ if (complete < total)
 
                 return base.ContentLength;
             }
-            set { contentLength = value; }
         }
 
         private void ComputerContentLength()
@@ -762,131 +550,10 @@ if (complete < total)
 
         public override void OnWrite(Stream outputStream)
         {
-            //write paramters
-            WriteParameters(outputStream);
-
-            //写入content-disposition: form-data; name = "file"; filename = "xxx"\r\n
-            WriteFileParameters(outputStream);
-
-            outputStream.Flush();
-
-            //wrtie content: file or bintary
-            try
-            {
-
-                if (data != null)
-                {
-                    int completed = 0;
-
-                    while (completed + SEGMENT_SIZE < realContentLength)
-                    {
-                        outputStream.Write(data, completed, SEGMENT_SIZE);
-                        outputStream.Flush();
-                        completed += SEGMENT_SIZE;
-
-                        if (progressCallback != null)
-                        {
-                            UpdateProgress(completed, realContentLength);
-                        }
-                    }
-
-                    if (completed < realContentLength)
-                    {
-                        //包括本身
-                        //包括本身
-                        outputStream.Write(data, completed, (int)(realContentLength - completed));
-
-                        if (progressCallback != null)
-                        {
-                            UpdateProgress(realContentLength, realContentLength);
-                        }
-                    }
-
-                    WriteEndLine(outputStream);
-                    outputStream.Flush();
-                }
-                else
-if (srcPath != null)
-                {
-                    // 64kb
-                    // 64kb
-                    byte[] buffer = new byte[SEGMENT_SIZE];
-                    int bytesRead = 0;
-
-                    long completed = bytesRead;
-                    fileStream = new FileStream(srcPath, FileMode.Open, FileAccess.Read);
-                    fileStream.Seek(fileOffset, SeekOrigin.Begin);
-                    long remain = realContentLength - completed;
-
-                    if (remain > 0)
-                    {
-
-                        while ((bytesRead = fileStream.Read(buffer, 0, (int)(buffer.Length > remain ? remain : buffer.Length))) != 0)
-                        {
-                            outputStream.Write(buffer, 0, bytesRead);
-                            outputStream.Flush();
-                            completed += bytesRead;
-
-                            if (progressCallback != null)
-                            {
-                                UpdateProgress(completed, realContentLength);
-                            }
-
-                            remain = realContentLength - completed;
-
-                            if (remain == 0)
-                            {
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-
-                        if (progressCallback != null)
-                        {
-                            completed += bytesRead;
-                            UpdateProgress(completed, realContentLength);
-                        }
-                    }
-
-                    WriteEndLine(outputStream);
-                    outputStream.Flush();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-
-                if (fileStream != null)
-                {
-                    fileStream.Close();
-                    fileStream.Dispose();
-                    //QLog.D("XIAO", "stream close");
-                    fileStream = null;
-                }
-
-                if (outputStream != null)
-                {
-                    outputStream.Flush();
-                    outputStream.Close();
-                    outputStream.Dispose();
-                    //QLog.D("XIAO", "stream close");
-                    outputStream = null;
-                }
-            }
-
+            StartHandleRequestBody(outputStream);
         }
 
-        public override string GetMD5()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void StartHandleRequestBody(Stream outputStream, EndRequestBody endRequestBody)
+        public override void StartHandleRequestBody(Stream outputStream, EndRequestBody endRequestBody = null)
         {
 
             //write paramters
@@ -932,8 +599,7 @@ if (srcPath != null)
                     WriteEndLine(outputStream);
                     outputStream.Flush();
                 }
-                else
-if (srcPath != null)
+                else if (srcPath != null)
                 {
                     // 64kb
                     // 64kb
@@ -981,11 +647,20 @@ if (srcPath != null)
                     outputStream.Flush();
                 }
 
-                endRequestBody(null);
+                if (endRequestBody != null)
+                {
+                    endRequestBody(null);
+                }
             }
             catch (Exception ex)
             {
-                endRequestBody(ex);
+                if (endRequestBody != null)
+                {
+                    endRequestBody(ex);
+                } else 
+                {
+                    throw;
+                }
             }
             finally
             {
@@ -994,7 +669,6 @@ if (srcPath != null)
                 {
                     fileStream.Close();
                     fileStream.Dispose();
-                    //QLog.D("XIAO", "stream close");
                     fileStream = null;
                 }
 
@@ -1003,89 +677,11 @@ if (srcPath != null)
                     outputStream.Flush();
                     outputStream.Close();
                     outputStream.Dispose();
-                    //QLog.D("XIAO", "stream close");
                     outputStream = null;
                 }
             }
 
         }
-
-//         private void AsyncStreamCallback(IAsyncResult ar)
-//         {
-//             RequestBodyState requestBodyState = ar.AsyncState as RequestBodyState;
-//             Stream outputStream = null;
-
-//             try
-//             {
-//                 outputStream = requestBodyState.outputStream;
-//                 outputStream.EndWrite(ar);
-
-//                 if (progressCallback != null)
-//                 {
-//                     UpdateProgress(requestBodyState.complete, realContentLength);
-//                 }
-
-//                 if (requestBodyState.complete < realContentLength)
-//                 {
-
-//                     if (srcPath != null)
-//                     {
-//                         long remain = realContentLength - requestBodyState.complete;
-
-//                         int count = fileStream.Read(requestBodyState.buffer, 0, (int)(requestBodyState.buffer.Length > remain ? remain : requestBodyState.buffer.Length));
-
-//                         requestBodyState.complete += count;
-//                         outputStream.BeginWrite(requestBodyState.buffer, 0, count, AsyncStreamCallback, requestBodyState);
-//                     }
-//                     else
-// if (data != null)
-//                     {
-//                         long remain = realContentLength - requestBodyState.complete;
-
-//                         int count = (int)(remain > SEGMENT_SIZE ? SEGMENT_SIZE : remain);
-//                         int offset = (int)requestBodyState.complete;
-//                         requestBodyState.complete += count;
-//                         outputStream.BeginWrite(requestBodyState.buffer, offset, count, AsyncStreamCallback, requestBodyState);
-//                     }
-
-//                     outputStream.Flush();
-//                 }
-//                 else
-//                 {
-//                     WriteEndLine(outputStream);
-//                     outputStream.Flush();
-
-//                     if (fileStream != null)
-//                     {
-//                         fileStream.Close();
-//                     }
-
-//                     if (outputStream != null)
-//                     {
-//                         outputStream.Close();
-//                     }
-//                     //write over
-//                     requestBodyState.endRequestBody(null);
-//                 }
-
-//             }
-//             catch (Exception ex)
-//             {
-
-//                 if (fileStream != null)
-//                 {
-//                     fileStream.Close();
-//                 }
-
-//                 if (outputStream != null)
-//                 {
-//                     outputStream.Close();
-//                 }
-
-//                 QLog.Error(TAG, ex.Message, ex);
-//                 requestBodyState.endRequestBody(ex);
-//             }
-//         }
 
     }
 }

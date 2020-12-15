@@ -17,7 +17,6 @@ namespace COSXML.Model.Bucket
             : base(bucket)
         {
             this.method = CosRequestMethod.PUT;
-            this.needMD5 = true;
             this.queryParameters.Add("replication", null);
             replicationConfiguration = new ReplicationConfiguration();
             replicationConfiguration.rules = new List<ReplicationConfiguration.Rule>();

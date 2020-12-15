@@ -78,42 +78,10 @@ namespace COSXML.Model.Object
             set { this.key = value; }
         }
 
-        public virtual void SetCosPath(string key)
-        {
-
-            if (key != null && !key.StartsWith("/"))
-            {
-                this.path = "/" + key;
-            }
-            else
-            {
-                this.path = key;
-            }
-        }
-
         public override Network.RequestBody GetRequestBody()
         {
 
             return null;
-        }
-
-        public override string GetCOSHost()
-        {
-            StringBuilder hostBuilder = new StringBuilder();
-
-            hostBuilder.Append(bucket);
-
-            if (!String.IsNullOrEmpty(appid) && !bucket.EndsWith("-" + appid))
-            {
-                hostBuilder.Append("-")
-                    .Append(appid);
-            }
-
-            hostBuilder.Append(".cos.")
-                    .Append(region)
-                    .Append(".myqcloud.com");
-
-            return hostBuilder.ToString();
         }
 
         public override string GetHost()

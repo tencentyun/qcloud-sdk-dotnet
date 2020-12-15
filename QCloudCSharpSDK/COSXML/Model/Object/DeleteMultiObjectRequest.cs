@@ -25,15 +25,9 @@ namespace COSXML.Model.Object
             : base(bucket, "/")
         {
             this.method = CosRequestMethod.POST;
-            this.needMD5 = true;
             this.queryParameters.Add("delete", null);
             delete = new Delete();
             delete.deleteObjects = new List<Delete.DeleteObject>();
-        }
-
-        public override void SetCosPath(string key)
-        {
-            // do nothing for delete multi objects api
         }
 
         /// <summary>
@@ -99,23 +93,6 @@ namespace COSXML.Model.Object
                 foreach (string key in keys)
                 {
                     SetDeleteKey(key, null);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 删除指定版本的对象
-        /// </summary>
-        /// <param name="versionIdAndKey"></param>
-        public void SetObjectKeys(Dictionary<string, string> versionIdAndKey)
-        {
-
-            if (versionIdAndKey != null)
-            {
-
-                foreach (KeyValuePair<string, string> pair in versionIdAndKey)
-                {
-                    SetDeleteKey(pair.Value, pair.Key);
                 }
             }
         }

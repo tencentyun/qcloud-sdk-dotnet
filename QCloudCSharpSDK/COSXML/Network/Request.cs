@@ -150,24 +150,6 @@ namespace COSXML.Network
 
         }
 
-
-        public void SetHeader(string name, string value)
-        {
-
-            try
-            {
-                headers.Add(name, value);
-            }
-            catch (ArgumentNullException)
-            {
-                QLog.Debug(TAG, "SetHeader: name is null");
-            }
-            catch (ArgumentException)
-            {
-                headers[name] = value;
-            }
-        }
-
         public RequestBody Body
         {
             get
@@ -175,27 +157,6 @@ namespace COSXML.Network
                 return body;
             }
             set { body = value; }
-        }
-
-        public Object Tag
-        {
-            get
-            {
-                return tag;
-            }
-            set { tag = value; }
-        }
-
-        public override string ToString()
-        {
-            StringBuilder str = new StringBuilder();
-
-            str.Append("Request{method=").Append(method)
-                .Append(", url=").Append(url)
-                .Append(", tag=").Append(tag)
-                .Append('}');
-
-            return str.ToString();
         }
 
         public COSXML.Callback.OnNotifyGetResponse onNotifyGetResponse;

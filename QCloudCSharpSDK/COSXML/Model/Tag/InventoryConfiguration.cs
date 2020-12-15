@@ -157,15 +157,6 @@ namespace COSXML.Model.Tag
             [XmlElement("Encryption")]
             public Encryption encryption;
 
-            public void SetBucket(String region, String bucket)
-            {
-
-                if (region != null && bucket != null)
-                {
-                    this.bucket = String.Format("qcs::cos:%s::%s", region, bucket);
-                }
-            }
-
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{COSBucketDestination:\n");

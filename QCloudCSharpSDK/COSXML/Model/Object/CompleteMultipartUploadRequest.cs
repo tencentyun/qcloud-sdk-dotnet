@@ -32,21 +32,9 @@ namespace COSXML.Model.Object
             : base(bucket, key)
         {
             this.method = CosRequestMethod.POST;
-            this.needMD5 = true;
             this.uploadId = uploadId;
             completeMultipartUpload = new CompleteMultipartUpload();
             completeMultipartUpload.parts = new List<CompleteMultipartUpload.Part>();
-        }
-
-        /// <summary>
-        /// 标识本次分块上传的 ID,
-        /// 使用 Initiate Multipart Upload 接口初始化分片上传时会得到一个 uploadId，
-        /// 该 ID 不但唯一标识这一分块数据，也标识了这分块数据在整个文件内的相对位置
-        /// </summary>
-        /// <param name="uploadId"></param>
-        public void SetUploadId(string uploadId)
-        {
-            this.uploadId = uploadId;
         }
 
         /// <summary>

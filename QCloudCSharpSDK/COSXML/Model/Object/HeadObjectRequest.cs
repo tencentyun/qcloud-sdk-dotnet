@@ -31,18 +31,5 @@ namespace COSXML.Model.Object
             }
         }
 
-        /// <summary>
-        /// 当 Object 在指定时间后被修改，则返回对应 Object 的 meta 信息，否则返回 304
-        /// </summary>
-        /// <param name="ifModifiedSince"></param>
-        public void SetIfModifiedSince(string ifModifiedSince)
-        {
-
-            if (ifModifiedSince != null)
-            {
-                SetRequestHeader(CosRequestHeaderKey.IF_MODIFIED_SINCE, ifModifiedSince);
-            }
-        }
-
     }
 }

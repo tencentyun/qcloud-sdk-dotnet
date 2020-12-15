@@ -43,7 +43,7 @@ namespace COSXML.Model.Bucket
         /// <param name="cosACL"></param>
         public void SetCosACL(CosACL cosACL)
         {
-            SetRequestHeader(CosRequestHeaderKey.X_COS_ACL, EnumUtils.GetValue(cosACL));
+            SetCosACL(EnumUtils.GetValue(cosACL));
         }
 
         /// <summary>

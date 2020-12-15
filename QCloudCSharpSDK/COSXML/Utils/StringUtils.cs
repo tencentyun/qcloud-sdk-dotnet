@@ -60,74 +60,74 @@ if (temp1 < temp2)
             return 0;
         }
 
-        public static Dictionary<string, string> ParseURL(string url)
-        {
-            Dictionary<string, string> urlTuple = new Dictionary<string, string>();
+        // public static Dictionary<string, string> ParseURL(string url)
+        // {
+        //     Dictionary<string, string> urlTuple = new Dictionary<string, string>();
 
-            if (String.IsNullOrEmpty(url))
-            {
+        //     if (String.IsNullOrEmpty(url))
+        //     {
 
-                return null;
-            }
+        //         return null;
+        //     }
 
-            int index = url.IndexOf("://");
+        //     int index = url.IndexOf("://");
 
-            if (index > 0)
-            {
-                urlTuple.Add("Scheme", url.Substring(0, index));
-            }
-            else
-            {
-                throw new ArgumentException("url need start with http:// or https://");
-            }
+        //     if (index > 0)
+        //     {
+        //         urlTuple.Add("Scheme", url.Substring(0, index));
+        //     }
+        //     else
+        //     {
+        //         throw new ArgumentException("url need start with http:// or https://");
+        //     }
 
-            int tmp = index;
+        //     int tmp = index;
 
-            index = url.IndexOf('/', tmp + 3);
+        //     index = url.IndexOf('/', tmp + 3);
 
-            if (index > 0)
-            {
-                urlTuple.Add("Host", url.Substring(tmp + 3, index - tmp - 3));
-                tmp = index;
-            }
-            else
-            {
-                urlTuple.Add("Host", url.Substring(tmp + 3));
+        //     if (index > 0)
+        //     {
+        //         urlTuple.Add("Host", url.Substring(tmp + 3, index - tmp - 3));
+        //         tmp = index;
+        //     }
+        //     else
+        //     {
+        //         urlTuple.Add("Host", url.Substring(tmp + 3));
 
-                return urlTuple;
-            }
+        //         return urlTuple;
+        //     }
 
-            index = url.IndexOf('?', tmp);
+        //     index = url.IndexOf('?', tmp);
 
-            if (index > 0)
-            {
-                urlTuple.Add("Path", url.Substring(tmp, index - tmp));
-                tmp = index;
-            }
-            else
-            {
-                urlTuple.Add("Path", url.Substring(tmp));
+        //     if (index > 0)
+        //     {
+        //         urlTuple.Add("Path", url.Substring(tmp, index - tmp));
+        //         tmp = index;
+        //     }
+        //     else
+        //     {
+        //         urlTuple.Add("Path", url.Substring(tmp));
 
-                return urlTuple;
-            }
+        //         return urlTuple;
+        //     }
 
-            index = url.IndexOf("#", tmp + 1);
+        //     index = url.IndexOf("#", tmp + 1);
 
-            if (index > 0)
-            {
-                urlTuple.Add("Query", url.Substring(tmp + 1, index - tmp - 1));
-                tmp = index;
-            }
-            else
-            {
-                urlTuple.Add("Query", url.Substring(tmp + 1));
+        //     if (index > 0)
+        //     {
+        //         urlTuple.Add("Query", url.Substring(tmp + 1, index - tmp - 1));
+        //         tmp = index;
+        //     }
+        //     else
+        //     {
+        //         urlTuple.Add("Query", url.Substring(tmp + 1));
 
-                return urlTuple;
-            }
+        //         return urlTuple;
+        //     }
 
-            urlTuple.Add("Fragment", url.Substring(tmp + 1));
+        //     urlTuple.Add("Fragment", url.Substring(tmp + 1));
 
-            return urlTuple;
-        }
+        //     return urlTuple;
+        // }
     }
 }
