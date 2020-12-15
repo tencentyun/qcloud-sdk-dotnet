@@ -1045,13 +1045,17 @@ namespace COSXMLTests
         {
             string key = multiKey;
 
-            COSXMLUploadTask uploadTask = new COSXMLUploadTask(bucket, key);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, key, bigFileSrcPath);
+
+            putObjectRequest.LimitTraffic(819200);
+
+            COSXMLUploadTask uploadTask = new COSXMLUploadTask(putObjectRequest);
 
             uploadTask.SetSrcPath(bigFileSrcPath);
 
             uploadTask.progressCallback = delegate (long completed, long total)
             {
-                // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+                Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
             };
 
             transferManager.UploadAsync(uploadTask);
@@ -1077,7 +1081,7 @@ namespace COSXMLTests
 
                     uploadTask2.progressCallback = delegate (long completed, long total)
                     {
-                        // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+                        Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
                     };
                     var asyncTask = transferManager.UploadAsync(uploadTask2);
                     asyncTask.Wait(10000);
@@ -1161,12 +1165,14 @@ namespace COSXMLTests
             cosXml.PutObject(putObjectRequest);
 
             //执行请求
-            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(bucket,
-                multiKey, localDir, localFileName);
+            GetObjectRequest getRequest = new GetObjectRequest(bucket, multiKey, localDir, localFileName);
+            getRequest.LimitTraffic(819200);
+
+            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(getRequest);
 
             downloadTask.progressCallback = delegate (long completed, long total)
             {
-                // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+                Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
             };
 
             var asyncTask = transferManager.DownloadAsync(downloadTask);
