@@ -1068,7 +1068,7 @@ namespace COSXMLTests
             uploadTask.Pause();
             Thread.Sleep(1000);
 
-            if (uploadTask.state() != TaskState.Completed)
+            if (uploadTask.State() != TaskState.Completed)
             {
 
                 QCloudServer.TestWithServerFailTolerance(() =>
@@ -1092,8 +1092,10 @@ namespace COSXMLTests
                     Assert.NotNull(result.GetResultInfo());
                 }
                 );
-            } else {
-                Console.WriteLine("Uplaod is Complete");
+            } 
+            else 
+            {
+                Console.WriteLine("Upload is Complete");
                 Assert.Pass();
             }
         }
@@ -1182,7 +1184,7 @@ namespace COSXMLTests
 
             Thread.Sleep(200);
             downloadTask.Resume();
-            if (downloadTask.state() != TaskState.Completed)
+            if (downloadTask.State() != TaskState.Completed)
             {
                 asyncTask = downloadTask.AsyncTask<COSXMLDownloadTask.DownloadTaskResult>();
                 asyncTask.Wait(10000);
@@ -1190,7 +1192,9 @@ namespace COSXMLTests
 
                 Assert.True(result.httpCode == 200);
                 Assert.NotNull(result.GetResultInfo());
-            } else {
+            } 
+            else 
+            {
                 Console.WriteLine("Download is Complete");
                 Assert.Pass();
             }
@@ -1267,7 +1271,7 @@ namespace COSXMLTests
             Thread.Sleep(200);
             copyTask.CompleteOnAllPartsCopyed = true;
             copyTask.Resume();
-            if (copyTask.state() != TaskState.Completed)
+            if (copyTask.State() != TaskState.Completed)
             {
                 asyncTask = copyTask.AsyncTask<COSXMLCopyTask.CopyTaskResult>();
                 asyncTask.Wait(10000);

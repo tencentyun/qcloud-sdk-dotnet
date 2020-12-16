@@ -64,7 +64,7 @@ namespace COSXML.Transfer
 
         public abstract void Resume();
 
-        public TaskState state()
+        public TaskState State()
         {
             return taskState;
         }
