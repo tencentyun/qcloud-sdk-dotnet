@@ -177,24 +177,6 @@ namespace COSXML.Transfer
                 putObjectRequest.SetCosStorageClass(StorageClass);
             }
 
-            var task = cosXmlServer.ExecuteAsync<PutObjectResult>(putObjectRequest);
-            task.ContinueWith((taskResult) => {
-                if (taskResult.IsCompleted) {
-
-                if (UpdateTaskState(TaskState.Completed))
-                {
-                    UploadTaskResult copyTaskResult = new UploadTaskResult();
-
-                    copyTaskResult.SetResult(taskResult.Result);
-
-                    if (successCallback != null)
-                    {
-                        successCallback(copyTaskResult);
-                    }
-                }
-                }
-            });
-
             cosXmlServer.PutObject(putObjectRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
