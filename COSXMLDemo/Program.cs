@@ -69,6 +69,9 @@ namespace COSXMLDemo
                 // 删除对象
                 Console.WriteLine(" ======= Delete Object ======");
                 DeleteObject(cosXml, cosKey);
+
+                // Console.WriteLine(" ======= Put Directory ======");
+                // UploadDirectory(cosXml);
             } 
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -154,6 +157,51 @@ namespace COSXMLDemo
             }
 
             return cosKey;
+        }
+
+        internal static void UploadDirectory(CosXmlServer cosXml)
+        {
+            //.cssg-snippet-body-start:[transfer-upload-file]
+            // 初始化 TransferConfig
+            TransferConfig transferConfig = new TransferConfig();
+            
+            // 初始化 TransferManager
+            TransferManager transferManager = new TransferManager(cosXml, transferConfig);
+
+            String dir = @"本地文件夹绝对路径"; //本地文件夹绝对路径
+
+            var files = System.IO.Directory.GetFiles(dir);
+
+            var tasks = new List<Task>();
+            foreach (var file in files)
+            {
+                Console.WriteLine("Enqueue Upload: " + file);
+                String cosPath = new FileInfo(file).Name; //对象在存储桶中的位置标识符，即称对象键
+                
+                // 上传对象
+                COSXMLUploadTask uploadTask = new COSXMLUploadTask(bucket, cosPath);
+                uploadTask.SetSrcPath(file);
+                
+                tasks.Add(transferManager.UploadAsync(uploadTask));
+            }
+
+            try
+            {
+                // Wait for all the tasks to finish.
+                Task.WaitAll(tasks.ToArray());
+
+                // We should never get to this point
+                Console.WriteLine("Upload Directory Complete");
+            }
+            catch (AggregateException e)
+            {
+                Console.WriteLine("\nThe following exceptions have been thrown by WaitAll(): (THIS WAS EXPECTED)");
+                for (int j = 0; j < e.InnerExceptions.Count; j++)
+                {
+                    Console.WriteLine("\n-------------------------------------------------\n{0}", e.InnerExceptions[j].ToString());
+                }
+            }
+            
         }
 
         internal static async Task GetObject(CosXmlServer cosXml, string cosKey) 

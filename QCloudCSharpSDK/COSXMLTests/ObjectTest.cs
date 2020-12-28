@@ -126,6 +126,13 @@ namespace COSXMLTests
 
                 Assert.True(result.httpCode == 200);
                 Assert.NotNull(result.eTag);
+
+                GetObjectRequest getObjectRequest = new GetObjectRequest(bucket, key, localDir, localFileName);
+                getObjectRequest.SetCosServerSideEncryptionWithCustomerKey(customerKey);
+                var getResult = cosXml.GetObject(getObjectRequest);
+                Assert.True(getResult.httpCode == 200);
+                FileInfo fileInfo = new FileInfo(localDir + System.IO.Path.DirectorySeparatorChar + localFileName);
+                Assert.AreEqual(fileInfo.Length, new FileInfo(smallFileSrcPath).Length);
             }
             catch (CosClientException clientEx)
             {
