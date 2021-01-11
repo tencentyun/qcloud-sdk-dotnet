@@ -135,8 +135,10 @@ namespace COSXMLDemo
             // 初始化 TransferManager
             TransferManager transferManager = new TransferManager(cosXml, transferConfig);
             
-            String cosPath = cosKey; //对象在存储桶中的位置标识符，即称对象键
-            String srcPath = @"本地绝对路径";//本地文件绝对路径
+            //对象在存储桶中的位置标识符，即称对象键
+            String cosPath = cosKey; 
+            //本地文件绝对路径
+            String srcPath = @"本地绝对路径";
             
             // 上传对象
             COSXMLUploadTask uploadTask = new COSXMLUploadTask(bucket, cosPath);
@@ -147,7 +149,8 @@ namespace COSXMLDemo
                 Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
             };
 
-            try {
+            try 
+            {
                 COSXML.Transfer.COSXMLUploadTask.UploadTaskResult result = await 
                     transferManager.UploadAsync(uploadTask);
                 Console.WriteLine(result.GetResultInfo());
@@ -168,7 +171,8 @@ namespace COSXMLDemo
             // 初始化 TransferManager
             TransferManager transferManager = new TransferManager(cosXml, transferConfig);
 
-            String dir = @"本地文件夹绝对路径"; //本地文件夹绝对路径
+            //本地文件夹绝对路径
+            String dir = @"本地文件夹绝对路径";
 
             var files = System.IO.Directory.GetFiles(dir);
 
@@ -176,7 +180,8 @@ namespace COSXMLDemo
             foreach (var file in files)
             {
                 Console.WriteLine("Enqueue Upload: " + file);
-                String cosPath = new FileInfo(file).Name; //对象在存储桶中的位置标识符，即称对象键
+                //对象在存储桶中的位置标识符，即称对象键
+                String cosPath = new FileInfo(file).Name;
                 
                 // 上传对象
                 COSXMLUploadTask uploadTask = new COSXMLUploadTask(bucket, cosPath);
@@ -211,9 +216,12 @@ namespace COSXMLDemo
             // 初始化 TransferManager
             TransferManager transferManager = new TransferManager(cosXml, transferConfig);
             
-            String cosPath = cosKey; //对象在存储桶中的位置标识符，即称对象键
-            string localDir = System.IO.Path.GetTempPath();//本地文件夹
-            string localFileName = "my-local-temp-file"; //指定本地保存的文件名
+            //对象在存储桶中的位置标识符，即称对象键
+            String cosPath = cosKey; 
+            //本地文件夹
+            string localDir = System.IO.Path.GetTempPath();
+            //指定本地保存的文件名
+            string localFileName = "my-local-temp-file"; 
             
             // 下载对象
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(bucket, cosPath, 
@@ -224,7 +232,8 @@ namespace COSXMLDemo
                 Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
             };
 
-            try {
+            try 
+            {
                 COSXML.Transfer.COSXMLDownloadTask.DownloadTaskResult result = await 
                     transferManager.DownloadAsync(downloadTask);
                 Console.WriteLine(result.GetResultInfo());
