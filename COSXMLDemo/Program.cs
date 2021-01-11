@@ -238,7 +238,8 @@ namespace COSXMLDemo
                     transferManager.DownloadAsync(downloadTask);
                 Console.WriteLine(result.GetResultInfo());
                 string eTag = result.eTag;
-            } catch (Exception e) {
+            } catch (Exception e) 
+            {
                 Console.WriteLine("CosException: " + e);
             }
         }
