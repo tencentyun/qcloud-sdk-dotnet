@@ -1,15 +1,42 @@
 using COSXML.Log;
 using COSXML.Model.Service;
 using COSXML.Model.Tag;
+using COSXML.Auth;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using COSXML.Network;
 
 namespace COSXMLTests
 {
+    public class CustomQCloudCredentialProvider : QCloudCredentialProvider
+    {
+        public override QCloudCredentials GetQCloudCredentials()
+        {
+            return base.GetQCloudCredentials();
+        }
+
+        public override void Refresh()
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class CustomQCloudCredentialProvider2 : QCloudCredentialProvider
+    {
+        public override QCloudCredentials GetQCloudCredentialsWithRequest(Request request)
+        {
+            return base.GetQCloudCredentialsWithRequest(request);
+        }
+
+        public override void Refresh()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     [TestFixture()]
     public class ServerTest
     {

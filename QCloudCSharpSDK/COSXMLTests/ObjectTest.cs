@@ -1447,8 +1447,82 @@ namespace COSXMLTests
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 Assert.Fail();
             }
+        }
+
+        [Test()]
+        public async Task AsyncMoveObject()
+        {
+            CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
+                    bucket, QCloudServer.Instance().region, copyKeySmall);
+
+            COSXMLCopyTask copyTask = new COSXMLCopyTask(bucket, commonKey, copySource);
+        
+            try {
+                // 拷贝对象
+                COSXML.Transfer.COSXMLCopyTask.CopyTaskResult result = await 
+                    transferManager.CopyAsync(copyTask);
+                Console.WriteLine(result.GetResultInfo());
+
+                // 删除对象
+                DeleteObjectRequest request = new DeleteObjectRequest(bucket, commonKey);
+                DeleteObjectResult deleteResult = cosXml.DeleteObject(request);
+                // 打印结果
+                Console.WriteLine(deleteResult.GetResultInfo());
+            } catch (Exception e) {
+                Console.WriteLine("CosException: " + e);
+            }
+        }
 
 
+        [Test()]
+        public void DeletePrefix()
+        {
+            try
+            {
+                String nextMarker = null;
+
+                do
+                {
+                    string prefix = "folder1/"; //对象键
+                    GetBucketRequest listRequest = new GetBucketRequest(bucket);
+                    //获取 a/ 下的对象以及子目录
+                    listRequest.SetPrefix(prefix);
+                    listRequest.SetMarker(nextMarker);
+                    //执行请求
+                    GetBucketResult listResult = cosXml.GetBucket(listRequest);
+                    //bucket的相关信息
+                    ListBucket info = listResult.listBucket;
+                    // 对象列表
+                    List<ListBucket.Contents> objects = info.contentsList;
+                    // 下一页的下标
+                    nextMarker = info.nextMarker;
+                    
+                    DeleteMultiObjectRequest deleteRequest = new DeleteMultiObjectRequest(bucket);
+                    //设置返回结果形式
+                    deleteRequest.SetDeleteQuiet(false);
+                    //对象key
+                    List<string> deleteObjects = new List<string>();
+                    foreach (var content in objects)
+                    {
+                    deleteObjects.Add(content.key);
+                    }
+                    deleteRequest.SetObjectKeys(deleteObjects);
+                    //执行请求
+                    DeleteMultiObjectResult deleteResult = cosXml.DeleteMultiObjects(deleteRequest);
+                    //请求成功
+                    Console.WriteLine(deleteResult.GetResultInfo());
+                } while (nextMarker != null);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                //请求失败
+                Console.WriteLine("CosClientException: " + clientEx);
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                //请求失败
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+            }
         }
     }
 }
