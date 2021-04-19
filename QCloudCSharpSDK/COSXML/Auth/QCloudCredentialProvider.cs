@@ -5,6 +5,7 @@ using COSXML.Utils;
 using COSXML.CosException;
 using COSXML.Common;
 using COSXML.Log;
+using COSXML.Network;
 using System.IO;
 
 namespace COSXML.Auth
@@ -12,9 +13,29 @@ namespace COSXML.Auth
 
     public abstract class QCloudCredentialProvider
     {
-        public abstract QCloudCredentials GetQCloudCredentials();
+        public virtual QCloudCredentials GetQCloudCredentials()
+        {
+            return null;
+        }
 
         public abstract void Refresh();
+
+        protected virtual QCloudCredentials GetQCloudCredentialsWithRequest(Request request)
+        {
+            return null;
+        }
+
+        public QCloudCredentials GetQCloudCredentialsCompat(Request request)
+        {
+            QCloudCredentials credentials = GetQCloudCredentialsWithRequest(request);
+
+            if (credentials == null)
+            {
+                credentials = GetQCloudCredentials(); 
+            }
+
+            return credentials;
+        }
     }
 
     /// <summary>

@@ -24,13 +24,11 @@ namespace COSXML.Network
     {
         private static string TAG = "HttpClient";
 
-        private static HttpClientConfig config;
-
-        private static QCloudCredentialProvider credentialsProvider;
+        private HttpClientConfig config;
 
         private static HttpClient instance;
 
-        private static Object sync = new Object();
+        private Object sync = new Object();
 
         private static Object syncInstance = new Object();
 
@@ -52,25 +50,25 @@ namespace COSXML.Network
             return instance;
         }
 
-        public static void Init(HttpClientConfig config, QCloudCredentialProvider credentialsProvider)
+        public void Init(HttpClientConfig config)
         {
-            lock (sync)
+            if (this.config == null)
             {
-                HttpClient.config = config;
-                HttpClient.credentialsProvider = credentialsProvider;
-                // init grobal httpwebreqeust
-                CommandTask.Init(HttpClient.config);
+                lock (sync)
+                {
+                    if (this.config == null)
+                    {
+                        this.config = config;
+                        // init grobal httpwebreqeust
+                        CommandTask.Init(this.config);
+                    }
+                }
             }
 
         }
 
         private HttpClient()
         {
-
-            if (config == null)
-            {
-                throw new CosClientException((int)CosClientError.InternalError, "need to call Init(HttpClientConfig, QCloudCredentialProvider) before");
-            }
         }
 
         /// <summary>
@@ -78,19 +76,20 @@ namespace COSXML.Network
         /// </summary>
         /// <param name="cosRequest"></param>
         /// <param name="cosResult"></param>
+        /// <param name="credentialProvider"></param>
         /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception>
         /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
-        public void Excute(CosRequest cosRequest, CosResult cosResult)
+        public void Excute(CosRequest cosRequest, CosResult cosResult, QCloudCredentialProvider credentialProvider)
         {
             //HttpTask httpTask = new HttpTask();
             //httpTask.cosRequest = cosRequest;
             //httpTask.cosResult = cosResult;
             //httpTask.isSchedue = false;
-            InternalExcute(cosRequest, cosResult);
+            InternalExcute(cosRequest, cosResult, credentialProvider);
         }
 
 
-        public void Schedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
+        public void Schedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback, QCloudCredentialProvider credentialProvider)
         {
             //HttpTask httpTask = new HttpTask();
             //httpTask.cosRequest = cosRequest;
@@ -98,7 +97,7 @@ namespace COSXML.Network
             //httpTask.isSchedue = true;
             //httpTask.successCallback = successCallback;
             //httpTask.failCallback = failCallback;
-            InternalSchedue(cosRequest, cosResult, successCallback, failCallback);
+            InternalSchedue(cosRequest, cosResult, successCallback, failCallback, credentialProvider);
         }
 
 
@@ -107,14 +106,15 @@ namespace COSXML.Network
         /// </summary>
         /// <param name="cosRequest"></param>
         /// <param name="cosResult"></param>
+        /// <param name="credentialProvider"></param>
         /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception>
         /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
-        public void InternalExcute(CosRequest cosRequest, CosResult cosResult)
+        public void InternalExcute(CosRequest cosRequest, CosResult cosResult, QCloudCredentialProvider credentialProvider)
         {
 
             try
             {
-                Request request = CreateRequest(cosRequest);
+                Request request = CreateRequest(cosRequest, credentialProvider);
                 //extern informations exchange
                 cosResult.ExternInfo(cosRequest);
 
@@ -171,12 +171,12 @@ namespace COSXML.Network
         //     }
         // }
 
-        public void InternalSchedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
+        public void InternalSchedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback, QCloudCredentialProvider credentialProvider)
         {
 
             try
             {
-                Request request = CreateRequest(cosRequest);
+                Request request = CreateRequest(cosRequest, credentialProvider);
                 Response response;
 
                 if (cosRequest is GetObjectRequest)
@@ -211,7 +211,7 @@ namespace COSXML.Network
             }
         }
 
-        private Request CreateRequest(CosRequest cosRequest)
+        private Request CreateRequest(CosRequest cosRequest, QCloudCredentialProvider credentialProvider)
         {
             cosRequest.CheckParameters();
             string requestUrlWithSign = cosRequest.RequestURLWithSign;
@@ -269,7 +269,7 @@ namespace COSXML.Network
             //cacluate sign, and add it.
             if (requestUrlWithSign == null)
             {
-                CheckSign(cosRequest.GetSignSourceProvider(), request);
+                CheckSign(cosRequest.GetSignSourceProvider(), request, credentialProvider);
             }
 
             return request;
@@ -292,7 +292,8 @@ namespace COSXML.Network
         /// </summary>
         /// <param name="qcloudSignSource">QCloudSignSource</param>
         /// <param name="request"></param>
-        private void CheckSign(IQCloudSignSource qcloudSignSource, Request request)
+        /// <param name="credentialProvider"></param>
+        private void CheckSign(IQCloudSignSource qcloudSignSource, Request request, QCloudCredentialProvider credentialProvider)
         {
             // has authorizaiton, notice: using request.Headers， otherwise, error
             if (request.Headers.ContainsKey(CosRequestHeaderKey.AUTHORIZAIION))
@@ -310,14 +311,14 @@ namespace COSXML.Network
                 return;
             }
 
-            if (credentialsProvider == null)
+            if (credentialProvider == null)
             {
                 throw new ArgumentNullException("credentialsProvider == null");
             }
 
             CosXmlSigner signer = new CosXmlSigner();
 
-            signer.Sign(request, qcloudSignSource, credentialsProvider.GetQCloudCredentials());
+            signer.Sign(request, qcloudSignSource, credentialProvider.GetQCloudCredentialsCompat(request));
         }
 
         private bool CheckNeedMd5(Request request, bool isNeedMd5)

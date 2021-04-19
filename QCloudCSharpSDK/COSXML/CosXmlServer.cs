@@ -27,7 +27,7 @@ namespace COSXML
     {
         private CosXmlConfig config;
 
-        private QCloudCredentialProvider qcloudCredentailProvider;
+        private QCloudCredentialProvider credentialProvider;
 
         private HttpClient httpClient;
 
@@ -51,9 +51,9 @@ namespace COSXML
                 QLog.AddLogAdapter(new LogImpl());
             }
 
-            this.qcloudCredentailProvider = qcloudCredentailProvider;
-            HttpClient.Init(this.config.HttpConfig, this.qcloudCredentailProvider);
+            this.credentialProvider = qcloudCredentailProvider;
             httpClient = HttpClient.GetInstance();
+            httpClient.Init(this.config.HttpConfig);
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace COSXML
         private CosResult Excute(CosRequest request, CosResult result)
         {
             CheckAppidAndRegion(request);
-            httpClient.Excute(request, result);
+            httpClient.Excute(request, result, credentialProvider);
 
             return result;
         }
@@ -167,7 +167,7 @@ namespace COSXML
         private void Schedue(CosRequest request, CosResult result, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback)
         {
             CheckAppidAndRegion(request);
-            httpClient.Schedue(request, result, successCallback, failCallback);
+            httpClient.Schedue(request, result, successCallback, failCallback, credentialProvider);
         }
 
         public Model.Service.GetServiceResult GetService(Model.Service.GetServiceRequest request)
@@ -690,7 +690,7 @@ namespace COSXML
                     }
                 }
 
-                return CosXmlSigner.GenerateSign(method, key, encodeQuery, headers, signTime, qcloudCredentailProvider.GetQCloudCredentials());
+                return CosXmlSigner.GenerateSign(method, key, encodeQuery, headers, signTime, credentialProvider.GetQCloudCredentialsCompat(null));
             }
             catch (CosClientException)
             {
