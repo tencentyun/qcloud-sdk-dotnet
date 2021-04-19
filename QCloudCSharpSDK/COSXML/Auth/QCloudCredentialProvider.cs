@@ -20,7 +20,7 @@ namespace COSXML.Auth
 
         public abstract void Refresh();
 
-        protected virtual QCloudCredentials GetQCloudCredentialsWithRequest(Request request)
+        public virtual QCloudCredentials GetQCloudCredentialsWithRequest(Request request)
         {
             return null;
         }
