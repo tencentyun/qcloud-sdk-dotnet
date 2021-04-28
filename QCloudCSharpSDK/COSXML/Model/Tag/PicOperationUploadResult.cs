@@ -169,6 +169,48 @@ namespace COSXML.Model.Tag
             /// </summary>
             [XmlElement]
             public int WatermarkStatus;
+
+            /// <summary>
+            /// 二维码时表示二维码识别结果
+            /// </summary>
+            [XmlElement]
+            public int CodeStatus;
+
+            /// <summary>
+            /// 二维码表示二维码识别结果
+            /// </summary>
+            [XmlElement]
+            public QRcodeInfo QRcodeInfo;
+        }
+
+        /// <summary>
+        /// 二维码识别结果
+        /// </summary>
+        public sealed class QRcodeInfo
+        {
+            /// <summary>
+            /// 文件对象键
+            /// </summary>
+            [XmlElement]
+            public string CodeUrl;
+
+            /// <summary>
+            /// 图片路径
+            /// </summary>
+            [XmlElement]
+            public CodeLocation CodeLocation;
+        }
+
+        /// <summary>
+        /// 二维码识别结果
+        /// </summary>
+        public sealed class CodeLocation
+        {
+            /// <summary>
+            /// 文件对象键
+            /// </summary>
+            [XmlElement]
+            public List<string> Point;
         }
     }
 }

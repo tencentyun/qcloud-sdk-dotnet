@@ -1053,5 +1053,15 @@ namespace COSXML
 
             return Execute(request, new ImageProcessResult());
         }
+
+        /// <summary>
+        /// 下载时进行二维码识别
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public QRCodeRecognitionResult QRCodeRecognition(QRCodeRecognitionRequest request)
+        {
+            return Execute(request, new QRCodeRecognitionResult());
+        }
     }
 }

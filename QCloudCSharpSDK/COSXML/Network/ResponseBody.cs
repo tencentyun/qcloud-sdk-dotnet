@@ -186,9 +186,6 @@ namespace COSXML.Network
             }
             catch (Exception ex)
             {
-                responseBodyState.endResponseBody(false, ex);
-                responseBodyState.Clear();
-
                 if (fileStream != null)
                 {
                     fileStream.Close();
@@ -200,6 +197,9 @@ namespace COSXML.Network
                     memoryStream.Close();
                     memoryStream.Dispose();
                 }
+
+                responseBodyState.endResponseBody(false, ex);
+                responseBodyState.Clear();
 
                 QLog.Error("ResponseBody", ex.Message, ex);
             }
@@ -237,8 +237,7 @@ namespace COSXML.Network
 
                     inputStream.BeginRead(responseBodyState.buffer, 0, responseBodyState.buffer.Length, AsyncStreamCallback, responseBodyState);
                 }
-                else
-if (recvLen == 0)
+                else if (recvLen == 0)
                 {
 
                     if (isDownload)
@@ -259,9 +258,6 @@ if (recvLen == 0)
                         parseStream(memoryStream, contentType, responseBodyState.completed);
                     }
 
-                    responseBodyState.endResponseBody(true, null);
-                    responseBodyState.Clear();
-
                     if (fileStream != null)
                     {
                         fileStream.Close();
@@ -273,13 +269,13 @@ if (recvLen == 0)
                         memoryStream.Close();
                         memoryStream.Dispose();
                     }
+
+                    responseBodyState.endResponseBody(true, null);
+                    responseBodyState.Clear();
                 }
             }
             catch (Exception ex)
             {
-                responseBodyState.endResponseBody(false, ex);
-                responseBodyState.Clear();
-
                 if (fileStream != null)
                 {
                     fileStream.Close();
@@ -291,6 +287,9 @@ if (recvLen == 0)
                     memoryStream.Close();
                     memoryStream.Dispose();
                 }
+
+                responseBodyState.endResponseBody(false, ex);
+                responseBodyState.Clear();
 
                 QLog.Error("ResponseBody", ex.Message, ex);
             }

@@ -988,6 +988,13 @@ namespace COSXML
         ImageProcessResult ImageProcess(ImageProcessRequest request);
 
         /// <summary>
+        /// 下载时进行二维码识别
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        QRCodeRecognitionResult QRCodeRecognition(QRCodeRecognitionRequest request);
+
+        /// <summary>
         /// 取消请求
         /// </summary>
         /// <param name="cosRequest"></param>
