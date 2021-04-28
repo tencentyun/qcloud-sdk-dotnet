@@ -1237,7 +1237,7 @@ namespace COSXMLTests
                 {
                     downloadTask.Cancel();
                 }
-                
+
                 Thread.Sleep(500);
             } 
             else 
@@ -1497,7 +1497,8 @@ namespace COSXMLTests
 
             COSXMLCopyTask copyTask = new COSXMLCopyTask(bucket, commonKey, copySource);
         
-            try {
+            try 
+            {
                 // 拷贝对象
                 COSXML.Transfer.COSXMLCopyTask.CopyTaskResult result = await 
                     transferManager.CopyAsync(copyTask);
@@ -1545,8 +1546,9 @@ namespace COSXMLTests
                     List<string> deleteObjects = new List<string>();
                     foreach (var content in objects)
                     {
-                    deleteObjects.Add(content.key);
+                        deleteObjects.Add(content.key);
                     }
+                    
                     deleteRequest.SetObjectKeys(deleteObjects);
                     //执行请求
                     DeleteMultiObjectResult deleteResult = cosXml.DeleteMultiObjects(deleteRequest);

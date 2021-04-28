@@ -68,6 +68,7 @@ namespace COSXML.Utils
             {
                 crc = TableValue(_table, bytes[i], crc);
             }
+            
             crc = ~crc;
             return crc;
         }
@@ -90,8 +91,10 @@ namespace COSXML.Utils
 
         private static void Gf2MatrixSquare(ulong[] square, ulong[] mat)
         {
-            for (int n = 0; n < GF2_DIM; n++)
+            for (int n = 0; n < GF2_DIM; n++) 
+            {
                 square[n] = Gf2MatrixTimes(mat, mat[n]);
+            }
         }
 
         static public ulong Combine(ulong crc1, ulong crc2, long len2)
@@ -128,17 +131,25 @@ namespace COSXML.Utils
                 // apply zeros operator for this bit of len2
                 Gf2MatrixSquare(even, odd);
                 if ((len2 & 1) == 1)
+                {
                     crc1 = Gf2MatrixTimes(even, crc1);
+                }
+                    
                 len2 >>= 1;
 
                 // if no more bits set, then done
                 if (len2 == 0)
+                {
                     break;
+                }
 
                 // another iteration of the loop with odd and even swapped
                 Gf2MatrixSquare(odd, even);
                 if ((len2 & 1) == 1)
+                {
                     crc1 = Gf2MatrixTimes(odd, crc1);
+                }
+
                 len2 >>= 1;
 
                 // if no more bits set, then done

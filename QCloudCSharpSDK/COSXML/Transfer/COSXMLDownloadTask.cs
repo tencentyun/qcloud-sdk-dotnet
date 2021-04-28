@@ -144,7 +144,7 @@ namespace COSXML.Transfer
 
         private void ResumeDownloadInPossible(HeadObjectResult result, string localFile)
         {
-            DownloadResumableInfo resumableInfo = DownloadResumableInfo.loadFromResumableFile(resumableTaskFile);
+            DownloadResumableInfo resumableInfo = DownloadResumableInfo.LoadFromResumableFile(resumableTaskFile);
             
             if (resumableInfo != null)
             {
@@ -169,7 +169,7 @@ namespace COSXML.Transfer
                 resumableInfo.eTag = result.eTag;
                 resumableInfo.lastModified = result.lastModified;
 
-                resumableInfo.persist(resumableTaskFile);
+                resumableInfo.Persist(resumableTaskFile);
             }
         }
 
@@ -183,7 +183,8 @@ namespace COSXML.Transfer
                 byte[] buffer = new byte[2048];
                 int bytesRead;
                 ulong crc = 0;
-                while((bytesRead = fs.Read(buffer, 0, buffer.Length)) > 0) 
+
+                while ((bytesRead = fs.Read(buffer, 0, buffer.Length)) > 0) 
                 {
                     ulong partCrc = Crc64.Compute(buffer, 0, bytesRead);
                     if (crc == 0) 
@@ -195,6 +196,7 @@ namespace COSXML.Transfer
                         crc = Crc64.Combine(crc, partCrc, bytesRead);
                     }
                 }
+
                 localFileCrc64 = crc.ToString();
                 return localFileCrc64 == crc64ecma;
             }
@@ -371,7 +373,7 @@ namespace COSXML.Transfer
 
             public string crc64ecma;
 
-            public static DownloadResumableInfo loadFromResumableFile(string taskFile)
+            public static DownloadResumableInfo LoadFromResumableFile(string taskFile)
             {
                 try
                 {
@@ -388,7 +390,7 @@ namespace COSXML.Transfer
                 }
             }
 
-            public void persist(string taskFile)
+            public void Persist(string taskFile)
             {
                 string xml = XmlBuilder.Serialize(this);
                 using (FileStream stream = File.Create(taskFile))

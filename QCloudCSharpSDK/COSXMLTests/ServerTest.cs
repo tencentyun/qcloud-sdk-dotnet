@@ -88,7 +88,7 @@ namespace COSXMLTests
         }
 
     }
-    
+
     public class CustomQCloudCredentialProvider : QCloudCredentialProvider
     {
         public override QCloudCredentials GetQCloudCredentials()
@@ -101,6 +101,7 @@ namespace COSXMLTests
             throw new NotImplementedException();
         }
     }
+    
     public class CustomQCloudCredentialProvider2 : QCloudCredentialProvider
     {
         public override QCloudCredentials GetQCloudCredentialsWithRequest(Request request)
