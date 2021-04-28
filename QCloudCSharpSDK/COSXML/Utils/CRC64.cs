@@ -68,7 +68,7 @@ namespace COSXML.Utils
             {
                 crc = TableValue(_table, bytes[i], crc);
             }
-            
+
             crc = ~crc;
             return crc;
         }
@@ -83,6 +83,7 @@ namespace COSXML.Utils
                 {
                     sum ^= mat[idx];
                 }
+                
                 vec >>= 1;
                 idx++;
             }
@@ -101,7 +102,9 @@ namespace COSXML.Utils
         {
             // degenerate case.
             if (len2 == 0)
+            {
                 return crc1;
+            }
 
             int n;
             ulong row;

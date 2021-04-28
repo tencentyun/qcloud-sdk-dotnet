@@ -1509,7 +1509,8 @@ namespace COSXMLTests
                 DeleteObjectResult deleteResult = cosXml.DeleteObject(request);
                 // 打印结果
                 Console.WriteLine(deleteResult.GetResultInfo());
-            } catch (Exception e) {
+            } 
+            catch (Exception e) {
                 Console.WriteLine("CosException: " + e);
             }
         }
@@ -1548,7 +1549,7 @@ namespace COSXMLTests
                     {
                         deleteObjects.Add(content.key);
                     }
-                    
+
                     deleteRequest.SetObjectKeys(deleteObjects);
                     //执行请求
                     DeleteMultiObjectResult deleteResult = cosXml.DeleteMultiObjects(deleteRequest);
