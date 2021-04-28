@@ -1,19 +1,12 @@
-// Copyright (c) Damien Guard.  All rights reserved.
-// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. 
-// You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-// Originally published at http://damieng.com/blog/2007/11/19/calculating-crc-64-in-c-and-net
-
 using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 
 namespace COSXML.Utils
 {
-    public class CRC64
+    public class Crc64
     {
         private static ulong[] _table;
         private static object _lock = new object();
-        private const int GF2_DIM = 64; /* dimension of GF(2) vectors (length of CRC) */
+        private const int GF2_DIM = 64;
         private static ulong _poly;
 
         private static void GenStdCrcTable(ulong poly)
@@ -36,6 +29,7 @@ namespace COSXML.Utils
                         crc = (crc >> 1);
                     }
                 }
+
                 _table[n] = crc;
             }
         }
@@ -85,7 +79,9 @@ namespace COSXML.Utils
             while (vec != 0)
             {
                 if ((vec & 1) == 1)
+                {
                     sum ^= mat[idx];
+                }
                 vec >>= 1;
                 idx++;
             }
@@ -106,11 +102,11 @@ namespace COSXML.Utils
 
             int n;
             ulong row;
-            ulong[] even = new ulong[GF2_DIM]; // even-power-of-two zeros operator
-            ulong[] odd = new ulong[GF2_DIM];  // odd-power-of-two zeros operator
+            ulong[] even = new ulong[GF2_DIM]; 
+            ulong[] odd = new ulong[GF2_DIM]; 
 
             // put operator for one zero bit in odd
-            odd[0] = _poly;      // CRC-64 polynomial
+            odd[0] = _poly;
 
             row = 1;
             for (n = 1; n < GF2_DIM; n++)

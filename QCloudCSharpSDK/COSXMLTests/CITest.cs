@@ -212,6 +212,7 @@ namespace COSXMLTests
             o["rules"] = rules;
 
             string ruleString = o.ToString(Formatting.None);
+            
             request.SetRequestHeader("Pic-Operations", ruleString);
             //执行请求
             PutObjectResult result = QCloudServer.Instance().cosXml.PutObject(request);

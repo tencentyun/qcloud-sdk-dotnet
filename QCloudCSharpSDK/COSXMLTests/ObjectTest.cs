@@ -1237,8 +1237,10 @@ namespace COSXMLTests
                 {
                     downloadTask.Cancel();
                 }
+                
                 Thread.Sleep(500);
-            } else 
+            } 
+            else 
             {
                 Console.WriteLine("localFileCrc64 = " + downloadTask.GetLocalFileCrc64());
                 Thread.Sleep(500);
@@ -1521,7 +1523,8 @@ namespace COSXMLTests
 
                 do
                 {
-                    string prefix = "folder1/"; //对象键
+                    //对象键
+                    string prefix = "folder1/"; 
                     GetBucketRequest listRequest = new GetBucketRequest(bucket);
                     //获取 a/ 下的对象以及子目录
                     listRequest.SetPrefix(prefix);

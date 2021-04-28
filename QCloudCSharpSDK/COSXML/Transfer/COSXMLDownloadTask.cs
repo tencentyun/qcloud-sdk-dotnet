@@ -109,7 +109,7 @@ namespace COSXML.Transfer
                         {
                             resumableTaskFile = getObjectRequest.GetSaveFilePath() + ".cosresumabletask";
                         }
-                        resumeDownloadInPossible(result, getObjectRequest.GetSaveFilePath());
+                        ResumeDownloadInPossible(result, getObjectRequest.GetSaveFilePath());
                     }
 
                     //download
@@ -142,7 +142,7 @@ namespace COSXML.Transfer
             });
         }
 
-        private void resumeDownloadInPossible(HeadObjectResult result, string localFile)
+        private void ResumeDownloadInPossible(HeadObjectResult result, string localFile)
         {
             DownloadResumableInfo resumableInfo = DownloadResumableInfo.loadFromResumableFile(resumableTaskFile);
             
@@ -173,9 +173,9 @@ namespace COSXML.Transfer
             }
         }
 
-        private bool compareCrc64(string localFile, string crc64ecma)
+        private bool CompareCrc64(string localFile, string crc64ecma)
         {
-            CRC64.InitECMA();
+            Crc64.InitECMA();
             String hash = String.Empty;
 
             using (FileStream fs = File.Open(localFile, FileMode.Open))
@@ -183,15 +183,16 @@ namespace COSXML.Transfer
                 byte[] buffer = new byte[2048];
                 int bytesRead;
                 ulong crc = 0;
-                while((bytesRead = fs.Read(buffer, 0, buffer.Length)) > 0) {
-                    ulong partCrc = CRC64.Compute(buffer, 0, bytesRead);
+                while((bytesRead = fs.Read(buffer, 0, buffer.Length)) > 0) 
+                {
+                    ulong partCrc = Crc64.Compute(buffer, 0, bytesRead);
                     if (crc == 0) 
                     {
                         crc = partCrc;
                     }
                     else 
                     {
-                        crc = CRC64.Combine(crc, partCrc, bytesRead);
+                        crc = Crc64.Combine(crc, partCrc, bytesRead);
                     }
                 }
                 localFileCrc64 = crc.ToString();
@@ -230,7 +231,7 @@ namespace COSXML.Transfer
                     }
                 }
 
-                if (resumable && crc64ecma != null && !compareCrc64(getObjectRequest.GetSaveFilePath(), crc64ecma))
+                if (resumable && crc64ecma != null && !CompareCrc64(getObjectRequest.GetSaveFilePath(), crc64ecma))
                 {
                     // crc64 is not match
                     if (UpdateTaskState(TaskState.Failed))
@@ -377,6 +378,7 @@ namespace COSXML.Transfer
                     using (FileStream stream = File.OpenRead(taskFile))
                     {
                         DownloadResumableInfo resumableInfo = XmlParse.Deserialize<DownloadResumableInfo>(stream);
+                        
                         return resumableInfo;
                     }
                 }

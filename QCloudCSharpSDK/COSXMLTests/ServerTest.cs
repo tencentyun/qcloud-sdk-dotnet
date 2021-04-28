@@ -12,30 +12,6 @@ using COSXML.Network;
 
 namespace COSXMLTests
 {
-    public class CustomQCloudCredentialProvider : QCloudCredentialProvider
-    {
-        public override QCloudCredentials GetQCloudCredentials()
-        {
-            return base.GetQCloudCredentials();
-        }
-
-        public override void Refresh()
-        {
-            throw new NotImplementedException();
-        }
-    }
-    public class CustomQCloudCredentialProvider2 : QCloudCredentialProvider
-    {
-        public override QCloudCredentials GetQCloudCredentialsWithRequest(Request request)
-        {
-            return base.GetQCloudCredentialsWithRequest(request);
-        }
-
-        public override void Refresh()
-        {
-            throw new NotImplementedException();
-        }
-    }
 
     [TestFixture()]
     public class ServerTest
@@ -111,5 +87,30 @@ namespace COSXMLTests
             }
         }
 
+    }
+    
+    public class CustomQCloudCredentialProvider : QCloudCredentialProvider
+    {
+        public override QCloudCredentials GetQCloudCredentials()
+        {
+            return base.GetQCloudCredentials();
+        }
+
+        public override void Refresh()
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class CustomQCloudCredentialProvider2 : QCloudCredentialProvider
+    {
+        public override QCloudCredentials GetQCloudCredentialsWithRequest(Request request)
+        {
+            return base.GetQCloudCredentialsWithRequest(request);
+        }
+
+        public override void Refresh()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
