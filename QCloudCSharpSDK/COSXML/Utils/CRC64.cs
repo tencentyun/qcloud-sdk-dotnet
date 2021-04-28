@@ -83,10 +83,11 @@ namespace COSXML.Utils
                 {
                     sum ^= mat[idx];
                 }
-                
+
                 vec >>= 1;
                 idx++;
             }
+            
             return sum;
         }
 

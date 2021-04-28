@@ -1510,7 +1510,8 @@ namespace COSXMLTests
                 // 打印结果
                 Console.WriteLine(deleteResult.GetResultInfo());
             } 
-            catch (Exception e) {
+            catch (Exception e) 
+            {
                 Console.WriteLine("CosException: " + e);
             }
         }
