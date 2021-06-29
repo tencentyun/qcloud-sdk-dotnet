@@ -10,7 +10,7 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 实现初始化分片上传，成功执行此请求以后会返回 UploadId 用于后续的 Upload Part 请求
-    /// <see cref="https://cloud.tencent.com/document/product/436/7746"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7746"/>
     /// </summary>
     public sealed class InitMultipartUploadRequest : ObjectRequest
     {
@@ -23,7 +23,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 设置 Object 的存储级别
-        /// <see cref="Common.CosStorageClass"/>
+        /// <see href="Common.CosStorageClass"/>
         /// </summary>
         /// <param name="cosStorageClass"></param>
         public void SetCosStorageClass(string cosStorageClass)
@@ -40,7 +40,7 @@ namespace COSXML.Model.Object
         /// 当前访问策略条目限制为 1000 条，
         /// 如果您不需要进行 Object ACL 控制，请填 default 或者此项不进行设置，
         /// 默认继承 Bucket 权限
-        /// <see cref="Common.CosACL"/>
+        /// <see href="Common.CosACL"/>
         /// </summary>
         /// <param name="cosACL"></param>
         public void SetCosACL(string cosACL)
@@ -57,7 +57,7 @@ namespace COSXML.Model.Object
         /// 当前访问策略条目限制为 1000 条，
         /// 如果您不需要进行 Object ACL 控制，请填 default 或者此项不进行设置，
         /// 默认继承 Bucket 权限
-        /// <see cref="Common.CosACL"/>
+        /// <see href="Common.CosACL"/>
         public void SetCosACL(CosACL cosACL)
         {
             SetCosACL(EnumUtils.GetValue(cosACL));
@@ -65,7 +65,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 赋予被授权者读的权限
-        /// <see cref="Model.Tag.GrantAccount"/>
+        /// <see href="Model.Tag.GrantAccount"/>
         /// </summary>
         /// <param name="grantAccount"></param>
         public void SetXCosGrantRead(GrantAccount grantAccount)
@@ -79,7 +79,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 赋予被授权者读写的权限
-        /// <see cref="Model.Tag.GrantAccount"/>
+        /// <see href="Model.Tag.GrantAccount"/>
         /// </summary>
         /// <param name="grantAccount"></param>
         public void SetXCosReadWrite(GrantAccount grantAccount)

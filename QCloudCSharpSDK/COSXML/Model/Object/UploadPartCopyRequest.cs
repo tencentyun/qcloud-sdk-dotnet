@@ -10,13 +10,13 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 分片复制
-    /// <see cref="https://cloud.tencent.com/document/product/436/12633"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/12633"/>
     /// </summary>
     public sealed class UploadPartCopyRequest : ObjectRequest
     {
         /// <summary>
         /// 拷贝的数据源
-        /// <see cref="Model.Tag.CopySourceStruct"/>
+        /// <see href="Model.Tag.CopySourceStruct"/>
         /// </summary>
         private CopySourceStruct copySourceStruct;
 
@@ -34,7 +34,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 设置拷贝数据源
-        /// <see cref="Model.Tag.CopySourceStruct"/>
+        /// <see href="Model.Tag.CopySourceStruct"/>
         /// </summary>
         /// <param name="copySource"></param>
         public void SetCopySource(CopySourceStruct copySource)

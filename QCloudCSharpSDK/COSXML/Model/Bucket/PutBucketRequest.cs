@@ -12,7 +12,7 @@ namespace COSXML.Model.Bucket
 {
     /// <summary>
     /// 创建 Bucket
-    /// <see cref="https://cloud.tencent.com/document/product/436/7738"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7738"/>
     /// </summary>
     public sealed class PutBucketRequest : BucketRequest
     {
@@ -24,7 +24,7 @@ namespace COSXML.Model.Bucket
 
         /// <summary>
         /// 定义 Object 的 acl 属性。有效值：private，public-read-write，public-read；默认值：private
-        /// <see cref="Common.CosACL"/>
+        /// <see href="Common.CosACL"/>
         /// </summary>
         /// <param name="cosACL"></param>
         public void SetCosACL(string cosACL)
@@ -38,7 +38,7 @@ namespace COSXML.Model.Bucket
 
         /// <summary>
         /// 定义 Object 的 acl 属性。有效值：private，public-read-write，public-read；默认值：private
-        /// <see cref="Common.CosACL"/>
+        /// <see href="Common.CosACL"/>
         /// </summary>
         /// <param name="cosACL"></param>
         public void SetCosACL(CosACL cosACL)
@@ -48,7 +48,7 @@ namespace COSXML.Model.Bucket
 
         /// <summary>
         /// 赋予被授权者读的权限
-        /// <see cref="Model.Tag.GrantAccount"/>
+        /// <see href="Model.Tag.GrantAccount"/>
         /// </summary>
         /// <param name="grantAccount"></param>
         public void SetXCosGrantRead(GrantAccount grantAccount)
@@ -62,7 +62,7 @@ namespace COSXML.Model.Bucket
 
         /// <summary>
         /// 赋予被授权者写的权限
-        /// <see cref="Model.Tag.GrantAccount"/>
+        /// <see href="Model.Tag.GrantAccount"/>
         /// </summary>
         /// <param name="grantAccount"></param>
         public void SetXCosGrantWrite(GrantAccount grantAccount)
@@ -76,7 +76,7 @@ namespace COSXML.Model.Bucket
 
         /// <summary>
         /// 赋予被授权者所有的权限
-        /// <see cref="Model.Tag.GrantAccount"/>
+        /// <see href="Model.Tag.GrantAccount"/>
         /// </summary>
         /// <param name="grantAccount"></param>
         public void SetXCosReadWrite(GrantAccount grantAccount)

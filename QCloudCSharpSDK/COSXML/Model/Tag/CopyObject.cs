@@ -7,7 +7,7 @@ namespace COSXML.Model.Tag
 {
     /// <summary>
     /// 复制结果返回信息
-    /// <see cref="https://cloud.tencent.com/document/product/436/10881"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/10881"/>
     /// </summary>
     [XmlRoot("CopyObjectResult")]
     public sealed class CopyObject

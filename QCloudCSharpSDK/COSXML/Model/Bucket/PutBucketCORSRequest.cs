@@ -11,13 +11,13 @@ namespace COSXML.Model.Bucket
 {
     /// <summary>
     /// 设置 Bucket CORS
-    /// <see cref="https://cloud.tencent.com/document/product/436/8279"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/8279"/>
     /// </summary>
     public sealed class PutBucketCORSRequest : BucketRequest
     {
         /// <summary>
         /// CORS 配置信息
-        /// <see cref="Model.Tag.CORSConfiguration"/>
+        /// <see href="Model.Tag.CORSConfiguration"/>
         /// </summary>
         private CORSConfiguration corsConfiguration;
 
@@ -37,7 +37,7 @@ namespace COSXML.Model.Bucket
 
         /// <summary>
         /// 设置 CORS 规则
-        /// <see cref="Model.Tag.CORSConfiguration.CORSRule"/>
+        /// <see href="Model.Tag.CORSConfiguration.CORSRule"/>
         /// </summary>
         /// <param name="corsRule"></param>
         public void SetCORSRule(CORSConfiguration.CORSRule corsRule)
@@ -51,7 +51,7 @@ namespace COSXML.Model.Bucket
 
         /// <summary>
         /// 设置 CORS 规则
-        /// <see cref="Model.Tag.CORSConfiguration.CORSRule"/>
+        /// <see href="Model.Tag.CORSConfiguration.CORSRule"/>
         /// </summary>
         /// <param name="corsRules"></param>
         public void SetCORSRules(List<CORSConfiguration.CORSRule> corsRules)

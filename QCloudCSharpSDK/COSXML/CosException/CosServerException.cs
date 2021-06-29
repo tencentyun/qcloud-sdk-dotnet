@@ -8,7 +8,7 @@ namespace COSXML.CosException
 {
     /// <summary>
     /// 服务器异常，通常是一个非正确的服务器响应，例如权限错误、服务不可用等。
-    /// <see cref="Model.Tag.CosServerError"/>
+    /// <see href="Model.Tag.CosServerError"/>
     /// </summary>
     [Serializable]
     public class CosServerException : System.ApplicationException

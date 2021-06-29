@@ -7,7 +7,7 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 实现 Object 跨域访问配置的预请求
-    /// <see cref="https://cloud.tencent.com/document/product/436/8288"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/8288"/>
     /// </summary>
     public sealed class OptionObjectResult : CosResult
     {

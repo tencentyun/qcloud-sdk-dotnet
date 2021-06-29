@@ -10,7 +10,7 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 下载对象
-    /// <see cref="https://cloud.tencent.com/document/product/436/7753"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7753"/>
     /// </summary>
     public sealed class GetObjectRequest : ObjectRequest
     {
@@ -109,7 +109,7 @@ namespace COSXML.Model.Object
         /// <summary>
         /// 最大下载速度，单位是 bit/s
         /// </summary>
-        /// <param name="start"></param>
+        /// <param name="rate"></param>
         public void LimitTraffic(long rate)
         {
             SetRequestHeader(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, rate.ToString());

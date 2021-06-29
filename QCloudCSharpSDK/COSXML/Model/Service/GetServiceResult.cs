@@ -10,13 +10,13 @@ namespace COSXML.Model.Service
 {
     /// <summary>
     /// 获取所有 Bucket 列表返回的结果
-    /// <see cref="https://cloud.tencent.com/document/product/436/8291"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/8291"/>
     /// </summary>
     public sealed class GetServiceResult : CosDataResult<ListAllMyBuckets>
     {
         /// <summary>
         /// list all buckets for users
-        /// <see cref="COSXML.Model.Tag.ListAllMyBuckets"/>
+        /// <see href="COSXML.Model.Tag.ListAllMyBuckets"/>
         /// </summary>
         public ListAllMyBuckets listAllMyBuckets {get => _data; }
     }

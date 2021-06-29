@@ -9,7 +9,7 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 查询特定分块上传中的已上传的块
-    /// <see cref="https://cloud.tencent.com/document/product/436/7747"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7747"/>
     /// </summary>
     public sealed class ListPartsRequest : ObjectRequest
     {

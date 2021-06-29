@@ -7,7 +7,7 @@ namespace COSXML.Model.Tag
 {
     /// <summary>
     /// 初始化上传返回的信息
-    /// <see cref="https://cloud.tencent.com/document/product/436/7746"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7746"/>
     /// </summary>
     [XmlRoot("InitiateMultipartUploadResult")]
     public sealed class InitiateMultipartUpload

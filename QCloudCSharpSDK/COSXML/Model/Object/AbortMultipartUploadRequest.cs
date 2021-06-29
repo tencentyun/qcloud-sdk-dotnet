@@ -9,7 +9,7 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 舍弃一个分块上传并删除已上传的块
-    /// <see cref="https://cloud.tencent.com/document/product/436/7740"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7740"/>
     /// </summary>
     public sealed class AbortMultipartUploadRequest : ObjectRequest
     {

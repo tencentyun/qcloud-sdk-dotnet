@@ -9,13 +9,13 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 获取某个存储桶下的某个对象的访问权限的返回结果
-    /// <see cref="https://cloud.tencent.com/document/product/436/7744"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7744"/>
     /// </summary>
     public sealed class GetObjectACLResult : CosDataResult<AccessControlPolicy>
     {
         /// <summary>
         /// 访问权限信息
-        /// <see cref="Model.Tag.AccessControlPolicy"/>
+        /// <see href="Model.Tag.AccessControlPolicy"/>
         /// </summary>
         public AccessControlPolicy accessControlPolicy {get => _data; }
     }

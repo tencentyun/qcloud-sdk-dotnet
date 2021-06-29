@@ -46,7 +46,7 @@ namespace COSXML.Model.Tag
 
         /// <summary>
         /// 表示本次上传发起者的信息
-        /// <see cref="Initiator"/>
+        /// <see href="Initiator"/>
         /// </summary>
         [XmlElement("Initiator")]
         public Initiator initiator;
@@ -77,7 +77,7 @@ namespace COSXML.Model.Tag
 
         /// <summary>
         /// 表示每一个块的信息
-        /// <see cref="Part"/>
+        /// <see href="Part"/>
         /// </summary>
         [XmlElement("Part")]
         public List<Part> parts;

@@ -7,7 +7,7 @@ namespace COSXML.Model.Tag
 {
     /// <summary>
     /// cos server 返回的错误信息
-    /// <see cref="https://cloud.tencent.com/document/product/436/7730"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7730"/>
     /// </summary>
     [XmlRoot("Error")]
     public sealed class CosServerError

@@ -8,7 +8,7 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 删除对象
-    /// <see cref="https://cloud.tencent.com/document/product/436/7743"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7743"/>
     /// </summary>
     public sealed class DeleteObjectRequest : ObjectRequest
     {

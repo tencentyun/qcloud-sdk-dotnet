@@ -51,7 +51,6 @@ namespace COSXML.Model
         /// <summary>
         /// parse status line and headers
         /// </summary>
-        /// <param name="response"> <see cref="COSXML.Network.Response"/></param>
         internal virtual void InternalParseResponseHeaders() 
         { 
 

@@ -10,7 +10,7 @@ namespace COSXML.Model.Tag
     {
         /// <summary>
         /// 规则描述
-        /// <see cref="Rule"/>
+        /// <see href="Rule"/>
         /// </summary>
         [XmlElement("Rule")]
         public List<Rule> rules;
@@ -47,7 +47,7 @@ namespace COSXML.Model.Tag
 
             /// <summary>
             /// Filter 用于描述规则影响的 Object 集合
-            /// <see cref="Filter"/>
+            /// <see href="Filter"/>
             /// </summary>
             [XmlElement("Filter")]
             public Filter filter;
@@ -60,35 +60,35 @@ namespace COSXML.Model.Tag
 
             /// <summary>
             /// 规则转换属性，对象何时转换为 Standard_IA 或 Archive
-            /// <see cref="Transition"/>
+            /// <see href="Transition"/>
             /// </summary>
             [XmlElement("Transition")]
             public Transition transition;
 
             /// <summary>
             /// 规则过期属性
-            /// <see cref="Expiration"/>
+            /// <see href="Expiration"/>
             /// </summary>
             [XmlElement("Expiration")]
             public Expiration expiration;
 
             /// <summary>
             /// 指明非当前版本对象何时过期
-            /// <see cref="NoncurrentVersionExpiration"/>
+            /// <see href="NoncurrentVersionExpiration"/>
             /// </summary>
             [XmlElement("NoncurrentVersionExpiration")]
             public NoncurrentVersionExpiration noncurrentVersionExpiration;
 
             /// <summary>
             /// 指明非当前版本对象何时转换为 STANDARD_IA 或 ARCHIVE
-            /// <see cref="NoncurrentVersionTransition"/>
+            /// <see href="NoncurrentVersionTransition"/>
             /// </summary>
             [XmlElement("NoncurrentVersionTransition")]
             public NoncurrentVersionTransition noncurrentVersionTransition;
 
             /// <summary>
             /// 设置允许分片上传保持运行的最长时间
-            /// <see cref="AbortIncompleteMultiUpload"/>
+            /// <see href="AbortIncompleteMultiUpload"/>
             /// </summary>
             [XmlElement("AbortIncompleteMultipartUpload")]
             public AbortIncompleteMultiUpload abortIncompleteMultiUpload;
@@ -201,7 +201,7 @@ namespace COSXML.Model.Tag
 
             /// <summary>
             /// 指定 Object 转储到的目标存储类型，枚举值： STANDARD_IA, ARCHIVE
-            /// <see cref="COSXML.Common.CosStorageClass"/>
+            /// <see href="COSXML.Common.CosStorageClass"/>
             /// </summary>
             [XmlElement("StorageClass")]
             public string storageClass;
@@ -296,7 +296,7 @@ namespace COSXML.Model.Tag
 
             /// <summary>
             /// 指定 Object 转储到的目标存储类型
-            /// <see cref="COSXML.Common.CosStorageClass"/>
+            /// <see href="COSXML.Common.CosStorageClass"/>
             /// </summary>
             [XmlElement("StorageClass")]
             public string storageClass;

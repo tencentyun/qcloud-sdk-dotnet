@@ -8,7 +8,7 @@ namespace COSXML.Model.Bucket
 {
     /// <summary>
     /// 获取 Bucket 中对象列表
-    /// <see cref="https://cloud.tencent.com/document/product/436/7734"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7734"/>
     /// </summary>
     public sealed class GetBucketRequest : BucketRequest
     {

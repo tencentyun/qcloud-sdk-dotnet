@@ -10,13 +10,13 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 对一个通过 COS 归档为 archive 类型的对象进行恢复
-    /// <see cref="https://cloud.tencent.com/document/product/436/12633"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/12633"/>
     /// </summary>
     public sealed class RestoreObjectRequest : ObjectRequest
     {
         /// <summary>
         /// 用于恢复数据的配置
-        /// <see cref="Model.Tag.RestoreConfigure"/>
+        /// <see href="Model.Tag.RestoreConfigure"/>
         /// </summary>
         private RestoreConfigure restoreConfigure;
 
@@ -46,7 +46,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 恢复数据时，Tier 可以指定为 CAS 支持的三种恢复类型，分别为 Expedited、Standard、Bulk
-        /// <see cref="Model.Tag.RestoreConfigure.Tier"/>
+        /// <see href="Model.Tag.RestoreConfigure.Tier"/>
         /// </summary>
         /// <param name="tier"></param>
         public void SetTier(RestoreConfigure.Tier tier)

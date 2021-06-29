@@ -7,14 +7,14 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 检索对象返回的结果
-    /// <see cref="https://cloud.tencent.com/document/product/436/7745"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7745"/>
     /// </summary>
     public sealed class HeadObjectResult : CosResult
     {
 
         /// <summary>
         /// Object 的存储级别，枚举值：STANDARD,STANDARD_IA
-        /// <see cref="Common.CosStorageClass"/>
+        /// <see href="Common.CosStorageClass"/>
         /// </summary>
         public string cosStorageClass;
 

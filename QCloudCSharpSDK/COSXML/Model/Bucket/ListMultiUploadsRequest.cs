@@ -8,7 +8,7 @@ namespace COSXML.Model.Bucket
 {
     /// <summary>
     /// 查询 Bucket 正在进行中的分块上传
-    /// <see cref="https://cloud.tencent.com/document/product/436/7736"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7736"/>
     /// </summary>
     public sealed class ListMultiUploadsRequest : BucketRequest
     {

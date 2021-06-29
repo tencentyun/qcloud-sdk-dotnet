@@ -11,7 +11,7 @@ namespace COSXML.Model.Bucket
 {
     /// <summary>
     /// 设置 Bucket 生命周期
-    /// <see cref="https://cloud.tencent.com/document/product/436/8280"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/8280"/>
     /// </summary>
     public sealed class PutBucketLifecycleRequest : BucketRequest
     {
@@ -33,7 +33,7 @@ namespace COSXML.Model.Bucket
 
         /// <summary>
         /// 设置生命周期规则
-        /// <see cref="Model.Tag.LifecycleConfiguration.Rule"/>
+        /// <see href="Model.Tag.LifecycleConfiguration.Rule"/>
         /// </summary>
         /// <param name="rule"></param>
         public void SetRule(LifecycleConfiguration.Rule rule)
@@ -47,7 +47,7 @@ namespace COSXML.Model.Bucket
 
         /// <summary>
         /// 设置生命周期规则
-        /// <see cref="Model.Tag.LifecycleConfiguration.Rule"/>
+        /// <see href="Model.Tag.LifecycleConfiguration.Rule"/>
         /// </summary>
         /// <param name="rules"></param>
         public void SetRules(List<LifecycleConfiguration.Rule> rules)

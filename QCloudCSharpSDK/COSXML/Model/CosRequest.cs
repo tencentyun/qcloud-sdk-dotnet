@@ -221,7 +221,6 @@ namespace COSXML.Model
         /// <summary>
         /// set appid for cos.
         /// </summary>
-        /// <param name="appid"> cos appid </param>
         public string APPID
         {
             get
@@ -252,7 +251,7 @@ namespace COSXML.Model
         /// <summary>
         /// return the body for cos request. such as upload file.
         /// </summary>
-        /// <returns> <see cref="COSXML.Network.RequestBody"/></returns>
+        /// <returns> <see href="COSXML.Network.RequestBody"/></returns>
         public abstract RequestBody GetRequestBody();
 
         /// <summary>
@@ -343,7 +342,6 @@ namespace COSXML.Model
         /// <summary>
         /// 设置预签名URL
         /// </summary>
-        /// <param name="requestSignURL"></param>
         public string RequestURLWithSign
         {
             get

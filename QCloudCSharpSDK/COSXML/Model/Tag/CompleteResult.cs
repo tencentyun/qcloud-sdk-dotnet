@@ -7,7 +7,7 @@ namespace COSXML.Model.Tag
 {
     /// <summary>
     /// 分片上传完成结果
-    /// <see cref="https://cloud.tencent.com/document/product/436/7742"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7742"/>
     /// </summary>
     [XmlRoot("CompleteMultipartUploadResult")]
     public sealed class CompleteResult

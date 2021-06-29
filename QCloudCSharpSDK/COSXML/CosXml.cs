@@ -44,8 +44,8 @@ namespace COSXML
         /// <summary>
         /// 获取存储桶列表
         /// </summary>
-        /// <param name="request"> <see cref="COSXML.Model.Service.GetServiceRequest"/>GetServiceRequest </param>
-        /// <returns><see cref="COSXML.Model.Service.GetServiceResult"/>GetServiceResult</returns>
+        /// <param name="request"> <see href="COSXML.Model.Service.GetServiceRequest"/>GetServiceRequest </param>
+        /// <returns><see href="COSXML.Model.Service.GetServiceResult"/>GetServiceResult</returns>
         /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
         /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception>
         GetServiceResult GetService(GetServiceRequest request);

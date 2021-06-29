@@ -7,7 +7,7 @@ namespace COSXML.Model.Tag
 {
     /// <summary>
     /// 保存 Get Bucket 请求结果的所有信息
-    /// <see cref="https://cloud.tencent.com/document/product/436/7734#.E8.AF.B7.E6.B1.82.E7.A4.BA.E4.BE.8B"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7734#.E8.AF.B7.E6.B1.82.E7.A4.BA.E4.BE.8B"/>
     /// </summary>
     [XmlRoot("ListBucketResult")]
     public sealed class ListBucket
@@ -54,16 +54,16 @@ namespace COSXML.Model.Tag
         [XmlElement("NextMarker")]
         public string nextMarker;
 
-        [XmlElement("Contents")]
         /// <summary>
         /// 对象元数据信息列表
-        /// <see cref="Contents"/>
+        /// <see href="Contents"/>
         /// </summary>
+        [XmlElement("Contents")]
         public List<Contents> contentsList;
 
         /// <summary>
         /// 将 Prefix 到 delimiter 之间的相同路径归为一类，定义为 Common Prefix
-        /// <see cref="CommonPrefixes"/>
+        /// <see href="CommonPrefixes"/>
         /// </summary>
         [XmlElement("CommonPrefixes")]
         public List<CommonPrefixes> commonPrefixesList;
@@ -144,14 +144,14 @@ namespace COSXML.Model.Tag
 
             /// <summary>
             /// Bucket 持有者信息
-            /// <see cref="Owner"/>
+            /// <see href="Owner"/>
             /// </summary>
             [XmlElement("Owner")]
             public Owner owner;
 
             /// <summary>
             /// Object 的存储级别，枚举值：STANDARD，STANDARD_IA，ARCHIVE
-            /// <see cref="COSXML.Common.CosStorageClass"/>
+            /// <see href="COSXML.Common.CosStorageClass"/>
             /// </summary>
             [XmlElement("StorageClass")]
             public string storageClass;

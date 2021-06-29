@@ -118,7 +118,7 @@ namespace COSXMLTests
             //对象键
             string key = photoKey;
 
-            SensitiveContentRecognitionRequest request = new SensitiveContentRecognitionRequest(bucket, key, "politics");
+            SensitiveContentRecognitionRequest request = new SensitiveContentRecognitionRequest(bucket, key, "porn,terrorist,politics");
 
             SensitiveContentRecognitionResult result = QCloudServer.Instance().cosXml.SensitiveContentRecognition(request);
 

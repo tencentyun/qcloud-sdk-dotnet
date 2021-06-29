@@ -7,14 +7,14 @@ namespace COSXML.Model.Tag
 {
     /// <summary>
     /// 本次分块上传的所有信息
-    /// <see cref="https://cloud.tencent.com/document/product/436/7742"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7742"/>
     /// </summary>
     [XmlRoot]
     public sealed class CompleteMultipartUpload
     {
         /// <summary>
         /// 本次分块上传中每个块的信息
-        /// <see cref="Part"/>
+        /// <see href="Part"/>
         /// </summary>
         [XmlElement("Part")]
         public List<Part> parts;

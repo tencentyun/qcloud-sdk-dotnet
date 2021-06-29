@@ -8,7 +8,7 @@ namespace COSXML.Model.Bucket
 {
     /// <summary>
     /// 删除 Bucket Lifecycle
-    /// <see cref="https://cloud.tencent.com/document/product/436/8284"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/8284"/>
     /// </summary>
     public sealed class DeleteBucketLifecycleRequest : BucketRequest
     {

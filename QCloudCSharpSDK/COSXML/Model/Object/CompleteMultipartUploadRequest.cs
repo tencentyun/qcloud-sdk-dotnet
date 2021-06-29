@@ -11,13 +11,13 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 实现完成整个分块上传
-    /// <see cref="https://cloud.tencent.com/document/product/436/7742"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7742"/>
     /// </summary>
     public sealed class CompleteMultipartUploadRequest : ObjectRequest
     {
         /// <summary>
         /// 本次分块上传的所有信息
-        /// <see cref="Model.Tag.CompleteMultipartUpload"/>
+        /// <see href="Model.Tag.CompleteMultipartUpload"/>
         /// </summary>
         private CompleteMultipartUpload completeMultipartUpload;
 

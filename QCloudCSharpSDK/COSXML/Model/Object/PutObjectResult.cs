@@ -10,7 +10,7 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 简单上传对象返回的结果
-    /// <see cref="https://cloud.tencent.com/document/product/436/7749"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7749"/>
     /// </summary>
     public sealed class PutObjectResult : CosDataResult<PicOperationUploadResult>
     {

@@ -140,7 +140,7 @@ namespace COSXMLTests
                 request.SetQueryParameter("time", TimeUtils.GetCurrentTime(TimeUnit.Seconds).ToString());
                 request.SetRequestHeader("custom", "value1");
                 request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.Seconds), 600, new List<string>() { "custome" },
-                    new List<string>() { "time" } );
+                    new List<string>() { "time" });
                 QCloudServer.SetRequestACLData(request);
 
                 //执行请求
@@ -526,7 +526,7 @@ namespace COSXMLTests
         {
             PutBucketVersioning(true);
             Thread.Sleep(200);
-            QCloudServer.TestWithServerFailTolerance(() => 
+            QCloudServer.TestWithServerFailTolerance(() =>
             {
                 GetBucketVersioning();
             }
@@ -534,7 +534,7 @@ namespace COSXMLTests
 
             PutBucketReplication();
             Thread.Sleep(100);
-            QCloudServer.TestWithServerFailTolerance(() => 
+            QCloudServer.TestWithServerFailTolerance(() =>
             {
                 GetBucketReplication();
             }
@@ -588,7 +588,7 @@ namespace COSXMLTests
                 Assert.AreEqual(result.httpCode, 200);
 
                 Assert.NotNull(versioning);
-                Assert.Contains(versioning.status, new List<String>() {"Enabled", "Suspended"});
+                Assert.Contains(versioning.status, new List<String>() { "Enabled", "Suspended" });
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -622,7 +622,7 @@ namespace COSXMLTests
                 ruleStruct.id = "replication1";
                 ruleStruct.prefix = "dir/";
 
-                request.SetReplicationConfiguration("2832742109", "2832742109", new List<PutBucketReplicationRequest.RuleStruct>() { ruleStruct } );
+                request.SetReplicationConfiguration("2832742109", "2832742109", new List<PutBucketReplicationRequest.RuleStruct>() { ruleStruct });
 
                 //执行请求
                 PutBucketReplicationResult result = cosXml.PutBucketReplication(request);
@@ -841,7 +841,7 @@ namespace COSXMLTests
 
                 Assert.AreEqual(getResult.httpCode, 200);
 
-                if (setDomain) 
+                if (setDomain)
                 {
 
                     Assert.NotNull(getResult.domainConfiguration.rule);
@@ -850,8 +850,8 @@ namespace COSXMLTests
                     Assert.NotNull(getResult.domainConfiguration.rule.Type);
                     Assert.NotNull(getResult.domainConfiguration.rule.Replace);
 
-                } 
-                else 
+                }
+                else
                 {
                     Assert.Null(getResult.domainConfiguration);
                 }
@@ -879,7 +879,7 @@ namespace COSXMLTests
             {
                 PutBucketLoggingRequest request = new PutBucketLoggingRequest(bucket);
 
-                request.SetTarget("bucket-cssg-source-1253653367", "/abc");
+                request.SetTarget(QCloudServer.Instance().bucketForLoggingTarget, "/abc");
                 PutBucketLoggingResult putResult = cosXml.PutBucketLogging(request);
 
                 Assert.IsTrue(putResult.httpCode == 200);
@@ -929,7 +929,7 @@ namespace COSXMLTests
                 putRequest.SetIndexDocument("index.html");
                 putRequest.SetErrorDocument("eroror.html");
                 putRequest.SetRedirectAllRequestTo("https");
-                
+
                 var rule = new WebsiteConfiguration.RoutingRule();
                 rule.contidion = new WebsiteConfiguration.Contidion();
                 // HttpErrorCodeReturnedEquals 与 KeyPrefixEquals 必选其一
@@ -942,13 +942,13 @@ namespace COSXMLTests
                 // ReplaceKeyWith 与 ReplaceKeyPrefixWith 必选其一
                 // rule.redirect.replaceKeyPrefixWith = "aaa";
                 rule.redirect.replaceKeyWith = "bbb";
-                putRequest.SetRoutingRules(new List<WebsiteConfiguration.RoutingRule>() { rule } );
+                putRequest.SetRoutingRules(new List<WebsiteConfiguration.RoutingRule>() { rule });
 
                 PutBucketWebsiteResult putResult = cosXml.PutBucketWebsite(putRequest);
 
                 Assert.IsTrue(putResult.httpCode == 200);
 
-                QCloudServer.TestWithServerFailTolerance(() => 
+                QCloudServer.TestWithServerFailTolerance(() =>
                 {
                     GetBucketWebsiteRequest getRequest = new GetBucketWebsiteRequest(bucket);
 
@@ -1035,7 +1035,7 @@ namespace COSXMLTests
 
                 InventoryConfiguration[] configurations = new InventoryConfiguration[] { testConfig, testConfig2 };
 
-                foreach (InventoryConfiguration configuration in configurations) 
+                foreach (InventoryConfiguration configuration in configurations)
                 {
                     Assert.NotNull(configuration);
                     Assert.NotNull(configuration.destination.cosBucketDestination.accountId);

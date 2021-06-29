@@ -8,7 +8,7 @@ namespace COSXML.Model.Service
 {
     /// <summary>
     /// 获取所有 Bucket 列表
-    /// <see cref="https://cloud.tencent.com/document/product/436/8291"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/8291"/>
     /// </summary>
     public sealed class GetServiceRequest : CosRequest
     {

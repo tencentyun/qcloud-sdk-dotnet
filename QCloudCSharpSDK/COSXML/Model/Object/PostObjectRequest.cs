@@ -14,14 +14,14 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 使用者用表单的形式将文件（Object）上传至指定 Bucket 中.
-    /// <see cref="https://cloud.tencent.com/document/product/436/14690"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/14690"/>
     /// </summary>
     public sealed class PostObjectRequest : ObjectRequest
     {
 
         /// <summary>
         /// 表单字段
-        /// <see cref="FormStruct"/>
+        /// <see href="FormStruct"/>
         /// </summary>
         private FormStruct formStruct;
 
@@ -85,7 +85,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 定义 Object 的 acl 属性。有效值：private，public-read-write，public-read；默认值：private
-        /// <see cref="Common.CosACL"/>
+        /// <see href="Common.CosACL"/>
         /// </summary>
         /// <param name="cosACL"></param>
         public void SetCosACL(CosACL cosACL)
@@ -95,7 +95,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 定义 Object 的 acl 属性。有效值：private，public-read-write，public-read；默认值：private
-        /// <see cref="Common.CosACL"/>
+        /// <see href="Common.CosACL"/>
         /// </summary>
         /// <param name="cosACL"></param>
         public void SetCosACL(string cosACL)
@@ -190,7 +190,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 设置对象的存储类型
-        /// <see cref="Common.CosStorageClass"/>
+        /// <see href="Common.CosStorageClass"/>
         /// </summary>
         /// <param name="cosStorageClass"></param>
         public void SetCosStorageClass(string cosStorageClass)
@@ -201,7 +201,7 @@ namespace COSXML.Model.Object
         /// <summary>
         /// 最大上传速度，单位是 bit/s
         /// </summary>
-        /// <param name="start"></param>
+        /// <param name="rate"></param>
         public void LimitTraffic(long rate)
         {
             formStruct.xCOSTrafficLimit = rate.ToString();
@@ -229,7 +229,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 用于做请求检查，如果请求的内容和 Policy 指定的条件不符，返回 403 AccessDenied。
-        /// <see cref="Policy"/>
+        /// <see href="Policy"/>
         /// </summary>
         /// <param name="policy"></param>
         public void SetPolicy(Policy policy)
@@ -336,7 +336,7 @@ namespace COSXML.Model.Object
 
             /// <summary>
             /// 请求检查策略
-            /// <see cref="Policy"/>
+            /// <see href="Policy"/>
             /// </summary>
             public Policy policy;
 

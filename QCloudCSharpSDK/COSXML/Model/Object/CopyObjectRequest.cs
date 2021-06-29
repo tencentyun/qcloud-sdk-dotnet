@@ -11,13 +11,13 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 实现将一个文件从源路径复制到目标路径
-    /// <see cref="https://cloud.tencent.com/document/product/436/10881"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/10881"/>
     /// </summary>
     public sealed class CopyObjectRequest : ObjectRequest
     {
         /// <summary>
         /// 拷贝的对象源
-        /// <see cref="Model.Tag.CopySourceStruct"/>
+        /// <see href="Model.Tag.CopySourceStruct"/>
         /// </summary>
         private CopySourceStruct copySourceStruct;
 
@@ -29,7 +29,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 设置复制的对象源
-        /// <see cref="Model.Tag.CopySourceStruct"/>
+        /// <see href="Model.Tag.CopySourceStruct"/>
         /// </summary>
         /// <param name="copySource"></param>
         public void SetCopySource(CopySourceStruct copySource)
@@ -51,7 +51,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 设置 Object 的存储级别，枚举值：STANDARD，STANDARD_IA。默认值：STANDARD
-        /// <see cref="Common.CosStorageClass"/>
+        /// <see href="Common.CosStorageClass"/>
         /// </summary>
         /// <param name="cosStorageClass"></param>
         public void SetCosStorageClass(CosStorageClass cosStorageClass)
@@ -61,7 +61,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 设置 Object 的存储级别
-        /// <see cref="Common.CosStorageClass"/>
+        /// <see href="Common.CosStorageClass"/>
         /// </summary>
         /// <param name="cosStorageClass"></param>
         public void SetCosStorageClass(string cosStorageClass)
@@ -71,7 +71,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 定义 Object 的 ACL 属性。有效值：private，public-read-write，public-read；默认值：private
-        /// <see cref="Common.CosACL"/>
+        /// <see href="Common.CosACL"/>
         /// </summary>
         /// <param name="cosACL"></param>
         public void SetCosACL(string cosACL)
@@ -85,7 +85,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 定义 Object 的 ACL 属性。有效值：private，public-read-write，public-read；默认值：private
-        /// <see cref="Common.CosACL"/>
+        /// <see href="Common.CosACL"/>
         /// </summary>
         /// <param name="cosACL"></param>
         public void SetCosACL(CosACL cosACL)
@@ -95,7 +95,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 赋予被授权者读的权限
-        /// <see cref="Model.Tag.GrantAccount"/>
+        /// <see href="Model.Tag.GrantAccount"/>
         /// </summary>
         /// <param name="grantAccount"></param>
         public void SetXCosGrantRead(GrantAccount grantAccount)
@@ -109,7 +109,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 赋予被授权者所有的权限
-        /// <see cref="Model.Tag.GrantAccount"/>
+        /// <see href="Model.Tag.GrantAccount"/>
         /// </summary>
         /// <param name="grantAccount"></param>
         public void SetXCosReadWrite(GrantAccount grantAccount)

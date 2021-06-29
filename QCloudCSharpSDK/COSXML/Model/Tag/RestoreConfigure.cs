@@ -18,7 +18,7 @@ namespace COSXML.Model.Tag
 
         /// <summary>
         /// 归档存储工作参数配置
-        /// <see cref="CASJobParameters"/>
+        /// <see href="CASJobParameters"/>
         /// </summary>
         [XmlElement("CASJobParameters")]
         public CASJobParameters casJobParameters;
@@ -27,7 +27,7 @@ namespace COSXML.Model.Tag
         {
             /// <summary>
             /// 恢复数据时，Tier 可以指定为 CAS 支持的三种恢复类型，分别为 Expedited、Standard、Bulk
-            /// <see cref="Tier"/>
+            /// <see href="Tier"/>
             /// </summary>
             [XmlElement("Tier")]
             public Tier tier = Tier.Standard;

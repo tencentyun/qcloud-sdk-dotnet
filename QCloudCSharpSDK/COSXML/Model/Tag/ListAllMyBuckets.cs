@@ -7,21 +7,21 @@ namespace COSXML.Model.Tag
 {
     /// <summary>
     /// 列出存储桶结果
-    /// <see cref="https://cloud.tencent.com/document/product/436/8291"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/8291"/>
     /// </summary>
     [XmlRoot("ListAllMyBucketsResult")]
     public sealed class ListAllMyBuckets
     {
         /// <summary>
         /// Bucket 持有者的信息
-        /// <see cref="Owner"/>
+        /// <see href="Owner"/>
         /// </summary>
         [XmlElement("Owner")]
         public Owner owner;
 
         /// <summary>
         /// 本次响应的所有 Bucket 列表信息
-        /// <see cref="Bucket"/>
+        /// <see href="Bucket"/>
         /// </summary>
         [XmlArray("Buckets")]
         public List<Bucket> buckets;

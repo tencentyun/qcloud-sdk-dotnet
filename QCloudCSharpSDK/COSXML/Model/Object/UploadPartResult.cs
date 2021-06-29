@@ -8,7 +8,7 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 分片上传返回的结果
-    /// <see cref="https://cloud.tencent.com/document/product/436/7750"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7750"/>
     /// </summary>
     public sealed class UploadPartResult : CosResult
     {

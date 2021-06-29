@@ -11,13 +11,13 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 实现在指定 Bucket 中批量删除 Object,单次请求最大支持批量删除 1000 个 Object
-    /// <see cref="https://cloud.tencent.com/document/product/436/8289"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/8289"/>
     /// </summary>
     public sealed class DeleteMultiObjectRequest : ObjectRequest
     {
         /// <summary>
         /// 删除对象
-        /// <see cref="Model.Tag.Delete"/>
+        /// <see href="Model.Tag.Delete"/>
         /// </summary>
         private Delete delete;
 

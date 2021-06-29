@@ -8,7 +8,7 @@ namespace COSXML.Model.Bucket
 {
     /// <summary>
     /// 查询 Bucket 的生命周期配置
-    /// <see cref="https://cloud.tencent.com/document/product/436/8278"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/8278"/>
     /// </summary>
     public sealed class GetBucketLifecycleRequest : BucketRequest
     {

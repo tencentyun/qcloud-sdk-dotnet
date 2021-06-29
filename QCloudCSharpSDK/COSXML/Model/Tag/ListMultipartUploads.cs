@@ -7,7 +7,7 @@ namespace COSXML.Model.Tag
 {
     /// <summary>
     /// 所有分块上传的信息
-    /// <see cref="https://cloud.tencent.com/document/product/436/7736"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7736"/>
     /// </summary>
     [XmlRoot("ListMultipartUploadsResult")]
     public sealed class ListMultipartUploads
@@ -77,14 +77,14 @@ namespace COSXML.Model.Tag
 
         /// <summary>
         /// 每个 Upload 的信息
-        /// <see cref="Upload"/>
+        /// <see href="Upload"/>
         /// </summary>
         [XmlElement("Upload")]
         public List<Upload> uploads;
 
         /// <summary>
         /// 将 prefix 到 delimiter 之间的相同路径归为一类，定义为 Common Prefix
-        /// <see cref="CommonPrefixes"/>
+        /// <see href="CommonPrefixes"/>
         /// </summary>
         [XmlElement("CommonPrefixes")]
         public List<CommonPrefixes> commonPrefixesList;
@@ -158,14 +158,14 @@ namespace COSXML.Model.Tag
 
             /// <summary>
             /// 用来表示本次上传发起者的信息
-            /// <see cref="initiator"/>
+            /// <see href="initiator"/>
             /// </summary>
             [XmlElement("Initiator")]
             public Initiator initiator;
 
             /// <summary>
             /// 用来表示这些分块所有者的信息
-            /// <see cref="Owner"/>
+            /// <see href="Owner"/>
             /// </summary>
             [XmlElement("Owner")]
             public Owner owner;

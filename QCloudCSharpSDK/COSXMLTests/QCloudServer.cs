@@ -18,15 +18,16 @@ namespace COSXMLTests
 
         private const int ServerFailTolerance = 3;
 
-        internal string bucketForBucketTest 
+        internal string bucketForBucketTest
         {
-            get 
+            get
             {
-                return "dotnet-ut-temp-" + TimeUtils.GetCurrentTime(TimeUnit.Seconds) + "-1253653367";
+                return "dotnet-ut-temp-" + TimeUtils.GetCurrentTime(TimeUnit.Seconds) + "-1252246555";
             }
         }
 
         internal string bucketForObjectTest;
+        internal string bucketForLoggingTarget;
 
         internal string bucketVersioning;
         internal string regionForBucketVersioning;
@@ -46,11 +47,12 @@ namespace COSXMLTests
         {
             QLog.SetLogLevel(Level.V);
 
-            uin = "1278687956";
-            appid = "1253653367";
-            bucketVersioning = "dotnet-ut-versioning-1253653367";
+            uin = "3472213910";
+            appid = "1252246555";
+            bucketVersioning = "dotnet-ut-versioning-1252246555";
             regionForBucketVersioning = "ap-beijing";
-            bucketForObjectTest = "dotnet-ut-obj-1253653367";
+            bucketForObjectTest = "dotnet-ut-obj-1252246555";
+            bucketForLoggingTarget = "dotnet-ut-logging-target-1252246555";
             region = "ap-guangzhou";
 
             secretId = Environment.GetEnvironmentVariable("COS_KEY");
@@ -131,7 +133,7 @@ namespace COSXMLTests
 
         public static void SetRequestACLData(CosRequest request)
         {
-            request.GetType().GetMethod("SetCosACL", new [] {typeof(CosACL)}).Invoke(request, new object[] { CosACL.Private });
+            request.GetType().GetMethod("SetCosACL", new[] { typeof(CosACL) }).Invoke(request, new object[] { CosACL.Private });
 
             COSXML.Model.Tag.GrantAccount readAccount = new COSXML.Model.Tag.GrantAccount();
             readAccount.AddGrantAccount("1131975903", "1131975903");
@@ -181,7 +183,7 @@ namespace COSXMLTests
             }
         }
 
-        internal static void TestWithServerFailTolerance(Action action) 
+        internal static void TestWithServerFailTolerance(Action action)
         {
             for (int i = 0; i < ServerFailTolerance; i++)
             {
@@ -192,7 +194,7 @@ namespace COSXMLTests
                 }
                 catch (CosServerException ex)
                 {
-                    Console.WriteLine("Fail But With Tolerance: " +  ex.StackTrace);
+                    Console.WriteLine("Fail But With Tolerance: " + ex.StackTrace);
                 }
             }
         }

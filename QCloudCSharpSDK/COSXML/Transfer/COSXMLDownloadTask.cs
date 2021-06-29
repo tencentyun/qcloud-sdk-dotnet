@@ -7,7 +7,6 @@ using COSXML.Model;
 using System.IO;
 using COSXML.CosException;
 using System.Xml.Serialization;
-using System.Text;
 using COSXML.Common;
 
 namespace COSXML.Transfer

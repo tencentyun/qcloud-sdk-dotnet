@@ -39,6 +39,7 @@ namespace COSXML.Network
         /// sync excute
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="response"></param>
         /// <param name="config"></param>
         /// <returns></returns>
         public static void Excute(Request request, Response response, HttpClientConfig config)
@@ -88,12 +89,11 @@ namespace COSXML.Network
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //QLog.E(TAG, ex.Message, ex);
                 throw;
             }
-            
             finally
             {
 
@@ -388,7 +388,7 @@ namespace COSXML.Network
             WebHeaderCollection headers = httpWebResponse.Headers;
 
             // Transfer-Encoding: chunked
-            bool isChunked = false; 
+            bool isChunked = false;
             if (headers != null)
             {
                 Dictionary<string, List<string>> result = new Dictionary<string, List<string>>(headers.Count);
@@ -410,7 +410,7 @@ namespace COSXML.Network
 
                     result.Add(key, values);
 
-                    if ("Transfer-Encoding".EndsWith(key, StringComparison.OrdinalIgnoreCase) && values.Contains("chunked")) 
+                    if ("Transfer-Encoding".EndsWith(key, StringComparison.OrdinalIgnoreCase) && values.Contains("chunked"))
                     {
                         isChunked = true;
                     }
@@ -419,7 +419,7 @@ namespace COSXML.Network
                 response.Headers = result;
             }
 
-            if (!isChunked) 
+            if (!isChunked)
             {
                 response.ContentLength = httpWebResponse.ContentLength;
             }
@@ -536,9 +536,9 @@ namespace COSXML.Network
         {
             private static MethodInfo addHeaderMethod;
 
-            private static readonly ICollection<PlatformID> monoPlatforms = new List<PlatformID> 
+            private static readonly ICollection<PlatformID> monoPlatforms = new List<PlatformID>
             {
-                 PlatformID.MacOSX, PlatformID.Unix 
+                 PlatformID.MacOSX, PlatformID.Unix
             };
 
             private static bool? isMonoPlatform;
@@ -573,6 +573,19 @@ namespace COSXML.Network
                         null,
                         new Type[] { typeof(string), typeof(string) },
                         null);
+
+                    if (method == null)
+                    {
+                        internalMethodName = "AddInternal";
+
+                        QLog.Debug(TAG, internalMethodName.ToString());
+                        method = typeof(WebHeaderCollection).GetMethod(
+                            internalMethodName,
+                            BindingFlags.NonPublic | BindingFlags.Instance,
+                            null,
+                            new Type[] { typeof(string), typeof(string) },
+                            null);
+                    }
 
                     addHeaderMethod = method;
                 }

@@ -10,7 +10,7 @@ namespace COSXML.Model.Tag
     {
         /// <summary>
         /// 跨域资源共享配置的信息，最多可以包含100条 CORSRule
-        /// <see cref="CORSRule"/>
+        /// <see href="CORSRule"/>
         /// </summary>
         [XmlElement("CORSRule")]
         public List<CORSRule> corsRules;

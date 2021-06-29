@@ -9,7 +9,7 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 简单上传对象
-    /// <see cref="https://cloud.tencent.com/document/product/436/7749"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7749"/>
     /// </summary>
     public sealed class PutObjectRequest : ObjectRequest
     {
@@ -92,7 +92,7 @@ namespace COSXML.Model.Object
 
         /// <summary>
         /// 设置 Object 的存储级别
-        /// <see cref="Common.CosStorageClass"/>
+        /// <see href="Common.CosStorageClass"/>
         /// </summary>
         /// <param name="cosStorageClass"></param>
         public void SetCosStorageClass(string cosStorageClass)
@@ -148,7 +148,7 @@ if (data != null)
 
         /// <summary>
         /// 定义 Object 的 acl 属性。有效值：private，public-read-write，public-read；默认值：private
-        /// <see cref="Common.CosACL"/>
+        /// <see href="Common.CosACL"/>
         /// </summary>
         /// <param name="cosACL"></param>
         public void SetCosACL(string cosACL)
@@ -163,7 +163,7 @@ if (data != null)
         /// <summary>
         /// 最大上传速度，单位是 bit/s
         /// </summary>
-        /// <param name="start"></param>
+        /// <param name="rate"></param>
         public void LimitTraffic(long rate)
         {
             SetRequestHeader(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, rate.ToString());
@@ -171,7 +171,7 @@ if (data != null)
 
         /// <summary>
         /// 定义 Object 的 acl 属性。有效值：private，public-read-write，public-read；默认值：private
-        /// <see cref="Common.CosACL"/>
+        /// <see href="Common.CosACL"/>
         /// </summary>
         /// <param name="cosACL"></param>
         public void SetCosACL(CosACL cosACL)
@@ -181,7 +181,7 @@ if (data != null)
 
         /// <summary>
         /// 赋予被授权者读的权限
-        /// <see cref="Model.Tag.GrantAccount"/>
+        /// <see href="Model.Tag.GrantAccount"/>
         /// </summary>
         /// <param name="grantAccount"></param>
         public void SetXCosGrantRead(GrantAccount grantAccount)
@@ -195,7 +195,7 @@ if (data != null)
 
         /// <summary>
         /// 赋予被授权者所有的权限
-        /// <see cref="Model.Tag.GrantAccount"/>
+        /// <see href="Model.Tag.GrantAccount"/>
         /// </summary>
         /// <param name="grantAccount"></param>
         public void SetXCosReadWrite(GrantAccount grantAccount)

@@ -13,7 +13,7 @@ namespace COSXML.Model.Object
     {
         /// <summary>
         /// 存储桶名称(Bucket)
-        /// <see cref="https://cloud.tencent.com/document/product/436/7751"/>
+        /// <see href="https://cloud.tencent.com/document/product/436/7751"/>
         /// </summary>
         protected string bucket;
 

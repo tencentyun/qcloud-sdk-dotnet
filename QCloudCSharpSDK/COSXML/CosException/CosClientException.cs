@@ -13,7 +13,7 @@ namespace COSXML.CosException
     {
         /// <summary>
         /// 错误码
-        /// <see cref="Common.CosClientError"/>
+        /// <see href="Common.CosClientError"/>
         /// </summary>
         public int errorCode;
 

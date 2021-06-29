@@ -7,7 +7,7 @@ namespace COSXML.Model.Bucket
 {
     /// <summary>
     /// 删除 Bucket 权限策略
-    /// <see cref="https://cloud.tencent.com/document/product/436/8285"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/8285"/>
     /// </summary>
     public sealed class DeleteBucketPolicyRequest : BucketRequest
     {

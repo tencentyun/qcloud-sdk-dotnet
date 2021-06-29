@@ -7,21 +7,21 @@ namespace COSXML.Model.Tag
 {
     /// <summary>
     /// 本次删除返回结果的方式和目标 Object
-    /// <see cref="https://cloud.tencent.com/document/product/436/8289"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/8289"/>
     /// </summary>
     [XmlRoot("DeleteResult")]
     public sealed class DeleteResult
     {
         /// <summary>
         /// 本次删除的成功 Object 信息
-        /// <see cref="Deleted"/>
+        /// <see href="Deleted"/>
         /// </summary>
         [XmlElement("Deleted")]
         public List<Deleted> deletedList;
 
         /// <summary>
         /// 本次删除的失败 Object 信息
-        /// <see cref="Error"/>
+        /// <see href="Error"/>
         /// </summary>
         [XmlElement("Error")]
         public List<Error> errorList;

@@ -12,7 +12,7 @@ namespace COSXML.Model.Object
 {
     /// <summary>
     /// 分片上传
-    /// <see cref="https://cloud.tencent.com/document/product/436/7750"/>
+    /// <see href="https://cloud.tencent.com/document/product/436/7750"/>
     /// </summary>
     public sealed class UploadPartRequest : ObjectRequest
     {
@@ -79,7 +79,7 @@ namespace COSXML.Model.Object
         /// <summary>
         /// 最大上传速度，单位是 bit/s
         /// </summary>
-        /// <param name="start"></param>
+        /// <param name="rate"></param>
         public void LimitTraffic(long rate)
         {
             SetRequestHeader(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, rate.ToString());
