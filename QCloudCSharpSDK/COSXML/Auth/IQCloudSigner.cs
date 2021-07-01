@@ -138,10 +138,10 @@ namespace COSXML.Auth
 
             foreach (KeyValuePair<string, string> pair in sourceHeaders)
             {
-                lowerKeySourceHeaders.Add(pair.Key.ToLower(), URLEncodeUtils.Encode(pair.Value));
+                lowerKeySourceHeaders.Add(pair.Key.ToLower(), pair.Value);
             }
 
-            lowerKeySourceHeaders.Add("host", URLEncodeUtils.Encode(request.Host));
+            lowerKeySourceHeaders.Add("host", request.Host);
 
             if (headerKeysToSign.Contains("content-length"))
             {
@@ -157,11 +157,11 @@ namespace COSXML.Auth
 
                     if (contentLength > 0)
                     {
-                        lowerKeySourceHeaders.Add("content-length", URLEncodeUtils.Encode(contentLength.ToString()));
+                        lowerKeySourceHeaders.Add("content-length", contentLength.ToString());
                     }
                 }
-                catch (Exception) 
-                { 
+                catch (Exception)
+                {
 
                 }
             }
@@ -172,7 +172,7 @@ namespace COSXML.Auth
 
             foreach (KeyValuePair<string, string> pair in sourceParameters)
             {
-                lowerKeySourceParameters.Add(pair.Key.ToLower(), URLEncodeUtils.Encode(pair.Value));
+                lowerKeySourceParameters.Add(pair.Key.ToLower(), pair.Value);
             }
 
             string path = URLEncodeUtils.Decode(request.Url.Path);
@@ -325,9 +325,9 @@ namespace COSXML.Auth
                 result = result.Substring(0, result.Length - 1);
                 keyResult = keyResult.Substring(0, keyResult.Length - 1);
 
-                return new string[] 
-                { 
-                    result, keyResult 
+                return new string[]
+                {
+                    result, keyResult
                 };
             }
 
@@ -349,7 +349,7 @@ namespace COSXML.Auth
                     list[i] = list[i].ToLower();
                 }
 
-                list.Sort(delegate(string strA, string strB)
+                list.Sort(delegate (string strA, string strB)
                 {
 
                     return StringUtils.Compare(strA, strB, false);
@@ -361,8 +361,8 @@ namespace COSXML.Auth
 
     public sealed class CosXmlSigner : IQCloudSigner
     {
-        public CosXmlSigner() 
-        { 
+        public CosXmlSigner()
+        {
 
         }
 

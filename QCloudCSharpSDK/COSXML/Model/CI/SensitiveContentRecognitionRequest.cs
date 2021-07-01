@@ -5,6 +5,7 @@ using System.Text;
 using COSXML.Common;
 using COSXML.Model.Object;
 using COSXML.CosException;
+using COSXML.Utils;
 
 namespace COSXML.Model.CI
 {
@@ -21,7 +22,7 @@ namespace COSXML.Model.CI
 
             this.method = CosRequestMethod.GET;
             this.queryParameters.Add("ci-process", "sensitive-content-recognition");
-            this.queryParameters.Add("detect-type", type);
+            this.queryParameters.Add("detect-type", URLEncodeUtils.Encode(type));
         }
 
     }
