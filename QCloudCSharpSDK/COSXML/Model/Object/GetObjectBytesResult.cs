@@ -16,6 +16,7 @@ namespace COSXML.Model.Object
 
         internal override void ExternInfo(CosRequest cosRequest)
         {
+            base.ExternInfo(cosRequest);
             GetObjectBytesRequest getObjectBytesRequest = cosRequest as GetObjectBytesRequest;
 
             this.progressCallback = getObjectBytesRequest.GetCosProgressCallback();

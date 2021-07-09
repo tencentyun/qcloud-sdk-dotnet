@@ -5,11 +5,14 @@ using System.Text;
 using COSXML.Network;
 using System.IO;
 using COSXML.Transfer;
+using COSXML.Model.Object;
 
 namespace COSXML.Model
 {
     public class CosResult
     {
+        public string Key { get; protected set; }
+
         /// <summary>
         /// http code
         /// </summary>
@@ -44,8 +47,11 @@ namespace COSXML.Model
         /// </summary>
         /// <param name="cosRequest"></param>
         internal virtual void ExternInfo(CosRequest cosRequest) 
-        { 
-
+        {
+            if (cosRequest is ObjectRequest)
+            {
+                Key = ((ObjectRequest)cosRequest).Key;
+            }
         }
 
         /// <summary>
