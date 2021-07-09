@@ -177,6 +177,7 @@ namespace COSXML.Network
             try
             {
                 Request request = CreateRequest(cosRequest, credentialProvider);
+                cosResult.ExternInfo(cosRequest);
                 Response response;
 
                 if (cosRequest is GetObjectRequest)

@@ -38,6 +38,7 @@ namespace COSXML.Model.Object
 
         internal override void ExternInfo(CosRequest cosRequest)
         {
+            base.ExternInfo(cosRequest);
             this.outputFilePath = ((SelectObjectRequest)cosRequest).outputFilePath;
             this.progressCallback = ((SelectObjectRequest)cosRequest).progressCallback;
         }
