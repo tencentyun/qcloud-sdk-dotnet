@@ -108,6 +108,7 @@ namespace COSXML.Transfer
                         {
                             resumableTaskFile = getObjectRequest.GetSaveFilePath() + ".cosresumabletask";
                         }
+
                         ResumeDownloadInPossible(result, getObjectRequest.GetSaveFilePath());
                     }
 
