@@ -150,6 +150,13 @@ namespace COSXML
             /// <returns></returns>
             public Builder SetRegion(string region)
             {
+                //region cannot be empty
+                if(region is null || region == "") {
+                    throw new CosException.CosClientException(
+                        (int)COSXML.Common.CosClientError.InvalidArgument,
+                        "region cannot be empty"
+                    );
+                }
                 this.region = region;
 
                 return this;

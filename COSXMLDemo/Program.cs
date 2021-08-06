@@ -25,9 +25,9 @@ namespace COSXMLDemo
         {
 
             // 腾讯云 SecretId
-            string secretId = Environment.GetEnvironmentVariable("COS_KEY");
+            string secretId = Environment.GetEnvironmentVariable("SECRET_ID");
             // 腾讯云 SecretKey
-            string secretKey = Environment.GetEnvironmentVariable("COS_SECRET"); 
+            string secretKey = Environment.GetEnvironmentVariable("SECRET_KEY"); 
             // 存储桶所在地域
             string region = "ap-guangzhou"; 
 

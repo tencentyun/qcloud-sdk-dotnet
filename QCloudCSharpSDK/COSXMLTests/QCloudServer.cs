@@ -48,19 +48,19 @@ namespace COSXMLTests
             QLog.SetLogLevel(Level.V);
 
             uin = "3472213910";
-            appid = "1252246555";
+            appid = "1251668577";
             bucketVersioning = "dotnet-ut-versioning-1252246555";
             regionForBucketVersioning = "ap-beijing";
-            bucketForObjectTest = "dotnet-ut-obj-1252246555";
+            bucketForObjectTest = "examplebucket-0706-1251668577";
             bucketForLoggingTarget = "dotnet-ut-logging-target-1252246555";
             region = "ap-guangzhou";
 
-            secretId = Environment.GetEnvironmentVariable("COS_KEY");
-            secretKey = Environment.GetEnvironmentVariable("COS_SECRET");
+            secretId = Environment.GetEnvironmentVariable("SECRET_ID");
+            secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
             if (secretId == null)
             {
-                secretId = Environment.GetEnvironmentVariable("COS_KEY", EnvironmentVariableTarget.Machine);
-                secretKey = Environment.GetEnvironmentVariable("COS_SECRET", EnvironmentVariableTarget.Machine);
+                secretId = Environment.GetEnvironmentVariable("SECRET_ID", EnvironmentVariableTarget.Machine);
+                secretKey = Environment.GetEnvironmentVariable("SECRET_KEY", EnvironmentVariableTarget.Machine);
             }
 
             CosXmlConfig config = new CosXmlConfig.Builder()

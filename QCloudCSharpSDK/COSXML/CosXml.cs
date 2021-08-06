@@ -490,6 +490,12 @@ namespace COSXML
         void PutObjectACL(PutObjectACLRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
+        /// Append上传对象
+        /// </summary>
+        /// <param name="request"></param>
+        AppendObjectResult AppendObject(AppendObjectRequest request);
+
+        /// <summary>
         /// 获取对象 ACL 权限
         /// </summary>
         /// <param name="request">GetObjectACLRequest</param>

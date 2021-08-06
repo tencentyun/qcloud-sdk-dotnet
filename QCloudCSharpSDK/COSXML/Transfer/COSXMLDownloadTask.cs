@@ -157,6 +157,7 @@ namespace COSXML.Transfer
                     if (localFileInfo.Exists && localFileInfo.Length < result.size)
                     {
                         rangeStart = localFileInfo.Length;
+                        localFileOffset = rangeStart;
                     }
                 }
             }

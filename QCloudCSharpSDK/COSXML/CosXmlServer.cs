@@ -456,6 +456,19 @@ namespace COSXML
             Schedue(request, new PutObjectResult(), successCallback, failCallback);
         }
 
+        [ExcludeFromCodeCoverage]
+        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+        public void AppendObject(AppendObjectRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback) 
+        {
+            Schedue(request, new AppendObjectResult(), successCallback, failCallback);
+        }
+        
+        public AppendObjectResult AppendObject(AppendObjectRequest request) 
+        {
+
+            return (Model.Object.AppendObjectResult)Excute(request, new Model.Object.AppendObjectResult());
+        }
+
         public HeadObjectResult HeadObject(HeadObjectRequest request)
         {
 

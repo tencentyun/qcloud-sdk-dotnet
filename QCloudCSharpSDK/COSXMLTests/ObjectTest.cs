@@ -1211,8 +1211,7 @@ namespace COSXMLTests
         public void TestDownloadResumableTask()
         {
             //执行请求
-            GetObjectRequest getRequest = new GetObjectRequest(bucket, "bigObject1619585110", localDir, "bigObject1619585110");
-            getRequest.LimitTraffic(8 * 1024 * 1024);
+            GetObjectRequest getRequest = new GetObjectRequest(bucket, "exampleobject", localDir, "exampleobject");
 
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(getRequest);
             downloadTask.SetResumableDownload(true);
@@ -1221,30 +1220,14 @@ namespace COSXMLTests
             downloadTask.progressCallback = delegate (long completed, long total)
             {
                 progrss = completed * 100.0 / total;
-                // Console.WriteLine(String.Format("progress = {0:##.##}%", progrss));
+                Console.WriteLine(String.Format("progress = {0:##.##}%", progrss));
             };
 
-            var asyncTask = transferManager.DownloadAsync(downloadTask);
+            Task<COSXML.Transfer.COSXMLDownloadTask.DownloadTaskResult> task = transferManager.DownloadAsync(downloadTask);
 
-            asyncTask = downloadTask.AsyncTask<COSXMLDownloadTask.DownloadTaskResult>();
-            asyncTask.Wait();
-            
-            if (downloadTask.State() != TaskState.Completed && downloadTask.State() != TaskState.Failed)
-            {
-                Console.WriteLine("downloadTask.State() = " + downloadTask.State());
-                Console.WriteLine("localFileCrc64 = " + downloadTask.GetLocalFileCrc64());
-                if (progrss < 100)
-                {
-                    downloadTask.Cancel();
-                }
-
-                Thread.Sleep(500);
-            } 
-            else 
-            {
-                Console.WriteLine("localFileCrc64 = " + downloadTask.GetLocalFileCrc64());
-                Thread.Sleep(500);
-            }
+            Thread.Sleep(200);
+            Console.WriteLine(task.Result.GetResultInfo());
+            Assert.True(task.Result.IsSuccessful());
         }
 
         [Test()]
