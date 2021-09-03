@@ -17,7 +17,7 @@ namespace COSXML.Model.Bucket
         /// 跨域资源共享配置的所有信息，最多可以包含100条 CORSRule
         /// <see href="COSXML.Model.Tag.CORSConfiguration"/>
         /// </summary>
-        public CORSConfiguration corsConfiguration {get => _data; }
+        public CORSConfiguration corsConfiguration { get; private set; }
 
     }
 }

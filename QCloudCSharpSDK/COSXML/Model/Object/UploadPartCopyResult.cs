@@ -17,6 +17,6 @@ namespace COSXML.Model.Object
         /// 分片复制的结果信息
         /// <see href="Model.Tag.CopyObject"/>
         /// </summary>
-        public CopyPartResult copyPart {get => _data; }
+        public CopyPartResult copyPart { get; private set; }
     }
 }

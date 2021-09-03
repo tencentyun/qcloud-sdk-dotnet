@@ -1,23 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{FC694C68-F0E3-411F-8E6C-2E9F94826016}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2EAC00B4-2C14-491A-AEEE-8953D8A83EBF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>COSXML</RootNamespace>
     <AssemblyName>COSXML</AssemblyName>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-
-    <PackageId>Tencent.QCloud.Cos.Sdk</PackageId>
-    <Version>5.4.22.0</Version>
-    <Authors>Tencent</Authors>
-    <Company>Tencent</Company>
-    <description>Tencent Cloud COS(Cloud Object Service) .Net SDK</description>
-
   </PropertyGroup>
-  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -26,9 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -36,15 +29,226 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\COSXML.xml</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-
-  <PropertyGroup>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DocumentationFile>bin\COSXML.XML</DocumentationFile>
+  <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.0' OR '$(TargetFrameworkVersion)' == 'v2.0' OR '$(TargetFrameworkVersion)' == 'v3.5'">
+    <DefineConstants>COMPATIBLE</DefineConstants>
   </PropertyGroup>
-
   <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Auth\QCloudCredentials.cs" />
+    <Compile Include="Auth\QCloudCredentialProvider.cs" />
+    <Compile Include="Auth\IQCloudSigner.cs" />
+    <Compile Include="Common\CosACL.cs" />
+    <Compile Include="Common\CosClientError.cs" />
+    <Compile Include="Common\CosGrantPermission.cs" />
+    <Compile Include="Common\CosMetaDataDirective.cs" />
+    <Compile Include="Common\CosRequestHeaderKey.cs" />
+    <Compile Include="Common\CosRequestMethod.cs" />
+    <Compile Include="Common\CosStorageClass.cs" />
+    <Compile Include="Common\CosVersion.cs" />
+    <Compile Include="CosException\CosClientException.cs" />
+    <Compile Include="CosException\CosServerException.cs" />
+    <Compile Include="CosXml.cs" />
+    <Compile Include="CosXmlConfig.cs" />
+    <Compile Include="CosXmlServer.cs" />
+    <Compile Include="Listener\CosCallback.cs" />
+    <Compile Include="Log\FileLogImpl.cs" />
+    <Compile Include="Log\ILog.cs" />
+    <Compile Include="Log\LogImpl.cs" />
+    <Compile Include="Log\QLog.cs" />
+    <Compile Include="Model\Bucket\BucketRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketCORSRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketCORSResult.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketInventoryRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketInventoryResult.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketLifecycleRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketLifecycleResult.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketPolicyRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketPolicyResult.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketReplicationRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketReplicationResult.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketResult.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketTaggingRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketTaggingResult.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketWebsiteRequest.cs" />
+    <Compile Include="Model\Bucket\DeleteBucketWebsiteResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketACLRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketACLResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketCORSRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketCORSResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketDomainRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketDomainResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketIntelligentTieringRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketIntelligentTieringResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketInventoryRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketInventoryResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketLifecycleRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketLifecycleResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketLoggingRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketLoggingResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketPolicyRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketPolicyResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketReplicationRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketReplicationResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketTaggingRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketTaggingResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketVersioningRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketVersioningResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketWebsiteRequest.cs" />
+    <Compile Include="Model\Bucket\GetBucketWebsiteResult.cs" />
+    <Compile Include="Model\Bucket\HeadBucketRequest.cs" />
+    <Compile Include="Model\Bucket\HeadBucketResult.cs" />
+    <Compile Include="Model\Bucket\ListBucketInventoryRequest.cs" />
+    <Compile Include="Model\Bucket\ListBucketInventoryResult.cs" />
+    <Compile Include="Model\Bucket\ListBucketVersionsRequest.cs" />
+    <Compile Include="Model\Bucket\ListBucketVersionsResult.cs" />
+    <Compile Include="Model\Bucket\ListMultiUploadsRequest.cs" />
+    <Compile Include="Model\Bucket\ListMultiUploadsResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketACLRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketACLResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketCORSRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketCORSResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketDomainRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketDomainResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketIntelligentTieringRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketInventoryRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketInventoryResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketLifecycleRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketLifecycleResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketLoggingRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketLoggingResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketPolicyRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketPolicyResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketReplicationRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketReplicationResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketTaggingRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketTaggingResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketVersioningRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketVersioningResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketWebsiteRequest.cs" />
+    <Compile Include="Model\Bucket\PutBucketWebsiteResult.cs" />
+    <Compile Include="Model\CI\ImageProcessRequest.cs" />
+    <Compile Include="Model\CI\ImageProcessResult.cs" />
+    <Compile Include="Model\CI\QRCodeRecognitionRequest.cs" />
+    <Compile Include="Model\CI\QRCodeRecognitionResult.cs" />
+    <Compile Include="Model\CI\SensitiveContentRecognitionRequest.cs" />
+    <Compile Include="Model\CI\SensitiveContentRecognitionResult.cs" />
+    <Compile Include="Model\CosRequest.cs" />
+    <Compile Include="Model\CosResult.cs" />
+    <Compile Include="Model\Object\AbortMultipartUploadRequest.cs" />
+    <Compile Include="Model\Object\AbortMultipartUploadResult.cs" />
+    <Compile Include="Model\Object\AppendObjectRequest.cs" />
+    <Compile Include="Model\Object\AppendObjectResult.cs" />
+    <Compile Include="Model\Object\CompleteMultipartUploadRequest.cs" />
+    <Compile Include="Model\Object\CompleteMultipartUploadResult.cs" />
+    <Compile Include="Model\Object\CopyObjectRequest.cs" />
+    <Compile Include="Model\Object\CopyObjectResult.cs" />
+    <Compile Include="Model\Object\DeleteMultiObjectRequest.cs" />
+    <Compile Include="Model\Object\DeleteMultiObjectResult.cs" />
+    <Compile Include="Model\Object\DeleteObjectRequest.cs" />
+    <Compile Include="Model\Object\DeleteObjectResult.cs" />
+    <Compile Include="Model\Object\GetObjectACLRequest.cs" />
+    <Compile Include="Model\Object\GetObjectACLResult.cs" />
+    <Compile Include="Model\Object\GetObjectBytesRequest.cs" />
+    <Compile Include="Model\Object\GetObjectBytesResult.cs" />
+    <Compile Include="Model\Object\GetObjectRequest.cs" />
+    <Compile Include="Model\Object\GetObjectResult.cs" />
+    <Compile Include="Model\Object\HeadObjectRequest.cs" />
+    <Compile Include="Model\Object\HeadObjectResult.cs" />
+    <Compile Include="Model\Object\InitMultipartUploadRequest.cs" />
+    <Compile Include="Model\Object\InitMultipartUploadResult.cs" />
+    <Compile Include="Model\Object\ListPartsRequest.cs" />
+    <Compile Include="Model\Object\ListPartsResult.cs" />
+    <Compile Include="Model\Object\ObjectRequest.cs" />
+    <Compile Include="Model\Object\OptionObjectRequest.cs" />
+    <Compile Include="Model\Object\OptionObjectResult.cs" />
+    <Compile Include="Model\Object\PostObjectRequest.cs" />
+    <Compile Include="Model\Object\PostObjectResult.cs" />
+    <Compile Include="Model\Object\PutObjectACLRequest.cs" />
+    <Compile Include="Model\Object\PutObjectACLResult.cs" />
+    <Compile Include="Model\Object\PutObjectRequest.cs" />
+    <Compile Include="Model\Object\PutObjectResult.cs" />
+    <Compile Include="Model\Object\RestoreObjectRequest.cs" />
+    <Compile Include="Model\Object\RestoreObjectResult.cs" />
+    <Compile Include="Model\Object\SelectObjectRequest.cs" />
+    <Compile Include="Model\Object\SelectObjectResult.cs" />
+    <Compile Include="Model\Object\UploadPartCopyRequest.cs" />
+    <Compile Include="Model\Object\UploadPartCopyResult.cs" />
+    <Compile Include="Model\Object\UploadPartRequest.cs" />
+    <Compile Include="Model\Object\UploadPartResult.cs" />
+    <Compile Include="Model\Service\GetServiceRequest.cs" />
+    <Compile Include="Model\Service\GetServiceResult.cs" />
+    <Compile Include="Model\Tag\AccessControlPolicy.cs" />
+    <Compile Include="Model\Tag\BucketLoggingStatus.cs" />
+    <Compile Include="Model\Tag\CompleteMultipartUpload.cs" />
+    <Compile Include="Model\Tag\CompleteResult.cs" />
+    <Compile Include="Model\Tag\CopyObject.cs" />
+    <Compile Include="Model\Tag\CopyPartResult.cs" />
+    <Compile Include="Model\Tag\CopySourceStruct.cs" />
+    <Compile Include="Model\Tag\CORSConfiguration.cs" />
+    <Compile Include="Model\Tag\CosServerError.cs" />
+    <Compile Include="Model\Tag\Delete.cs" />
+    <Compile Include="Model\Tag\DeleteResult.cs" />
+    <Compile Include="Model\Tag\DomainConfiguration.cs" />
+    <Compile Include="Model\Tag\GrantAccount.cs" />
+    <Compile Include="Model\Tag\InitiateMultipartUpload.cs" />
+    <Compile Include="Model\Tag\IntelligentTieringConfiguration.cs" />
+    <Compile Include="Model\Tag\InventoryConfiguration.cs" />
+    <Compile Include="Model\Tag\LifecycleConfiguration.cs" />
+    <Compile Include="Model\Tag\ListAllMyBuckets.cs" />
+    <Compile Include="Model\Tag\ListBucket.cs" />
+    <Compile Include="Model\Tag\ListBucketVersions.cs" />
+    <Compile Include="Model\Tag\ListInventoryConfiguration.cs" />
+    <Compile Include="Model\Tag\ListMultipartUploads.cs" />
+    <Compile Include="Model\Tag\ListParts.cs" />
+    <Compile Include="Model\Tag\ObjectSelectionFormat.cs" />
+    <Compile Include="Model\Tag\PicOperationUploadResult.cs" />
+    <Compile Include="Model\Tag\PreSignatureStruct.cs" />
+    <Compile Include="Model\Tag\QRRecognitionResult.cs" />
+    <Compile Include="Model\Tag\ReplicationConfiguration.cs" />
+    <Compile Include="Model\Tag\RestoreConfigure.cs" />
+    <Compile Include="Model\Tag\SelectObject.cs" />
+    <Compile Include="Model\Tag\SensitiveRecognitionResult.cs" />
+    <Compile Include="Model\Tag\Tagging.cs" />
+    <Compile Include="Model\Tag\VersioningConfiguration.cs" />
+    <Compile Include="Model\Tag\WebsiteConfiguration.cs" />
+    <Compile Include="Network\CommandTask.cs" />
+    <Compile Include="Network\HttpClient.cs" />
+    <Compile Include="Network\HttpClientConfig.cs" />
+    <Compile Include="Network\HttpUrl.cs" />
+    <Compile Include="Network\Request.cs" />
+    <Compile Include="Network\RequestBody.cs" />
+    <Compile Include="Network\Response.cs" />
+    <Compile Include="Network\ResponseBody.cs" />
+    <Compile Include="Network\RetryStrategy.cs" />
+    <Compile Include="Transfer\XmlBuilder.cs" />
+    <Compile Include="Transfer\XmlParse.cs" />
+    <Compile Include="Utils\CosValueAttribute.cs" />
+    <Compile Include="Utils\Crc64.cs" />
+    <Compile Include="Utils\DigestUtils.cs" />
+    <Compile Include="Utils\EnumUtils.cs" />
+    <Compile Include="Utils\HttpDateTimeUtils.cs" />
+    <Compile Include="Utils\StringUtils.cs" />
+    <Compile Include="Utils\TimeUtils.cs" />
+    <Compile Include="Utils\URLEncodeUtils.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

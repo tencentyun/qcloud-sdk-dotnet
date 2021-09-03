@@ -7,7 +7,6 @@ using COSXML.Model.Object;
 using COSXML.Model.CI;
 using COSXML.Model;
 using COSXML.Model.Tag;
-using System.Threading.Tasks;
 
 namespace COSXML
 {
@@ -56,7 +55,7 @@ namespace COSXML
         /// <param name="request">GetServiceRequest</param>
         /// <param name="successCallback">OnSuccessCallback</param>
         /// <param name="failCallback">OnFailedCallback</param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetService(GetServiceRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -74,7 +73,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PutBucket(PutBucketRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -92,7 +91,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void HeadBucket(HeadBucketRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -110,7 +109,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetBucket(GetBucketRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -128,7 +127,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void DeleteBucket(DeleteBucketRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -146,7 +145,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PutBucketACL(PutBucketACLRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -164,7 +163,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetBucketACL(GetBucketACLRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -182,7 +181,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PutBucketCORS(PutBucketCORSRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -200,7 +199,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetBucketCORS(GetBucketCORSRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -218,7 +217,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void DeleteBucketCORS(DeleteBucketCORSRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -236,7 +235,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PutBucketLifecycle(PutBucketLifecycleRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -254,7 +253,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetBucketLifecycle(GetBucketLifecycleRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -272,7 +271,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void DeleteBucketLifecycle(DeleteBucketLifecycleRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -290,7 +289,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PutBucketReplication(PutBucketReplicationRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -308,7 +307,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetBucketReplication(GetBucketReplicationRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -326,7 +325,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void DeleteBucketReplication(DeleteBucketReplicationRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -344,7 +343,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PutBucketVersioning(PutBucketVersioningRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -362,7 +361,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetBucketVersioning(GetBucketVersioningRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -380,7 +379,7 @@ namespace COSXML
         /// <param name="request">ListBucketVersionsRequest</param>
         /// <param name="successCallback">successCallback</param>
         /// <param name="failCallback">failCallback</param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void ListBucketVersions(ListBucketVersionsRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -398,7 +397,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void ListMultiUploads(ListMultiUploadsRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -416,7 +415,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PutObject(PutObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -434,7 +433,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void HeadObject(HeadObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -452,7 +451,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetObject(GetObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -468,7 +467,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetObject(GetObjectBytesRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -486,7 +485,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PutObjectACL(PutObjectACLRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -510,7 +509,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetObjectACL(GetObjectACLRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -528,7 +527,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void DeleteObject(DeleteObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -546,7 +545,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void DeleteMultiObjects(DeleteMultiObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -562,7 +561,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void InitMultipartUpload(InitMultipartUploadRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -580,7 +579,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void ListParts(ListPartsRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -598,7 +597,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void UploadPart(UploadPartRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -616,7 +615,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void CompleteMultiUpload(CompleteMultipartUploadRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -634,7 +633,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void AbortMultiUpload(AbortMultipartUploadRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -652,7 +651,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void CopyObject(CopyObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -670,7 +669,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PartCopy(UploadPartCopyRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -688,7 +687,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void OptionObject(OptionObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -706,7 +705,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PostObject(PostObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -724,7 +723,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void RestoreObject(RestoreObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -740,7 +739,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PutBucketWebsiteAsync(PutBucketWebsiteRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -756,7 +755,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetBucketWebsiteAsync(GetBucketWebsiteRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -772,7 +771,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void DeleteBucketWebsiteAsync(DeleteBucketWebsiteRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -788,7 +787,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PutBucketDomainAsync(PutBucketDomainRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -804,7 +803,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetBucketDomainAsync(GetBucketDomainRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -820,7 +819,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PutBucketLoggingAsync(PutBucketLoggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -836,7 +835,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetBucketLoggingAsync(GetBucketLoggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -852,7 +851,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PutBucketInventoryAsync(PutBucketInventoryRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -868,7 +867,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetBucketInventoryAsync(GetBucketInventoryRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -884,7 +883,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void DeleteInventoryAsync(DeleteBucketInventoryRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -900,7 +899,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void ListBucketInventoryAsync(ListBucketInventoryRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -916,7 +915,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void PutBucketTaggingAsync(PutBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -932,7 +931,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void GetBucketTaggingAsync(GetBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -948,7 +947,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void DeleteBucketTaggingAsync(DeleteBucketTaggingRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -964,7 +963,7 @@ namespace COSXML
         /// <param name="request"></param>
         /// <param name="successCallback"></param>
         /// <param name="failCallback"></param>
-        [Obsolete("方法已废弃，请使用 ExecuteAsync 实现异步请求。")]
+         
         void SelectObjectAsync(SelectObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
@@ -1012,12 +1011,5 @@ namespace COSXML
         /// <param name="request"></param>
         /// <returns></returns>
         T Execute<T>(CosRequest request) where T : CosResult;
-
-        /// <summary>
-        /// 异步执行请求
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        Task<T> ExecuteAsync<T>(CosRequest request) where T : CosResult;
     }
 }

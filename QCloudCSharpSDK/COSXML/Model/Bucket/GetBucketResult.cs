@@ -18,6 +18,6 @@ namespace COSXML.Model.Bucket
         /// 保存 Get Bucket 请求结果的所有信息
         /// <see href="COSXML.Model.Tag.ListBucket"/>
         /// </summary>
-        public ListBucket listBucket {get => _data; }
+        public ListBucket listBucket { get; private set; }
     }
 }

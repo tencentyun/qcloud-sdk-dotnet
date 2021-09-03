@@ -5,6 +5,6 @@ namespace COSXML.Model.Bucket
 {
     public sealed class GetBucketIntelligentTieringResult : CosDataResult<IntelligentTieringConfiguration>
     {
-        public IntelligentTieringConfiguration configuration {get => _data; }
+        public IntelligentTieringConfiguration configuration { get; private set; }
     }
 }

@@ -5,6 +5,6 @@ namespace COSXML.Model.Bucket
     public sealed class GetBucketInventoryResult : CosDataResult<InventoryConfiguration>
     {
 
-        public InventoryConfiguration inventoryConfiguration {get => _data; }
+        public InventoryConfiguration inventoryConfiguration { get; private set; }
     }
 }

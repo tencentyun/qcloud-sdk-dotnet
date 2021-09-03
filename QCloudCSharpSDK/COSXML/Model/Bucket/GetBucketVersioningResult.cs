@@ -9,6 +9,6 @@ namespace COSXML.Model.Bucket
 {
     public sealed class GetBucketVersioningResult : CosDataResult<VersioningConfiguration>
     {
-        public VersioningConfiguration versioningConfiguration {get => _data; }
+        public VersioningConfiguration versioningConfiguration { get; private set; }
     }
 }

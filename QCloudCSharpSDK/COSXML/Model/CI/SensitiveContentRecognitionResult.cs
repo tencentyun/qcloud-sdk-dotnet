@@ -16,6 +16,6 @@ namespace COSXML.Model.CI
         /// 图片审核结果
         /// </summary>
         /// <value></value>
-        public SensitiveRecognitionResult recognitionResult { get => _data;  }
+        public SensitiveRecognitionResult recognitionResult { get; private set; }
     }
 }
