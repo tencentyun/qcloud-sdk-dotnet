@@ -22,7 +22,7 @@ namespace COSXMLTests
 
             try
             {
-                QCloudServer instance = QCloudServer.Instance();
+                QCloudServer instance = new QCloudServer();
                 GetServiceRequest request = new GetServiceRequest();
 
                 GetServiceResult result = instance.cosXml.GetService(request);

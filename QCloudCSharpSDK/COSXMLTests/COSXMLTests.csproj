@@ -6,7 +6,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\COSXML\COSXML.csproj">
+    <ProjectReference Include="..\COSXML\COSXML-Netcore.csproj">
       <Project>{FC694C68-F0E3-411F-8E6C-2E9F94826016}</Project>
       <Name>COSXML</Name>
     </ProjectReference>

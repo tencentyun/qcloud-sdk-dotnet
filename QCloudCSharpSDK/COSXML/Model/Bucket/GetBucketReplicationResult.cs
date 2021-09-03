@@ -9,6 +9,8 @@ namespace COSXML.Model.Bucket
 {
     public sealed class GetBucketReplicationResult : CosDataResult<ReplicationConfiguration>
     {
-        public ReplicationConfiguration replicationConfiguration { get; private set; }
+        public ReplicationConfiguration replicationConfiguration { 
+            get{ return _data; } 
+        }
     }
 }

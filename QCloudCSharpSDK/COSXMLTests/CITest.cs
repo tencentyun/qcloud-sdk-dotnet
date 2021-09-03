@@ -36,14 +36,14 @@ namespace COSXMLTests
             localTempPhotoFilePath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".jpg", 1);
             FileInfo fileInfo = new FileInfo(localTempPhotoFilePath);
             DirectoryInfo directoryInfo = fileInfo.Directory;
-            GetObjectRequest request = new GetObjectRequest(bucket, photoKey, directoryInfo.FullName, fileInfo.Name);
-            QCloudServer.Instance().cosXml.GetObject(request);
+            PutObjectRequest request = new PutObjectRequest(bucket, photoKey, fileInfo.Name);
+            QCloudServer.Instance().cosXml.PutObject(request);
 
             qrPhotoKey = "qr_code_photo.jpg";
             localQRCodeTempPhotoFilePath = QCloudServer.CreateFile("qr_" + TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".jpg", 1);
             fileInfo = new FileInfo(localQRCodeTempPhotoFilePath);
-            request = new GetObjectRequest(bucket, qrPhotoKey, directoryInfo.FullName, fileInfo.Name);
-            QCloudServer.Instance().cosXml.GetObject(request);
+            request = new PutObjectRequest(bucket, qrPhotoKey, fileInfo.Name);
+            QCloudServer.Instance().cosXml.PutObject(request);
         }
 
         [OneTimeTearDown]

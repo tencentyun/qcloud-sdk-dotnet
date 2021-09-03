@@ -8,6 +8,8 @@ namespace COSXML.Model.Bucket
 {
     public sealed class GetBucketLoggingResult : CosDataResult<BucketLoggingStatus>
     {
-        public BucketLoggingStatus bucketLoggingStatus { get; private set; }
+        public BucketLoggingStatus bucketLoggingStatus { 
+            get{ return _data; } 
+        }
     }
 }

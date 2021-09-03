@@ -5,6 +5,8 @@ namespace COSXML.Model.Bucket
 {
     public sealed class GetBucketDomainResult : CosDataResult<DomainConfiguration>
     {
-        public DomainConfiguration domainConfiguration { get; private set; }
+        public DomainConfiguration domainConfiguration { 
+            get{ return _data; } 
+        }
     }
 }

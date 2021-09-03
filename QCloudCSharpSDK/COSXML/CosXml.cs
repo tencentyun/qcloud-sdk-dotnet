@@ -7,6 +7,9 @@ using COSXML.Model.Object;
 using COSXML.Model.CI;
 using COSXML.Model;
 using COSXML.Model.Tag;
+#if !COMPATIBLE
+using System.Threading.Tasks;
+#endif
 
 namespace COSXML
 {
@@ -1011,5 +1014,15 @@ namespace COSXML
         /// <param name="request"></param>
         /// <returns></returns>
         T Execute<T>(CosRequest request) where T : CosResult;
+
+        #if !COMPATIBLE
+        /// <summary>
+        /// 异步执行请求
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<T> ExecuteAsync<T>(CosRequest request) where T : CosResult;
+        #endif
+
     }
 }

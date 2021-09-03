@@ -17,7 +17,8 @@ namespace COSXML.Model.Object
         /// 已上传块的所有信息
         /// <see href="Model.Tag.ListParts"/>
         /// </summary>
-        public ListParts listParts { get; private set; }
-
+        public ListParts listParts { 
+            get {return _data; } 
+        }
     }
 }

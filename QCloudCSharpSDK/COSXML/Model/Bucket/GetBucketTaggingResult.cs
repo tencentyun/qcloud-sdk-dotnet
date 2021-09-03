@@ -9,6 +9,8 @@ namespace COSXML.Model.Bucket
 {
     public sealed class GetBucketTaggingResult : CosDataResult<Tagging>
     {
-        public Tagging tagging { get; private set; }
+        public Tagging tagging { 
+            get {return _data; } 
+        }
     }
 }

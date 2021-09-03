@@ -17,7 +17,9 @@ namespace COSXML.Model.Object
         /// 复制结果信息
         /// <see href="Model.Tag.CopyObject"/>
         /// </summary>
-        public CopyObject copyObject { get; private set; }
+        public CopyObject copyObject { 
+            get {return _data; } 
+        }
 
     }
 }
