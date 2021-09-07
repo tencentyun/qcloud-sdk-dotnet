@@ -787,10 +787,15 @@ namespace COSXML
             return (Model.Object.GetObjectBytesResult)Excute(request, new Model.Object.GetObjectBytesResult());
         }
 
-         
         public void GetObject(GetObjectBytesRequest request, OnSuccessCallback<CosResult> successCallback, OnFailedCallback failCallback)
         {
             Schedue(request, new GetObjectBytesResult(), successCallback, failCallback);
+        }
+
+        public string GetObjectUrl(string bucket, string key) 
+        {
+            string http_prefix = config.IsHttps ? "https://" : "http://";
+            return http_prefix + bucket + ".cos." + config.Region + ".myqcloud.com/" + key;
         }
 
         public PutBucketWebsiteResult PutBucketWebsite(PutBucketWebsiteRequest request)

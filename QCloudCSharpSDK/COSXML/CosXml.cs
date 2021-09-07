@@ -474,6 +474,14 @@ namespace COSXML
         void GetObject(GetObjectBytesRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
+        /// 获取对象访问URL
+        /// </summary>
+        /// <param name="bucket">bucket</param>
+        /// <param name="key">object key</param>
+        /// <returns></returns>
+        string GetObjectUrl(string bucket, string key);
+
+        /// <summary>
         /// 设置对象 ACL 权限
         /// </summary>
         /// <param name="request">PutObjectACLRequest</param>
