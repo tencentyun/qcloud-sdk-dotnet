@@ -31,7 +31,7 @@ namespace COSXML
         /// 获取完整请求域名
         /// </summary>
         /// <value></value>
-        public string host { get; }
+        public string host { get; private set; }
 
         private CosXmlConfig(Builder builder)
         {
@@ -151,7 +151,7 @@ namespace COSXML
             public Builder SetRegion(string region)
             {
                 //region cannot be empty
-                if(region is null || region == "") {
+                if(region == null || region == "") {
                     throw new CosException.CosClientException(
                         (int)COSXML.Common.CosClientError.InvalidArgument,
                         "region cannot be empty"

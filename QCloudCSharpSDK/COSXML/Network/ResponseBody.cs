@@ -118,7 +118,15 @@ namespace COSXML.Network
                     {
                         // save raw content
                         memoryStream = new MemoryStream((int)contentLength);
-                        inputStream.CopyTo(memoryStream);
+                        
+                        //inputStream.CopyTo(memoryStream);
+                        byte[] buffer = new byte[10 * 1000];
+                        int count;
+                        while ((count = inputStream.Read(buffer, 0, buffer.Length)) != 0)
+                        {
+                            memoryStream.Write(buffer, 0, count);
+                        }
+
                         rawContentBodyString = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
 
                         memoryStream.Seek(0, SeekOrigin.Begin);

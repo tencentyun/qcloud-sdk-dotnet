@@ -137,10 +137,6 @@ namespace COSXMLTests
             try
             {
                 PutBucketACLRequest request = new PutBucketACLRequest(bucket);
-                request.SetQueryParameter("time", TimeUtils.GetCurrentTime(TimeUnit.Seconds).ToString());
-                request.SetRequestHeader("custom", "value1");
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.Seconds), 600, new List<string>() { "custome" },
-                    new List<string>() { "time" });
                 QCloudServer.SetRequestACLData(request);
 
                 //执行请求

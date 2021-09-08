@@ -9,6 +9,8 @@ namespace COSXML.Model.Bucket
 {
     public sealed class ListBucketVersionsResult : CosDataResult<ListBucketVersions>
     {
-        public ListBucketVersions listBucketVersions {get => _data; }
+        public ListBucketVersions listBucketVersions { 
+            get {return _data; } 
+        }
     }
 }

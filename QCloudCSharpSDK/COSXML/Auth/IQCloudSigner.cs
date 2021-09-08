@@ -26,9 +26,9 @@ namespace COSXML.Auth
 
     public sealed class CosXmlSignSourceProvider : IQCloudSignSource
     {
-        private HashSet<string> parameterKeysToSign;
+        private List<string> parameterKeysToSign;
 
-        private HashSet<string> headerKeysToSign;
+        private List<string> headerKeysToSign;
 
         private string signTime;
 
@@ -40,8 +40,8 @@ namespace COSXML.Auth
 
         public CosXmlSignSourceProvider()
         {
-            parameterKeysToSign = new HashSet<string>();
-            headerKeysToSign = new HashSet<string>();
+            parameterKeysToSign = new List<string>();
+            headerKeysToSign = new List<string>();
         }
 
         public void AddParameterKey(string key)
@@ -313,6 +313,11 @@ namespace COSXML.Auth
                         resultBuilder.Append(key).Append('=').Append(value).Append('&');
                     }
 
+                    keyResultBuilder.Append(key).Append(';');
+                }
+                else
+                {
+                    resultBuilder.Append(key).Append('=').Append('&');
                     keyResultBuilder.Append(key).Append(';');
                 }
             }

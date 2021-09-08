@@ -63,7 +63,7 @@ namespace COSXML.CosException
         }
 
         public CosServerException(int statusCode, string statusMessage)
-            : base($"CosServerException: {statusCode} - {statusMessage}")
+            : base("CosServerException: {" + statusCode + "} - {" + statusMessage + "}")
         {
             this.statusCode = statusCode;
             this.statusMessage = statusMessage;

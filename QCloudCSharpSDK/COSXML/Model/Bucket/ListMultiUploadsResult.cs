@@ -17,6 +17,8 @@ namespace COSXML.Model.Bucket
         /// 所有分块上传的信息
         /// <see href="COSXML.Model.Tag.ListMultipartUploads"/>
         /// </summary>
-        public ListMultipartUploads listMultipartUploads {get => _data; }
+        public ListMultipartUploads listMultipartUploads { 
+            get {return _data; } 
+        }
     }
 }

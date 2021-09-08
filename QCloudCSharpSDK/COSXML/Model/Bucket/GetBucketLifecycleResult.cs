@@ -17,6 +17,8 @@ namespace COSXML.Model.Bucket
         /// 生命周期配置信息
         /// <see href="COSXML.Model.Tag.LifecycleConfiguration"/>
         /// </summary>
-        public LifecycleConfiguration lifecycleConfiguration {get => _data; }
+        public LifecycleConfiguration lifecycleConfiguration { 
+            get{ return _data; } 
+        }
     }
 }
