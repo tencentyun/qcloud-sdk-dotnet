@@ -158,7 +158,6 @@ namespace COSXMLTests
                 PutObjectRequest request = new PutObjectRequest(bucket, key, smallFileSrcPath);
 
                 //32字符
-                //32字符
                 string customerKey = "25rN73uQtl1bUGnvHe0URgFWBNu4vBba";
 
                 request.SetCosServerSideEncryptionWithCustomerKey(customerKey);
@@ -198,12 +197,10 @@ namespace COSXMLTests
 
                 PutObjectRequest request = new PutObjectRequest(bucket, key, smallFileSrcPath);
 
-
                 request.SetCosServerSideEncryptionWithKMS(null, null);
 
                 //执行请求
                 PutObjectResult result = cosXml.PutObject(request);
-
 
                 Assert.True(result.httpCode == 200);
                 Assert.NotNull(result.eTag);
@@ -223,7 +220,6 @@ namespace COSXMLTests
         [Test()]
         public void PutObject()
         {
-
             try
             {
                 bucket = QCloudServer.Instance().bucketForObjectTest;
@@ -236,6 +232,7 @@ namespace COSXMLTests
                 Console.WriteLine(result.GetResultInfo());
                 Assert.AreEqual(200, result.httpCode);
                 Assert.NotNull(result.eTag);
+                Assert.True(COSXML.Utils.Crc64.CompareCrc64(smallFileSrcPath, result.crc64ecma));
 
                 //Put Copy测试的Source Object
                 request = new PutObjectRequest(bucket, copykey, copySourceFilePath);
@@ -244,6 +241,7 @@ namespace COSXMLTests
                 Console.WriteLine(result.GetResultInfo());
                 Assert.AreEqual(200, result.httpCode);
                 Assert.NotNull(result.eTag);
+                Assert.True(COSXML.Utils.Crc64.CompareCrc64(copySourceFilePath, result.crc64ecma));
 
                 request = new PutObjectRequest(bucket, copyKeySmall, copySourceFilePath);
                 result = cosXml.PutObject(request);
@@ -251,6 +249,7 @@ namespace COSXMLTests
                 Console.WriteLine(result.GetResultInfo());
                 Assert.AreEqual(200, result.httpCode);
                 Assert.NotNull(result.eTag);
+                Assert.True(COSXML.Utils.Crc64.CompareCrc64(copySourceFilePath, result.crc64ecma));
             }
             catch (CosClientException clientEx)
             {
@@ -420,7 +419,7 @@ namespace COSXMLTests
                 CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
                     bucket, QCloudServer.Instance().region, copykey);
 
-                CopyObjectRequest copyObjectRequest = new CopyObjectRequest(bucket, multiKey);
+                CopyObjectRequest copyObjectRequest = new CopyObjectRequest(bucket, commonKey);
 
                 //设置拷贝源
                 copyObjectRequest.SetCopySource(copySource);
@@ -434,7 +433,6 @@ namespace COSXMLTests
                 // Console.WriteLine(result.GetResultInfo());
                 Assert.IsNotEmpty((result.GetResultInfo()));
                 Assert.AreEqual(result.httpCode, 200);
-                Assert.NotNull(copyObject.crc64);
                 Assert.NotNull(copyObject.eTag);
                 Assert.NotNull(copyObject.lastModified);
                 Assert.Null(copyObject.versionId);
@@ -889,6 +887,8 @@ namespace COSXMLTests
 
                 Assert.AreEqual(result.httpCode, 200);
                 Assert.NotNull(result.eTag);
+                Assert.NotNull(result.crc64ecma);
+                Assert.True(COSXML.Utils.Crc64.CompareCrc64(localFileName, result.crc64ecma));
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {

@@ -368,6 +368,42 @@ namespace COSXML
         void GetBucketVersioning(GetBucketVersioningRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
+        /// 设置存储桶防盗链
+        /// </summary>
+        /// <param name="request">PutBucketRefererRequest</param>
+        /// <returns>PutBucketRefererResult</returns>
+        /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
+        /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception> 
+        PutBucketRefererResult PutBucketReferer(PutBucketRefererRequest request);
+
+        /// <summary>
+        /// 设置存储桶防盗链的异步方法
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="successCallback"></param>
+        /// <param name="failCallback"></param>
+         
+        void PutBucketReferer(PutBucketRefererRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        /// <summary>
+        /// 获取存储桶防盗链
+        /// </summary>
+        /// <param name="request">GetBucketRefererRequest</param>
+        /// <returns>GetBucketRefererResult</returns>
+        /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
+        /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception> 
+        GetBucketRefererResult GetBucketReferer(GetBucketRefererRequest request);
+
+        /// <summary>
+        /// 获取存储桶防盗链的异步方法
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="successCallback"></param>
+        /// <param name="failCallback"></param>
+         
+        void GetBucketReferer(GetBucketRefererRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        /// <summary>
         /// 列出多版本对象列表
         /// </summary>
         /// <param name="request">ListBucketVersionsRequest</param>

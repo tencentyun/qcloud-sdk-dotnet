@@ -19,6 +19,11 @@ namespace COSXML.Model.Object
         /// </summary>
         public string eTag;
 
+        /// <summary>
+        /// 对象的 crc64
+        /// </summary>
+        public string crc64ecma;
+
         internal override void InternalParseResponseHeaders()
         {
             List<string> values;
@@ -28,6 +33,13 @@ namespace COSXML.Model.Object
             if (values != null && values.Count > 0)
             {
                 eTag = values[0];
+            }
+
+            this.responseHeaders.TryGetValue("x-cos-hash-crc64ecma", out values);
+
+            if (values != null && values.Count > 0)
+            {
+                crc64ecma = values[0];
             }
         }
     }

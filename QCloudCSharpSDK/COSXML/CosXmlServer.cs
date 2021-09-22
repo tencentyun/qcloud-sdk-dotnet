@@ -409,6 +409,27 @@ namespace COSXML
             return (Model.Bucket.ListMultiUploadsResult)Excute(request, new Model.Bucket.ListMultiUploadsResult());
         }
 
+        public PutBucketRefererResult PutBucketReferer(PutBucketRefererRequest request)
+        {
+
+            return (Model.Bucket.PutBucketRefererResult)Excute(request, new Model.Bucket.PutBucketRefererResult());
+        }
+
+        public void PutBucketReferer(PutBucketRefererRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
+        {
+            Schedue(request, new PutBucketRefererResult(), successCallback, failCallback);
+        }
+
+        public GetBucketRefererResult GetBucketReferer(GetBucketRefererRequest request)
+        {
+
+            return (Model.Bucket.GetBucketRefererResult)Excute(request, new Model.Bucket.GetBucketRefererResult());
+        }
+
+        public void GetBucketReferer(GetBucketRefererRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
+        {
+            Schedue(request, new GetBucketRefererResult(), successCallback, failCallback);
+        }
          
         public void ListMultiUploads(ListMultiUploadsRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {

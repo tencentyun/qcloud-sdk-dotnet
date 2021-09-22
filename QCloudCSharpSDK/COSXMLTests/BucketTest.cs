@@ -1102,5 +1102,43 @@ namespace COSXMLTests
             }
         }
 
+        [Test()]
+        public void TestBucketReferer() 
+        {
+            try
+            {
+                // Put Bucket Refer
+                PutBucketRefererRequest request = new PutBucketRefererRequest(bucket);
+                RefererConfiguration configuration = new RefererConfiguration();
+                configuration.Status = "Enabled";
+                configuration.RefererType = "White-List";
+                configuration.domainList = new DomainList();
+                configuration.domainList.AddDomain("*.qq.com");
+                configuration.EmptyReferConfiguration = "Deny";
+                request.SetRefererConfiguration(configuration);
+                PutBucketRefererResult result = cosXml.PutBucketReferer(request);
+                Assert.AreEqual(result.httpCode, 200);
+
+                // Get Bucket Refer
+                GetBucketRefererRequest getRequest = new GetBucketRefererRequest(bucket);
+                GetBucketRefererResult getResult = cosXml.GetBucketReferer(getRequest);
+                Assert.AreEqual(getResult.httpCode, 200);
+                Assert.IsNotEmpty(getResult.GetResultInfo());
+                Assert.NotNull(getResult.refererConfiguration);
+                Assert.AreEqual(getResult.refererConfiguration.Status, "Enabled");
+
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
     }
 }
