@@ -22,9 +22,11 @@ namespace COSXMLTests
     {
         private string localTempPhotoFilePath;
         private string localQRCodeTempPhotoFilePath;
-
+        private string localSnapshotFilePath;
+        private string localSnapshotFileName;
         private string photoKey;
         private string qrPhotoKey;
+        private string videoKey;
         private string bucket;
 
         [OneTimeSetUp]
@@ -44,6 +46,9 @@ namespace COSXMLTests
             fileInfo = new FileInfo(localQRCodeTempPhotoFilePath);
             request = new PutObjectRequest(bucket, qrPhotoKey, fileInfo.Name);
             QCloudServer.Instance().cosXml.PutObject(request);
+            videoKey = "CITestVideo.mp4";
+            localSnapshotFilePath = "/tmp/";
+            localSnapshotFileName = "snapshot.jpg";
         }
 
         [OneTimeTearDown]
@@ -51,6 +56,7 @@ namespace COSXMLTests
         {
             QCloudServer.DeleteFile(localTempPhotoFilePath);
             QCloudServer.DeleteFile(localQRCodeTempPhotoFilePath);
+            QCloudServer.DeleteFile("./" + localSnapshotFileName);
         }
 
 
@@ -277,6 +283,30 @@ namespace COSXMLTests
             Assert.NotNull(rResult.recognitionResult.QRcodeInfo.CodeLocation.Point);
             Assert.True(rResult.recognitionResult.QRcodeInfo.CodeLocation.Point.Count > 0);
         
+        }
+
+        [Test]
+        public void TestGetSnapshotRequest()
+        {
+            try
+            {
+                string key = videoKey;
+                GetSnapshotRequest request = new GetSnapshotRequest(bucket, key, 1.5F, "/Users/shawnnqin/Desktop/", localSnapshotFileName);
+                GetSnapshotResult result = QCloudServer.Instance().cosXml.GetSnapshot(request);
+                Assert.True(File.Exists(localSnapshotFilePath + localSnapshotFileName));
+                Assert.AreEqual(result.httpCode, 200);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+            
         }
     }
 }

@@ -1052,5 +1052,15 @@ namespace COSXML
         {
             return Execute(request, new QRCodeRecognitionResult());
         }
+
+        /// <summary>
+        /// 获取媒体文件某个时间的截图
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public GetSnapshotResult GetSnapshot(GetSnapshotRequest request)
+        {
+            return Execute(request, new GetSnapshotResult());
+        }
     }
 }

@@ -13,6 +13,7 @@ using COSXML.Model.Tag;
 using COSXML.Log;
 using System.IO;
 using COSXML.Model.Object;
+using COSXML.Model.CI;
 using COSXML.Utils;
 
 namespace COSXML.Network
@@ -126,6 +127,11 @@ namespace COSXML.Network
 
                     response = new CosResponse(cosResult, getObjectRequest.GetSaveFilePath(), getObjectRequest.GetLocalFileOffset(),
                         getObjectRequest.GetCosProgressCallback());
+                }
+                else if (cosRequest is GetSnapshotRequest)
+                {
+                    GetSnapshotRequest getSnapshotRequest = cosRequest as GetSnapshotRequest;
+                    response = new CosResponse(cosResult, getSnapshotRequest.GetSaveFilePath(), 0, null);
                 }
                 else
                 {

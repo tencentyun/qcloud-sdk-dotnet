@@ -1047,6 +1047,13 @@ namespace COSXML
         QRCodeRecognitionResult QRCodeRecognition(QRCodeRecognitionRequest request);
 
         /// <summary>
+        /// 获取媒体文件某个时间的截图
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        GetSnapshotResult GetSnapshot(GetSnapshotRequest request);
+
+        /// <summary>
         /// 取消请求
         /// </summary>
         /// <param name="cosRequest"></param>
