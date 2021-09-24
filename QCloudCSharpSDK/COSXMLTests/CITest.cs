@@ -5,12 +5,14 @@ using COSXML.Model.Object;
 using COSXML.Model.Tag;
 using COSXML.Model.CI;
 using COSXML.Utils;
+using COSXML.Transfer;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Threading;
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -47,8 +49,7 @@ namespace COSXMLTests
             request = new PutObjectRequest(bucket, qrPhotoKey, fileInfo.Name);
             QCloudServer.Instance().cosXml.PutObject(request);
             videoKey = "CITestVideo.mp4";
-            localSnapshotFilePath = "/tmp/";
-            localSnapshotFileName = "snapshot.jpg";
+            localSnapshotFilePath = "/tmp/snapshot.jpg";
         }
 
         [OneTimeTearDown]
@@ -56,7 +57,7 @@ namespace COSXMLTests
         {
             QCloudServer.DeleteFile(localTempPhotoFilePath);
             QCloudServer.DeleteFile(localQRCodeTempPhotoFilePath);
-            QCloudServer.DeleteFile("./" + localSnapshotFileName);
+            QCloudServer.DeleteFile(localSnapshotFilePath);
         }
 
 
@@ -291,9 +292,9 @@ namespace COSXMLTests
             try
             {
                 string key = videoKey;
-                GetSnapshotRequest request = new GetSnapshotRequest(bucket, key, 1.5F, "/Users/shawnnqin/Desktop/", localSnapshotFileName);
+                GetSnapshotRequest request = new GetSnapshotRequest(bucket, key, 1.5F, localSnapshotFilePath);
                 GetSnapshotResult result = QCloudServer.Instance().cosXml.GetSnapshot(request);
-                Assert.True(File.Exists(localSnapshotFilePath + localSnapshotFileName));
+                Assert.True(File.Exists(localSnapshotFilePath));
                 Assert.AreEqual(result.httpCode, 200);
             }
             catch (COSXML.CosException.CosClientException clientEx)
@@ -307,6 +308,43 @@ namespace COSXMLTests
                 Assert.Fail();
             }
             
+        }
+
+        [Test]
+        public void TestGetMediaInfo()
+        {
+            try
+            {
+                string key = videoKey;
+                GetMediaInfoRequest request = new GetMediaInfoRequest(bucket, key);
+                GetMediaInfoResult result = QCloudServer.Instance().cosXml.GetMediaInfo(request);
+                Assert.AreEqual(result.httpCode, 200);
+                ForeachClassProperties<MediaInfoResult.MediaInfo.Stream.Video>(result.mediaInfoResult.mediaInfo.stream.video);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+            
+        }
+
+        public static void ForeachClassProperties<T>(T model)
+        {
+            // TODO(shawnnqin) 这里反射check属性没有弄到，再优化一下
+            Type t = model.GetType();
+            PropertyInfo[] PropertyList = t.GetProperties();
+            foreach (PropertyInfo item in PropertyList)
+            {
+                string name = item.Name;
+                object value = item.GetValue(model, null);
+                Assert.NotNull(value);
+            }
         }
     }
 }

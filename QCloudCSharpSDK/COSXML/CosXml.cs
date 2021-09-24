@@ -1054,6 +1054,13 @@ namespace COSXML
         GetSnapshotResult GetSnapshot(GetSnapshotRequest request);
 
         /// <summary>
+        /// 获取媒体文件的信息
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        GetMediaInfoResult GetMediaInfo(GetMediaInfoRequest request);
+
+        /// <summary>
         /// 取消请求
         /// </summary>
         /// <param name="cosRequest"></param>

@@ -15,12 +15,10 @@ namespace COSXML.Model.CI
     /// </summary>
     public sealed class GetSnapshotRequest : ObjectRequest
     {
-
-        private string localDir;
-        private string localFileName;
+        private string localFilePath;
 
         public GetSnapshotRequest(string bucket, string key, 
-            float time, string localDir, string localFileName, 
+            float time, string localFilePath, 
             int width = 0, int height = 0, string format = "jpg", 
             string rotate = "auto", string mode = "exactframe"
             )
@@ -56,8 +54,7 @@ namespace COSXML.Model.CI
                 this.queryParameters.Add("mode", mode);
             }
 
-            this.localDir = localDir;
-            this.localFileName = localFileName;
+            this.localFilePath = localFilePath;
             this.CheckParameters();
         }
 
@@ -83,29 +80,7 @@ namespace COSXML.Model.CI
         /// <returns></returns>
         public string GetSaveFilePath()
         {
-            string result = localDir;
-            DirectoryInfo dirInfo = new DirectoryInfo(localDir);
-
-            if (!dirInfo.Exists)
-            {
-                dirInfo.Create();
-            }
-
-            if (String.IsNullOrEmpty(localFileName))
-            {
-                localFileName = path;
-            }
-
-            if (localDir.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString(), StringComparison.OrdinalIgnoreCase))
-            {
-                result = result + localFileName;
-            }
-            else
-            {
-                result = result + System.IO.Path.DirectorySeparatorChar + localFileName;
-            }
-
-            return result;
+            return localFilePath;
         }
 
     }

@@ -1062,5 +1062,15 @@ namespace COSXML
         {
             return Execute(request, new GetSnapshotResult());
         }
+
+        /// <summary>
+        /// 获取媒体文件的信息
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public GetMediaInfoResult GetMediaInfo(GetMediaInfoRequest request)
+        {
+            return Execute(request, new GetMediaInfoResult());
+        }
     }
 }
