@@ -56,7 +56,7 @@ namespace COSXML.Model.Tag
             StringBuilder stringBuilder = new StringBuilder("{DomainList:\n");
             foreach (var domain in domains) 
             {
-                stringBuilder.Append("Domain").Append(domain).Append("\n");
+                stringBuilder.Append("Domain:").Append(domain).Append("\n");
             }
             stringBuilder.Append("}");
             return stringBuilder.ToString();

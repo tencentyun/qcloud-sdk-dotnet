@@ -9,6 +9,10 @@ using COSXML.Utils;
 
 namespace COSXML.Model.CI
 {
+    /// <summary>
+    /// 图片审核
+    /// <see href="https://cloud.tencent.com/document/product/436/45434"/>
+    /// </summary>
     public sealed class SensitiveContentRecognitionRequest : ObjectRequest
     {
         public SensitiveContentRecognitionRequest(string bucket, string key, string type)

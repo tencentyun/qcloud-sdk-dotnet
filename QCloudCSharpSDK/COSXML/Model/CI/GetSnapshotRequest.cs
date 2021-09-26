@@ -60,13 +60,7 @@ namespace COSXML.Model.CI
 
         public override void CheckParameters()
         {
-
-            if (localDir == null)
-            {
-                throw new CosClientException((int)CosClientError.InvalidArgument, "localDir = null");
-            }
-
-            if (localFileName == null)
+            if (localFilePath == null)
             {
                 throw new CosClientException((int)CosClientError.InvalidArgument, "localFileName = null");
             }

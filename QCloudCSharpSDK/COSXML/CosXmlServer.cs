@@ -1072,5 +1072,16 @@ namespace COSXML
         {
             return Execute(request, new GetMediaInfoResult());
         }
+
+        /// <summary>
+        /// 提交视频审核任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public SensitiveCencorJobResult SubmitVideoCensorJob(SubmitVideoCensorJobRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new SensitiveCencorJobResult());
+        }
     }
 }

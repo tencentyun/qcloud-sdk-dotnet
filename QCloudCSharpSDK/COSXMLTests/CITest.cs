@@ -346,5 +346,30 @@ namespace COSXMLTests
                 Assert.NotNull(value);
             }
         }
+
+        [Test]
+        public void TestVideoCensorJobCommit()
+        {
+            try
+            {
+                SubmitVideoCensorJobRequest request = new SubmitVideoCensorJobRequest(bucket);
+                request.SetCencorObject(videoKey);
+                request.SetDetectType("Porn,Terrorism");
+                SensitiveCencorJobResult result = QCloudServer.Instance().cosXml.SubmitVideoCensorJob(request);
+                string id = result.censorJobsResponse.JobsDetail.JobId;
+                Assert.NotNull(id);
+                Assert.AreEqual(200, result.httpCode);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
     }
 }

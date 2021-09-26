@@ -1061,6 +1061,13 @@ namespace COSXML
         GetMediaInfoResult GetMediaInfo(GetMediaInfoRequest request);
 
         /// <summary>
+        /// 提交视频审核任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        SensitiveCencorJobResult SubmitVideoCensorJob(SubmitVideoCensorJobRequest request);
+
+        /// <summary>
         /// 取消请求
         /// </summary>
         /// <param name="cosRequest"></param>
