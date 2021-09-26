@@ -1083,5 +1083,28 @@ namespace COSXML
             request.Region = this.GetConfig().Region;
             return Execute(request, new SensitiveCencorJobResult());
         }
+
+        /// <summary>
+        /// 获取视频审核任务结果
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public GetVideoCensorJobResult GetVideoCensorJob(GetVideoCensorJobRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new GetVideoCensorJobResult());
+        }
+
+        /// <summary>
+        /// 获取媒体bucket列表
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public DescribeMediaBucketsResult DescribeMediaBuckets(DescribeMediaBucketsRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new DescribeMediaBucketsResult());
+        }
+
     }
 }

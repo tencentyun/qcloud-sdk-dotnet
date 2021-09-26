@@ -28,7 +28,7 @@ namespace COSXML.Model.CI
             videoCencorJobInfo.conf.snapshot = new VideoCencorJobInfo.Snapshot();
         }
 
-        public void SetCencorObject(string key)
+        public void SetCensorObject(string key)
         {
             videoCencorJobInfo.input.obj = key;
         }
@@ -58,10 +58,18 @@ namespace COSXML.Model.CI
             videoCencorJobInfo.conf.detectContent = detectContent.ToString();
         }
 
-        public void SetSnapshot(string mode, string count, float timeInterval)
+        public void SetSnapshotCount(string count, float timeInterval)
+        {
+            videoCencorJobInfo.conf.snapshot.count = count;
+        }
+
+        public void SetSnapshotMode(string mode)
         {
             videoCencorJobInfo.conf.snapshot.mode = mode;
-            videoCencorJobInfo.conf.snapshot.count = count;
+        }
+
+        public void SetSnapshotTimeInterval(float timeInterval)
+        {
             videoCencorJobInfo.conf.snapshot.timeInterval = timeInterval.ToString();
         }
 

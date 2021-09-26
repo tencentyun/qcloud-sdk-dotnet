@@ -353,12 +353,34 @@ namespace COSXMLTests
             try
             {
                 SubmitVideoCensorJobRequest request = new SubmitVideoCensorJobRequest(bucket);
-                request.SetCencorObject(videoKey);
-                request.SetDetectType("Porn,Terrorism");
+                request.SetCensorObject(videoKey);
+                request.SetDetectType("Porn,Terrorisim");
+                request.SetSnapshotMode("Interval");
                 SensitiveCencorJobResult result = QCloudServer.Instance().cosXml.SubmitVideoCensorJob(request);
                 string id = result.censorJobsResponse.JobsDetail.JobId;
                 Assert.NotNull(id);
                 Assert.AreEqual(200, result.httpCode);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestDescribeMediaBuckets()
+        {
+            try
+            {
+                DescribeMediaBucketsRequest request = new DescribeMediaBucketsRequest();
+                DescribeMediaBucketsResult result = QCloudServer.Instance().cosXml.DescribeMediaBuckets(request);
+                Assert.AreEqual(result.httpCode, 200);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {

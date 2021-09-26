@@ -17,6 +17,11 @@ namespace COSXML.Model.Object
         /// </summary>
         protected string bucket;
 
+        public CIRequest()
+        {
+
+        }
+
         public CIRequest(string bucket)
         {
             this.bucket = bucket;
@@ -71,6 +76,10 @@ namespace COSXML.Model.Object
             {
                 hostBuilder.Append(serviceConfig.host);
             }
+            else if (String.IsNullOrEmpty(bucket))
+            {
+                hostBuilder.Append("ci.").Append(region).Append(".myqcloud.com");
+            }
             else
             {
                 hostBuilder.Append(bucket);
@@ -101,10 +110,6 @@ namespace COSXML.Model.Object
             //{
             //    throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "appid is null");
             //}
-            if (bucket == null || bucket.Length < 1)
-            {
-                throw new CosClientException((int)CosClientError.InvalidArgument, "bucket is null");
-            }
             // if (region == null || region.Length < 1)
             // {
             //     throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "region is null");

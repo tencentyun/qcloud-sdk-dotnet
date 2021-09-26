@@ -1068,6 +1068,20 @@ namespace COSXML
         SensitiveCencorJobResult SubmitVideoCensorJob(SubmitVideoCensorJobRequest request);
 
         /// <summary>
+        /// 获取视频审核任务结果
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        GetVideoCensorJobResult GetVideoCensorJob(GetVideoCensorJobRequest request);
+
+        /// <summary>
+        /// 获取媒体bucket列表
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        DescribeMediaBucketsResult DescribeMediaBuckets(DescribeMediaBucketsRequest request);
+
+        /// <summary>
         /// 取消请求
         /// </summary>
         /// <param name="cosRequest"></param>
