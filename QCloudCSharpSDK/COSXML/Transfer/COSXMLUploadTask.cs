@@ -197,13 +197,13 @@ namespace COSXML.Transfer
                 if (UpdateTaskState(TaskState.Completed))
                 {
                     PutObjectResult result = cosResult as PutObjectResult;
-                    UploadTaskResult copyTaskResult = new UploadTaskResult();
+                    UploadTaskResult uploadTaskResult = new UploadTaskResult();
 
-                    copyTaskResult.SetResult(result);
+                    uploadTaskResult.SetResult(result);
 
                     if (successCallback != null)
                     {
-                        successCallback(copyTaskResult);
+                        successCallback(uploadTaskResult);
                     }
                 }
 

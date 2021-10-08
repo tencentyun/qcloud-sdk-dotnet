@@ -6,11 +6,11 @@ using System.Text;
 namespace COSXML.Model.Tag
 {
     /// <summary>
-    /// 视频审核
-    /// <see href="https://cloud.tencent.com/document/product/436/7733"/>
+    /// 音频审核请求body
+    /// <see href="https://cloud.tencent.com/document/product/436/54063"/>
     /// </summary>
     [XmlRoot("Request")]
-    public sealed class VideoCencorJobInfo
+    public sealed class AudioCencorJobInfo
     {
         [XmlElement("Input")]
         public Input input;
@@ -36,10 +36,20 @@ namespace COSXML.Model.Tag
             [XmlElement("Object")]
             public string obj;
 
+            [XmlElement("Url")]
+            public string url;
+
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Input:\n");
-                stringBuilder.Append("Object:" + obj + "\n");
+                if (obj != null)
+                {
+                    stringBuilder.Append("Object:" + obj + "\n");
+                }
+                if (url != null)
+                {
+                    stringBuilder.Append("Url:" + url + "\n");
+                }
                 stringBuilder.Append("}");
                 return stringBuilder.ToString();
             }
@@ -51,9 +61,6 @@ namespace COSXML.Model.Tag
             [XmlElement("DetectType")]
             public string detectType;
 
-            [XmlElement("Snapshot")]
-            public Snapshot snapshot;
-
             [XmlElement("Callback")]
             public string callback;
 
@@ -63,19 +70,11 @@ namespace COSXML.Model.Tag
             [XmlElement("BizType")]
             public string bizType;
 
-            [XmlElement("DetectContent")]
-            public string detectContent;
-
             public string GetInfo()
             { 
                 StringBuilder stringBuilder = new StringBuilder("{Conf:\n");
 
                 stringBuilder.Append("DetectType:").Append(detectType).Append("\n");
-                stringBuilder.Append("Snapshot:").Append(snapshot.GetInfo()).Append("\n");
-                if (detectContent != null)
-                {
-                    stringBuilder.Append("DetectContent:").Append(detectContent).Append("\n");
-                }
                 if (callback != null)
                 {
                     stringBuilder.Append("Callback:").Append(callback).Append("\n");
@@ -94,39 +93,6 @@ namespace COSXML.Model.Tag
             }
         }
 
-        public sealed class Snapshot
-        {
-            [XmlElement("Mode")]
-            public string mode = "";
-
-            [XmlElement("Count")]
-            public string count = "";
-
-            [XmlElement("TimeInterval")]
-            public string timeInterval = "";
-
-            public string GetInfo()
-            {
-                StringBuilder stringBuilder = new StringBuilder("{Snapshot:\n");
-
-                if (mode != null)
-                {
-                    stringBuilder.Append("Mode:").Append(mode).Append("\n");
-                }
-                if (count != null)
-                {
-                    stringBuilder.Append("Count:").Append(count).Append("\n");
-                }
-                if (timeInterval != null)
-                {
-                    stringBuilder.Append("TimeInterval:").Append(timeInterval).Append("\n");
-                }
-                stringBuilder.Append("}");
-
-                return stringBuilder.ToString();
-            }
-            
-        }
     }
 
 }

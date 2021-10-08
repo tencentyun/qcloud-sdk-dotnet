@@ -7,16 +7,15 @@ using COSXML.Transfer;
 namespace COSXML.Model.CI
 {
     /// <summary>
-    /// 
+    /// 查询音频审核结果
     /// </summary>
-    public sealed class SensitiveCencorJobResult : CosDataResult<CensorJobsResponse>
+    public sealed class GetAudioCensorJobResult : CosDataResult<AudioCensorResult>
     {
-
         /// <summary>
-        /// 图片审核结果
+        /// 音频审核结果
         /// </summary>
         /// <value></value>
-        public CensorJobsResponse censorJobsResponse { 
+        public AudioCensorResult resultStruct { 
             get {return _data; } 
         }
     }

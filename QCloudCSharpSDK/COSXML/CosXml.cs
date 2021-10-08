@@ -1065,7 +1065,7 @@ namespace COSXML
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        SensitiveCencorJobResult SubmitVideoCensorJob(SubmitVideoCensorJobRequest request);
+        SubmitCensorJobResult SubmitVideoCensorJob(SubmitVideoCensorJobRequest request);
 
         /// <summary>
         /// 获取视频审核任务结果
@@ -1073,6 +1073,20 @@ namespace COSXML
         /// <param name="request"></param>
         /// <returns></returns>
         GetVideoCensorJobResult GetVideoCensorJob(GetVideoCensorJobRequest request);
+
+        /// <summary>
+        /// 提交音频审核任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        SubmitCensorJobResult SubmitAudioCensorJob(SubmitAudioCensorJobRequest request);
+
+        /// <summary>
+        /// 获取音频审核任务结果
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        GetAudioCensorJobResult GetAudioCensorJob(GetAudioCensorJobRequest request);
 
         /// <summary>
         /// 获取媒体bucket列表

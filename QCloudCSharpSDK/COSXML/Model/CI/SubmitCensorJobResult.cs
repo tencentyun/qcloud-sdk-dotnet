@@ -7,15 +7,16 @@ using COSXML.Transfer;
 namespace COSXML.Model.CI
 {
     /// <summary>
-    /// 视频审核结果
+    /// 
     /// </summary>
-    public sealed class GetVideoCensorJobResult : CosDataResult<VideoCensorResult>
+    public sealed class SubmitCensorJobResult : CosDataResult<CensorJobsResponse>
     {
+
         /// <summary>
-        /// 视频审核结果
+        /// 图片审核结果
         /// </summary>
         /// <value></value>
-        public VideoCensorResult resultStruct { 
+        public CensorJobsResponse censorJobsResponse { 
             get {return _data; } 
         }
     }

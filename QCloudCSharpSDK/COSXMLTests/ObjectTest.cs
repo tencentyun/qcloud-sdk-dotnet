@@ -52,30 +52,43 @@ namespace COSXMLTests
 
         [OneTimeSetUp]
         public void Init()
-        {
-            cosXml = QCloudServer.Instance().cosXml;
-            bucket = QCloudServer.Instance().bucketForObjectTest;
-            transferManager = new TransferManager(cosXml, new TransferConfig());
-            long currentTime = TimeUtils.GetCurrentTime(TimeUnit.Seconds);
-            smallFileSrcPath = QCloudServer.CreateFile("small_" + currentTime + ".txt", 1024 * 1024 * 1);
-            bigFileSrcPath = QCloudServer.CreateFile("big_" + currentTime + ".txt", 1024 * 1024 * 10);
-            FileInfo fileInfo = new FileInfo(smallFileSrcPath);
+        {   
+            try
+            {
+                cosXml = QCloudServer.Instance().cosXml;
+                bucket = QCloudServer.Instance().bucketForObjectTest;
+                transferManager = new TransferManager(cosXml, new TransferConfig());
+                long currentTime = TimeUtils.GetCurrentTime(TimeUnit.Seconds);
+                smallFileSrcPath = QCloudServer.CreateFile("small_" + currentTime + ".txt", 1024 * 1024 * 1);
+                bigFileSrcPath = QCloudServer.CreateFile("big_" + currentTime + ".txt", 1024 * 1024 * 10);
+                FileInfo fileInfo = new FileInfo(smallFileSrcPath);
 
-            DirectoryInfo directoryInfo = fileInfo.Directory;
+                DirectoryInfo directoryInfo = fileInfo.Directory;
 
-            localDir = directoryInfo.FullName;
-            localFileName = "local.txt";
+                localDir = directoryInfo.FullName;
+                localFileName = "local.txt";
 
-            commonKey = "simpleObject" + currentTime;
-            multiKey = "bigObject" + currentTime;
-            copykey = "copy_objecttest.txt";
-            copySourceFilePath = QCloudServer.CreateFile(copykey, 1024 * 1024 * 1);
-            copyKeySmall = "copy_target";
-            selectKey = "select_target.json";
-            appendKey = "appendableObject";
+                commonKey = "simpleObject" + currentTime;
+                multiKey = "bigObject" + currentTime;
+                copykey = "copy_objecttest.txt";
+                copySourceFilePath = QCloudServer.CreateFile(copykey, 1024 * 1024 * 1);
+                copyKeySmall = "copy_target";
+                selectKey = "select_target.json";
+                appendKey = "appendableObject";
 
-            PutObject();
-            MultiUpload();
+                PutObject();
+                MultiUpload();
+            }
+            catch (CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
         }
 
         [OneTimeTearDown]
@@ -876,7 +889,6 @@ namespace COSXMLTests
             {
                 GetObjectRequest request = new GetObjectRequest(bucket, commonKey, localDir, localFileName);
 
-
                 request.SetCosProgressCallback(delegate (long completed, long total)
                 {
                     // Console.WriteLine(String.Format("progress = {0} / {1} : {2:##.##}%", completed, total, completed * 100.0 / total));
@@ -1085,10 +1097,17 @@ namespace COSXMLTests
                 // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
             };
 
+            bool flag = false;
+            uploadTask.successCallback = delegate (CosResult callback_result)
+            {
+                flag = true;
+            };
+
             COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
 
             Assert.AreEqual(result.httpCode, 200);
             Assert.NotNull(result.eTag);
+            Assert.True(flag);
         }
 
         [Test()]
@@ -1191,14 +1210,22 @@ namespace COSXMLTests
         {
             GetObjectRequest request = new GetObjectRequest(bucket,
                 commonKey, localDir, localFileName);
+            request.LimitTraffic(8 * 1024 * 1024);
 
             //执行请求
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
+
+            bool flag = false;
+            downloadTask.successCallback = delegate (CosResult callback_result)
+            {
+                flag = true;
+            };
 
             COSXMLDownloadTask.DownloadTaskResult result = await transferManager.DownloadAsync(downloadTask);
 
             Assert.True(result.httpCode == 200);
             Assert.NotNull(result.eTag);
+            Assert.True(flag);
         }
 
 
@@ -1215,7 +1242,7 @@ namespace COSXMLTests
             GetObjectRequest request = new GetObjectRequest(bucket,
                 commonKey, localDir, localFileName);
             request.SetRange(100);
-            request.LimitTraffic(8 * 1000 * 1024);
+            request.LimitTraffic(8 * 1024 * 1024);
 
             //执行请求
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
@@ -1253,7 +1280,7 @@ namespace COSXMLTests
                 asyncTask.Wait(10000);
                 COSXMLDownloadTask.DownloadTaskResult result = asyncTask.Result;
 
-                Assert.True(result.httpCode == 200);
+                Assert.AreEqual(result.httpCode, 200);
                 Assert.NotNull(result.GetResultInfo());
             } 
             else 

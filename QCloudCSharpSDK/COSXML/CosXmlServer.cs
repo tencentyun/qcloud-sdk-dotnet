@@ -1078,10 +1078,10 @@ namespace COSXML
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public SensitiveCencorJobResult SubmitVideoCensorJob(SubmitVideoCensorJobRequest request)
+        public SubmitCensorJobResult SubmitVideoCensorJob(SubmitVideoCensorJobRequest request)
         {
             request.Region = this.GetConfig().Region;
-            return Execute(request, new SensitiveCencorJobResult());
+            return Execute(request, new SubmitCensorJobResult());
         }
 
         /// <summary>
@@ -1093,6 +1093,28 @@ namespace COSXML
         {
             request.Region = this.GetConfig().Region;
             return Execute(request, new GetVideoCensorJobResult());
+        }
+
+        /// <summary>
+        /// 提交音频审核任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public SubmitCensorJobResult SubmitAudioCensorJob(SubmitAudioCensorJobRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new SubmitCensorJobResult());
+        }
+
+        /// <summary>
+        /// 获取音频审核任务结果
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public GetAudioCensorJobResult GetAudioCensorJob(GetAudioCensorJobRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new GetAudioCensorJobResult());
         }
 
         /// <summary>

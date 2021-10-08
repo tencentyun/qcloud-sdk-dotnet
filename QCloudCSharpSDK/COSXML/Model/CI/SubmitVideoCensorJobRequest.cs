@@ -23,9 +23,16 @@ namespace COSXML.Model.CI
             videoCencorJobInfo = new VideoCencorJobInfo();
             this.method = CosRequestMethod.POST;
             this.SetRequestPath("/video/auditing");
+            this.SetRequestHeader("Content-Type", "application/xml");
             videoCencorJobInfo.input = new VideoCencorJobInfo.Input();
             videoCencorJobInfo.conf = new VideoCencorJobInfo.Conf();
             videoCencorJobInfo.conf.snapshot = new VideoCencorJobInfo.Snapshot();
+        }
+
+        // TODO clean this
+        public void SetDebugBody()
+        {
+            throw new CosClientException(1,Transfer.XmlBuilder.Serialize(videoCencorJobInfo));
         }
 
         public void SetCensorObject(string key)
@@ -58,7 +65,7 @@ namespace COSXML.Model.CI
             videoCencorJobInfo.conf.detectContent = detectContent.ToString();
         }
 
-        public void SetSnapshotCount(string count, float timeInterval)
+        public void SetSnapshotCount(string count)
         {
             videoCencorJobInfo.conf.snapshot.count = count;
         }
@@ -68,9 +75,9 @@ namespace COSXML.Model.CI
             videoCencorJobInfo.conf.snapshot.mode = mode;
         }
 
-        public void SetSnapshotTimeInterval(float timeInterval)
+        public void SetSnapshotTimeInterval(string timeInterval)
         {
-            videoCencorJobInfo.conf.snapshot.timeInterval = timeInterval.ToString();
+            videoCencorJobInfo.conf.snapshot.timeInterval = timeInterval;
         }
 
         public override Network.RequestBody GetRequestBody()

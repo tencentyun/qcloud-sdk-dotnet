@@ -29,6 +29,7 @@ namespace COSXMLTests
         private string photoKey;
         private string qrPhotoKey;
         private string videoKey;
+        private string audioKey;
         private string bucket;
 
         [OneTimeSetUp]
@@ -49,6 +50,7 @@ namespace COSXMLTests
             request = new PutObjectRequest(bucket, qrPhotoKey, fileInfo.Name);
             QCloudServer.Instance().cosXml.PutObject(request);
             videoKey = "CITestVideo.mp4";
+            audioKey = "CITestAudio.mp3";
             localSnapshotFilePath = "/tmp/snapshot.jpg";
         }
 
@@ -319,7 +321,11 @@ namespace COSXMLTests
                 GetMediaInfoRequest request = new GetMediaInfoRequest(bucket, key);
                 GetMediaInfoResult result = QCloudServer.Instance().cosXml.GetMediaInfo(request);
                 Assert.AreEqual(result.httpCode, 200);
-                ForeachClassProperties<MediaInfoResult.MediaInfo.Stream.Video>(result.mediaInfoResult.mediaInfo.stream.video);
+                Assert.NotNull(result.mediaInfoResult.mediaInfo.stream.video);
+                Assert.NotNull(result.mediaInfoResult.mediaInfo.stream.video.index);
+                Assert.NotNull(result.mediaInfoResult.mediaInfo.stream.video.codecName);
+                Assert.NotNull(result.mediaInfoResult.mediaInfo.stream.video.codecLongName);
+                Assert.NotNull(result.mediaInfoResult.mediaInfo.stream.video.height);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -334,19 +340,6 @@ namespace COSXMLTests
             
         }
 
-        public static void ForeachClassProperties<T>(T model)
-        {
-            // TODO(shawnnqin) 这里反射check属性没有弄到，再优化一下
-            Type t = model.GetType();
-            PropertyInfo[] PropertyList = t.GetProperties();
-            foreach (PropertyInfo item in PropertyList)
-            {
-                string name = item.Name;
-                object value = item.GetValue(model, null);
-                Assert.NotNull(value);
-            }
-        }
-
         [Test]
         public void TestVideoCensorJobCommit()
         {
@@ -354,12 +347,49 @@ namespace COSXMLTests
             {
                 SubmitVideoCensorJobRequest request = new SubmitVideoCensorJobRequest(bucket);
                 request.SetCensorObject(videoKey);
-                request.SetDetectType("Porn,Terrorisim");
-                request.SetSnapshotMode("Interval");
-                SensitiveCencorJobResult result = QCloudServer.Instance().cosXml.SubmitVideoCensorJob(request);
+                request.SetDetectType("Porn,Terrorism");
+                request.SetSnapshotMode("Average");
+                request.SetSnapshotCount("100");
+                SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitVideoCensorJob(request);
+                string id = result.censorJobsResponse.JobsDetail.JobId;
+                Assert.NotNull(id);
+                Thread.Sleep(5000);
+                // get video censor job
+                GetVideoCensorJobRequest getRequest = new GetVideoCensorJobRequest(bucket, id);
+                GetVideoCensorJobResult getResult = QCloudServer.Instance().cosXml.GetVideoCensorJob(getRequest);
+                Assert.NotNull(getResult.resultStruct.jobsDetail.AudioSection.Count);
+                Assert.AreEqual(200, getResult.httpCode);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestAudioCensorJobCommit()
+        {
+            try
+            {
+                SubmitAudioCensorJobRequest request = new SubmitAudioCensorJobRequest(bucket);
+                request.SetCensorObject(audioKey);
+                request.SetDetectType("Porn,Terrorism");
+                SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitAudioCensorJob(request);
                 string id = result.censorJobsResponse.JobsDetail.JobId;
                 Assert.NotNull(id);
                 Assert.AreEqual(200, result.httpCode);
+                // get audio censor job
+                Thread.Sleep(5000);
+                GetAudioCensorJobRequest getRequest = new GetAudioCensorJobRequest(bucket, id);
+                GetAudioCensorJobResult getResult = QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.State);
+                Assert.AreEqual(200, getResult.httpCode);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -381,6 +411,9 @@ namespace COSXMLTests
                 DescribeMediaBucketsRequest request = new DescribeMediaBucketsRequest();
                 DescribeMediaBucketsResult result = QCloudServer.Instance().cosXml.DescribeMediaBuckets(request);
                 Assert.AreEqual(result.httpCode, 200);
+                Assert.NotNull(result.mediaBuckets.MediaBucketList);
+                Assert.AreEqual(result.mediaBuckets.MediaBucketList.Count, 10);
+                Assert.NotNull(result.mediaBuckets.MediaBucketList[1].BucketId);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {

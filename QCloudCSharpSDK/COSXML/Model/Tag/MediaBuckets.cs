@@ -25,7 +25,7 @@ namespace COSXML.Model.Tag
         public int PageSize;
 
         [XmlElement]
-        public MediaBucketListInfo MediaBucketList;
+        public List<MediaBucketListInfo> MediaBucketList;
 
         public sealed class MediaBucketListInfo 
         {
