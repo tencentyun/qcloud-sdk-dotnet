@@ -29,12 +29,6 @@ namespace COSXML.Model.CI
             videoCencorJobInfo.conf.snapshot = new VideoCencorJobInfo.Snapshot();
         }
 
-        // TODO clean this
-        public void SetDebugBody()
-        {
-            throw new CosClientException(1,Transfer.XmlBuilder.Serialize(videoCencorJobInfo));
-        }
-
         public void SetCensorObject(string key)
         {
             videoCencorJobInfo.input.obj = key;

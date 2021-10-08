@@ -1118,6 +1118,50 @@ namespace COSXML
         }
 
         /// <summary>
+        /// 提交文本审核任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public SubmitCensorJobResult SubmitTextCensorJob(SubmitTextCensorJobRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new SubmitCensorJobResult());
+        }
+
+        /// <summary>
+        /// 获取文本审核任务结果
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public GetTextCensorJobResult GetTextCensorJob(GetTextCensorJobRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new GetTextCensorJobResult());
+        }
+
+        /// <summary>
+        /// 提交文档审核任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public SubmitCensorJobResult SubmitDocumentCensorJob(SubmitDocumentCensorJobRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new SubmitCensorJobResult());
+        }
+        
+        /// <summary>
+        /// 获取文档审核任务结果
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public GetDocumentCensorJobResult GetDocumentCensorJob(GetDocumentCensorJobRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new GetDocumentCensorJobResult());
+        }
+
+        /// <summary>
         /// 获取媒体bucket列表
         /// </summary>
         /// <param name="request"></param>

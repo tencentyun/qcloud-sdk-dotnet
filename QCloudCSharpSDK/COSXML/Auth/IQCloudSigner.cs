@@ -47,7 +47,7 @@ namespace COSXML.Auth
         public void AddParameterKey(string key)
         {
 
-            if (key != null)
+            if (key != null && !parameterKeysToSign.Contains(key))
             {
                 parameterKeysToSign.Add(key);
             }
@@ -61,7 +61,10 @@ namespace COSXML.Auth
 
                 foreach (string key in keys)
                 {
-                    this.parameterKeysToSign.Add(key.ToLower());
+                    if (!parameterKeysToSign.Contains(key))
+                    {
+                        this.parameterKeysToSign.Add(key.ToLower());
+                    }
                 }
             }
         }
@@ -69,7 +72,7 @@ namespace COSXML.Auth
         public void AddHeaderKey(string key)
         {
 
-            if (key != null)
+            if (key != null && !headerKeysToSign.Contains(key))
             {
                 headerKeysToSign.Add(key);
             }
@@ -92,7 +95,10 @@ namespace COSXML.Auth
 
                 foreach (string key in keys)
                 {
-                    this.headerKeysToSign.Add(key.ToLower());
+                    if (!headerKeysToSign.Contains(key))
+                    {
+                        this.headerKeysToSign.Add(key.ToLower());
+                    }
                 }
             }
         }

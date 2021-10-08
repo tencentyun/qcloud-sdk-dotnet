@@ -85,7 +85,7 @@ namespace COSXML.Transfer
             {
                 getObjectRequest = new GetObjectRequest(bucket, key, localDir, localFileName);
             }
-
+            
             cosXmlServer.HeadObject(headObjectRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)

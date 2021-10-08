@@ -1089,6 +1089,34 @@ namespace COSXML
         GetAudioCensorJobResult GetAudioCensorJob(GetAudioCensorJobRequest request);
 
         /// <summary>
+        /// 提交文本审核任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        SubmitCensorJobResult SubmitTextCensorJob(SubmitTextCensorJobRequest request);
+
+        /// <summary>
+        /// 获取文本审核任务结果
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        GetTextCensorJobResult GetTextCensorJob(GetTextCensorJobRequest request);
+
+        /// <summary>
+        /// 提交文档审核任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        SubmitCensorJobResult SubmitDocumentCensorJob(SubmitDocumentCensorJobRequest request);
+
+        /// <summary>
+        /// 获取文档审核任务结果
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        GetDocumentCensorJobResult GetDocumentCensorJob(GetDocumentCensorJobRequest request);
+
+        /// <summary>
         /// 获取媒体bucket列表
         /// </summary>
         /// <param name="request"></param>

@@ -30,6 +30,7 @@ namespace COSXMLTests
         private string qrPhotoKey;
         private string videoKey;
         private string audioKey;
+        private string textKey;
         private string bucket;
 
         [OneTimeSetUp]
@@ -51,6 +52,7 @@ namespace COSXMLTests
             QCloudServer.Instance().cosXml.PutObject(request);
             videoKey = "CITestVideo.mp4";
             audioKey = "CITestAudio.mp3";
+            textKey = "CITestText.txt";
             localSnapshotFilePath = "/tmp/snapshot.jpg";
         }
 
@@ -388,6 +390,68 @@ namespace COSXMLTests
                 Thread.Sleep(5000);
                 GetAudioCensorJobRequest getRequest = new GetAudioCensorJobRequest(bucket, id);
                 GetAudioCensorJobResult getResult = QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.State);
+                Assert.AreEqual(200, getResult.httpCode);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestTextCensorJobCommit()
+        {
+            try
+            {
+                SubmitTextCensorJobRequest request = new SubmitTextCensorJobRequest(bucket);
+                request.SetCensorObject(textKey);
+                request.SetDetectType("Porn,Terrorism");
+                SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitTextCensorJob(request);
+                string id = result.censorJobsResponse.JobsDetail.JobId;
+                Assert.NotNull(id);
+                Assert.AreEqual(200, result.httpCode);
+                // get text censor job
+                Thread.Sleep(5000);
+                GetTextCensorJobRequest getRequest = new GetTextCensorJobRequest(bucket, id);
+                GetTextCensorJobResult getResult = QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.State);
+                Assert.AreEqual(200, getResult.httpCode);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestDocumentCensorJobCommit()
+        {
+            try
+            {
+                SubmitDocumentCensorJobRequest request = new SubmitDocumentCensorJobRequest(bucket);
+                request.SetUrl("https://calibre-ebook.com/downloads/demos/demo.docx");
+                request.SetDetectType("Porn,Terrorism");
+                SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitDocumentCensorJob(request);
+                string id = result.censorJobsResponse.JobsDetail.JobId;
+                Assert.NotNull(id);
+                Assert.AreEqual(200, result.httpCode);
+                // get text censor job
+                Thread.Sleep(5000);
+                GetDocumentCensorJobRequest getRequest = new GetDocumentCensorJobRequest(bucket, id);
+                GetDocumentCensorJobResult getResult = QCloudServer.Instance().cosXml.GetDocumentCensorJob(getRequest);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.State);
                 Assert.AreEqual(200, getResult.httpCode);
             }
