@@ -12,19 +12,22 @@ namespace COSXML.Model.Tag
     [XmlRoot("Response")]
     public sealed class VideoCensorResult
     {
-        [XmlElement("JobsDetail")]
-        public JobsDetail jobsDetail;
+        [XmlElement]
+        public JobsDetailStruct JobsDetail;
 
         [XmlElement]
         public string NonExistJobIds;
 
-        public sealed class JobsDetail
+        public sealed class JobsDetailStruct
         {
             [XmlElement]
             public string Code;
 
             [XmlElement]
             public string Message;
+
+            [XmlElement]
+            public string JobId;
 
             [XmlElement]
             public string State;
@@ -39,7 +42,7 @@ namespace COSXML.Model.Tag
             public string SnapshotCount;
 
             [XmlElement]
-            public int Result;
+            public string Result;
 
             [XmlElement]
             public Info PornInfo;
@@ -57,16 +60,16 @@ namespace COSXML.Model.Tag
             public List<SnapshotDetail> Snapshot;
 
             [XmlElement]
-            public List<AudioSectionDetail> AudioSection;     
+            public List<AudioSectionDetail> AudioSection;   
         }       
 
         public sealed class Info
         {
             [XmlElement]
-            public int HitFlag;
+            public string HitFlag;
 
             [XmlElement]
-            public int Count;
+            public string Count;
         }
 
         public sealed class SnapshotDetail
@@ -75,7 +78,7 @@ namespace COSXML.Model.Tag
             public string Url;
 
             [XmlElement]
-            public int SnapshotTime;
+            public string SnapshotTime;
             
             [XmlElement]
             public string Text;
@@ -102,10 +105,10 @@ namespace COSXML.Model.Tag
             public string Text;
 
             [XmlElement]
-            public int OffsetTime;
+            public string OffsetTime;
 
             [XmlElement]
-            public int Duration;
+            public string Duration;
 
             [XmlElement]
             public AudioSectionInfoDetail PornInfo;
@@ -123,10 +126,10 @@ namespace COSXML.Model.Tag
         public sealed class SnapshotSectionInfoDetail
         {
             [XmlElement]
-            public int HitFlag;
+            public string HitFlag;
 
             [XmlElement]
-            public int Score;
+            public string Score;
 
             [XmlElement]
             public string Label;

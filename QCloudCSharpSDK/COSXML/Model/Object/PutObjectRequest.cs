@@ -36,6 +36,11 @@ namespace COSXML.Model.Object
         private long contentLength = -1L;
 
         /// <summary>
+        /// 上传文件流
+        /// </summary>
+        private FileStream fileStream;
+
+        /// <summary>
         /// 上传回调
         /// </summary>
         private COSXML.Callback.OnProgressCallback progressCallback;
@@ -82,6 +87,45 @@ namespace COSXML.Model.Object
         }
 
         /// <summary>
+        /// 文件流上传
+        /// </summary>
+        /// <param name="bucket"></param>
+        /// <param name="key"></param>
+        /// <param name="fileStream"></param>
+        public PutObjectRequest(string bucket, string key, FileStream fileStream) : base(bucket, key)
+        {
+            this.fileStream = fileStream;
+            this.method = CosRequestMethod.PUT;
+        }
+
+        /// <summary>
+        /// 指定 offset 的文件流上传
+        /// </summary>
+        /// <param name="bucket"></param>
+        /// <param name="key"></param>
+        /// <param name="fileStream"></param>
+        /// <param name="offset"></param>
+        public PutObjectRequest(string bucket, string key, FileStream fileStream, long offset) : this(bucket, key, fileStream)
+        {
+            this.fileOffset = offset;
+        }
+
+        /// <summary>
+        /// 指定 offset + content-length 的文件流上传
+        /// </summary>
+        /// <param name="bucket"></param>
+        /// <param name="key"></param>
+        /// <param name="fileStream"></param>
+        /// <param name="offset"></param>
+        /// <param name="needSendLength"></param>
+        public PutObjectRequest(string bucket, string key, FileStream fileStream, long offset, long needSendLength) : this(bucket, key, fileStream, offset)
+        {
+            this.contentLength = needSendLength < 0 ? -1L : needSendLength;
+        }
+
+        
+
+        /// <summary>
         /// 上传回调
         /// </summary>
         /// <param name="progressCallback"></param>
@@ -103,7 +147,7 @@ namespace COSXML.Model.Object
         public override void CheckParameters()
         {
 
-            if (srcPath == null && data == null)
+            if (srcPath == null && data == null && fileStream == null)
             {
                 throw new CosClientException((int)(CosClientError.InvalidArgument), "data source = null");
             }
@@ -115,6 +159,16 @@ namespace COSXML.Model.Object
                 {
                     throw new CosClientException((int)(CosClientError.InvalidArgument), "file not exist");
                 }
+            }
+
+            if (fileStream != null)
+            {
+                if (fileStream.Length <= fileOffset ||
+                    !fileStream.CanRead ||
+                    !fileStream.CanSeek)
+                    {
+                        throw new CosClientException((int)(CosClientError.InvalidArgument), "fileStream invalid");
+                    }
             }
 
             base.CheckParameters();
@@ -136,11 +190,28 @@ namespace COSXML.Model.Object
                 body = new FileRequestBody(srcPath, fileOffset, contentLength);
                 body.ProgressCallback = progressCallback;
             }
-            else
-if (data != null)
+            else if (data != null)
             {
                 body = new ByteRequestBody(data);
                 body.ProgressCallback = progressCallback;
+            }
+            else if (fileStream != null)
+            {
+                if (fileOffset < 0)
+                {
+                    fileOffset = 0L;
+                }
+                if (contentLength == -1L)
+                {
+                    contentLength = fileStream.Length - fileOffset;
+                }
+                if (fileOffset + contentLength > fileStream.Length)
+                {
+                    throw new CosException.CosClientException(
+                        (int)COSXML.Common.CosClientError.InvalidArgument, 
+                        "file stream offset + contentLength greater than fileStream.Length");
+                }
+                body = new FileStreamRequestBody(fileStream, fileOffset, contentLength);
             }
 
             return body;

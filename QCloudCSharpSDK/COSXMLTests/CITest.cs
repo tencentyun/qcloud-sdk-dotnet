@@ -291,7 +291,7 @@ namespace COSXMLTests
         }
 
         [Test]
-        public void TestGetSnapshotRequest()
+        public void TestGetSnapshot()
         {
             try
             {
@@ -323,11 +323,64 @@ namespace COSXMLTests
                 GetMediaInfoRequest request = new GetMediaInfoRequest(bucket, key);
                 GetMediaInfoResult result = QCloudServer.Instance().cosXml.GetMediaInfo(request);
                 Assert.AreEqual(result.httpCode, 200);
-                Assert.NotNull(result.mediaInfoResult.mediaInfo.stream.video);
-                Assert.NotNull(result.mediaInfoResult.mediaInfo.stream.video.index);
-                Assert.NotNull(result.mediaInfoResult.mediaInfo.stream.video.codecName);
-                Assert.NotNull(result.mediaInfoResult.mediaInfo.stream.video.codecLongName);
-                Assert.NotNull(result.mediaInfoResult.mediaInfo.stream.video.height);
+                // 查看视频文件媒体参数是否成功获取
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.Index);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.CodecName);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.CodecLongName);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.CodecTagString);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.CodecTag);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.Profile);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.Width);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.Height);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.HasBFrame);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.RefFrames);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.Sar);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.Dar);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.PixFormat);
+                //Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.FieldOrder);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.Level);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.Fps);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.AvgFps);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.Timebase);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.StartTime);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.Duration);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.Bitrate);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.NumFrames);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Video.Language);    
+
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.Index);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.CodecName);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.CodecLongName);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.CodecTimeBase);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.CodecTagString);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.CodecTag);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.SampleFmt);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.SampleRate);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.Channel);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.ChannelLayout);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.Timebase);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.StartTime);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.Duration);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.Bitrate);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Audio.Language);
+
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Subtitle);
+                //Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Subtitle.Index);
+                //Assert.NotNull(result.mediaInfoResult.MediaInfo.Stream.Subtitle.Language);
+                
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Format);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Format.NumStream);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Format.NumProgram);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Format.FormatName);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Format.FormatLongName);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Format.StartTime);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Format.Duration);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Format.Bitrate);
+                Assert.NotNull(result.mediaInfoResult.MediaInfo.Format.Size);
+                
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -347,20 +400,111 @@ namespace COSXMLTests
         {
             try
             {
+                
                 SubmitVideoCensorJobRequest request = new SubmitVideoCensorJobRequest(bucket);
                 request.SetCensorObject(videoKey);
                 request.SetDetectType("Porn,Terrorism");
                 request.SetSnapshotMode("Average");
                 request.SetSnapshotCount("100");
                 SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitVideoCensorJob(request);
+                Assert.NotNull(result.censorJobsResponse.JobsDetail.JobId);
+                Assert.NotNull(result.censorJobsResponse.JobsDetail.State);
+                Assert.NotNull(result.censorJobsResponse.JobsDetail.CreationTime);
                 string id = result.censorJobsResponse.JobsDetail.JobId;
-                Assert.NotNull(id);
-                Thread.Sleep(5000);
+                Thread.Sleep(60000);
+                
                 // get video censor job
                 GetVideoCensorJobRequest getRequest = new GetVideoCensorJobRequest(bucket, id);
                 GetVideoCensorJobResult getResult = QCloudServer.Instance().cosXml.GetVideoCensorJob(getRequest);
-                Assert.NotNull(getResult.resultStruct.jobsDetail.AudioSection.Count);
                 Assert.AreEqual(200, getResult.httpCode);
+
+                Assert.NotNull(getResult.resultStruct.JobsDetail);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Code);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.State);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.CreationTime);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Object);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.SnapshotCount);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Result);
+
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo.Count);
+                
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.Count);
+                /*
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PoliticsInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PoliticsInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PoliticsInfo.Count);
+
+                Assert.NotNull(getResult.resultStruct.JobsDetail.AdsInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.AdsInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.AdsInfo.Count);
+*/
+                Assert.NotZero(getResult.resultStruct.JobsDetail.Snapshot.Count);
+                for(int i = 0; i < getResult.resultStruct.JobsDetail.Snapshot.Count; i++)
+                {
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i]);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].Url);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].Text);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].SnapshotTime);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].PornInfo);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].PornInfo.HitFlag);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].PornInfo.Score);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].PornInfo.Label);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].PornInfo.SubLabel);
+
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].TerrorismInfo);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].TerrorismInfo.HitFlag);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].TerrorismInfo.Score);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].TerrorismInfo.Label);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].TerrorismInfo.SubLabel);
+                    /*
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].PoliticsInfo);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].PoliticsInfo.HitFlag);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].PoliticsInfo.Score);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].PoliticsInfo.Label);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].PoliticsInfo.SubLabel);
+
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].AdsInfo);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].AdsInfo.HitFlag);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].AdsInfo.Score);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].AdsInfo.Label);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Snapshot[i].AdsInfo.SubLabel);  
+                    */   
+                }
+                Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection);
+                /*
+                Assert.NotZero(getResult.resultStruct.JobsDetail.AudioSection.Count);
+                for(int i = 0; i < getResult.resultStruct.JobsDetail.AudioSection.Count; i++)
+                {
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i]);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].Url);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].OffsetTime);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].Duration);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].Text);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].PoliticsInfo);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].PoliticsInfo.HitFlag);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].PoliticsInfo.Score);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].PoliticsInfo.Keywords);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].PornInfo);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].PornInfo.HitFlag);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].PornInfo.Score);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].PornInfo.Keywords);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].TerrorismInfo);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].TerrorismInfo.HitFlag);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].TerrorismInfo.Score);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].TerrorismInfo.Keywords);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].AdsInfo);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].AdsInfo.HitFlag);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].AdsInfo.Score);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.AudioSection[i].AdsInfo.Keywords);
+                }
+                */
+
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -375,10 +519,11 @@ namespace COSXMLTests
         }
 
         [Test]
-        public void TestAudioCensorJobCommit()
+        public void TestAudioCensorJob()
         {
             try
             {
+                
                 SubmitAudioCensorJobRequest request = new SubmitAudioCensorJobRequest(bucket);
                 request.SetCensorObject(audioKey);
                 request.SetDetectType("Porn,Terrorism");
@@ -387,11 +532,52 @@ namespace COSXMLTests
                 Assert.NotNull(id);
                 Assert.AreEqual(200, result.httpCode);
                 // get audio censor job
-                Thread.Sleep(5000);
+                Thread.Sleep(60000);
+                
                 GetAudioCensorJobRequest getRequest = new GetAudioCensorJobRequest(bucket, id);
                 GetAudioCensorJobResult getResult = QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest);
-                Assert.NotNull(getResult.resultStruct.JobsDetail.State);
                 Assert.AreEqual(200, getResult.httpCode);
+                // 成功时不返回
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Code);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.State);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.CreationTime);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Object);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Result);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.AudioText);
+
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo.Score);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo.Label);
+
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.Score);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.Label);
+             
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Section);
+                
+                Assert.NotZero(getResult.resultStruct.JobsDetail.Section.Count);
+                for(int i = 0; i < getResult.resultStruct.JobsDetail.Section.Count; i++)
+                {
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].Url);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].OffsetTime);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].Duration);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].Text);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo.HitFlag);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo.Score);
+                    // 没有命中关键词时不返回
+                    //Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo.Keywords);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo.HitFlag);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo.Score);
+                    // 没有命中关键词时不返回
+                    //Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo.Keywords);
+                }
+                
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -410,6 +596,7 @@ namespace COSXMLTests
         {
             try
             {
+                
                 SubmitTextCensorJobRequest request = new SubmitTextCensorJobRequest(bucket);
                 request.SetCensorObject(textKey);
                 request.SetDetectType("Porn,Terrorism");
@@ -417,12 +604,62 @@ namespace COSXMLTests
                 string id = result.censorJobsResponse.JobsDetail.JobId;
                 Assert.NotNull(id);
                 Assert.AreEqual(200, result.httpCode);
-                // get text censor job
-                Thread.Sleep(5000);
+                // 等待审核任务跑完
+                Thread.Sleep(30000);
                 GetTextCensorJobRequest getRequest = new GetTextCensorJobRequest(bucket, id);
                 GetTextCensorJobResult getResult = QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
-                Assert.NotNull(getResult.resultStruct.JobsDetail.State);
                 Assert.AreEqual(200, getResult.httpCode);
+                // 只有失败时返回
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Code);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.State);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.CreationTime);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Object);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.SectionCount);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Result);
+
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo.Count);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.Count);
+                /*
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PoliticsInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PoliticsInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PoliticsInfo.Count);
+                */
+                /*
+                Assert.NotNull(getResult.resultStruct.JobsDetail.AdsInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.AdsInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.AdsInfo.Count);
+                */
+                /*
+                Assert.NotNull(getResult.resultStruct.JobsDetail.IllegalInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.IllegalInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.IllegalInfo.Count);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.AbuseInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.AbuseInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.AbuseInfo.Count);
+                */
+
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Section);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Section.Count);
+                for(int i = 0; i < getResult.resultStruct.JobsDetail.Section.Count; i++)
+                {
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].StartByte);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo);
+                    //Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo.Code);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo.HitFlag);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo.Score);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo.Keywords);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo);
+                    //Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PoliticsInfo);
+                    //Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].AdsInfo);
+                    //Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].IllegalInfo);
+                    //Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].AbuseInfo);
+                }
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -441,6 +678,7 @@ namespace COSXMLTests
         {
             try
             {
+                /*
                 SubmitDocumentCensorJobRequest request = new SubmitDocumentCensorJobRequest(bucket);
                 request.SetUrl("https://calibre-ebook.com/downloads/demos/demo.docx");
                 request.SetDetectType("Porn,Terrorism");
@@ -448,12 +686,56 @@ namespace COSXMLTests
                 string id = result.censorJobsResponse.JobsDetail.JobId;
                 Assert.NotNull(id);
                 Assert.AreEqual(200, result.httpCode);
-                // get text censor job
-                Thread.Sleep(5000);
-                GetDocumentCensorJobRequest getRequest = new GetDocumentCensorJobRequest(bucket, id);
+                throw new COSXML.CosException.CosClientException(1, result.censorJobsResponse.JobsDetail.JobId);
+                // 等待审核任务跑完
+                Thread.Sleep(50000);
+                */
+                //GetDocumentCensorJobRequest getRequest = new GetDocumentCensorJobRequest(bucket, id);
+                GetDocumentCensorJobRequest getRequest = new GetDocumentCensorJobRequest(bucket, "sd17ad7e1d2bd611ec9c44525400f3e40d");
                 GetDocumentCensorJobResult getResult = QCloudServer.Instance().cosXml.GetDocumentCensorJob(getRequest);
-                Assert.NotNull(getResult.resultStruct.JobsDetail.State);
                 Assert.AreEqual(200, getResult.httpCode);
+                // 参数检查
+                Assert.NotNull(getResult.resultStruct.JobsDetail.State);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Code);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Suggestion);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.CreationTime);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Url);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageCount);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PornInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PornInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PornInfo.Score);
+                /*
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PoliticsInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PoliticsInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PoliticsInfo.Score);
+                */
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.Url);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.Text);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PageNumber);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.SheetNumber);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.SubLabel);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.Score);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults.Text);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults.Keywords);
+                /*
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.SubLabel);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.Score);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.OcrResults);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.OcrResults.Text);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.OcrResults.Keywords);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.ObjectResults);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.ObjectResults.Name);
+                */
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -476,8 +758,13 @@ namespace COSXMLTests
                 DescribeMediaBucketsResult result = QCloudServer.Instance().cosXml.DescribeMediaBuckets(request);
                 Assert.AreEqual(result.httpCode, 200);
                 Assert.NotNull(result.mediaBuckets.MediaBucketList);
-                Assert.AreEqual(result.mediaBuckets.MediaBucketList.Count, 10);
-                Assert.NotNull(result.mediaBuckets.MediaBucketList[1].BucketId);
+                Assert.NotZero(result.mediaBuckets.MediaBucketList.Count);
+                for (int i = 0; i < result.mediaBuckets.MediaBucketList.Count; i++)
+                {
+                    Assert.NotNull(result.mediaBuckets.MediaBucketList[i].BucketId);
+                    Assert.NotNull(result.mediaBuckets.MediaBucketList[i].Region);
+                    Assert.NotNull(result.mediaBuckets.MediaBucketList[i].CreateTime);
+                }
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {

@@ -44,6 +44,8 @@ namespace COSXMLTests
 
         internal string selectFilePath;
 
+        internal string streamUploadFilePath;
+
         internal string appendKey;
 
         internal string localDir;
@@ -61,6 +63,7 @@ namespace COSXMLTests
                 long currentTime = TimeUtils.GetCurrentTime(TimeUnit.Seconds);
                 smallFileSrcPath = QCloudServer.CreateFile("small_" + currentTime + ".txt", 1024 * 1024 * 1);
                 bigFileSrcPath = QCloudServer.CreateFile("big_" + currentTime + ".txt", 1024 * 1024 * 10);
+                streamUploadFilePath = QCloudServer.CreateFile("streaming_" + currentTime + ".txt", 1024 * 1024 * 10);
                 FileInfo fileInfo = new FileInfo(smallFileSrcPath);
 
                 DirectoryInfo directoryInfo = fileInfo.Directory;
@@ -230,7 +233,6 @@ namespace COSXMLTests
             }
         }
 
-        [Test()]
         public void PutObject()
         {
             try
@@ -302,6 +304,113 @@ namespace COSXMLTests
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 Assert.Fail();
+            }
+        }
+
+        [Test()]
+        public void PutObjectStreamTest()
+        {
+            try
+            {
+                FileStream fileStream = new FileStream(streamUploadFilePath, FileMode.Open, FileAccess.Read);
+                PutObjectRequest request = new PutObjectRequest(bucket, commonKey, fileStream);
+                PutObjectResult result = cosXml.PutObject(request);
+                fileStream.Close();
+                //确定长度ok, crc64ok, 下载下来对比ok
+                FileInfo info = new FileInfo(streamUploadFilePath);
+                HeadObjectRequest headObjectRequest = new HeadObjectRequest(bucket, commonKey);
+                HeadObjectResult headObjectResult = cosXml.HeadObject(headObjectRequest);
+                Assert.AreEqual(headObjectResult.size, info.Length);
+                Assert.True(COSXML.Utils.Crc64.CompareCrc64(streamUploadFilePath, headObjectResult.crc64ecma));
+            }
+            catch (CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test()]
+        public void PutObjectStreamOffsetTest()
+        {
+            try
+            {
+                FileStream fileStream = new FileStream(streamUploadFilePath, FileMode.Open, FileAccess.Read);
+                long offset = 1 * 1024 * 1024L;
+                PutObjectRequest request = new PutObjectRequest(bucket, commonKey, fileStream, offset);
+                PutObjectResult result = cosXml.PutObject(request);
+                fileStream.Close();
+                //确定长度ok, crc64ok, 下载下来对比ok
+                FileInfo info = new FileInfo(streamUploadFilePath);
+                HeadObjectRequest headObjectRequest = new HeadObjectRequest(bucket, commonKey);
+                HeadObjectResult headObjectResult = cosXml.HeadObject(headObjectRequest);
+                Assert.AreEqual(headObjectResult.size + offset, info.Length);
+            }
+            catch (CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test()]
+        public void PutObjectStreamContentLengthTest()
+        {
+            try
+            {
+                FileStream fileStream = new FileStream(streamUploadFilePath, FileMode.Open, FileAccess.Read);
+                long offset = 1 * 1024 * 1024L;
+                long contetnLength = 1 * 1024 * 1024L;
+                PutObjectRequest request = new PutObjectRequest(bucket, commonKey, fileStream, offset, contetnLength);
+                PutObjectResult result = cosXml.PutObject(request);
+                fileStream.Close();
+                //确定长度ok, crc64ok, 下载下来对比ok
+                FileInfo info = new FileInfo(streamUploadFilePath);
+                HeadObjectRequest headObjectRequest = new HeadObjectRequest(bucket, commonKey);
+                HeadObjectResult headObjectResult = cosXml.HeadObject(headObjectRequest);
+                Assert.AreEqual(headObjectResult.size, contetnLength);
+            }
+            catch (CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test()]
+        public void InvalidPutObjectStreamTest()
+        {
+            try
+            {
+                FileStream fileStream = new FileStream(streamUploadFilePath, FileMode.Open, FileAccess.Write);
+                PutObjectRequest request = new PutObjectRequest(bucket, commonKey, fileStream);
+                PutObjectResult result = cosXml.PutObject(request);
+                Assert.Fail();
+            }
+            catch (CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Pass();
+            }
+            catch (CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Pass();
             }
         }
 
@@ -1147,7 +1256,7 @@ namespace COSXMLTests
 
             Assert.AreEqual(result.httpCode, 200);
             Assert.NotNull(result.eTag);
-            // TODO make sure callback
+            // TODO callback
             //Assert.True(flag);
         }
 
@@ -1160,9 +1269,16 @@ namespace COSXMLTests
 
             uploadTask.SetSrcPath(smallFileSrcPath);
 
+            bool flag = false;
+            uploadTask.successCallback = delegate (CosResult callback_result)
+            {
+                flag = true;
+            };
             COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
 
-            Assert.AreEqual(result.httpCode, 200);
+            // TODO callback
+            //Assert.True(flag);
+            Assert.AreEqual(200, result.httpCode);
             Assert.NotNull(result.eTag);
         }
 
@@ -1266,7 +1382,7 @@ namespace COSXMLTests
 
             Assert.True(result.httpCode == 200);
             Assert.NotNull(result.eTag);
-            // TODO make sure callback
+            // TODO callback
             //Assert.True(flag);
         }
 
@@ -1484,7 +1600,6 @@ namespace COSXMLTests
                 long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
                 PutObjectRequest request = new PutObjectRequest(bucket,
                     commonKey, smallFileSrcPath);
-
 
                 request.LimitTraffic(8 * 1000 * 1024);
                 //执行请求

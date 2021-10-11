@@ -9,13 +9,13 @@ namespace COSXML.Model.CI
     /// <summary>
     /// 文档审核结果
     /// </summary>
-    public sealed class GetDocumentCensorJobResult : CosDataResult<DocumentCensorJobResult>
+    public sealed class GetDocumentCensorJobResult : CosDataResult<DocumentCensorResult>
     {
         /// <summary>
         /// 文档审核结果
         /// </summary>
         /// <value></value>
-        public DocumentCensorJobResult resultStruct { 
+        public DocumentCensorResult resultStruct { 
             get {return _data; } 
         }
     }

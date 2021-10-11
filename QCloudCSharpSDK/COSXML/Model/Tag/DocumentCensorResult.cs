@@ -10,7 +10,7 @@ namespace COSXML.Model.Tag
     /// <see href="https://cloud.tencent.com/document/product/436/59382"/>
     /// </summary>
     [XmlRoot("Response")]
-    public sealed class DocumentCensorJobResult
+    public sealed class DocumentCensorResult
     {
         [XmlElement]
         public Detail JobsDetail;

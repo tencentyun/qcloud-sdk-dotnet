@@ -442,7 +442,7 @@ namespace COSXML.Network
                     successCallback(cosResult);
                 }
                 else
-if (faileCallback != null)
+                if (faileCallback != null)
                 {
 
                     if (ex is CosClientException)
@@ -450,7 +450,7 @@ if (faileCallback != null)
                         faileCallback(ex as CosClientException, null);
                     }
                     else
-if (ex is CosServerException)
+                    if (ex is CosServerException)
                     {
                         faileCallback(null, ex as CosServerException);
                     }

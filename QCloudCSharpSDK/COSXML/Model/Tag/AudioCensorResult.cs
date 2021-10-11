@@ -24,6 +24,9 @@ namespace COSXML.Model.Tag
             public string Message;
 
             [XmlElement]
+            public string JobId;
+
+            [XmlElement]
             public string State;
 
             [XmlElement]
@@ -60,10 +63,10 @@ namespace COSXML.Model.Tag
         public sealed class Info
         {
             [XmlElement]
-            public int HitFlag;
+            public string HitFlag;
 
             [XmlElement]
-            public int Score;
+            public string Score;
 
             [XmlElement]
             public string Label;
@@ -99,10 +102,10 @@ namespace COSXML.Model.Tag
         public sealed class SectionInfoDetail
         {
             [XmlElement]
-            public int HitFlag;
+            public string HitFlag;
 
             [XmlElement]
-            public int Score;
+            public string Score;
 
             [XmlElement]
             public string Keywords;

@@ -10,7 +10,7 @@ namespace COSXML.Model.Tag
     /// <see href="https://cloud.tencent.com/document/product/436/56288"/>
     /// </summary>
     [XmlRoot("Response")]
-    public sealed class TextCensorJobResult
+    public sealed class TextCensorResult
     {
         [XmlElement]
         public Detail JobsDetail;
@@ -39,6 +39,9 @@ namespace COSXML.Model.Tag
             public string Object;
 
             [XmlElement]
+            public string SectionCount;
+
+            [XmlElement]
             public string Result;
 
             [XmlElement]
@@ -60,7 +63,7 @@ namespace COSXML.Model.Tag
             public Info AbuseInfo;
 
             [XmlElement]
-            public SectionInfo Section;     
+            public List<SectionInfo> Section;
         }       
 
         public sealed class Info

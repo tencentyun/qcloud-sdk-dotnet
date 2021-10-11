@@ -6,186 +6,186 @@ namespace COSXML.Model.Tag
     [XmlRoot("Response")]
     public sealed class MediaInfoResult
     {
-        [XmlElement("MediaInfo")]
-        public MediaInfo mediaInfo;
-        public sealed class MediaInfo
+        [XmlElement]
+        public MediaInfoDetail MediaInfo;
+        public sealed class MediaInfoDetail
         {
-            [XmlElement("Format")]
-            public Format format;
+            [XmlElement]
+            public FormatDetail Format;
 
-            [XmlElement("Stream")]
-            public Stream stream;
+            [XmlElement]
+            public StreamDetail Stream;
 
-            public sealed class Stream 
+            public sealed class StreamDetail 
             {
-                [XmlElement("Video")]
-                public Video video;
+                [XmlElement]
+                public VideoDetail Video;
 
-                [XmlElement("Audio")]
-                public Audio audio;
+                [XmlElement]
+                public AudioDetail Audio;
 
-                [XmlElement("Subtitle")]
-                public Subtitle subtitle;
+                [XmlElement]
+                public SubtitleDetail Subtitle;
 
-                public sealed class Video
+                public sealed class VideoDetail
                 {
-                    [XmlElement("Index")]
-                    public int index;
+                    [XmlElement]
+                    public string Index;
 
-                    [XmlElement("CodecName")]
-                    public string codecName;
+                    [XmlElement]
+                    public string CodecName;
 
-                    [XmlElement("CodecLongName")]
-                    public string codecLongName;
+                    [XmlElement]
+                    public string CodecLongName;
 
-                    [XmlElement("CodecTimeBase")]
-                    public string codecTimeBase;
+                    [XmlElement]
+                    public string CodecTimeBase;
 
-                    [XmlElement("CodecTagString")]
-                    public string codecTagString;
+                    [XmlElement]
+                    public string CodecTagString;
 
-                    [XmlElement("CodecTag")]
-                    public string codecTag;
+                    [XmlElement]
+                    public string CodecTag;
 
-                    [XmlElement("Profile")]
-                    public string profile;
+                    [XmlElement]
+                    public string Profile;
 
-                    [XmlElement("Height")]
-                    public int height;
+                    [XmlElement]
+                    public string Height;
 
-                    [XmlElement("Width")]
-                    public int width;
+                    [XmlElement]
+                    public string Width;
 
-                    [XmlElement("HasBFrame")]
-                    public int hasBFrame;
+                    [XmlElement]
+                    public string HasBFrame;
 
-                    [XmlElement("RefFrames")]
-                    public int refFrames;
+                    [XmlElement]
+                    public string RefFrames;
 
-                    [XmlElement("Sar")]
-                    public string sar;
+                    [XmlElement]
+                    public string Sar;
 
-                    [XmlElement("Dar")]
-                    public string dar;
+                    [XmlElement]
+                    public string Dar;
 
-                    [XmlElement("PixFormat")]
-                    public string pixformat;
+                    [XmlElement]
+                    public string PixFormat;
 
-                    [XmlElement("FieldOrder")]
-                    public string fieldOrder;
+                    [XmlElement]
+                    public string FieldOrder;
 
-                    [XmlElement("Level")]
-                    public int level;
+                    [XmlElement]
+                    public string Level;
 
-                    [XmlElement("Fps")]
-                    public float fps;
+                    [XmlElement]
+                    public string Fps;
 
-                    [XmlElement("AvgFps")]
-                    public string avgFps;
+                    [XmlElement]
+                    public string AvgFps;
 
-                    [XmlElement("Timebase")]
-                    public string timebase;
+                    [XmlElement]
+                    public string Timebase;
 
-                    [XmlElement("StartTime")]
-                    public float startTime;
+                    [XmlElement]
+                    public string StartTime;
 
-                    [XmlElement("Duration")]
-                    public float duration;
+                    [XmlElement]
+                    public string Duration;
 
-                    [XmlElement("Bitrate")]
-                    public float bitrate;
+                    [XmlElement]
+                    public string Bitrate;
                     
-                    [XmlElement("NumFrames")]
-                    public int numFrames;
+                    [XmlElement]
+                    public string NumFrames;
                     
-                    [XmlElement("Language")]
+                    [XmlElement]
                     public string Language;
                     
                 }
 
-                public sealed class Audio
+                public sealed class AudioDetail
                 {
-                    [XmlElement("Index")]
-                    public int index;
+                    [XmlElement]
+                    public string Index;
 
                     [XmlElement("CodecName")]
-                    public string codecName;
+                    public string CodecName;
 
                     [XmlElement("CodecLongName")]
-                    public string codecLongName;
+                    public string CodecLongName;
 
                     [XmlElement("CodecTimeBase")]
-                    public string codecTimeBase;
+                    public string CodecTimeBase;
 
                     [XmlElement("CodecTagString")]
-                    public string codecTagString;
+                    public string CodecTagString;
 
                     [XmlElement("CodecTag")]
-                    public string codecTag;
+                    public string CodecTag;
                     
                     [XmlElement("SampleFmt")]
-                    public string sampleFmt;
+                    public string SampleFmt;
                     
                     [XmlElement("SampleRate")]
-                    public int sampleRate;
+                    public string SampleRate;
 
                     [XmlElement("Channel")]
-                    public int channel;
+                    public string Channel;
 
                     [XmlElement("ChannelLayout")]
-                    public string channelLayout;
+                    public string ChannelLayout;
 
                     [XmlElement("Timebase")]
-                    public string timebase;
+                    public string Timebase;
 
                     [XmlElement("StartTime")]
-                    public float startTime;
+                    public string StartTime;
 
                     [XmlElement("Duration")]
-                    public float duration;
+                    public string Duration;
 
                     [XmlElement("Bitrate")]
-                    public float bitrate;
+                    public string Bitrate;
                     
                     [XmlElement("Language")]
-                    public string language;
+                    public string Language;
                 }
 
-                public sealed class Subtitle
+                public sealed class SubtitleDetail
                 {
                     [XmlElement("Index")]
-                    public int index;
+                    public string Index;
 
                     [XmlElement("Language")]
-                    public string language;
+                    public string Language;
                 }
             }
 
-            public sealed class Format
+            public sealed class FormatDetail
             {
                 [XmlElement("Bitrate")]
-                public float bitrate;
+                public string Bitrate;
 
                 [XmlElement("NumStream")]
-                public int numStream;
+                public string NumStream;
 
                 [XmlElement("NumProgram")]
-                public int numProgram;
+                public string NumProgram;
 
                 [XmlElement("FormatName")]
-                public string formatName;
+                public string FormatName;
 
                 [XmlElement("FormatLongName")]
-                public string formatLongName;
+                public string FormatLongName;
 
                 [XmlElement("StartTime")]
-                public float startTime;
+                public string StartTime;
 
                 [XmlElement("Duration")]
-                public float duration;
+                public string Duration;
                 
                 [XmlElement("Size")]
-                public int size;
+                public string Size;
 
             }
         }
