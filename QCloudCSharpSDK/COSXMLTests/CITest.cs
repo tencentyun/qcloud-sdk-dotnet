@@ -411,7 +411,7 @@ namespace COSXMLTests
                 Assert.NotNull(result.censorJobsResponse.JobsDetail.State);
                 Assert.NotNull(result.censorJobsResponse.JobsDetail.CreationTime);
                 string id = result.censorJobsResponse.JobsDetail.JobId;
-                Thread.Sleep(60000);
+                Thread.Sleep(120000);
                 
                 // get video censor job
                 GetVideoCensorJobRequest getRequest = new GetVideoCensorJobRequest(bucket, id);
