@@ -678,7 +678,7 @@ namespace COSXMLTests
         {
             try
             {
-                /*
+                
                 SubmitDocumentCensorJobRequest request = new SubmitDocumentCensorJobRequest(bucket);
                 request.SetUrl("https://calibre-ebook.com/downloads/demos/demo.docx");
                 request.SetDetectType("Porn,Terrorism");
@@ -689,9 +689,8 @@ namespace COSXMLTests
                 throw new COSXML.CosException.CosClientException(1, result.censorJobsResponse.JobsDetail.JobId);
                 // 等待审核任务跑完
                 Thread.Sleep(50000);
-                */
-                //GetDocumentCensorJobRequest getRequest = new GetDocumentCensorJobRequest(bucket, id);
-                GetDocumentCensorJobRequest getRequest = new GetDocumentCensorJobRequest(bucket, "sd17ad7e1d2bd611ec9c44525400f3e40d");
+                
+                GetDocumentCensorJobRequest getRequest = new GetDocumentCensorJobRequest(bucket, id);
                 GetDocumentCensorJobResult getResult = QCloudServer.Instance().cosXml.GetDocumentCensorJob(getRequest);
                 Assert.AreEqual(200, getResult.httpCode);
                 // 参数检查

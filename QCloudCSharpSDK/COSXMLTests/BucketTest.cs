@@ -1113,7 +1113,7 @@ namespace COSXMLTests
                 configuration.Status = "Enabled";
                 configuration.RefererType = "White-List";
                 configuration.domainList = new DomainList();
-                configuration.domainList.AddDomain("*.qq.com");
+                configuration.domainList.AddDomain("*.domain1.com");
                 configuration.EmptyReferConfiguration = "Deny";
                 request.SetRefererConfiguration(configuration);
                 PutBucketRefererResult result = cosXml.PutBucketReferer(request);
@@ -1126,6 +1126,85 @@ namespace COSXMLTests
                 Assert.IsNotEmpty(getResult.GetResultInfo());
                 Assert.NotNull(getResult.refererConfiguration);
                 Assert.AreEqual(getResult.refererConfiguration.Status, "Enabled");
+
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test()]
+        public void TestDeleteBucketReferer() 
+        {
+            try
+            {
+                // Put Bucket Refer
+                PutBucketRefererRequest request = new PutBucketRefererRequest(bucket);
+                RefererConfiguration configuration = new RefererConfiguration();
+                configuration.Status = "Enabled";
+                configuration.RefererType = "White-List";
+                configuration.domainList = new DomainList();
+                configuration.domainList.AddDomain("*.domain1.com");
+                configuration.domainList.AddDomain("*.domain2.com");
+                configuration.EmptyReferConfiguration = "Deny";
+                request.SetRefererConfiguration(configuration);
+                PutBucketRefererResult result = cosXml.PutBucketReferer(request);
+                Assert.AreEqual(result.httpCode, 200);
+
+                // Get Bucket Refer
+                GetBucketRefererRequest getRequest = new GetBucketRefererRequest(bucket);
+                GetBucketRefererResult getResult = cosXml.GetBucketReferer(getRequest);
+                Assert.AreEqual(getResult.httpCode, 200);
+                Assert.IsNotEmpty(getResult.GetResultInfo());
+                Assert.NotNull(getResult.refererConfiguration);
+                Assert.AreEqual(getResult.refererConfiguration.Status, "Enabled");
+                Assert.NotNull(getResult.refererConfiguration.domainList);
+                Assert.NotZero(getResult.refererConfiguration.domainList.domains.Count);
+                List<string> domains = new List<string>();
+                for (int i = 0; i < getResult.refererConfiguration.domainList.domains.Count; i++)
+                {
+                    string domain = getResult.refererConfiguration.domainList.domains[i];
+                    if (!domain.Contains("domain2"))
+                        domains.Add(domain);
+                }
+
+                // Put New BucketReferer
+                request = new PutBucketRefererRequest(bucket);
+                configuration = new RefererConfiguration();
+                configuration.Status = "Enabled";
+                configuration.RefererType = "White-List";
+                configuration.domainList = new DomainList();
+                foreach(string domain in domains)
+                {
+                    configuration.domainList.AddDomain(domain);
+                }
+                configuration.EmptyReferConfiguration = "Deny";
+                request.SetRefererConfiguration(configuration);
+                result = cosXml.PutBucketReferer(request);
+                Assert.AreEqual(result.httpCode, 200);
+
+                // Get Bucket Refer again
+                getRequest = new GetBucketRefererRequest(bucket);
+                getResult = cosXml.GetBucketReferer(getRequest);
+                Assert.AreEqual(getResult.httpCode, 200);
+                Assert.IsNotEmpty(getResult.GetResultInfo());
+                Assert.NotNull(getResult.refererConfiguration);
+                Assert.AreEqual(getResult.refererConfiguration.Status, "Enabled");
+                Assert.NotNull(getResult.refererConfiguration.domainList);
+                Assert.AreEqual(getResult.refererConfiguration.domainList.domains.Count, 1);
+                for (int i = 0; i < getResult.refererConfiguration.domainList.domains.Count; i++)
+                {
+                    string domain = getResult.refererConfiguration.domainList.domains[i];
+                    if (domain.Contains("domain2"))
+                        Assert.Fail();
+                }
 
             }
             catch (COSXML.CosException.CosClientException clientEx)

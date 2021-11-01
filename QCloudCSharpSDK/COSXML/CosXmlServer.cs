@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Text.RegularExpressions;
 using System.Text;
 using COSXML.Network;
 using COSXML.Model;
@@ -686,7 +686,18 @@ namespace COSXML
 
                     foreach (KeyValuePair<string, string> keyValuePair in queryParameters)
                     {
-                        encodeQuery[keyValuePair.Key] = URLEncodeUtils.Encode(keyValuePair.Value);
+                        if (keyValuePair.Key == null)
+                        {
+                            continue;
+                        }
+                        else if (keyValuePair.Value == null)
+                        {
+                            encodeQuery[URLEncodeUtils.Encode(keyValuePair.Key).ToLower()] = URLEncodeUtils.Encode("");
+                        }
+                        else 
+                        {
+                            encodeQuery[URLEncodeUtils.Encode(keyValuePair.Key).ToLower()] = URLEncodeUtils.Encode(keyValuePair.Value);
+                        } 
                     }
                 }
 
@@ -731,6 +742,7 @@ namespace COSXML
 
                 if (preSignatureStruct.host == null)
                 {
+                    StringBuilder host = new StringBuilder();
 
                     if (preSignatureStruct.bucket == null)
                     {
@@ -739,21 +751,41 @@ namespace COSXML
 
                     if (preSignatureStruct.bucket.EndsWith("-" + preSignatureStruct.appid))
                     {
-                        urlBuilder.Append(preSignatureStruct.bucket);
+                        host.Append(preSignatureStruct.bucket);
                     }
                     else
                     {
-                        urlBuilder.Append(preSignatureStruct.bucket).Append("-")
+                        host.Append(preSignatureStruct.bucket).Append("-")
                             .Append(preSignatureStruct.appid);
                     }
 
-                    urlBuilder.Append(".cos.")
+                    host.Append(".cos.")
                         .Append(preSignatureStruct.region)
                         .Append(".myqcloud.com");
+
+                    urlBuilder.Append(host.ToString());
+
+                    // host 入签
+                    if (preSignatureStruct.signHost)
+                    {
+                        if (preSignatureStruct.headers == null)
+                        {
+                            preSignatureStruct.headers = new Dictionary<string, string>(); 
+                        }
+                        preSignatureStruct.headers.Add("host", host.ToString());
+                    }
                 }
                 else
                 {
                     urlBuilder.Append(preSignatureStruct.host);
+                    // host 入签
+                    if (preSignatureStruct.signHost) {
+                        if (preSignatureStruct.headers == null)
+                        {
+                            preSignatureStruct.headers = new Dictionary<string, string>(); 
+                        }
+                        preSignatureStruct.headers.Add("host", preSignatureStruct.host);
+                    }
                 }
 
                 if (!preSignatureStruct.key.StartsWith("/"))
@@ -777,6 +809,13 @@ namespace COSXML
                         queryBuilder.Append('&');
                     }
                 }
+                
+                // 针对需要二次 Encode 的 request Param 特殊处理
+                Regex rgx = new Regex("q-url-param-list=.*&");
+                string paramlist = rgx.Match(sign).ToString().ToString().Split('=')[1].ToString();
+                paramlist = URLEncodeUtils.Encode(paramlist).ToLower();
+                string encodedStr = "q-url-param-list=" + paramlist + "&";
+                sign = rgx.Replace(sign, encodedStr);
 
                 queryBuilder.Append(sign);
                 urlBuilder.Append("?").Append(queryBuilder.ToString());

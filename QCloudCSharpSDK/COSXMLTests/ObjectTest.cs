@@ -1674,6 +1674,41 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public void TestGenerateSignUrlWithRequestParams()
+        {
+            try
+            {
+                string key = "CITestImage.png";
+                PreSignatureStruct signatureStruct = new PreSignatureStruct();
+
+                signatureStruct.bucket = bucket;
+                signatureStruct.appid = QCloudServer.Instance().appid;
+                signatureStruct.region = QCloudServer.Instance().region;
+                signatureStruct.key = key;
+                signatureStruct.httpMethod = "GET";
+                signatureStruct.isHttps = true;
+                signatureStruct.signDurationSecond = 600;
+                signatureStruct.queryParameters = new Dictionary<string, string>();
+                string ci_params = "imageMogr2/thumbnail/!50p";
+                signatureStruct.queryParameters.Add(ci_params, null);
+                signatureStruct.headers = new Dictionary<string, string>();
+                string url = cosXml.GenerateSignURL(signatureStruct);
+                throw new COSXML.CosException.CosClientException(1, url);
+                Assert.NotNull(url);
+            }         
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test()]
         public async Task AsyncPutObject()
         {
             PutObjectRequest request = new PutObjectRequest(bucket, commonKey, smallFileSrcPath);
