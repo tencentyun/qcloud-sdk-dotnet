@@ -92,7 +92,7 @@ namespace COSXML.Network
                 {
                     if (File.Exists(filePath) && new FileInfo(filePath).Length > fileOffset)
                     {
-                        // 写脏文件了，直接Truncate掉
+                        // 写脏文件了，直接 Truncate
                         fileStream = new FileStream(filePath, FileMode.Truncate, FileAccess.Write);
                     }
                     else 
@@ -190,7 +190,16 @@ namespace COSXML.Network
 
                 if (isDownload)
                 {
-                    fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write);
+                    if (File.Exists(filePath) && new FileInfo(filePath).Length > fileOffset)
+                    {
+                        // 写脏文件了，直接 Truncate
+                        fileStream = new FileStream(filePath, FileMode.Truncate, FileAccess.Write);
+                    }
+                    else 
+                    {
+                        // 正常文件或者追加写场景，直接写入
+                        fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write);
+                    }
                     fileStream.Seek(fileOffset, SeekOrigin.Begin);
                     responseBodyState.inputStream.BeginRead(responseBodyState.buffer, 0, responseBodyState.buffer.Length, AsyncStreamCallback, responseBodyState);
                 }

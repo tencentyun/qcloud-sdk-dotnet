@@ -1507,21 +1507,43 @@ namespace COSXMLTests
         [Test()]
         public void TestDownloadTaskOverwriteSameFile()
         {
+            try {
+                GetObjectRequest request = new GetObjectRequest(bucket, multiKey, localDir, localFileName);
+                
+                COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
+                var asyncTask = transferManager.DownloadAsync(downloadTask);
+                asyncTask.Wait();
+                
+                //GetObjectResult result = cosXml.GetObject(request);
+                //Assert.AreEqual(200, result.httpCode);
+                long bigLength = new FileInfo(localFileName).Length;
+                // 再下载一个小文件
+                // 存在一致性问题，把小文件重新上传一下
+                PutObject();
+                request = new GetObjectRequest(bucket, commonKey, localDir, localFileName);
+                
+                downloadTask = new COSXMLDownloadTask(request);
+                asyncTask = transferManager.DownloadAsync(downloadTask);
+                asyncTask.Wait();
+                
+                //result = cosXml.GetObject(request);
+                //Assert.AreEqual(200, result.httpCode);
+                // 检查文件长度，是否覆盖写
+                long smallLength = new FileInfo(localFileName).Length;
+                
+                Assert.True(smallLength < bigLength);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
             // 先下载一个大文件
-            GetObjectRequest request = new GetObjectRequest(bucket, multiKey, localDir, localFileName);
-            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
-            var asyncTask = transferManager.DownloadAsync(downloadTask);
-            asyncTask.Wait();
-            long bigLength = new FileInfo(localFileName).Length;
-            // 再下载一个小文件
-            request = new GetObjectRequest(bucket, commonKey, localDir, localFileName);
-            downloadTask = new COSXMLDownloadTask(request);
-            asyncTask = transferManager.DownloadAsync(downloadTask);
-            asyncTask.Wait();
-
-            // 检查文件长度，是否覆盖写
-            long smallLength = new FileInfo(localFileName).Length;
-            Assert.True(smallLength < bigLength);
         }
 
         [Test()]
