@@ -317,10 +317,29 @@ namespace COSXML.Model
             // 默认签署的头部跟参数
             cosXmlSignSourceProvider.AddHeaderKeys(new List<string>() 
             {
-                "content-type",
+                "cache-control",
+                "content-disposition",
+                "content-encoding",
                 "content-length",
                 "content-md5",
-                "host"
+                "content-type",
+                "expect",
+                "expires",
+                "host",
+                "if-match",
+                "if-modified-since",
+                "if-none-match",
+                "if-unmodified-since",
+                "origin",
+                "range",
+                "response-cache-control",
+                "response-content-disposition",
+                "response-content-encoding",
+                "response-content-language",
+                "response-content-type",
+                "response-expires",
+                "transfer-encoding",
+                "versionid"
             });
 
             foreach (KeyValuePair<string, string> pair in headers)

@@ -39,7 +39,7 @@ namespace COSXML.Model.Tag
         /// <summary>
         /// 签名中是否签入host
         /// </summary>
-        public bool signHost = true;
+        public bool signHost = false;
 
         /// <summary>
         /// http request method : get , put , etc.

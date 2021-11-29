@@ -217,6 +217,27 @@ namespace COSXML
             return (Model.Bucket.HeadBucketResult)Excute(request, new Model.Bucket.HeadBucketResult());
         }
 
+        public bool DoesBucketExist(DoesBucketExistRequest request)
+        {
+            try {
+                CosResult result = Excute(request, new Model.Bucket.HeadBucketResult());
+                if (result.httpCode == 200) {
+                    return true;
+                }
+                return false;
+            }
+            catch (CosServerException serverEx) {
+                if (serverEx.statusCode == 404) {
+                    return false;
+                } else {
+                    throw serverEx;
+                }
+            }
+            catch (Exception e) {
+                throw e;
+            }
+        }
+
          
         public void HeadBucket(HeadBucketRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
@@ -484,6 +505,28 @@ namespace COSXML
             Schedue(request, new HeadObjectResult(), successCallback, failCallback);
         }
 
+        public bool DoesObjectExist(DoesObjectExistRequest request)
+        {
+            try {
+                CosResult result = Excute(request, new Model.Object.HeadObjectResult());
+                if (result.httpCode == 200) {
+                    return true;
+                }
+                return false;
+            }
+            catch (CosServerException serverEx) {
+                if (serverEx.statusCode == 404) {
+                    return false;
+                }
+                else {
+                    throw serverEx;
+                }
+            }
+            catch (Exception e) {
+                throw e;
+            }
+        }
+
         public GetObjectResult GetObject(GetObjectRequest request)
         {
 
@@ -518,6 +561,36 @@ namespace COSXML
         public void GetObjectACL(GetObjectACLRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
         {
             Schedue(request, new GetObjectACLResult(), successCallback, failCallback);
+        }
+
+        public PutObjectTaggingResult PutObjectTagging(PutObjectTaggingRequest request)
+        {
+            return (Model.Object.PutObjectTaggingResult)Excute(request, new Model.Object.PutObjectTaggingResult());
+        }
+
+        public void PutObjectTagging(PutObjectTaggingRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
+        {
+            Schedue(request, new PutObjectTaggingResult(), successCallback, failCallback);
+        }
+
+        public GetObjectTaggingResult GetObjectTagging(GetObjectTaggingRequest request)
+        {
+            return (Model.Object.GetObjectTaggingResult)Excute(request, new Model.Object.GetObjectTaggingResult());
+        }
+
+        public void GetObjectTagging(GetObjectTaggingRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
+        {
+            Schedue(request, new GetObjectTaggingResult(), successCallback, failCallback);
+        }
+
+        public DeleteObjectTaggingResult DeleteObjectTagging(DeleteObjectTaggingRequest request)
+        {
+            return (Model.Object.DeleteObjectTaggingResult)Excute(request, new Model.Object.DeleteObjectTaggingResult());
+        }
+
+        public void DeleteObjectTagging(DeleteObjectTaggingRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback)
+        {
+            Schedue(request, new DeleteObjectTaggingResult(), successCallback, failCallback);
         }
 
         public DeleteObjectResult DeleteObject(DeleteObjectRequest request)
@@ -772,7 +845,8 @@ namespace COSXML
                         {
                             preSignatureStruct.headers = new Dictionary<string, string>(); 
                         }
-                        preSignatureStruct.headers.Add("host", host.ToString());
+                        if (!preSignatureStruct.headers.ContainsKey("host"))
+                            preSignatureStruct.headers.Add("host", host.ToString());
                     }
                 }
                 else

@@ -98,6 +98,15 @@ namespace COSXML
         void HeadBucket(HeadBucketRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
+        /// 检查存储桶是否存在（只有同步方法）
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="successCallback"></param>
+        /// <param name="failCallback"></param>
+         
+        bool DoesBucketExist(DoesBucketExistRequest request);
+
+        /// <summary>
         /// 列出存储桶下的文件
         /// </summary>
         /// <param name="request">GetBucketRequest</param>
@@ -476,6 +485,14 @@ namespace COSXML
         void HeadObject(HeadObjectRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
+        /// 检查对象是否存在(只支持同步方法)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="successCallback"></param>
+        /// <param name="failCallback"></param>
+        bool DoesObjectExist(DoesObjectExistRequest request);
+
+        /// <summary>
         /// 下载对象
         /// </summary>
         /// <param name="request">GetObjectRequest</param>
@@ -558,6 +575,48 @@ namespace COSXML
         /// <param name="failCallback"></param>
          
         void GetObjectACL(GetObjectACLRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
+
+        /// <summary>
+        /// 设置对象标签的同步方法
+        /// </summary>
+        /// <param name="request"></param>
+        PutObjectTaggingResult PutObjectTagging(PutObjectTaggingRequest request);
+
+        /// <summary>
+        /// 设置对象标签的异步方法
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="successCallback"></param>
+        /// <param name="failCallback"></param>
+        void PutObjectTagging(PutObjectTaggingRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback);
+
+        /// <summary>
+        /// 获取对象标签的同步方法
+        /// </summary>
+        /// <param name="request"></param>
+        GetObjectTaggingResult GetObjectTagging(GetObjectTaggingRequest request);
+
+        /// <summary>
+        /// 获取对象标签的异步方法
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="successCallback"></param>
+        /// <param name="failCallback"></param>
+        void GetObjectTagging(GetObjectTaggingRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback);
+
+        /// <summary>
+        /// 删除对象标签的同步方法
+        /// </summary>
+        /// <param name="request"></param>
+        DeleteObjectTaggingResult DeleteObjectTagging(DeleteObjectTaggingRequest request);
+
+        /// <summary>
+        /// 删除对象标签的异步方法
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="successCallback"></param>
+        /// <param name="failCallback"></param>
+        void DeleteObjectTagging(DeleteObjectTaggingRequest request, Callback.OnSuccessCallback<CosResult> successCallback, Callback.OnFailedCallback failCallback);
 
         /// <summary>
         /// 删除对象

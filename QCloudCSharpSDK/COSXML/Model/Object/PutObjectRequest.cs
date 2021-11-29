@@ -36,9 +36,9 @@ namespace COSXML.Model.Object
         private long contentLength = -1L;
 
         /// <summary>
-        /// 上传文件流
+        /// 上传流
         /// </summary>
-        private FileStream fileStream;
+        private Stream stream;
 
         /// <summary>
         /// 上传回调
@@ -87,38 +87,38 @@ namespace COSXML.Model.Object
         }
 
         /// <summary>
-        /// 文件流上传
+        /// 流式上传
         /// </summary>
         /// <param name="bucket"></param>
         /// <param name="key"></param>
-        /// <param name="fileStream"></param>
-        public PutObjectRequest(string bucket, string key, FileStream fileStream) : base(bucket, key)
+        /// <param name="stream"></param>
+        public PutObjectRequest(string bucket, string key, Stream stream) : base(bucket, key)
         {
-            this.fileStream = fileStream;
+            this.stream = stream;
             this.method = CosRequestMethod.PUT;
         }
 
         /// <summary>
-        /// 指定 offset 的文件流上传
+        /// 指定 offset 的流式上传
         /// </summary>
         /// <param name="bucket"></param>
         /// <param name="key"></param>
-        /// <param name="fileStream"></param>
+        /// <param name="stream"></param>
         /// <param name="offset"></param>
-        public PutObjectRequest(string bucket, string key, FileStream fileStream, long offset) : this(bucket, key, fileStream)
+        public PutObjectRequest(string bucket, string key, Stream stream, long offset) : this(bucket, key, stream)
         {
             this.fileOffset = offset;
         }
 
         /// <summary>
-        /// 指定 offset + content-length 的文件流上传
+        /// 指定 offset + content-length 的流式上传
         /// </summary>
         /// <param name="bucket"></param>
         /// <param name="key"></param>
-        /// <param name="fileStream"></param>
+        /// <param name="stream"></param>
         /// <param name="offset"></param>
         /// <param name="needSendLength"></param>
-        public PutObjectRequest(string bucket, string key, FileStream fileStream, long offset, long needSendLength) : this(bucket, key, fileStream, offset)
+        public PutObjectRequest(string bucket, string key, Stream stream, long offset, long needSendLength) : this(bucket, key, stream, offset)
         {
             this.contentLength = needSendLength < 0 ? -1L : needSendLength;
         }
@@ -147,7 +147,7 @@ namespace COSXML.Model.Object
         public override void CheckParameters()
         {
 
-            if (srcPath == null && data == null && fileStream == null)
+            if (srcPath == null && data == null && stream == null)
             {
                 throw new CosClientException((int)(CosClientError.InvalidArgument), "data source = null");
             }
@@ -161,13 +161,13 @@ namespace COSXML.Model.Object
                 }
             }
 
-            if (fileStream != null)
+            if (stream != null)
             {
-                if (fileStream.Length <= fileOffset ||
-                    !fileStream.CanRead ||
-                    !fileStream.CanSeek)
+                if (stream.Length <= fileOffset ||
+                    !stream.CanRead ||
+                    !stream.CanSeek)
                     {
-                        throw new CosClientException((int)(CosClientError.InvalidArgument), "fileStream invalid");
+                        throw new CosClientException((int)(CosClientError.InvalidArgument), "stream invalid");
                     }
             }
 
@@ -195,7 +195,7 @@ namespace COSXML.Model.Object
                 body = new ByteRequestBody(data);
                 body.ProgressCallback = progressCallback;
             }
-            else if (fileStream != null)
+            else if (stream != null)
             {
                 if (fileOffset < 0)
                 {
@@ -203,15 +203,15 @@ namespace COSXML.Model.Object
                 }
                 if (contentLength == -1L)
                 {
-                    contentLength = fileStream.Length - fileOffset;
+                    contentLength = stream.Length - fileOffset;
                 }
-                if (fileOffset + contentLength > fileStream.Length)
+                if (fileOffset + contentLength > stream.Length)
                 {
                     throw new CosException.CosClientException(
                         (int)COSXML.Common.CosClientError.InvalidArgument, 
-                        "file stream offset + contentLength greater than fileStream.Length");
+                        "stream offset + contentLength greater than stream.Length");
                 }
-                body = new FileStreamRequestBody(fileStream, fileOffset, contentLength);
+                body = new StreamRequestBody(stream, fileOffset, contentLength);
             }
 
             return body;

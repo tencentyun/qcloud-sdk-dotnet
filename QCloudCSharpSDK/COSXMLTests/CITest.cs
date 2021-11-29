@@ -38,22 +38,30 @@ namespace COSXMLTests
         {
             bucket = QCloudServer.Instance().bucketForObjectTest;
 
-            photoKey = "example_photo.jpg";
+            // 本地文件名，用于暂存下载的文件，以测试上传时处理接口
+            localTempPhotoFilePath = TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".jpg";
+            localQRCodeTempPhotoFilePath = "qr_" + TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".jpg";
+            localSnapshotFilePath = "/tmp/snapshot.jpg";
+            /*
             localTempPhotoFilePath = QCloudServer.CreateFile(TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".jpg", 1);
             FileInfo fileInfo = new FileInfo(localTempPhotoFilePath);
             DirectoryInfo directoryInfo = fileInfo.Directory;
             PutObjectRequest request = new PutObjectRequest(bucket, photoKey, fileInfo.Name);
             QCloudServer.Instance().cosXml.PutObject(request);
-
+            */
+            /*
             qrPhotoKey = "qr_code_photo.jpg";
             localQRCodeTempPhotoFilePath = QCloudServer.CreateFile("qr_" + TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".jpg", 1);
             fileInfo = new FileInfo(localQRCodeTempPhotoFilePath);
-            request = new PutObjectRequest(bucket, qrPhotoKey, fileInfo.Name);
+            PutObjectRequest request = new PutObjectRequest(bucket, qrPhotoKey, fileInfo.Name);
             QCloudServer.Instance().cosXml.PutObject(request);
+            */
+            // 预先上传好的媒体文件，用于万象媒体接口的测试
+            photoKey = "CITestImage.png";
+            qrPhotoKey = "CITestQrImage.jpg";
             videoKey = "CITestVideo.mp4";
             audioKey = "CITestAudio.mp3";
             textKey = "CITestText.txt";
-            localSnapshotFilePath = "/tmp/snapshot.jpg";
         }
 
         [OneTimeTearDown]
@@ -68,83 +76,114 @@ namespace COSXMLTests
         [Test]
         public void PutObjectWithDeSample()
         {
-            string key = "original_photo.jpg";
-            string srcPath = localTempPhotoFilePath;
+            try {
+                // 利用云上格式正确的 demo图片进行测试
+                GetObjectRequest getRequest = new GetObjectRequest(bucket, photoKey, ".", localTempPhotoFilePath);
+                GetObjectResult getResult = QCloudServer.Instance().cosXml.GetObject(getRequest);
+                Assert.True(200 == getResult.httpCode);
+                
+                // 发起上传流程
+                string key = "original_photo.png";
+                string srcPath = localTempPhotoFilePath;
 
-            PutObjectRequest request = new PutObjectRequest(bucket, key, srcPath);
+                PutObjectRequest request = new PutObjectRequest(bucket, key, srcPath);
 
-            JObject o = new JObject();
+                JObject o = new JObject();
 
-            // 返回原图
-            o["is_pic_info"] = 1;
-            JArray rules = new JArray();
-            JObject rule = new JObject();
+                // 返回原图
+                o["is_pic_info"] = 1;
+                JArray rules = new JArray();
+                JObject rule = new JObject();
 
-            rule["bucket"] = bucket;
-            rule["fileid"] = "desample_photo.jpg";
-            //处理参数，规则参见：https://cloud.tencent.com/document/product/460/19017
-            rule["rule"] = "imageMogr2/thumbnail/400x";
-            rules.Add(rule);
-            o["rules"] = rules;
-            string ruleString = o.ToString(Formatting.None);
+                rule["bucket"] = bucket;
+                rule["fileid"] = "desample_photo.png";
+                //处理参数，规则参见：https://cloud.tencent.com/document/product/460/19017
+                rule["rule"] = "imageMogr2/thumbnail/400x";
+                rules.Add(rule);
+                o["rules"] = rules;
+                string ruleString = o.ToString(Formatting.None);
 
-            request.SetRequestHeader("Pic-Operations", ruleString);
-            //执行请求
-            PutObjectResult result = QCloudServer.Instance().cosXml.PutObject(request);
-            var uploadResult = result.uploadResult;
-            // Console.WriteLine(result.GetResultInfo());
-            Assert.IsNotEmpty((result.GetResultInfo()));
+                request.SetRequestHeader("Pic-Operations", ruleString);
+                //执行请求
+                PutObjectResult result = QCloudServer.Instance().cosXml.PutObject(request);
+                var uploadResult = result.uploadResult;
+                // Console.WriteLine(result.GetResultInfo());
+                Assert.IsNotEmpty((result.GetResultInfo()));
 
-            Assert.True(result.IsSuccessful());
-            Assert.NotNull(uploadResult);
+                Assert.True(result.IsSuccessful());
+                Assert.NotNull(uploadResult);
 
-            Assert.NotNull(uploadResult.originalInfo);
-            Assert.NotNull(uploadResult.originalInfo.ETag);
-            Assert.NotNull(uploadResult.originalInfo.Key);
-            Assert.NotNull(uploadResult.originalInfo.Location);
-            Assert.NotNull(uploadResult.originalInfo.imageInfo.Ave);
-            Assert.NotNull(uploadResult.originalInfo.imageInfo.Format);
-            Assert.NotNull(uploadResult.originalInfo.imageInfo.Orientation);
-            Assert.NotZero(uploadResult.originalInfo.imageInfo.Width);
-            Assert.NotZero(uploadResult.originalInfo.imageInfo.Height);
-            Assert.NotZero(uploadResult.originalInfo.imageInfo.Quality);
+                Assert.NotNull(uploadResult.originalInfo);
+                Assert.NotNull(uploadResult.originalInfo.ETag);
+                Assert.NotNull(uploadResult.originalInfo.Key);
+                Assert.NotNull(uploadResult.originalInfo.Location);
+                Assert.NotNull(uploadResult.originalInfo.imageInfo.Ave);
+                Assert.NotNull(uploadResult.originalInfo.imageInfo.Format);
+                Assert.NotNull(uploadResult.originalInfo.imageInfo.Orientation);
+                Assert.NotZero(uploadResult.originalInfo.imageInfo.Width);
+                Assert.NotZero(uploadResult.originalInfo.imageInfo.Height);
+                Assert.NotZero(uploadResult.originalInfo.imageInfo.Quality);
 
-            Assert.NotNull(uploadResult.processResults);
-            Assert.NotZero(uploadResult.processResults.results.Count);
-            Assert.True(uploadResult.processResults.results[0].Width <= 400);
-            Assert.True(uploadResult.processResults.results[0].Height <= 400);
-            Assert.NotNull(uploadResult.processResults.results[0].ETag);
-            Assert.NotNull(uploadResult.processResults.results[0].Format);
-            Assert.NotNull(uploadResult.processResults.results[0].Key);
-            Assert.NotNull(uploadResult.processResults.results[0].Location);
-            Assert.NotZero(uploadResult.processResults.results[0].Quality);
-            Assert.NotZero(uploadResult.processResults.results[0].Size);
-            Assert.Zero(uploadResult.processResults.results[0].WatermarkStatus);
+                Assert.NotNull(uploadResult.processResults);
+                Assert.NotZero(uploadResult.processResults.results.Count);
+                Assert.True(uploadResult.processResults.results[0].Width <= 400);
+                Assert.True(uploadResult.processResults.results[0].Height <= 400);
+                Assert.NotNull(uploadResult.processResults.results[0].ETag);
+                Assert.NotNull(uploadResult.processResults.results[0].Format);
+                Assert.NotNull(uploadResult.processResults.results[0].Key);
+                Assert.NotNull(uploadResult.processResults.results[0].Location);
+                Assert.NotZero(uploadResult.processResults.results[0].Quality);
+                Assert.NotZero(uploadResult.processResults.results[0].Size);
+                Assert.Zero(uploadResult.processResults.results[0].WatermarkStatus);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+
         }
 
         [Test]
         public void SensitiveRecognition()
         {
             //对象键
-            //对象键
-            string key = photoKey;
+            try {
+                string key = photoKey;
 
-            SensitiveContentRecognitionRequest request = new SensitiveContentRecognitionRequest(bucket, key, "porn,terrorist,politics");
+                SensitiveContentRecognitionRequest request = new SensitiveContentRecognitionRequest(bucket, key, "porn,terrorist,politics");
 
-            SensitiveContentRecognitionResult result = QCloudServer.Instance().cosXml.SensitiveContentRecognition(request);
+                SensitiveContentRecognitionResult result = QCloudServer.Instance().cosXml.SensitiveContentRecognition(request);
 
-            // Console.WriteLine(result.GetResultInfo());
-            Assert.IsNotEmpty((result.GetResultInfo()));
+                // Console.WriteLine(result.GetResultInfo());
+                Assert.IsNotEmpty((result.GetResultInfo()));
 
-            Assert.True(result.httpCode == 200);
-            Assert.NotNull(result.recognitionResult);
-            Assert.NotNull(result.recognitionResult.PoliticsInfo);
-            Assert.Zero(result.recognitionResult.PoliticsInfo.Code);
-            Assert.NotNull(result.recognitionResult.PoliticsInfo.Score);
-            Assert.NotNull(result.recognitionResult.PoliticsInfo.Count);
-            Assert.NotNull(result.recognitionResult.PoliticsInfo.Msg);
-            Assert.NotNull(result.recognitionResult.PoliticsInfo.Label);
-            Assert.NotNull(result.recognitionResult.PoliticsInfo.HitFlag);
+                Assert.True(result.httpCode == 200);
+                Assert.NotNull(result.recognitionResult);
+                Assert.NotNull(result.recognitionResult.PoliticsInfo);
+                Assert.Zero(result.recognitionResult.PoliticsInfo.Code);
+                Assert.NotNull(result.recognitionResult.PoliticsInfo.Score);
+                Assert.NotNull(result.recognitionResult.PoliticsInfo.Count);
+                Assert.NotNull(result.recognitionResult.PoliticsInfo.Msg);
+                Assert.NotNull(result.recognitionResult.PoliticsInfo.Label);
+                Assert.NotNull(result.recognitionResult.PoliticsInfo.HitFlag);
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+
         }
 
         [Test]
@@ -160,7 +199,7 @@ namespace COSXMLTests
             JObject rule = new JObject();
 
             rule["bucket"] = bucket;
-            rule["fileid"] = "desample_photo.jpg";
+            rule["fileid"] = "desample_photo.png";
             //处理参数，规则参见：https://cloud.tencent.com/document/product/460/19017
             rule["rule"] = "imageMogr2/thumbnail/400x400";
             rules.Add(rule);
@@ -206,8 +245,13 @@ namespace COSXMLTests
         public void QRCodeRecognition()
         {
             string key = qrPhotoKey;
+            // 下载云上有内容的 QR Code
             string srcPath = localQRCodeTempPhotoFilePath;
+            GetObjectRequest getRequest = new GetObjectRequest(bucket, key, ".", localQRCodeTempPhotoFilePath);
+            GetObjectResult getResult = QCloudServer.Instance().cosXml.GetObject(getRequest);
+            Assert.True(200 == getResult.httpCode);
 
+            // 开始请求上传时 QR code 识别
             PutObjectRequest request = new PutObjectRequest(bucket, key, srcPath);
 
             JObject o = new JObject();
@@ -686,10 +730,8 @@ namespace COSXMLTests
                 string id = result.censorJobsResponse.JobsDetail.JobId;
                 Assert.NotNull(id);
                 Assert.AreEqual(200, result.httpCode);
-                throw new COSXML.CosException.CosClientException(1, result.censorJobsResponse.JobsDetail.JobId);
                 // 等待审核任务跑完
                 Thread.Sleep(50000);
-                
                 GetDocumentCensorJobRequest getRequest = new GetDocumentCensorJobRequest(bucket, id);
                 GetDocumentCensorJobResult getResult = QCloudServer.Instance().cosXml.GetDocumentCensorJob(getRequest);
                 Assert.AreEqual(200, getResult.httpCode);
@@ -721,9 +763,9 @@ namespace COSXMLTests
                 Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.HitFlag);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.SubLabel);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.Score);
-                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults);
-                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults.Text);
-                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults.Keywords);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults.Text);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults.Keywords);
                 /*
                 Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.HitFlag);

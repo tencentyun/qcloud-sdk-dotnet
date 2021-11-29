@@ -1219,5 +1219,29 @@ namespace COSXMLTests
             }
         }
 
+        [Test()]
+        public void TestDoesBucketExist() {
+            try {
+                DoesBucketExistRequest request = new DoesBucketExistRequest(bucket);
+                bool exist = cosXml.DoesBucketExist(request);
+                Assert.True(exist);
+                
+                request = new DoesBucketExistRequest("notexist" + bucket);
+                exist = cosXml.DoesBucketExist(request);
+                Assert.False(exist);
+
+            } 
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
     }
 }

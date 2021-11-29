@@ -8,7 +8,7 @@ using COSXML.Network;
 namespace COSXML.Model.Bucket
 {
     /// <summary>
-    /// 检索 Bucket 是否存在
+    /// 添加存储桶标签
     /// <see href="https://cloud.tencent.com/document/product/436/7735"/>
     /// </summary>
     public sealed class PutBucketTaggingRequest : BucketRequest

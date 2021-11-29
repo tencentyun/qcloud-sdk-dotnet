@@ -348,6 +348,116 @@ namespace COSXML.Network
         }
     }
 
+    public class StreamRequestBody : RequestBody
+    {
+        private readonly long fileOffset;
+        //private RequestBodyState requestBodyState;
+        private Stream stream;
+
+        public StreamRequestBody(Stream stream, long fileOffset, long sendContentSize)
+        {
+            this.stream = stream;
+            this.fileOffset = fileOffset;
+            contentLength = sendContentSize;
+        }
+
+        public override void OnWrite(Stream outputStream)
+        {
+            StartHandleRequestBody(outputStream);
+        }
+
+        public override string GetMD5()
+        {
+
+            try
+            {
+                stream.Seek(fileOffset, SeekOrigin.Begin);
+                return DigestUtils.GetMd5ToBase64(stream, contentLength);
+            }
+            catch (Exception ex)
+            {
+                QLog.Error(TAG, ex.Message, ex);
+                throw;
+            }
+        }
+
+        public override void StartHandleRequestBody(Stream outputStream, EndRequestBody endRequestBody = null)
+        {
+            try
+            {
+                byte[] buffer = new byte[SEGMENT_SIZE];
+                int bytesRead = 0;
+
+                long completed = bytesRead;
+                //seek to designated position
+                //seek to designated position
+                stream.Seek(fileOffset, SeekOrigin.Begin);
+                long remain = contentLength - completed;
+
+                if (remain > 0)
+                {
+
+                    while ((bytesRead = stream.Read(buffer, 0, (int)(buffer.Length > remain ? remain : buffer.Length))) != 0)
+                    {
+                        outputStream.Write(buffer, 0, bytesRead);
+                        outputStream.Flush();
+                        completed += bytesRead;
+
+                        if (progressCallback != null)
+                        {
+                            UpdateProgress(completed, contentLength);
+                        }
+
+                        remain = contentLength - completed;
+
+                        if (remain == 0)
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+
+                    if (progressCallback != null)
+                    {
+                        UpdateProgress(completed, contentLength);
+                    }
+                }
+
+                buffer = null;
+                if (endRequestBody != null)
+                {
+                    endRequestBody(null);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (endRequestBody != null)
+                {
+                    endRequestBody(ex);
+                } 
+                else 
+                {
+                    throw;
+                }
+            }
+            finally
+            {
+
+                if (outputStream != null)
+                {
+                    outputStream.Flush();
+                    outputStream.Close();
+                    outputStream.Dispose();
+                    //QLog.D("XIAO", "stream close");
+                    outputStream = null;
+                }
+            }
+
+        }
+    }
+
     public class FileStreamRequestBody : RequestBody
     {
         private readonly long fileOffset;

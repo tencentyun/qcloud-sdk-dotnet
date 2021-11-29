@@ -240,7 +240,6 @@ namespace COSXMLTests
                 bucket = QCloudServer.Instance().bucketForObjectTest;
                 PutObjectRequest request = new PutObjectRequest(bucket, commonKey, smallFileSrcPath);
                 QCloudServer.SetRequestACLData(request);
-
                 //执行请求
                 PutObjectResult result = cosXml.PutObject(request);
 
@@ -1506,6 +1505,26 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public void TestDownloadTaskOverwriteSameFile()
+        {
+            // 先下载一个大文件
+            GetObjectRequest request = new GetObjectRequest(bucket, multiKey, localDir, localFileName);
+            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
+            var asyncTask = transferManager.DownloadAsync(downloadTask);
+            asyncTask.Wait();
+            long bigLength = new FileInfo(localFileName).Length;
+            // 再下载一个小文件
+            request = new GetObjectRequest(bucket, commonKey, localDir, localFileName);
+            downloadTask = new COSXMLDownloadTask(request);
+            asyncTask = transferManager.DownloadAsync(downloadTask);
+            asyncTask.Wait();
+
+            // 检查文件长度，是否覆盖写
+            long smallLength = new FileInfo(localFileName).Length;
+            Assert.True(smallLength < bigLength);
+        }
+
+        [Test()]
         public async Task TestCopyTaskWithBigFile()
         {
             CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
@@ -1693,9 +1712,10 @@ namespace COSXMLTests
                 signatureStruct.queryParameters.Add(ci_params, null);
                 signatureStruct.headers = new Dictionary<string, string>();
                 string url = cosXml.GenerateSignURL(signatureStruct);
-                throw new COSXML.CosException.CosClientException(1, url);
                 Assert.NotNull(url);
-            }         
+                // TODO check
+                Assert.True(url.Contains(URLEncodeUtils.Encode(URLEncodeUtils.Encode(ci_params)).ToString().ToLower()));
+            }
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.Message);
@@ -1866,11 +1886,12 @@ namespace COSXMLTests
                 preSignatureStruct.queryParameters = null;
                 string requstUrl = QCloudServer.Instance().cosXml.GenerateSignURL(preSignatureStruct);
                 Assert.IsNotEmpty(requstUrl);
-
-                GetObjectRequest request = new GetObjectRequest(null, null, localDir, smallFileSrcPath);
+                /*
+                GetObjectRequest request = new GetObjectRequest(null, null, "./", smallFileSrcPath);
                 request.RequestURLWithSign = requstUrl;
                 GetObjectResult result = QCloudServer.Instance().cosXml.GetObject(request);
                 Assert.AreEqual(result.httpCode, 200);
+                */
             } catch (COSXML.CosException.CosClientException clientEx) {
                 Console.WriteLine("CosClientException: " + clientEx);
                 Assert.Fail();
@@ -1878,8 +1899,82 @@ namespace COSXMLTests
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 Assert.Fail();
             }
+        }
+
+        [Test()]
+        public void TestObjectTagging() {
+            try {
+                PutObjectTaggingRequest request = new PutObjectTaggingRequest(bucket, commonKey);
+                request.AddTag("tag1", "val1");
+                PutObjectTaggingResult result = cosXml.PutObjectTagging(request);
+                Assert.AreEqual(result.httpCode, 200);
+                TestGetObjectTagging();
+            } catch (COSXML.CosException.CosClientException clientEx) {
+                Console.WriteLine("CosClientException: " + clientEx);
+                Assert.Fail();
+            } catch (COSXML.CosException.CosServerException serverEx) {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        public void TestGetObjectTagging() {
+            try {
+                GetObjectTaggingRequest request = new GetObjectTaggingRequest(bucket, commonKey);
+                GetObjectTaggingResult result = cosXml.GetObjectTagging(request);
+                Assert.AreEqual(result.httpCode, 200);
+                Assert.NotNull(result.tagging);
+                Assert.NotNull(result.tagging.tagSet);
+                Assert.NotZero(result.tagging.tagSet.tags.Count);
+                for (int i=0; i<result.tagging.tagSet.tags.Count; i++) {
+                    Assert.NotNull(result.tagging.tagSet.tags[i]);
+                    Assert.NotNull(result.tagging.tagSet.tags[i].key);
+                    Assert.NotNull(result.tagging.tagSet.tags[i].value);
+                }
+                TestDeleteObjectTagging();
                 
-            
+            } catch (COSXML.CosException.CosClientException clientEx) {
+                Console.WriteLine("CosClientException: " + clientEx);
+                Assert.Fail();
+            } catch (COSXML.CosException.CosServerException serverEx) {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        public void TestDeleteObjectTagging() {
+            try {
+                DeleteObjectTaggingRequest request = new DeleteObjectTaggingRequest(bucket, commonKey);
+                DeleteObjectTaggingResult result = cosXml.DeleteObjectTagging(request);
+                Assert.AreEqual(result.httpCode, 204);
+                
+            } catch (COSXML.CosException.CosClientException clientEx) {
+                Console.WriteLine("CosClientException: " + clientEx);
+                Assert.Fail();
+            } catch (COSXML.CosException.CosServerException serverEx) {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test()]
+        public void TestDoesObjectExist() {
+            try {
+                DoesObjectExistRequest request = new DoesObjectExistRequest(bucket, commonKey);
+                bool result = cosXml.DoesObjectExist(request);
+                Assert.True(result);
+
+                request = new DoesObjectExistRequest(bucket, "notexist");
+                result = cosXml.DoesObjectExist(request);
+                Assert.False(result);
+                
+            } catch (COSXML.CosException.CosClientException clientEx) {
+                Console.WriteLine("CosClientException: " + clientEx);
+                Assert.Fail();
+            } catch (COSXML.CosException.CosServerException serverEx) {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
         }
 
         
