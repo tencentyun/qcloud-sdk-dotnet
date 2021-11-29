@@ -111,6 +111,7 @@
     <Compile Include="Model\Bucket\DeleteBucketWebsiteResult.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\Bucket\DoesBucketExistRequest.cs" />
     <Compile Include="Model\Bucket\GetBucketACLRequest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -159,8 +160,12 @@
     <Compile Include="Model\Bucket\GetBucketPolicyResult.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\Bucket\GetBucketRefererRequest.cs" />
-    <Compile Include="Model\Bucket\GetBucketRefererResult.cs" />
+    <Compile Include="Model\Bucket\GetBucketRefererRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Bucket\GetBucketRefererResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\Bucket\GetBucketReplicationRequest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -260,8 +265,12 @@
     <Compile Include="Model\Bucket\PutBucketPolicyResult.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\Bucket\PutBucketRefererRequest.cs" />
-    <Compile Include="Model\Bucket\PutBucketRefererResult.cs" />
+    <Compile Include="Model\Bucket\PutBucketRefererRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Bucket\PutBucketRefererResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\Bucket\PutBucketReplicationRequest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -292,21 +301,51 @@
     <Compile Include="Model\Bucket\PutBucketWebsiteResult.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\CI\CIRequest.cs" />
-    <Compile Include="Model\CI\DescribeMediaBucketsRequest.cs" />
-    <Compile Include="Model\CI\DescribeMediaBucketsResult.cs" />
-    <Compile Include="Model\CI\GetAudioCensorJobRequest.cs" />
-    <Compile Include="Model\CI\GetAudioCensorJobResult.cs" />
-    <Compile Include="Model\CI\GetDocumentCensorJobRequest.cs" />
-    <Compile Include="Model\CI\GetDocumentCensorJobResult.cs" />
-    <Compile Include="Model\CI\GetMediaInfoRequest.cs" />
-    <Compile Include="Model\CI\GetMediaInfoResult.cs" />
-    <Compile Include="Model\CI\GetSnapshotRequest.cs" />
-    <Compile Include="Model\CI\GetSnapshotResult.cs" />
-    <Compile Include="Model\CI\GetTextCensorJobRequest.cs" />
-    <Compile Include="Model\CI\GetTextCensorJobResult.cs" />
-    <Compile Include="Model\CI\GetVideoCensorJobRequest.cs" />
-    <Compile Include="Model\CI\GetVideoCensorJobResult.cs" />
+    <Compile Include="Model\CI\CIRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\DescribeMediaBucketsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\DescribeMediaBucketsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\GetAudioCensorJobRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\GetAudioCensorJobResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\GetDocumentCensorJobRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\GetDocumentCensorJobResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\GetMediaInfoRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\GetMediaInfoResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\GetSnapshotRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\GetSnapshotResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\GetTextCensorJobRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\GetTextCensorJobResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\GetVideoCensorJobRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\GetVideoCensorJobResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\CI\ImageProcessRequest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -325,65 +364,178 @@
     <Compile Include="Model\CI\SensitiveContentRecognitionResult.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\CI\SubmitAudioCensorJobRequest.cs" />
-    <Compile Include="Model\CI\SubmitCensorJobResult.cs" />
-    <Compile Include="Model\CI\SubmitDocumentCensorJobRequest.cs" />
-    <Compile Include="Model\CI\SubmitTextCensorJobRequest.cs" />
-    <Compile Include="Model\CI\SubmitVideoCensorJobRequest.cs" />
-    <Compile Include="Model\CosRequest.cs" />
-    <Compile Include="Model\CosResult.cs" />
-    <Compile Include="Model\Object\AbortMultipartUploadRequest.cs" />
-    <Compile Include="Model\Object\AbortMultipartUploadResult.cs" />
-    <Compile Include="Model\Object\AppendObjectRequest.cs" />
-    <Compile Include="Model\Object\AppendObjectResult.cs" />
-    <Compile Include="Model\Object\CompleteMultipartUploadRequest.cs" />
-    <Compile Include="Model\Object\CompleteMultipartUploadResult.cs" />
-    <Compile Include="Model\Object\CopyObjectRequest.cs" />
-    <Compile Include="Model\Object\CopyObjectResult.cs" />
-    <Compile Include="Model\Object\DeleteMultiObjectRequest.cs" />
-    <Compile Include="Model\Object\DeleteMultiObjectResult.cs" />
-    <Compile Include="Model\Object\DeleteObjectRequest.cs" />
-    <Compile Include="Model\Object\DeleteObjectResult.cs" />
-    <Compile Include="Model\Object\GetObjectACLRequest.cs" />
-    <Compile Include="Model\Object\GetObjectACLResult.cs" />
-    <Compile Include="Model\Object\GetObjectBytesRequest.cs" />
-    <Compile Include="Model\Object\GetObjectBytesResult.cs" />
-    <Compile Include="Model\Object\GetObjectRequest.cs" />
-    <Compile Include="Model\Object\GetObjectResult.cs" />
-    <Compile Include="Model\Object\HeadObjectRequest.cs" />
-    <Compile Include="Model\Object\HeadObjectResult.cs" />
-    <Compile Include="Model\Object\InitMultipartUploadRequest.cs" />
-    <Compile Include="Model\Object\InitMultipartUploadResult.cs" />
-    <Compile Include="Model\Object\ListPartsRequest.cs" />
-    <Compile Include="Model\Object\ListPartsResult.cs" />
-    <Compile Include="Model\Object\ObjectRequest.cs" />
-    <Compile Include="Model\Object\OptionObjectRequest.cs" />
-    <Compile Include="Model\Object\OptionObjectResult.cs" />
-    <Compile Include="Model\Object\PostObjectRequest.cs" />
-    <Compile Include="Model\Object\PostObjectResult.cs" />
-    <Compile Include="Model\Object\PutObjectACLRequest.cs" />
-    <Compile Include="Model\Object\PutObjectACLResult.cs" />
-    <Compile Include="Model\Object\PutObjectRequest.cs" />
-    <Compile Include="Model\Object\PutObjectResult.cs" />
-    <Compile Include="Model\Object\RestoreObjectRequest.cs" />
-    <Compile Include="Model\Object\RestoreObjectResult.cs" />
-    <Compile Include="Model\Object\SelectObjectRequest.cs" />
-    <Compile Include="Model\Object\SelectObjectResult.cs" />
-    <Compile Include="Model\Object\UploadPartCopyRequest.cs" />
-    <Compile Include="Model\Object\UploadPartCopyResult.cs" />
-    <Compile Include="Model\Object\UploadPartRequest.cs" />
-    <Compile Include="Model\Object\UploadPartResult.cs" />
-    <Compile Include="Model\Service\GetServiceRequest.cs" />
-    <Compile Include="Model\Service\GetServiceResult.cs" />
+    <Compile Include="Model\CI\SubmitAudioCensorJobRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\SubmitCensorJobResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\SubmitDocumentCensorJobRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\SubmitTextCensorJobRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CI\SubmitVideoCensorJobRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CosRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\CosResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\AbortMultipartUploadRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\AbortMultipartUploadResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\AppendObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\AppendObjectResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\CompleteMultipartUploadRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\CompleteMultipartUploadResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\CopyObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\CopyObjectResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\DeleteMultiObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\DeleteMultiObjectResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\DeleteObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\DeleteObjectResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\DeleteObjectTaggingRequest.cs" />
+    <Compile Include="Model\Object\DeleteObjectTaggingResult.cs" />
+    <Compile Include="Model\Object\DoesObjectExistRequest.cs" />
+    <Compile Include="Model\Object\GetObjectACLRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\GetObjectACLResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\GetObjectBytesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\GetObjectBytesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\GetObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\GetObjectResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\GetObjectTaggingRequest.cs" />
+    <Compile Include="Model\Object\GetObjectTaggingResult.cs" />
+    <Compile Include="Model\Object\HeadObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\HeadObjectResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\InitMultipartUploadRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\InitMultipartUploadResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\ListPartsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\ListPartsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\ObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\OptionObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\OptionObjectResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\PostObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\PostObjectResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\PutObjectACLRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\PutObjectACLResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\PutObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\PutObjectResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\PutObjectTaggingRequest.cs" />
+    <Compile Include="Model\Object\PutObjectTaggingResult.cs" />
+    <Compile Include="Model\Object\RestoreObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\RestoreObjectResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\SelectObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\SelectObjectResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\UploadPartCopyRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\UploadPartCopyResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\UploadPartRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Object\UploadPartResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Service\GetServiceRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Service\GetServiceResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\Tag\AccessControlPolicy.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\Tag\AudioCensorJobInfo.cs" />
-    <Compile Include="Model\Tag\AudioCensorResult.cs" />
+    <Compile Include="Model\Tag\AudioCensorJobInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Tag\AudioCensorResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\Tag\BucketLoggingStatus.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\Tag\CensorJobDetail.cs" />
+    <Compile Include="Model\Tag\CensorJobDetail.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\Tag\CompleteMultipartUpload.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -411,8 +563,12 @@
     <Compile Include="Model\Tag\DeleteResult.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\Tag\DocumentCensorJobInfo.cs" />
-    <Compile Include="Model\Tag\DocumentCensorResult.cs" />
+    <Compile Include="Model\Tag\DocumentCensorJobInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Tag\DocumentCensorResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\Tag\DomainConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -449,8 +605,12 @@
     <Compile Include="Model\Tag\ListParts.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\Tag\MediaBuckets.cs" />
-    <Compile Include="Model\Tag\MediaInfoResult.cs" />
+    <Compile Include="Model\Tag\MediaBuckets.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Tag\MediaInfoResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\Tag\ObjectSelectionFormat.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -463,7 +623,9 @@
     <Compile Include="Model\Tag\QRRecognitionResult.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\Tag\RefererConfiguration.cs" />
+    <Compile Include="Model\Tag\RefererConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\Tag\ReplicationConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -479,13 +641,21 @@
     <Compile Include="Model\Tag\Tagging.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\Tag\TextCensorJobInfo.cs" />
-    <Compile Include="Model\Tag\TextCensorResult.cs" />
+    <Compile Include="Model\Tag\TextCensorJobInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Tag\TextCensorResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\Tag\VersioningConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\Tag\VideoCensorJobInfo.cs" />
-    <Compile Include="Model\Tag\VideoCensorResult.cs" />
+    <Compile Include="Model\Tag\VideoCensorJobInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Tag\VideoCensorResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\Tag\WebsiteConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -520,4 +690,3 @@
   </Target>
   -->
 </Project>
-
