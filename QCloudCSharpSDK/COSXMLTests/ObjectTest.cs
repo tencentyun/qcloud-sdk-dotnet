@@ -1245,18 +1245,11 @@ namespace COSXMLTests
                 // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
             };
 
-            bool flag = false;
-            uploadTask.successCallback = delegate (CosResult callback_result)
-            {
-                flag = true;
-            };
-
             COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
 
             Assert.AreEqual(result.httpCode, 200);
             Assert.NotNull(result.eTag);
-            // TODO callback
-            //Assert.True(flag);
+
         }
 
         [Test()]
@@ -1268,15 +1261,8 @@ namespace COSXMLTests
 
             uploadTask.SetSrcPath(smallFileSrcPath);
 
-            bool flag = false;
-            uploadTask.successCallback = delegate (CosResult callback_result)
-            {
-                flag = true;
-            };
             COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
 
-            // TODO callback
-            //Assert.True(flag);
             Assert.AreEqual(200, result.httpCode);
             Assert.NotNull(result.eTag);
         }
@@ -1371,18 +1357,11 @@ namespace COSXMLTests
             //执行请求
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
 
-            bool flag = false;
-            downloadTask.successCallback = delegate (CosResult callback_result)
-            {
-                flag = true;
-            };
-
             COSXMLDownloadTask.DownloadTaskResult result = await transferManager.DownloadAsync(downloadTask);
 
-            Assert.True(result.httpCode == 200);
+            Assert.True(result.httpCode == 200 || result.httpCode == 206);
             Assert.NotNull(result.eTag);
-            // TODO callback
-            //Assert.True(flag);
+
         }
 
 
@@ -1508,8 +1487,8 @@ namespace COSXMLTests
         public void TestDownloadTaskOverwriteSameFile()
         {
             try {
+                // 先下载一个大文件
                 GetObjectRequest request = new GetObjectRequest(bucket, multiKey, localDir, localFileName);
-                
                 COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
                 var asyncTask = transferManager.DownloadAsync(downloadTask);
                 asyncTask.Wait();
@@ -1543,7 +1522,6 @@ namespace COSXMLTests
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 Assert.Fail();
             }
-            // 先下载一个大文件
         }
 
         [Test()]

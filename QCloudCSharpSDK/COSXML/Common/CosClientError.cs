@@ -21,6 +21,9 @@ namespace COSXML.Common
         [CosValue("SinkSourceNotFound")]
         SinkSourceNotFound = 10003,
 
+        [CosValue("CRC64ecmaCheckFailed")]
+        CRC64ecmaCheckFailed = 10004,
+
         [CosValue("InternalError")]
         InternalError = 20000,
 

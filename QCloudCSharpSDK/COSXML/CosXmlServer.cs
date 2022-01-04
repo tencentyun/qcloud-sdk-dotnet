@@ -929,7 +929,22 @@ namespace COSXML
         public string GetObjectUrl(string bucket, string key) 
         {
             string http_prefix = config.IsHttps ? "https://" : "http://";
-            return http_prefix + bucket + ".cos." + config.Region + ".myqcloud.com/" + key;
+            StringBuilder domainSuffix = new StringBuilder();
+            // 优先自定义域名
+            if (this.config.host != null) {
+                domainSuffix.Append(this.config.host).Append("/").Append(key);
+                return http_prefix + domainSuffix.ToString();
+            }
+            // endpoint
+            else if (this.config.endpointSuffix != null) {
+                domainSuffix.Append(".").Append(this.config.endpointSuffix).Append("/").Append(key);
+            }
+            // 默认域名
+            else {
+                domainSuffix.Append(".cos.");
+                domainSuffix.Append(this.config.Region).Append(".myqcloud.com/").Append(key);
+            }
+            return http_prefix + bucket + domainSuffix.ToString();
         }
 
         public PutBucketWebsiteResult PutBucketWebsite(PutBucketWebsiteRequest request)

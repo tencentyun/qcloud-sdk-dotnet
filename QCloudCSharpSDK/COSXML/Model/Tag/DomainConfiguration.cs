@@ -20,7 +20,7 @@ namespace COSXML.Model.Tag
             public string Type;
 
             [XmlElement]
-            public string Replace;
+            public string ForcedReplacement;
         }
     }
 }

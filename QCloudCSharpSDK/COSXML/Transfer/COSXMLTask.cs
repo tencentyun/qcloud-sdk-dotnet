@@ -201,6 +201,17 @@ namespace COSXML.Transfer
         public string eTag;
     }
 
+    public class DownloadSliceStruct
+    {
+        public int partNumber;
+
+        public long sliceStart;
+
+        public long sliceEnd;
+
+        public string eTag;
+    }
+
     public enum TaskState
     {
         Waiting = 0,

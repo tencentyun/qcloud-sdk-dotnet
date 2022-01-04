@@ -807,7 +807,7 @@ namespace COSXMLTests
                 domain.rule.Name = "www.qq.com";
                 domain.rule.Status = "ENABLED";
                 domain.rule.Type = "WEBSITE";
-                domain.rule.Replace = "";
+                domain.rule.ForcedReplacement = "";
 
                 PutBucketDomainResult result = cosXml.PutBucketDomain(new PutBucketDomainRequest(bucket, domain));
                 Assert.AreEqual(result.httpCode, 200);
@@ -822,6 +822,7 @@ namespace COSXMLTests
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 if (serverEx.statusCode != 409 && serverEx.statusCode != 451)
                 {
                     Assert.Fail();
@@ -844,7 +845,7 @@ namespace COSXMLTests
                     Assert.NotNull(getResult.domainConfiguration.rule.Name);
                     Assert.NotNull(getResult.domainConfiguration.rule.Status);
                     Assert.NotNull(getResult.domainConfiguration.rule.Type);
-                    Assert.NotNull(getResult.domainConfiguration.rule.Replace);
+                    Assert.NotNull(getResult.domainConfiguration.rule.ForcedReplacement);
 
                 }
                 else
@@ -875,7 +876,7 @@ namespace COSXMLTests
             {
                 PutBucketLoggingRequest request = new PutBucketLoggingRequest(bucket);
 
-                request.SetTarget(QCloudServer.Instance().bucketForLoggingTarget, "/abc");
+                request.SetTarget(QCloudServer.Instance().bucketForLoggingTarget, "/");
                 PutBucketLoggingResult putResult = cosXml.PutBucketLogging(request);
 
                 Assert.IsTrue(putResult.httpCode == 200);
@@ -930,8 +931,8 @@ namespace COSXMLTests
                 rule.contidion = new WebsiteConfiguration.Contidion();
                 // HttpErrorCodeReturnedEquals 与 KeyPrefixEquals 必选其一
                 // 只支持配置4XX返回码，例如403或404
-                rule.contidion.httpErrorCodeReturnedEquals = 404;
-                // rule.contidion.keyPrefixEquals = "test.html";
+                rule.contidion.httpErrorCodeReturnedEquals = "404";
+                rule.contidion.keyPrefixEquals = "test.html";
 
                 rule.redirect = new WebsiteConfiguration.Redirect();
                 rule.redirect.protocol = "https";
@@ -962,7 +963,7 @@ namespace COSXMLTests
                     Assert.NotNull(configuration.redirectAllRequestTo.protocol);
                     Assert.NotZero(configuration.routingRules.Count);
                     Assert.NotNull(configuration.routingRules[0].contidion);
-                    Assert.NotNull(configuration.routingRules[0].contidion.httpErrorCodeReturnedEquals);
+                    //Assert.NotNull(configuration.routingRules[0].contidion.httpErrorCodeReturnedEquals);
                     // Assert.NotNull(configuration.routingRules[0].contidion.keyPrefixEquals);
                     Assert.NotNull(configuration.routingRules[0].redirect);
                     Assert.NotNull(configuration.routingRules[0].redirect.protocol);

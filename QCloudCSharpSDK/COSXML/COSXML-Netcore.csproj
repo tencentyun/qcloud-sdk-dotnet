@@ -6,12 +6,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>COSXML</RootNamespace>
     <AssemblyName>COSXML</AssemblyName>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
 
     <PackageId>Tencent.QCloud.Cos.Sdk</PackageId>
-    <Version>5.4.25.0</Version>
+    <Version>5.4.26.0</Version>
     <Authors>Tencent</Authors>
     <Company>Tencent</Company>
     <description>Tencent Cloud COS(Cloud Object Service) .Net SDK</description>

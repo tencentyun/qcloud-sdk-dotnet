@@ -74,6 +74,8 @@ namespace COSXML.Transfer
         public void Download(COSXMLDownloadTask downloader)
         {
             downloader.InitCosXmlServer(cosXml);
+            downloader.SetSliceSize(transferConfig.SliceSizeForDownload);
+            downloader.SetDivisionSize(transferConfig.DivisionForDownload);
             downloader.Download();
         }
 
@@ -131,6 +133,12 @@ namespace COSXML.Transfer
         // 1M
         private long sliceSizeForUpload = 1048576;
 
+        // 20M
+        private long divisionForDownload = 20971520;
+
+        // 5M
+        private long sliceSizeForDownload = 5242880;
+
         /// <summary>
         /// 多大的文件会自动使用分片拷贝
         /// </summary>
@@ -181,6 +189,32 @@ namespace COSXML.Transfer
                 return sliceSizeForUpload;
             }
             set { sliceSizeForUpload = value; }
+        }
+
+        /// <summary>
+        /// 多大的文件会使用多线程分块下载
+        /// </summary>
+        /// <value>默认是 20MB</value>
+        public long DivisionForDownload
+        {
+            get
+            {
+                return divisionForDownload;
+            }
+            set { divisionForDownload = value; }
+        }
+
+        /// <summary>
+        /// 分块下载的每个块大小
+        /// </summary>
+        /// <value>默认是 5MB</value>
+        public long SliceSizeForDownload
+        {
+            get
+            {
+                return sliceSizeForDownload;
+            }
+            set { sliceSizeForDownload = value; }
         }
     }
 }

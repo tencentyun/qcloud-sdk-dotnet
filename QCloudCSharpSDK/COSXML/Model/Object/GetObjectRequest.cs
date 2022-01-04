@@ -17,12 +17,12 @@ namespace COSXML.Model.Object
         /// <summary>
         /// 保存文件的本地文件夹路径
         /// </summary>
-        private string localDir;
+        public string localDir;
 
         /// <summary>
         /// 保存文件的本地的文件名
         /// </summary>
-        private string localFileName;
+        public string localFileName;
 
         /// <summary>
         /// 保存文件的本地偏移位置，下载的数据从此处开始append该文件后面

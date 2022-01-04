@@ -1,5 +1,6 @@
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System;
 
 namespace COSXML.Model.Tag
 {
@@ -48,7 +49,7 @@ namespace COSXML.Model.Tag
         public sealed class Contidion
         {
             [XmlElement("HttpErrorCodeReturnedEquals")]
-            public int httpErrorCodeReturnedEquals;
+            public string httpErrorCodeReturnedEquals;
 
             [XmlElement("KeyPrefixEquals")]
             public string keyPrefixEquals;
