@@ -227,7 +227,7 @@ namespace COSXMLDemo
             
             // 下载对象
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(bucket, cosPath, 
-            localDir, localFileName);
+                localDir, localFileName);
             
             downloadTask.progressCallback = delegate (long completed, long total)
             {

@@ -48,8 +48,11 @@ namespace COSXML.Model.Tag
 
         public sealed class Contidion
         {
+            [XmlIgnore]
+            public int httpErrorCodeReturnedEquals;
+
             [XmlElement("HttpErrorCodeReturnedEquals")]
-            public string httpErrorCodeReturnedEquals;
+            public string httpErrorCodeReturnedEqualsStr;
 
             [XmlElement("KeyPrefixEquals")]
             public string keyPrefixEquals;

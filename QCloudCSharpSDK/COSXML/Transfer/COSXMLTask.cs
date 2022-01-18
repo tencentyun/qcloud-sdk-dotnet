@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using COSXML.Model;
+using COSXML.Common;
 using COSXML.Model.Object;
 using COSXML.CosException;
 using System.Threading.Tasks;

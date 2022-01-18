@@ -759,7 +759,7 @@ namespace COSXML
 
                     foreach (KeyValuePair<string, string> keyValuePair in queryParameters)
                     {
-                        if (keyValuePair.Key == null)
+                        if (keyValuePair.Key == null || keyValuePair.Key == "")
                         {
                             continue;
                         }
@@ -876,17 +876,19 @@ namespace COSXML
 
                 if (preSignatureStruct.queryParameters != null && preSignatureStruct.queryParameters.Count > 0)
                 {
-
                     foreach (KeyValuePair<string, string> keyValuePair in preSignatureStruct.queryParameters)
                     {
-                        queryBuilder.Append(keyValuePair.Key).Append('=').Append(URLEncodeUtils.Encode(keyValuePair.Value));
+                        if (keyValuePair.Key == null || keyValuePair.Key == "")
+                            continue;
+                        queryBuilder.Append(URLEncodeUtils.Encode(keyValuePair.Key)).Append('=').Append(URLEncodeUtils.Encode(keyValuePair.Value));
                         queryBuilder.Append('&');
                     }
                 }
                 
                 // 针对需要二次 Encode 的 request Param 特殊处理
                 Regex rgx = new Regex("q-url-param-list=.*&");
-                string paramlist = rgx.Match(sign).ToString().ToString().Split('=')[1].ToString();
+                string paramlist = rgx.Match(sign).ToString().Split('=')[1].ToString();
+                paramlist = paramlist.Trim('&');
                 paramlist = URLEncodeUtils.Encode(paramlist).ToLower();
                 string encodedStr = "q-url-param-list=" + paramlist + "&";
                 sign = rgx.Replace(sign, encodedStr);

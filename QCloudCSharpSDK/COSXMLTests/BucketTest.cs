@@ -807,7 +807,7 @@ namespace COSXMLTests
                 domain.rule.Name = "www.qq.com";
                 domain.rule.Status = "ENABLED";
                 domain.rule.Type = "WEBSITE";
-                domain.rule.ForcedReplacement = "";
+                domain.rule.Replace = "";
 
                 PutBucketDomainResult result = cosXml.PutBucketDomain(new PutBucketDomainRequest(bucket, domain));
                 Assert.AreEqual(result.httpCode, 200);
@@ -845,7 +845,7 @@ namespace COSXMLTests
                     Assert.NotNull(getResult.domainConfiguration.rule.Name);
                     Assert.NotNull(getResult.domainConfiguration.rule.Status);
                     Assert.NotNull(getResult.domainConfiguration.rule.Type);
-                    Assert.NotNull(getResult.domainConfiguration.rule.ForcedReplacement);
+                    Assert.NotNull(getResult.domainConfiguration.rule.Replace);
 
                 }
                 else
@@ -931,7 +931,7 @@ namespace COSXMLTests
                 rule.contidion = new WebsiteConfiguration.Contidion();
                 // HttpErrorCodeReturnedEquals 与 KeyPrefixEquals 必选其一
                 // 只支持配置4XX返回码，例如403或404
-                rule.contidion.httpErrorCodeReturnedEquals = "404";
+                rule.contidion.httpErrorCodeReturnedEquals = 0;
                 rule.contidion.keyPrefixEquals = "test.html";
 
                 rule.redirect = new WebsiteConfiguration.Redirect();
