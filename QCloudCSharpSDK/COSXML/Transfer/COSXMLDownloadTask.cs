@@ -560,6 +560,7 @@ namespace COSXML.Transfer
                     }
                     DownloadTaskResult downloadTaskResult = new DownloadTaskResult();
                     downloadTaskResult.SetResult(downloadResult);
+                    outputStream.Close();
                     if (successCallback != null)
                     {
                         successCallback(downloadTaskResult);
@@ -570,6 +571,7 @@ namespace COSXML.Transfer
                     // 容灾 return
                     DownloadTaskResult downloadTaskResult = new DownloadTaskResult();
                     downloadTaskResult.SetResult(downloadResult);
+                    outputStream.Close();
                     if (successCallback != null)
                     {
                         successCallback(downloadTaskResult);
