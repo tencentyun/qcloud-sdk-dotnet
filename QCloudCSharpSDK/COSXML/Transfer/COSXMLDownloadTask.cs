@@ -335,11 +335,13 @@ namespace COSXML.Transfer
             // concurrency control
             AutoResetEvent resetEvent = new AutoResetEvent(false);
             int retries = 0;
+            /*
             // download task lock, wait till lock released or timeout
             while (isTargetFileLocked())
             {
                 Thread.Sleep(100);
             }
+            */
             // return last response
             GetObjectResult downloadResult = null;
             if (sliceToRemove == null)
@@ -353,7 +355,7 @@ namespace COSXML.Transfer
                     {
                         continue;
                     }
-                    UpdateTargetFileLock();
+                    //UpdateTargetFileLock();
                     DownloadSliceStruct slice;
                     bool get_state = sliceList.TryGetValue(partNumber, out slice);
                     if (activeTasks >= maxTasks)
@@ -399,7 +401,7 @@ namespace COSXML.Transfer
                                     return;
                                 }
                             }
-                            UpdateTargetFileLock();
+                            //UpdateTargetFileLock();
                             sliceToRemove.Add(partNumber);
                             if (progressCallback != null && this.sliceList.Count > 1)
                             {
@@ -492,7 +494,7 @@ namespace COSXML.Transfer
                 });
                 foreach (var inputFilePath in tmpFileList)
                 {
-                    UpdateTargetFileLock();
+                    //UpdateTargetFileLock();
                     // tmp not exist, clear everything and ask for retry
                     if (!File.Exists(inputFilePath))
                     {
@@ -565,7 +567,7 @@ namespace COSXML.Transfer
                     {
                         successCallback(downloadTaskResult);
                     }
-                    ReleaseTargetFileLock();
+                    //ReleaseTargetFileLock();
                     return;
                 } else {
                     // 容灾 return
@@ -576,7 +578,7 @@ namespace COSXML.Transfer
                     {
                         successCallback(downloadTaskResult);
                     }
-                    ReleaseTargetFileLock();
+                    //ReleaseTargetFileLock();
                 }
             }
             /*
@@ -650,7 +652,7 @@ namespace COSXML.Transfer
                 }
             }
             // release lock
-            ReleaseTargetFileLock();
+            //ReleaseTargetFileLock();
         }
 
         public override void Pause()
@@ -709,7 +711,7 @@ namespace COSXML.Transfer
                 Download();
             }
         }
-
+/*
         private bool isTargetFileLocked()
         {
             try
@@ -787,7 +789,7 @@ namespace COSXML.Transfer
                 targetFileLock.ExitWriteLock();
             }
         }
-
+*/
         public class DownloadTaskResult : CosResult
         {
             public string eTag;
