@@ -30,6 +30,8 @@ namespace COSXML.Network
 
         private string proxyDomain;
 
+        private bool keepAlive;
+
         private HttpClientConfig(Builder builder)
         {
             this.userAgent = builder.userAgent;
@@ -43,6 +45,7 @@ namespace COSXML.Network
             this.proxyUserName = builder.proxyUserName;
             this.proxyUserPassword = builder.proxyUserPassword;
             this.proxyDomain = builder.proxyDomain;
+            this.keepAlive = builder.keepAlive;
         }
 
         public string UserAgnet
@@ -147,6 +150,15 @@ namespace COSXML.Network
 
         }
 
+        public bool KeepAlive
+        {
+            get
+            {
+
+                return keepAlive;
+            }
+        }
+
         public class Builder
         {
             internal string userAgent = CosVersion.GetUserAgent();
@@ -170,6 +182,8 @@ namespace COSXML.Network
             internal string proxyUserPassword;
 
             internal string proxyDomain;
+
+            internal bool keepAlive = true;
 
             public Builder() 
             { 
@@ -247,6 +261,13 @@ namespace COSXML.Network
             public Builder SetProxyDomain(string domain)
             {
                 this.proxyDomain = domain;
+
+                return this;
+            }
+
+            public Builder SetHttpKeepAlive(bool keepAlive)
+            {
+                this.keepAlive = keepAlive;
 
                 return this;
             }

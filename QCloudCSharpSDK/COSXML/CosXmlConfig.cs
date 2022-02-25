@@ -211,6 +211,18 @@ namespace COSXML
             }
 
             /// <summary>
+            /// 设置是否使用 Keep-Alive 长连接
+            /// </summary>
+            /// <param name="keepAlive"></param>
+            /// <returns></returns>
+            public Builder SetHttpKeepAlive(bool keepAlive)
+            {
+                this.httpClientConfigBuilder.SetHttpKeepAlive(keepAlive);
+
+                return this;
+            }
+
+            /// <summary>
             /// 设置 HTTP 代理主机
             /// </summary>
             /// <param name="host"></param>

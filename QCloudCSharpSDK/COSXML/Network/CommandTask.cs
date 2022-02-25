@@ -355,6 +355,9 @@ namespace COSXML.Network
             // set allow auto redirect
             httpWebRequest.AllowAutoRedirect = config.AllowAutoRedirect;
 
+            // set connection
+            httpWebRequest.KeepAlive = config.KeepAlive;
+
             // notice: it is not allowed to set common headers with the WebHeaderCollection.Accept
             // such as: Connection,Content-Length,Content-Type,Date,Expect. Host,If-Modified-Since,Range, Referer,Transfer-Encoding,User-Agent,Proxy-Connection
             //step2: set header and connection properity by request.heders

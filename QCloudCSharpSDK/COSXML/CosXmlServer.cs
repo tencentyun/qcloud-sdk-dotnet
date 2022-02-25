@@ -886,11 +886,11 @@ namespace COSXML
                 }
                 
                 // 针对需要二次 Encode 的 request Param 特殊处理
-                Regex rgx = new Regex("q-url-param-list=.*&");
-                string paramlist = rgx.Match(sign).ToString().Split('=')[1].ToString();
+                Regex rgx = new Regex("q-url-param-list=.*&q-signature");
+                string paramlist = rgx.Match(sign).ToString().Split('=')[1].ToString().Split('&')[0].ToString();
                 paramlist = paramlist.Trim('&');
                 paramlist = URLEncodeUtils.Encode(paramlist).ToLower();
-                string encodedStr = "q-url-param-list=" + paramlist + "&";
+                string encodedStr = "q-url-param-list=" + paramlist + "&q-signature";
                 sign = rgx.Replace(sign, encodedStr);
 
                 queryBuilder.Append(sign);
