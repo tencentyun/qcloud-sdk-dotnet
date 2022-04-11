@@ -91,7 +91,7 @@ namespace COSXML.Model.Object
             this.appendPosition = appendPosition < 0 ? 0 : appendPosition;
             this.queryParameters.Add("append", null);
             this.queryParameters.Add("position", appendPosition.ToString());
-            this.method = CosRequestMethod.PUT;
+            this.method = CosRequestMethod.POST;
             this.data = data;
         }
 

@@ -26,7 +26,11 @@ namespace COSXML.Model.Object
 
             if (values != null && values.Count > 0)
             {
-                nextAppendPosition = long.Parse(values[0]);
+                long tmpPosition;
+                if (long.TryParse(values[0], out tmpPosition))
+                {
+                    nextAppendPosition = tmpPosition;
+                }
             }
         }
     }

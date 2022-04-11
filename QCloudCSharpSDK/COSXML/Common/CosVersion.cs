@@ -9,7 +9,7 @@ namespace COSXML.Common
 {
     public sealed class CosVersion
     {
-        private static string SDKVersion = "5.4.28.0";
+        private static string SDKVersion = "5.4.29.0";
 
         public static string GetUserAgent()
         {

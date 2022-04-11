@@ -45,7 +45,6 @@ namespace COSXML.Transfer
         private DownloadResumableInfo resumableInfo = null;
         private bool resumable = false;
         private HashSet<string> tmpFilePaths = new HashSet<string>();
-        private long downloadedCount = 0;
         private HashSet<int> sliceToRemove = null;
 
         // global exception
@@ -261,8 +260,6 @@ namespace COSXML.Transfer
                                 if (this.sliceToRemove == null)
                                     this.sliceToRemove = new HashSet<int>();
                                 this.sliceToRemove.Add(downloadedSlice.partNumber);
-                                //this.downloadedCount += 1;
-                                //this.sliceList.Remove(downloadedSlice.partNumber);
                             }
                             // add to merging list
                             string tmpFileName = localDir + "." + localFileName + ".cosresumable." + downloadedSlice.partNumber;
@@ -335,13 +332,6 @@ namespace COSXML.Transfer
             // concurrency control
             AutoResetEvent resetEvent = new AutoResetEvent(false);
             int retries = 0;
-            /*
-            // download task lock, wait till lock released or timeout
-            while (isTargetFileLocked())
-            {
-                Thread.Sleep(100);
-            }
-            */
             // return last response
             GetObjectResult downloadResult = null;
             if (sliceToRemove == null)
@@ -355,7 +345,6 @@ namespace COSXML.Transfer
                     {
                         continue;
                     }
-                    //UpdateTargetFileLock();
                     DownloadSliceStruct slice;
                     bool get_state = sliceList.TryGetValue(partNumber, out slice);
                     if (activeTasks >= maxTasks)
@@ -401,13 +390,9 @@ namespace COSXML.Transfer
                                     return;
                                 }
                             }
-                            //UpdateTargetFileLock();
                             sliceToRemove.Add(partNumber);
                             if (progressCallback != null && this.sliceList.Count > 1)
                             {
-                                /* 大改这里的取值
-                                long completed = downloadedCount * this.sliceSize + sliceToRemove.Count * this.sliceSize;
-                                */
                                 long completed = sliceToRemove.Count * this.sliceSize;
                                 long total = rangeEnd - rangeStart;
                                 if (completed > total)
@@ -494,7 +479,6 @@ namespace COSXML.Transfer
                 });
                 foreach (var inputFilePath in tmpFileList)
                 {
-                    //UpdateTargetFileLock();
                     // tmp not exist, clear everything and ask for retry
                     if (!File.Exists(inputFilePath))
                     {
@@ -567,7 +551,6 @@ namespace COSXML.Transfer
                     {
                         successCallback(downloadTaskResult);
                     }
-                    //ReleaseTargetFileLock();
                     return;
                 } else {
                     // 容灾 return
@@ -578,53 +561,8 @@ namespace COSXML.Transfer
                     {
                         successCallback(downloadTaskResult);
                     }
-                    //ReleaseTargetFileLock();
                 }
             }
-            /*
-            var dir = new DirectoryInfo(localDir);
-            foreach (var file in dir.EnumerateFiles("." + localFileName + ".cosresumable.*")) {
-                file.Delete();
-            }
-            */
-            // delete resumable file
-            /*
-            if (resumableTaskFile != null)
-            {
-                FileInfo info = new FileInfo(resumableTaskFile);
-                if (info.Exists)
-                {
-                    info.Delete();
-                }
-            }
-            */
-            /*
-            // crc64 check
-            if (enableCrc64Check)
-            {
-                UpdateTargetFileLock();
-                if (!COSXML.Utils.Crc64.CompareCrc64(localDir + localFileName, crc64ecma))
-                {
-                    COSXML.CosException.CosClientException clientEx = new COSXML.CosException.CosClientException
-                        ((int)CosClientError.CRC64ecmaCheckFailed, "local file crc64 diff from file in cos, download again");
-                    throw clientEx;
-                    if (failCallback != null)
-                    {
-                        failCallback(clientEx, null);
-                    }
-                }
-            }
-            */
-            /*
-            if (resumableTaskFile != null)
-            {
-                FileInfo info = new FileInfo(resumableTaskFile);
-                if (info.Exists)
-                {
-                    info.Delete();
-                }
-            }
-            */
             return;
         }
 
@@ -633,6 +571,13 @@ namespace COSXML.Transfer
             //cancle request
             cosXmlServer.Cancel(headObjectRequest);
             cosXmlServer.Cancel(getObjectRequest);
+            // Cancel success, remove one task
+            Interlocked.Decrement(ref activeTasks);
+            // wait for tasks to finish
+            while (activeTasks > 0)
+            {
+                Thread.Sleep(100);
+            }
         }
 
         private void Clear()
@@ -651,8 +596,6 @@ namespace COSXML.Transfer
                     info.Delete();
                 }
             }
-            // release lock
-            //ReleaseTargetFileLock();
         }
 
         public override void Pause()
@@ -667,15 +610,6 @@ namespace COSXML.Transfer
                 }
                 //cancle request
                 RealCancle();
-                /*
-                if (!resumable) {
-                    foreach (int partNumber in sliceToRemove)
-                    {
-                        sliceList.Remove(partNumber);
-                        downloadedCount += 1;
-                    }
-                }
-                */
             }
         }
 
@@ -705,91 +639,12 @@ namespace COSXML.Transfer
                 lock (syncExit)
                 {
                     //continue to download
-                    //continue to download
                     isExit = false;
                 }
                 Download();
             }
         }
-/*
-        private bool isTargetFileLocked()
-        {
-            try
-            {
-                // check lock and expire state
-                string lockFileName = this.localDir + "." + this.localFileName + ".cosresumable.lock";
-                targetFileLock.EnterReadLock();
-                if (File.Exists(lockFileName))
-                {
-                    // 超时检查
-                    FileInfo fileInfo = new FileInfo(lockFileName);
-                    DateTime lastWriteTime = fileInfo.LastWriteTime;
-                    DateTime now = DateTime.Now;
-                    TimeSpan ts = now.Subtract(lastWriteTime);
-                    if (ts.Seconds > 10)
-                    {
-                        File.Delete(lockFileName);
-                        File.Create(lockFileName);
-                        return false;
-                    }
-                    return true;
-                }
-                else
-                {
-                    File.Create(lockFileName);
-                    return false;
-                }
-         
-            }
-            catch (Exception e)
-            {
-                return true;
-            }
-            finally
-            {
-                targetFileLock.ExitReadLock();
-            }
 
-        }
-
-        private void UpdateTargetFileLock()
-        {
-            try
-            {
-                string lockFileName = this.localDir + "." + this.localFileName + ".cosresumable.lock";
-                targetFileLock.EnterWriteLock();
-                File.AppendAllText(lockFileName, DateTime.Now.ToString());
-            }
-            catch (Exception e)
-            {
-                return;
-            }
-            finally
-            {
-                targetFileLock.ExitWriteLock();
-            }
-
-        }
-
-        private bool ReleaseTargetFileLock()
-        {
-            try
-            {
-                string lockFileName = this.localDir + "." + this.localFileName + ".cosresumable.lock";
-                targetFileLock.EnterWriteLock();
-                System.IO.File.Delete(lockFileName);
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-            finally
-            {
-                targetFileLock.ExitWriteLock();
-            }
-        }
-*/
         public class DownloadTaskResult : CosResult
         {
             public string eTag;
