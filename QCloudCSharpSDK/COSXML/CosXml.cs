@@ -34,7 +34,8 @@ namespace COSXML
         /// <param name="headers">http header</param>
         /// <param name="signDurationSecond">sign time</param>
         /// <returns></returns>
-        string GenerateSign(string method, string key, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, long signDurationSecond);
+        string GenerateSign(string method, string key, Dictionary<string, string> queryParameters, 
+                            Dictionary<string, string> headers, long signDurationSecond, long keyDurationSecond);
 
         /// <summary>
         /// 生成预签名URL

@@ -432,7 +432,8 @@ namespace COSXML.Auth
             }
         }
 
-        public static string GenerateSign(string method, string path, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, string signTime, QCloudCredentials qcloudCredentials)
+        public static string GenerateSign(string method, string path, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, 
+                                          string signTime, string keyTime, QCloudCredentials qcloudCredentials)
         {
 
             if (qcloudCredentials == null)
@@ -445,6 +446,11 @@ namespace COSXML.Auth
             if (signTime == null)
             {
                 signTime = qcloudCredentials.KeyTime;
+            }
+
+            if (keyTime == null)
+            {
+                keyTime = qcloudCredentials.KeyTime;
             }
 
             cosXmlSourceProvider.SetSignTime(signTime);
@@ -475,7 +481,7 @@ namespace COSXML.Auth
             signBuilder.Append(CosAuthConstants.Q_SIGN_ALGORITHM).Append('=').Append(CosAuthConstants.SHA1).Append('&')
                 .Append(CosAuthConstants.Q_AK).Append('=').Append(qcloudCredentials.SecretId).Append('&')
                 .Append(CosAuthConstants.Q_SIGN_TIME).Append('=').Append(cosXmlSourceProvider.GetSignTime()).Append('&')
-                .Append(CosAuthConstants.Q_KEY_TIME).Append('=').Append(qcloudCredentials.KeyTime).Append('&')
+                .Append(CosAuthConstants.Q_KEY_TIME).Append('=').Append(keyTime).Append('&')
                 .Append(CosAuthConstants.Q_HEADER_LIST).Append('=').Append(cosXmlSourceProvider.GetHeaderList()).Append('&')
                 .Append(CosAuthConstants.Q_URL_PARAM_LIST).Append('=').Append(cosXmlSourceProvider.GetParameterList()).Append('&')
                 .Append(CosAuthConstants.Q_SIGNATURE).Append('=').Append(signature);

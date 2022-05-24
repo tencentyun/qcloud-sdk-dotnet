@@ -60,5 +60,10 @@ namespace COSXML.Model.Tag
         /// 签名 sign的有效期，若 小于 0，则取keyTime.
         /// </summary>
         public long signDurationSecond;
+
+        /// <summary>
+        /// 签名 key的有效期，不设置 或 小于 0, 则取 QCloudCredential中的keyTime
+        /// </summary>
+        public long keyDurationSecond;
     }
 }

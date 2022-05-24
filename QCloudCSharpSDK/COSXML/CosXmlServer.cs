@@ -737,18 +737,24 @@ namespace COSXML
             Schedue(request, new RestoreObjectResult(), successCallback, failCallback);
         }
 
-        public string GenerateSign(string method, string key, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, long signDurationSecond)
+        public string GenerateSign(string method, string key, Dictionary<string, string> queryParameters, 
+                                   Dictionary<string, string> headers, long signDurationSecond, long keyDurationSecond)
         {
 
             try
             {
                 string signTime = null;
+                long currentTimeSecond = TimeUtils.GetCurrentTime(TimeUnit.Seconds);
 
                 if (signDurationSecond > 0)
                 {
-                    long currentTimeSecond = TimeUtils.GetCurrentTime(TimeUnit.Seconds);
-
                     signTime = String.Format("{0};{1}", currentTimeSecond, currentTimeSecond + signDurationSecond);
+                }
+
+                string keyTime = null;
+                if (keyDurationSecond > 0)
+                {
+                    signTime = String.Format("{0};{1}", currentTimeSecond, currentTimeSecond + keyDurationSecond);
                 }
 
                 Dictionary<string, string> encodeQuery = null;
@@ -774,7 +780,7 @@ namespace COSXML
                     }
                 }
 
-                return CosXmlSigner.GenerateSign(method, key, encodeQuery, headers, signTime, credentialProvider.GetQCloudCredentialsCompat(null));
+                return CosXmlSigner.GenerateSign(method, key, encodeQuery, headers, signTime, keyTime, credentialProvider.GetQCloudCredentialsCompat(null));
             }
             catch (CosClientException)
             {
@@ -870,7 +876,8 @@ namespace COSXML
                 urlBuilder.Append(preSignatureStruct.key);
 
                 string sign = GenerateSign(preSignatureStruct.httpMethod, preSignatureStruct.key,
-                    preSignatureStruct.queryParameters, preSignatureStruct.headers, preSignatureStruct.signDurationSecond);
+                    preSignatureStruct.queryParameters, preSignatureStruct.headers, 
+                    preSignatureStruct.signDurationSecond, preSignatureStruct.keyDurationSecond);
 
                 StringBuilder queryBuilder = new StringBuilder();
 
