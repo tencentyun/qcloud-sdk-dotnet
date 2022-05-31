@@ -19,5 +19,13 @@ namespace COSXML.Model.CI
         public CensorJobsResponse censorJobsResponse { 
             get {return _data; } 
         }
+
+        /// <summary>
+        /// 文本审核任务的响应
+        /// </summary>
+        /// <vaule></vaule>
+        public TextCencorJobsResponse testCencorJobsResponse {
+            get { return _data; }
+        }
     }
 }

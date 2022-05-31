@@ -39,6 +39,15 @@ namespace COSXML.Model.Tag
             [XmlElement("Content")]
             public string content;
 
+            [XmlElement("Url")]
+            public string url;
+
+            [XmlElement("DataId")]
+            public string dataId;
+/*
+            [XmlElement("UserInfo")]
+            public UserInfo userInfo;
+*/
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Input:\n");
@@ -50,6 +59,17 @@ namespace COSXML.Model.Tag
                 {
                     stringBuilder.Append("Content:" + content + "\n");
                 }
+                if (url != null)
+                {
+                    stringBuilder.Append("Url:" + url + "\n");
+                }
+                if (dataId != null)
+                {
+                    stringBuilder.Append("DataId:" + dataId + "\n");
+                }
+
+                stringBuilder.Append(userInfo.GetInfo().Append("\n"));
+
                 stringBuilder.Append("}");
                 return stringBuilder.ToString();
             }
@@ -85,7 +105,68 @@ namespace COSXML.Model.Tag
                 return stringBuilder.ToString();
             }
         }
+/*
+        public sealed class UserInfo
+        {
+            [XmlElement("TokenId")]
+            public string tokenId;
 
+            [XmlElement("Nickname")]
+            public string niekName;
+
+            [XmlElement("DeviceId")]
+            public string deviceId;
+
+            [XmlElement("AppId")]
+            public string appId;
+
+            [XmlElement("Room")]
+            public string room;
+
+            [XmlElement("IP")]
+            public string ip;
+
+            [XmlElement("Type")]
+            public string type;
+
+            public string GetInfo()
+            { 
+                StringBuilder stringBuilder = new StringBuilder("{UserInfo:\n");
+
+                if (tokenId != null)
+                {
+                    stringBuilder.Append("TokenId:").Append(tokenId).Append("\n");
+                }
+                if (niekName != null)
+                {
+                    stringBuilder.Append("Nickname:").Append(niekName).Append("\n");
+                }
+                if (deviceId != null)
+                {
+                    stringBuilder.Append("DeviceId:").Append(deviceId).Append("\n");
+                }
+                if (appId != null)
+                {
+                    stringBuilder.Append("AppId:").Append(appId).Append("\n");
+                }
+                if (room != null)
+                {
+                    stringBuilder.Append("Room:").Append(room).Append("\n");
+                }
+                if (ip != null)
+                {
+                    stringBuilder.Append("IP:").Append(ip).Append("\n");
+                }
+                if (type != null)
+                {
+                    stringBuilder.Append("Type:").Append(type).Append("\n");
+                }
+                stringBuilder.Append("}");
+
+                return stringBuilder.ToString();
+            }
+        }
+*/
     }
 
 }
