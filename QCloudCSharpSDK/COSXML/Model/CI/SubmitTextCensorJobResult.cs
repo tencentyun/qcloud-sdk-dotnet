@@ -9,14 +9,14 @@ namespace COSXML.Model.CI
     /// <summary>
     /// 
     /// </summary>
-    public sealed class SubmitCensorJobResult : CosDataResult<CensorJobsResponse>
+    public sealed class SubmitTextCensorJobsResult : CosDataResult<TextCensorJobsResponse>
     {
 
         /// <summary>
-        /// 图片审核结果
+        /// 文本审核结果
         /// </summary>
         /// <value></value>
-        public CensorJobsResponse censorJobsResponse { 
+        public TextCensorJobsResponse textCensorJobsResponse { 
             get {return _data; } 
         }
     }

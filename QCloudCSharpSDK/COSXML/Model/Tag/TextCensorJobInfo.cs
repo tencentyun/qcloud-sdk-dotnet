@@ -68,7 +68,7 @@ namespace COSXML.Model.Tag
                     stringBuilder.Append("DataId:" + dataId + "\n");
                 }
 
-                stringBuilder.Append(userInfo.GetInfo().Append("\n"));
+                //stringBuilder.Append(userInfo.GetInfo().Append("\n"));
 
                 stringBuilder.Append("}");
                 return stringBuilder.ToString();

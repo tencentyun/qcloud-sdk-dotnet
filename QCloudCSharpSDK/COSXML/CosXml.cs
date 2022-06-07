@@ -1156,11 +1156,11 @@ namespace COSXML
         SubmitCensorJobResult SubmitTextCensorJob(SubmitTextCensorJobRequest request);
         
         /// <summary>
-        /// 提交文本审核任务, 并同步返回
+        /// 提交文本审核任务, 支持同步返回
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        SubmitTextCensorJobResult SubmitTextCensorJobSync(SubmitTextCensorJobRequest request);
+        SubmitTextCensorJobsResult SubmitTextCensorJobSync(SubmitTextCensorJobRequest request);
 
         /// <summary>
         /// 获取文本审核任务结果
