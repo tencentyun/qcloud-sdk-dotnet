@@ -1266,14 +1266,14 @@ namespace COSXML
         }
 
         /// <summary>
-        /// 提交文本审核任务, 并同步返回
+        /// 提交文本审核任务, 支持同步返回
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public SubmitTextCensorJobResult SubmitTextCensorJobSync(SubmitTextCensorJobRequest request)
+        public SubmitTextCensorJobsResult SubmitTextCensorJobSync(SubmitTextCensorJobRequest request)
         {
             request.Region = this.GetConfig().Region;
-            return Execute(request, new SubmitTextCensorJobResult());
+            return Execute(request, new SubmitTextCensorJobsResult());
         }
 
         /// <summary>
