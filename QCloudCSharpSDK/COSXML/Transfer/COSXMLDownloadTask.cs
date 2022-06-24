@@ -22,9 +22,10 @@ namespace COSXML.Transfer
         private long rangeStart = 0L;
         private long rangeEnd = -1L;
         private int maxTasks = 5;
-        private long sliceSize = 5 * 1024 * 1024;
+        private long sliceSize = 10 * 1024 * 1024;
         private long divisionSize = 20 * 1024 * 1024;
         private bool enableCrc64Check = false;
+        private long singleTaskTimeoutMs = 30 * 1000;
 
         // concurrency control
         private volatile int activeTasks = 0;
@@ -33,12 +34,14 @@ namespace COSXML.Transfer
         private bool isExit = false;
         private static ReaderWriterLockSlim resumableFileWriteLock = new ReaderWriterLockSlim();
         private Dictionary<int, DownloadSliceStruct> sliceList = new Dictionary<int, DownloadSliceStruct>();
-        private static ReaderWriterLockSlim targetFileLock = new ReaderWriterLockSlim();
 
         // internal requests
         private HeadObjectRequest headObjectRequest;
         private GetObjectRequest getObjectRequest;
         private string localFileCrc64;
+
+        // list of ongoing getObjectRequest
+        private List<GetObjectRequest> getObjectRequestsList;
 
         // resumable info
         private string resumableTaskFile = null;
@@ -135,9 +138,25 @@ namespace COSXML.Transfer
             this.divisionSize = divisionSize;
         }
 
-        private void SetEnableCRC64Check(bool enableCrc64Check)
+        public void SetEnableCRC64Check(bool enableCrc64Check)
         {
             this.enableCrc64Check = enableCrc64Check;
+        }
+
+        public void SetSingleTaskTimeoutMs(long singleTaskTimeoutMs)
+        {
+            if (singleTaskTimeoutMs > 0)
+            {
+                this.singleTaskTimeoutMs = singleTaskTimeoutMs;
+            }
+        }
+
+        public void SetMaxRetries(int maxRetries)
+        {
+            if (maxRetries > 0)
+            {
+                this.maxRetries = maxRetries;
+            }
         }
 
         private void ComputeSliceList(HeadObjectResult result)
@@ -204,7 +223,7 @@ namespace COSXML.Transfer
                         ResumeDownloadInPossible(result, localDir + localFileName);
                     }
                     // concurrent download
-                    GetObject(result.crc64ecma);
+                    ConcurrentGetObject(result.crc64ecma);
                 } 
 
             },
@@ -313,8 +332,8 @@ namespace COSXML.Transfer
             }
         }
 
-        // actual get object requests with concurrency control
-        private void GetObject(string crc64ecma)
+        // 发起多线程下载
+        private void ConcurrentGetObject(string crc64ecma)
         {
             lock (syncExit) 
             {
@@ -323,19 +342,27 @@ namespace COSXML.Transfer
                     return;
                 }
             }
-            // create dir if not exist
+            // 保障目标路径是存在的
             DirectoryInfo dirInfo = new DirectoryInfo(localDir);
             if (!dirInfo.Exists)
             {
                 dirInfo.Create();
             }
-            // concurrency control
+            // 控制任务数
             AutoResetEvent resetEvent = new AutoResetEvent(false);
-            int retries = 0;
-            // return last response
-            GetObjectResult downloadResult = null;
+            // 记录成功的分片
             if (sliceToRemove == null)
+            {
                 sliceToRemove = new HashSet<int>();
+            }
+            // 记录子任务
+            if (getObjectRequestsList == null)
+            {
+                getObjectRequestsList = new List<GetObjectRequest>();
+            }
+            int retries = 0;
+            // 只抛出最后一条服务端回包
+            GetObjectResult downloadResult = null;
             while (sliceList.Count != 0 && retries < maxRetries)
             {
                 retries += 1;
@@ -359,7 +386,12 @@ namespace COSXML.Transfer
                         }
                     }
                     string tmpFileName = "." + localFileName + ".cosresumable." + slice.partNumber;
-                    // clear remainance
+                    /*
+                        以下几种场景需要清理临时文件
+                        1. 一次下载中, 重试未下载完成的文件
+                        2. Pause之后重入下载, 清理Pause前未下载完成的文件
+                        3. 断点续传中, 清理未下载完成的单个分块
+                    */
                     FileInfo tmpFileInfo = new FileInfo(localDir + tmpFileName);
                     if (tmpFileInfo.Exists 
                         && tmpFileInfo.Length != (slice.sliceEnd - slice.sliceStart + 1) 
@@ -367,19 +399,21 @@ namespace COSXML.Transfer
                     {
                         System.IO.File.Delete(localDir + tmpFileName);
                     }
-                    getObjectRequest = new GetObjectRequest(bucket, key, localDir, tmpFileName);
+                    GetObjectRequest subGetObjectRequest = new GetObjectRequest(bucket, key, localDir, tmpFileName);
                     tmpFilePaths.Add(localDir + tmpFileName);
-                    getObjectRequest.SetRange(slice.sliceStart, slice.sliceEnd);
-                    if (progressCallback != null && this.sliceList.Count == 1)
+                    subGetObjectRequest.SetRange(slice.sliceStart, slice.sliceEnd);
+                    getObjectRequestsList.Add(subGetObjectRequest);
+                    // 计算出来只有一个分块, 而且不是Resume或重试剩的一个, 即不走并发下载, 用GetObject的进度回调给客户端
+                    if (progressCallback != null && this.sliceList.Count == 1 && sliceToRemove.Count == 0)
                     {
-                        getObjectRequest.SetCosProgressCallback(delegate(long completed, long total)
+                        subGetObjectRequest.SetCosProgressCallback(delegate(long completed, long total)
                             {
                                 progressCallback(completed, total);
                             }
                         );
                     }
                     Interlocked.Increment(ref activeTasks);
-                    cosXmlServer.GetObject(getObjectRequest,
+                    cosXmlServer.GetObject(subGetObjectRequest,
                         delegate (CosResult result)
                         {
                             Interlocked.Decrement(ref activeTasks);
@@ -418,7 +452,7 @@ namespace COSXML.Transfer
                                     return;
                                 }
                             }
-                            // server 4xx throw and stop
+                            // 对服务端返回的4xx, 不重试, 直接抛异常
                             if (serverEx != null && serverEx.statusCode < 500) {
                                 throw serverEx;
                                 if (failCallback != null)
@@ -427,18 +461,51 @@ namespace COSXML.Transfer
                                 }
                                 return;
                             }
-                            // client cannot connect, just retry
+                            // 对客户端异常, 全部都重试
                             if (clientEx != null)
                                 gClientExp = clientEx;
                             resetEvent.Set();
                         }
                     );
                 }
+                long waitTimeMs = 0;
+                int lastActiveTasks = activeTasks;
                 while (activeTasks != 0)
                 {
+                    lock (syncExit)
+                    {
+                        if (isExit)
+                        {
+                            return;
+                        }
+                    }
                     Thread.Sleep(100);
+                    if (lastActiveTasks == activeTasks) {
+                        /*
+                            兼容一种子任务既不成功，也不失败，完全hang住的场景
+                            在 .net core + 丢包率高的使用场景下会概率性复现
+                            当activeTasks一直不变时，累加一个等待的时间
+                            超出 singleTaskTimeoutMs 时，全部清理掉进入下一轮重试
+                        */
+                        waitTimeMs += 100;
+                    } else {
+                        waitTimeMs = 0;
+                        lastActiveTasks = activeTasks;
+                    }
+                    if (waitTimeMs > singleTaskTimeoutMs) {
+                        foreach(GetObjectRequest subGetObjectRequest in getObjectRequestsList) {
+                            try {
+                                cosXmlServer.Cancel(subGetObjectRequest);
+                            } catch (Exception e) {
+                                ;
+                            }
+                        }
+                        getObjectRequestsList.Clear();
+                        activeTasks = 0;
+                        break;
+                    }
                 }
-                // remove success parts
+                // 从下载列表中移除成功分块
                 foreach (int partNumber in sliceToRemove)
                 {
                     sliceList.Remove(partNumber);
@@ -462,7 +529,7 @@ namespace COSXML.Transfer
                 }
                 return;
             } 
-            // file merge
+            // 预期每个分块都下载完成了, 开始顺序合并
             FileMode fileMode = FileMode.OpenOrCreate;
             FileInfo localFileInfo = new FileInfo(localDir + localFileName);
             if (localFileInfo.Exists && localFileOffset == 0 && localFileInfo.Length != rangeEnd - rangeStart + 1)
@@ -513,7 +580,7 @@ namespace COSXML.Transfer
                             System.IO.File.Delete(localDir + localFileName);
                         }
                         COSXML.CosException.CosClientException clientEx = new COSXML.CosException.CosClientException
-                            ((int)CosClientError.InternalError, "local tmp file not exist, could be concurrent writing same file" 
+                            ((int)CosClientError.InternalError, "local tmp file not exist, could be concurrent writing same file"
                             + inputFilePath +" download again");
                         throw clientEx;
                         if (failCallback != null)
@@ -530,6 +597,40 @@ namespace COSXML.Transfer
                 }
                 tmpFileList.Clear();
                 tmpFilePaths.Clear();
+                outputStream.Close();
+                // 合并完成后，默认进行文件大小的检查
+                FileInfo completedFileInfo = new FileInfo(localDir + localFileName);
+                if (completedFileInfo.Length != rangeEnd - rangeStart + 1) {
+                    COSXML.CosException.CosClientException clientEx = new COSXML.CosException.CosClientException
+                        ((int)CosClientError.InternalError, "local File Length " + completedFileInfo.Length + 
+                        " does not equals to applied download length " + (rangeEnd - rangeStart + 1) + ", try again");
+                    throw clientEx;
+                    if (UpdateTaskState(TaskState.Failed))
+                    {
+                        if (failCallback != null)
+                        {
+                            failCallback(clientEx, null);
+                        }
+                    }
+                    return;
+                }
+                // 按需进行CRC64的检查
+                if (enableCrc64Check) {
+                    if (!CompareCrc64(localDir + localFileName, crc64ecma)) {
+                        COSXML.CosException.CosClientException clientEx = new COSXML.CosException.CosClientException
+                        ((int)CosClientError.CRC64ecmaCheckFailed, "local File Crc64 " + 
+                        " does not equals to crc64ecma on cos, try download again");
+                        throw clientEx;
+                        if (UpdateTaskState(TaskState.Failed))
+                        {
+                            if (failCallback != null)
+                            {
+                                failCallback(clientEx, null);
+                            }
+                        }
+                        return;
+                    }
+                }
                 if (UpdateTaskState(TaskState.Completed))
                 {
                     var dir = new DirectoryInfo(localDir);
@@ -544,9 +645,9 @@ namespace COSXML.Transfer
                             info.Delete();
                         }
                     }
+                    //outputStream.Close();
                     DownloadTaskResult downloadTaskResult = new DownloadTaskResult();
                     downloadTaskResult.SetResult(downloadResult);
-                    outputStream.Close();
                     if (successCallback != null)
                     {
                         successCallback(downloadTaskResult);
@@ -556,7 +657,7 @@ namespace COSXML.Transfer
                     // 容灾 return
                     DownloadTaskResult downloadTaskResult = new DownloadTaskResult();
                     downloadTaskResult.SetResult(downloadResult);
-                    outputStream.Close();
+                    //outputStream.Close();
                     if (successCallback != null)
                     {
                         successCallback(downloadTaskResult);
@@ -568,16 +669,21 @@ namespace COSXML.Transfer
 
         private void RealCancle()
         {
-            //cancle request
+            // 停止可能进行中的Head请求
             cosXmlServer.Cancel(headObjectRequest);
-            cosXmlServer.Cancel(getObjectRequest);
-            // Cancel success, remove one task
+            // 停止可能进行中的下载线程
             Interlocked.Decrement(ref activeTasks);
+            foreach (GetObjectRequest subGetObjectRequest in getObjectRequestsList) {
+                cosXmlServer.Cancel(subGetObjectRequest);
+            }
+            activeTasks = 0;
+            /*
             // wait for tasks to finish
             while (activeTasks > 0)
             {
                 Thread.Sleep(100);
             }
+            */
         }
 
         private void Clear()

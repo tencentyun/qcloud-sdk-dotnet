@@ -136,8 +136,8 @@ namespace COSXML.Transfer
         // 20M
         private long divisionForDownload = 20971520;
 
-        // 5M
-        private long sliceSizeForDownload = 5242880;
+        // 10M
+        private long sliceSizeForDownload = 10485760;
 
         /// <summary>
         /// 多大的文件会自动使用分片拷贝
@@ -207,7 +207,7 @@ namespace COSXML.Transfer
         /// <summary>
         /// 分块下载的每个块大小
         /// </summary>
-        /// <value>默认是 5MB</value>
+        /// <value>默认是 10MB</value>
         public long SliceSizeForDownload
         {
             get

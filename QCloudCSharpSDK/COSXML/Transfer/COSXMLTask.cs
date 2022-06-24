@@ -143,7 +143,6 @@ namespace COSXML.Transfer
             {
                 onState(taskState);
             }
-
             return result;
 
         }
