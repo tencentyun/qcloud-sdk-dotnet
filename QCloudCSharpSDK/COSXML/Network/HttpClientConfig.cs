@@ -159,6 +159,15 @@ namespace COSXML.Network
             }
         }
 
+        public int MaxRetry
+        {
+            get
+            {
+
+                return maxRetry;
+            }
+        }
+
         public class Builder
         {
             internal string userAgent = CosVersion.GetUserAgent();
@@ -268,6 +277,13 @@ namespace COSXML.Network
             public Builder SetHttpKeepAlive(bool keepAlive)
             {
                 this.keepAlive = keepAlive;
+
+                return this;
+            }
+
+            public Builder SetMaxRetry(int maxRetry)
+            {
+                this.maxRetry = maxRetry;
 
                 return this;
             }

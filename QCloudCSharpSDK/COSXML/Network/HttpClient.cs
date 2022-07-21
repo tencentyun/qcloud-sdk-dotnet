@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -34,6 +34,8 @@ namespace COSXML.Network
         private static Object syncInstance = new Object();
 
         private const int MAX_ACTIVIE_TASKS = 5;
+
+        public int MaxRetry { private get; set;} = 3;
 
         private volatile int activieTasks = 0;
 
@@ -110,7 +112,7 @@ namespace COSXML.Network
         /// <param name="credentialProvider"></param>
         /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception>
         /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
-        public void InternalExcute(CosRequest cosRequest, CosResult cosResult, QCloudCredentialProvider credentialProvider)
+        public void InternalExcute(CosRequest cosRequest, CosResult cosResult, QCloudCredentialProvider credentialProvider, int retryIndex = 0)
         {
 
             try
@@ -141,17 +143,42 @@ namespace COSXML.Network
                 cosRequest.BindRequest(request);
                 CommandTask.Excute(request, response, config);
             }
-            catch (CosServerException)
+            catch (CosServerException serverException)
             {
-                throw;
+                // 服务端5xx才重试
+                if (serverException.statusCode >= 500 && retryIndex < MaxRetry)
+                {
+                    InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
+                }
+                else
+                {
+                    throw;
+                }
             }
             catch (CosClientException)
             {
-                throw;
+                // 客户端异常都重试
+                if (retryIndex < MaxRetry)
+                {
+                    InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
+                }
+                else
+                {
+                    throw;
+                }
+                
             }
             catch (Exception ex)
             {
-                throw new CosClientException((int)CosClientError.BadRequest, ex.Message, ex);
+                // 未知异常也重试
+                if (retryIndex < MaxRetry)
+                {
+                    InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
+                }
+                else
+                {
+                    throw new CosClientException((int)CosClientError.BadRequest, ex.Message, ex);
+                }
             }
 
         }

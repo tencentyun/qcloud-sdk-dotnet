@@ -8,6 +8,7 @@ using COSXML.Common;
 using COSXML.Utils;
 using COSXML.Model.Tag;
 using COSXML.Log;
+using COSXML.Model.Bucket;
 using System.Threading;
 
 namespace COSXML.Transfer
@@ -60,7 +61,11 @@ namespace COSXML.Transfer
 
         private AbortMultipartUploadRequest abortMultiUploadRequest;
 
+        private ListMultiUploadsRequest listMultiUploadsRequest;
+
         public int MaxConcurrent { private get; set; } = MAX_ACTIVIE_TASKS;
+
+        public bool UseResumableUpload { private get; set; } = true;
 
         public string StorageClass { private get; set; }
 
@@ -242,7 +247,14 @@ namespace COSXML.Transfer
             }
             else
             {
-                InitMultiUploadPart();
+                if (UseResumableUpload)
+                {
+                    CheckResumeblaUpload();
+                }
+                else
+                {
+                    InitMultiUploadPart();
+                }
             }
         }
 
@@ -300,6 +312,124 @@ namespace COSXML.Transfer
             });
         }
 
+        private void CheckResumeblaUpload()
+        {
+            listMultiUploadsRequest = new ListMultiUploadsRequest(bucket);
+            listMultiUploadsRequest.SetPrefix(key);
+            cosXmlServer.ListMultiUploads(listMultiUploadsRequest, delegate (CosResult cosResult)
+            {
+                // 取最新符合条件的uploadId
+                ListMultiUploadsResult result = cosResult as ListMultiUploadsResult;
+                var uploads = result.listMultipartUploads;
+                if (uploads.uploads != null && uploads.uploads.Count > 0) 
+                {
+                    for (int i = uploads.uploads.Count - 1; i >= 0; i--)
+                    {
+                        var upload = uploads.uploads[i];
+                        if (upload.key != key)
+                        {
+                            continue;
+                        }
+                        CheckAllUploadParts(upload.uploadID);
+                        return;
+                    }
+                }
+                else
+                {
+                    InitMultiUploadPart();
+                }
+            },
+            delegate (CosClientException clientEx, CosServerException serverEx)
+            {
+                lock (syncExit)
+                {
+
+                    if (isExit)
+                    {
+
+                        return;
+                    }
+                }
+
+                if (UpdateTaskState(TaskState.Failed))
+                {
+                    OnFailed(clientEx, serverEx);
+                }
+            });
+        }
+
+        private void CheckAllUploadParts(string uploadId)
+        {
+            bool checkSucc = true;
+            listPartsRequest = new ListPartsRequest(bucket, key, uploadId);
+            cosXmlServer.ListParts(listPartsRequest, delegate (CosResult cosResult)
+            {
+                lock (syncExit)
+                {
+
+                    if (isExit)
+                    {
+
+                        return;
+                    }
+                }
+
+                ListPartsResult result = cosResult as ListPartsResult;
+
+                Dictionary<int, SliceStruct> sourceParts = new Dictionary<int, SliceStruct>(sliceList.Count);
+
+                foreach (SliceStruct sliceStruct in sliceList)
+                {
+                    sourceParts.Add(sliceStruct.partNumber, sliceStruct);
+                }
+                //检查已上传块的ETag和本地ETag是否一致
+                foreach (ListParts.Part part in result.listParts.parts)
+                {
+                    int partNumber = -1;
+
+                    bool parse = int.TryParse(part.partNumber, out partNumber);
+
+                    if (!parse)
+                    {
+                        throw new ArgumentException("ListParts.Part parse error");
+                    }
+
+                    SliceStruct sliceStruct = sourceParts[partNumber];
+
+                    //计算本地ETag
+                    if (!CompareSliceMD5(srcPath, sliceStruct.sliceStart, sliceStruct.sliceLength, part.eTag))
+                    {
+                        checkSucc = false;
+                    }
+                }
+                if (checkSucc)
+                {
+                    this.uploadId = uploadId;
+                    UpdateSliceNums(result);
+                    OnInit();
+                }
+                else
+                {
+                    InitMultiUploadPart();
+                }
+            },
+            delegate (CosClientException clientEx, CosServerException serverEx)
+            {
+                lock(syncExit)
+                {
+                    if (isExit)
+                    {
+                        return;
+                    }
+                }
+
+                if (UpdateTaskState(TaskState.Failed))
+                {
+                    OnFailed(clientEx, serverEx);
+                }
+            });
+        }
+
         private void ListMultiParts()
         {
             listPartsRequest = new ListPartsRequest(bucket, key, uploadId);
@@ -317,9 +447,9 @@ namespace COSXML.Transfer
 
                 ListPartsResult result = cosResult as ListPartsResult;
 
-                //更细listParts
+                //指定uploadId时, 对已上传分块做校验, 已通过校验的分块会纳入续传范围
                 UpdateSliceNums(result);
-                //通知执行PartCopy
+                //跳过Init流程
                 OnInit();
 
             },
@@ -637,6 +767,29 @@ namespace COSXML.Transfer
                 {
                     OnFailed(new CosClientException((int)CosClientError.InternalError, ex.Message, ex), null);
                 }
+            }
+
+        }
+
+        private bool CompareSliceMD5(string localFile, long offset, long length, string crc64ecma)
+        {
+            Crc64.InitECMA();
+            String hash = String.Empty;
+
+            try
+            {
+                using (FileStream fs = File.OpenRead(localFile))
+                {
+                    fs.Seek(offset, SeekOrigin.Begin);
+                    string md5 = DigestUtils.GetMD5HexString(fs, length);
+                    fs.Close();
+                    crc64ecma = crc64ecma.Trim('"');
+                    return md5 == crc64ecma;
+                }
+            } 
+            catch (Exception e)
+            {
+                return false;
             }
 
         }
