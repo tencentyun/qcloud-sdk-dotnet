@@ -918,6 +918,10 @@ namespace COSXML.Transfer
                 //abort
                 Abort();
                 uploadId = null;
+                // throw exception if requested
+                if (throwExceptionIfCancelled) {
+                    throw new CosClientException((int)CosClientError.UserCancelled, "Upload Task Cancelled by user");
+                }
             }
         }
 

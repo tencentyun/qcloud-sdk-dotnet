@@ -734,6 +734,10 @@ namespace COSXML.Transfer
                 RealCancle();
                 //clear recoder
                 Clear();
+                // throw exception if requested
+                if (throwExceptionIfCancelled) {
+                    throw new CosClientException((int)CosClientError.UserCancelled, "Download Task Cancelled by user");
+                }
             }
         }
 

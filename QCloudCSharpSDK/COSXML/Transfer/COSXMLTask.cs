@@ -21,6 +21,8 @@ namespace COSXML.Transfer
 
         public OnState onState;
 
+        public bool throwExceptionIfCancelled = false;
+
         protected CosXml cosXmlServer;
 
         protected string bucket;
