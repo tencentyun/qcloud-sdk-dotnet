@@ -224,7 +224,7 @@ namespace COSXML.Transfer
                     }
                     // concurrent download
                     ConcurrentGetObject(result.crc64ecma);
-                } 
+                }
 
             },
             
@@ -462,8 +462,9 @@ namespace COSXML.Transfer
                                 return;
                             }
                             // 对客户端异常, 全部都重试
-                            if (clientEx != null)
+                            if (clientEx != null) {
                                 gClientExp = clientEx;
+                            }
                             resetEvent.Set();
                         }
                     );
@@ -528,7 +529,7 @@ namespace COSXML.Transfer
                     }
                 }
                 return;
-            } 
+            }
             // 预期每个分块都下载完成了, 开始顺序合并
             FileMode fileMode = FileMode.OpenOrCreate;
             FileInfo localFileInfo = new FileInfo(localDir + localFileName);
@@ -672,18 +673,10 @@ namespace COSXML.Transfer
             // 停止可能进行中的Head请求
             cosXmlServer.Cancel(headObjectRequest);
             // 停止可能进行中的下载线程
-            Interlocked.Decrement(ref activeTasks);
             foreach (GetObjectRequest subGetObjectRequest in getObjectRequestsList) {
                 cosXmlServer.Cancel(subGetObjectRequest);
             }
-            activeTasks = 0;
-            /*
-            // wait for tasks to finish
-            while (activeTasks > 0)
-            {
-                Thread.Sleep(100);
-            }
-            */
+            getObjectRequestsList.Clear();
         }
 
         private void Clear()
@@ -711,7 +704,7 @@ namespace COSXML.Transfer
             {
                 //exit download
                 lock (syncExit) 
-                { 
+                {
                     isExit = true; 
                 }
                 //cancle request
