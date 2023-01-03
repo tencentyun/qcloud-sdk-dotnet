@@ -873,7 +873,7 @@ namespace COSXML
                     preSignatureStruct.key = "/" + preSignatureStruct.key;
                 }
 
-                urlBuilder.Append(preSignatureStruct.key);
+                urlBuilder.Append(preSignatureStruct.key.Replace("+", "%2B"));
 
                 string sign = GenerateSign(preSignatureStruct.httpMethod, preSignatureStruct.key,
                     preSignatureStruct.queryParameters, preSignatureStruct.headers, 
