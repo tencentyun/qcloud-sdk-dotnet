@@ -31,7 +31,7 @@ namespace COSXML
         /// 获取完整请求域名
         /// </summary>
         /// <value></value>
-        public string host { get; }
+        public string host { get; private set; }
 
         private CosXmlConfig(Builder builder)
         {
@@ -150,6 +150,13 @@ namespace COSXML
             /// <returns></returns>
             public Builder SetRegion(string region)
             {
+                //region cannot be empty
+                if(region == null || region == "") {
+                    throw new CosException.CosClientException(
+                        (int)COSXML.Common.CosClientError.InvalidArgument,
+                        "region cannot be empty"
+                    );
+                }
                 this.region = region;
 
                 return this;
@@ -199,6 +206,18 @@ namespace COSXML
             public Builder SetReadWriteTimeoutMs(int readWriteTimeoutMs)
             {
                 this.httpClientConfigBuilder.SetReadWriteTimeoutMs(readWriteTimeoutMs);
+
+                return this;
+            }
+
+            /// <summary>
+            /// 设置是否使用 Keep-Alive 长连接
+            /// </summary>
+            /// <param name="keepAlive"></param>
+            /// <returns></returns>
+            public Builder SetHttpKeepAlive(bool keepAlive)
+            {
+                this.httpClientConfigBuilder.SetHttpKeepAlive(keepAlive);
 
                 return this;
             }

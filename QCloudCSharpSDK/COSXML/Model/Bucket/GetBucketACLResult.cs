@@ -18,6 +18,8 @@ namespace COSXML.Model.Bucket
         /// 访问权限列表信息
         /// <see href="COSXML.Model.Tag.AccessControlPolicy"/>
         /// </summary>
-        public AccessControlPolicy accessControlPolicy { get => _data;  }
+        public AccessControlPolicy accessControlPolicy { 
+            get{ return _data; } 
+        }
     }
 }

@@ -77,6 +77,14 @@ namespace COSXML.Model.Bucket
 
                 foreach (WebsiteConfiguration.RoutingRule rule in rules)
                 {
+                    if (rule.contidion != null && rule.contidion.httpErrorCodeReturnedEquals == 0)
+                    {
+                        rule.contidion.httpErrorCodeReturnedEqualsStr = null;
+                    }
+                    else if (rule.contidion != null && rule.contidion.httpErrorCodeReturnedEquals != 0)
+                    {
+                        rule.contidion.httpErrorCodeReturnedEqualsStr = rule.contidion.httpErrorCodeReturnedEquals.ToString();
+                    }
                     websiteConfiguration.routingRules.Add(rule);
                 }
             }

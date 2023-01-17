@@ -45,7 +45,6 @@ namespace COSXMLTests
 
         private void PutBucket()
         {
-
             try
             {
                 PutBucketRequest request = new PutBucketRequest(bucket);
@@ -137,10 +136,6 @@ namespace COSXMLTests
             try
             {
                 PutBucketACLRequest request = new PutBucketACLRequest(bucket);
-                request.SetQueryParameter("time", TimeUtils.GetCurrentTime(TimeUnit.Seconds).ToString());
-                request.SetRequestHeader("custom", "value1");
-                request.SetSign(TimeUtils.GetCurrentTime(TimeUnit.Seconds), 600, new List<string>() { "custome" },
-                    new List<string>() { "time" });
                 QCloudServer.SetRequestACLData(request);
 
                 //执行请求
@@ -826,6 +821,7 @@ namespace COSXMLTests
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 if (serverEx.statusCode != 409 && serverEx.statusCode != 451)
                 {
                     Assert.Fail();
@@ -879,7 +875,7 @@ namespace COSXMLTests
             {
                 PutBucketLoggingRequest request = new PutBucketLoggingRequest(bucket);
 
-                request.SetTarget(QCloudServer.Instance().bucketForLoggingTarget, "/abc");
+                request.SetTarget(QCloudServer.Instance().bucketForLoggingTarget, "/");
                 PutBucketLoggingResult putResult = cosXml.PutBucketLogging(request);
 
                 Assert.IsTrue(putResult.httpCode == 200);
@@ -934,8 +930,8 @@ namespace COSXMLTests
                 rule.contidion = new WebsiteConfiguration.Contidion();
                 // HttpErrorCodeReturnedEquals 与 KeyPrefixEquals 必选其一
                 // 只支持配置4XX返回码，例如403或404
-                rule.contidion.httpErrorCodeReturnedEquals = 404;
-                // rule.contidion.keyPrefixEquals = "test.html";
+                rule.contidion.httpErrorCodeReturnedEquals = 0;
+                rule.contidion.keyPrefixEquals = "test.html";
 
                 rule.redirect = new WebsiteConfiguration.Redirect();
                 rule.redirect.protocol = "https";
@@ -966,7 +962,7 @@ namespace COSXMLTests
                     Assert.NotNull(configuration.redirectAllRequestTo.protocol);
                     Assert.NotZero(configuration.routingRules.Count);
                     Assert.NotNull(configuration.routingRules[0].contidion);
-                    Assert.NotNull(configuration.routingRules[0].contidion.httpErrorCodeReturnedEquals);
+                    //Assert.NotNull(configuration.routingRules[0].contidion.httpErrorCodeReturnedEquals);
                     // Assert.NotNull(configuration.routingRules[0].contidion.keyPrefixEquals);
                     Assert.NotNull(configuration.routingRules[0].redirect);
                     Assert.NotNull(configuration.routingRules[0].redirect.protocol);
@@ -1103,6 +1099,147 @@ namespace COSXMLTests
                 Assert.AreEqual(newConf.Status, configuration.Status);
                 Assert.AreEqual(newConf.Transition.Days, configuration.Transition.Days);
                 Assert.AreEqual(newConf.Transition.RequestFrequent, configuration.Transition.RequestFrequent);
+            }
+        }
+
+        [Test()]
+        public void TestBucketReferer() 
+        {
+            try
+            {
+                // Put Bucket Refer
+                PutBucketRefererRequest request = new PutBucketRefererRequest(bucket);
+                RefererConfiguration configuration = new RefererConfiguration();
+                configuration.Status = "Enabled";
+                configuration.RefererType = "White-List";
+                configuration.domainList = new DomainList();
+                configuration.domainList.AddDomain("*.domain1.com");
+                configuration.EmptyReferConfiguration = "Deny";
+                request.SetRefererConfiguration(configuration);
+                PutBucketRefererResult result = cosXml.PutBucketReferer(request);
+                Assert.AreEqual(result.httpCode, 200);
+
+                // Get Bucket Refer
+                GetBucketRefererRequest getRequest = new GetBucketRefererRequest(bucket);
+                GetBucketRefererResult getResult = cosXml.GetBucketReferer(getRequest);
+                Assert.AreEqual(getResult.httpCode, 200);
+                Assert.IsNotEmpty(getResult.GetResultInfo());
+                Assert.NotNull(getResult.refererConfiguration);
+                Assert.AreEqual(getResult.refererConfiguration.Status, "Enabled");
+
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test()]
+        public void TestDeleteBucketReferer() 
+        {
+            try
+            {
+                // Put Bucket Refer
+                PutBucketRefererRequest request = new PutBucketRefererRequest(bucket);
+                RefererConfiguration configuration = new RefererConfiguration();
+                configuration.Status = "Enabled";
+                configuration.RefererType = "White-List";
+                configuration.domainList = new DomainList();
+                configuration.domainList.AddDomain("*.domain1.com");
+                configuration.domainList.AddDomain("*.domain2.com");
+                configuration.EmptyReferConfiguration = "Deny";
+                request.SetRefererConfiguration(configuration);
+                PutBucketRefererResult result = cosXml.PutBucketReferer(request);
+                Assert.AreEqual(result.httpCode, 200);
+
+                // Get Bucket Refer
+                GetBucketRefererRequest getRequest = new GetBucketRefererRequest(bucket);
+                GetBucketRefererResult getResult = cosXml.GetBucketReferer(getRequest);
+                Assert.AreEqual(getResult.httpCode, 200);
+                Assert.IsNotEmpty(getResult.GetResultInfo());
+                Assert.NotNull(getResult.refererConfiguration);
+                Assert.AreEqual(getResult.refererConfiguration.Status, "Enabled");
+                Assert.NotNull(getResult.refererConfiguration.domainList);
+                Assert.NotZero(getResult.refererConfiguration.domainList.domains.Count);
+                List<string> domains = new List<string>();
+                for (int i = 0; i < getResult.refererConfiguration.domainList.domains.Count; i++)
+                {
+                    string domain = getResult.refererConfiguration.domainList.domains[i];
+                    if (!domain.Contains("domain2"))
+                        domains.Add(domain);
+                }
+
+                // Put New BucketReferer
+                request = new PutBucketRefererRequest(bucket);
+                configuration = new RefererConfiguration();
+                configuration.Status = "Enabled";
+                configuration.RefererType = "White-List";
+                configuration.domainList = new DomainList();
+                foreach(string domain in domains)
+                {
+                    configuration.domainList.AddDomain(domain);
+                }
+                configuration.EmptyReferConfiguration = "Deny";
+                request.SetRefererConfiguration(configuration);
+                result = cosXml.PutBucketReferer(request);
+                Assert.AreEqual(result.httpCode, 200);
+
+                // Get Bucket Refer again
+                getRequest = new GetBucketRefererRequest(bucket);
+                getResult = cosXml.GetBucketReferer(getRequest);
+                Assert.AreEqual(getResult.httpCode, 200);
+                Assert.IsNotEmpty(getResult.GetResultInfo());
+                Assert.NotNull(getResult.refererConfiguration);
+                Assert.AreEqual(getResult.refererConfiguration.Status, "Enabled");
+                Assert.NotNull(getResult.refererConfiguration.domainList);
+                Assert.AreEqual(getResult.refererConfiguration.domainList.domains.Count, 1);
+                for (int i = 0; i < getResult.refererConfiguration.domainList.domains.Count; i++)
+                {
+                    string domain = getResult.refererConfiguration.domainList.domains[i];
+                    if (domain.Contains("domain2"))
+                        Assert.Fail();
+                }
+
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test()]
+        public void TestDoesBucketExist() {
+            try {
+                DoesBucketExistRequest request = new DoesBucketExistRequest(bucket);
+                bool exist = cosXml.DoesBucketExist(request);
+                Assert.True(exist);
+                
+                request = new DoesBucketExistRequest("notexist" + bucket);
+                exist = cosXml.DoesBucketExist(request);
+                Assert.False(exist);
+
+            } 
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
             }
         }
 

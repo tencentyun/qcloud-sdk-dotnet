@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using COSXML.Model;
+using COSXML.Common;
 using COSXML.Model.Object;
 using COSXML.CosException;
 using System.Threading.Tasks;
@@ -19,6 +20,8 @@ namespace COSXML.Transfer
         public OnInternalHandleBeforExcute onInternalHandle;
 
         public OnState onState;
+
+        public bool throwExceptionIfCancelled = false;
 
         protected CosXml cosXmlServer;
 
@@ -142,7 +145,6 @@ namespace COSXML.Transfer
             {
                 onState(taskState);
             }
-
             return result;
 
         }
@@ -197,6 +199,17 @@ namespace COSXML.Transfer
         public long sliceEnd;
 
         public long sliceLength;
+
+        public string eTag;
+    }
+
+    public class DownloadSliceStruct
+    {
+        public int partNumber;
+
+        public long sliceStart;
+
+        public long sliceEnd;
 
         public string eTag;
     }

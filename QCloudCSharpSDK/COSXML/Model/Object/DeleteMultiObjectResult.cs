@@ -17,6 +17,8 @@ namespace COSXML.Model.Object
         /// 本次删除返回结果的方式和目标 Object
         /// <see href="Model.Tag.DeleteResult"/>
         /// </summary>
-        public DeleteResult deleteResult {get => _data; }
+        public DeleteResult deleteResult { 
+            get {return _data; } 
+        }
     }
 }

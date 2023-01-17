@@ -26,9 +26,9 @@ namespace COSXML.Auth
 
     public sealed class CosXmlSignSourceProvider : IQCloudSignSource
     {
-        private HashSet<string> parameterKeysToSign;
+        private List<string> parameterKeysToSign;
 
-        private HashSet<string> headerKeysToSign;
+        private List<string> headerKeysToSign;
 
         private string signTime;
 
@@ -40,14 +40,14 @@ namespace COSXML.Auth
 
         public CosXmlSignSourceProvider()
         {
-            parameterKeysToSign = new HashSet<string>();
-            headerKeysToSign = new HashSet<string>();
+            parameterKeysToSign = new List<string>();
+            headerKeysToSign = new List<string>();
         }
 
         public void AddParameterKey(string key)
         {
 
-            if (key != null)
+            if (key != null && !parameterKeysToSign.Contains(key))
             {
                 parameterKeysToSign.Add(key);
             }
@@ -61,7 +61,10 @@ namespace COSXML.Auth
 
                 foreach (string key in keys)
                 {
-                    this.parameterKeysToSign.Add(key.ToLower());
+                    if (!parameterKeysToSign.Contains(key))
+                    {
+                        this.parameterKeysToSign.Add(key.ToLower());
+                    }
                 }
             }
         }
@@ -69,7 +72,7 @@ namespace COSXML.Auth
         public void AddHeaderKey(string key)
         {
 
-            if (key != null)
+            if (key != null && !headerKeysToSign.Contains(key))
             {
                 headerKeysToSign.Add(key);
             }
@@ -92,7 +95,10 @@ namespace COSXML.Auth
 
                 foreach (string key in keys)
                 {
-                    this.headerKeysToSign.Add(key.ToLower());
+                    if (!headerKeysToSign.Contains(key))
+                    {
+                        this.headerKeysToSign.Add(key.ToLower());
+                    }
                 }
             }
         }
@@ -315,6 +321,11 @@ namespace COSXML.Auth
 
                     keyResultBuilder.Append(key).Append(';');
                 }
+                else
+                {
+                    resultBuilder.Append(key).Append('=').Append('&');
+                    keyResultBuilder.Append(key).Append(';');
+                }
             }
 
             string result = resultBuilder.ToString();
@@ -421,7 +432,8 @@ namespace COSXML.Auth
             }
         }
 
-        public static string GenerateSign(string method, string path, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, string signTime, QCloudCredentials qcloudCredentials)
+        public static string GenerateSign(string method, string path, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, 
+                                          string signTime, string keyTime, QCloudCredentials qcloudCredentials)
         {
 
             if (qcloudCredentials == null)
@@ -434,6 +446,11 @@ namespace COSXML.Auth
             if (signTime == null)
             {
                 signTime = qcloudCredentials.KeyTime;
+            }
+
+            if (keyTime == null)
+            {
+                keyTime = qcloudCredentials.KeyTime;
             }
 
             cosXmlSourceProvider.SetSignTime(signTime);
@@ -464,7 +481,7 @@ namespace COSXML.Auth
             signBuilder.Append(CosAuthConstants.Q_SIGN_ALGORITHM).Append('=').Append(CosAuthConstants.SHA1).Append('&')
                 .Append(CosAuthConstants.Q_AK).Append('=').Append(qcloudCredentials.SecretId).Append('&')
                 .Append(CosAuthConstants.Q_SIGN_TIME).Append('=').Append(cosXmlSourceProvider.GetSignTime()).Append('&')
-                .Append(CosAuthConstants.Q_KEY_TIME).Append('=').Append(qcloudCredentials.KeyTime).Append('&')
+                .Append(CosAuthConstants.Q_KEY_TIME).Append('=').Append(keyTime).Append('&')
                 .Append(CosAuthConstants.Q_HEADER_LIST).Append('=').Append(cosXmlSourceProvider.GetHeaderList()).Append('&')
                 .Append(CosAuthConstants.Q_URL_PARAM_LIST).Append('=').Append(cosXmlSourceProvider.GetParameterList()).Append('&')
                 .Append(CosAuthConstants.Q_SIGNATURE).Append('=').Append(signature);

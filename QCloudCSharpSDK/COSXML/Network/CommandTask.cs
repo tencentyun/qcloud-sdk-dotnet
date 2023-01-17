@@ -25,6 +25,10 @@ namespace COSXML.Network
     {
         public const string TAG = "CommandTask";
 
+        public static int MaxRetries = 3;
+
+        public static HttpClientConfig config;
+
         /// <summary>
         /// init connectionLimit and statueCode = 100 action
         /// </summary>
@@ -33,6 +37,8 @@ namespace COSXML.Network
         {
             ServicePointManager.Expect100Continue = false;
             ServicePointManager.DefaultConnectionLimit = config.ConnectionLimit;
+            CommandTask.MaxRetries = config.MaxRetry;
+            CommandTask.config = config;
         }
 
         /// <summary>
@@ -160,7 +166,7 @@ namespace COSXML.Network
         /// <param name="request"></param>
         /// <param name="response"></param>
         /// <param name="config"></param>
-        public static void Schedue(Request request, Response response, HttpClientConfig config)
+        public static void Schedue(Request request, Response response, HttpClientConfig config, int retryIndex = 0)
         {
             HttpWebRequest httpWebRequest = null;
             RequestState requestState = new RequestState();
@@ -183,6 +189,7 @@ namespace COSXML.Network
 
                 requestState.httpWebRequest = httpWebRequest;
 
+                requestState.retryIndex = retryIndex;
                 //handle request body
                 if (request.Body != null)
                 {
@@ -238,6 +245,12 @@ namespace COSXML.Network
                     if (exception != null)
                     {
                         // handle request body throw exception
+                        if (requestState.retryIndex < MaxRetries)
+                        {
+                            QLog.Error(TAG, exception.Message, exception);
+                            Schedue(requestState.request, requestState.response, config, requestState.retryIndex + 1);
+                            return;
+                        }
                         requestState.response.OnFinish(false, exception);
                         //abort
                         requestState.Clear();
@@ -253,6 +266,12 @@ namespace COSXML.Network
             }
             catch (Exception ex)
             {
+                if (requestState.retryIndex < MaxRetries)
+                {
+                    QLog.Error(TAG, ex.Message, ex);
+                    Schedue(requestState.request, requestState.response, config, requestState.retryIndex + 1);
+                    return;
+                }
                 requestState.response.OnFinish(false, ex);
                 //abort
                 requestState.Clear();
@@ -291,7 +310,11 @@ namespace COSXML.Network
             }
             catch (WebException webEx)
             {
-
+                if (requestState.retryIndex < MaxRetries)
+                {
+                    Schedue(requestState.request, requestState.response, config, requestState.retryIndex + 1);
+                    return;
+                }
                 if (webEx.Response != null && webEx.Response is HttpWebResponse)
                 {
                     //nofity get response
@@ -326,6 +349,11 @@ namespace COSXML.Network
             }
             catch (Exception ex)
             {
+                if (requestState.retryIndex < MaxRetries)
+                {
+                    Schedue(requestState.request, requestState.response, config, requestState.retryIndex + 1);
+                    return;
+                }
                 requestState.response.OnFinish(false, ex);
                 //abort
                 requestState.Clear();
@@ -354,6 +382,9 @@ namespace COSXML.Network
 
             // set allow auto redirect
             httpWebRequest.AllowAutoRedirect = config.AllowAutoRedirect;
+
+            // set connection
+            httpWebRequest.KeepAlive = config.KeepAlive;
 
             // notice: it is not allowed to set common headers with the WebHeaderCollection.Accept
             // such as: Connection,Content-Length,Content-Type,Date,Expect. Host,If-Modified-Since,Range, Referer,Transfer-Encoding,User-Agent,Proxy-Connection
@@ -604,6 +635,8 @@ namespace COSXML.Network
             public Response response;
 
             public Request request;
+
+            public int retryIndex;
 
             public RequestState()
             {

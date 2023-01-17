@@ -37,6 +37,11 @@ namespace COSXML.Model.Tag
         public bool isHttps;
 
         /// <summary>
+        /// 签名中是否签入host
+        /// </summary>
+        public bool signHost = false;
+
+        /// <summary>
         /// http request method : get , put , etc.
         /// </summary>
         public string httpMethod;
@@ -55,5 +60,10 @@ namespace COSXML.Model.Tag
         /// 签名 sign的有效期，若 小于 0，则取keyTime.
         /// </summary>
         public long signDurationSecond;
+
+        /// <summary>
+        /// 签名 key的有效期，不设置 或 小于 0, 则取 QCloudCredential中的keyTime
+        /// </summary>
+        public long keyDurationSecond;
     }
 }

@@ -19,7 +19,14 @@ namespace COSXML.Model.Object
         /// </summary>
         public string eTag;
 
-        public PicOperationUploadResult uploadResult {get => _data; }
+        /// <summary>
+        /// 对象的 crc64
+        /// </summary>
+        public string crc64ecma;
+
+        public PicOperationUploadResult uploadResult { 
+            get {return _data; } 
+            }
 
         internal override void InternalParseResponseHeaders()
         {
@@ -30,6 +37,13 @@ namespace COSXML.Model.Object
             if (values != null && values.Count > 0)
             {
                 eTag = values[0];
+            }
+
+            this.responseHeaders.TryGetValue("x-cos-hash-crc64ecma", out values);
+
+            if (values != null && values.Count > 0)
+            {
+                crc64ecma = values[0];
             }
         }
     }

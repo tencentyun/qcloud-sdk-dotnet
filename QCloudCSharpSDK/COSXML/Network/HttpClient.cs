@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -13,6 +13,7 @@ using COSXML.Model.Tag;
 using COSXML.Log;
 using System.IO;
 using COSXML.Model.Object;
+using COSXML.Model.CI;
 using COSXML.Utils;
 
 namespace COSXML.Network
@@ -33,6 +34,8 @@ namespace COSXML.Network
         private static Object syncInstance = new Object();
 
         private const int MAX_ACTIVIE_TASKS = 5;
+
+        public int MaxRetry { private get; set;} = 3;
 
         private volatile int activieTasks = 0;
 
@@ -109,7 +112,7 @@ namespace COSXML.Network
         /// <param name="credentialProvider"></param>
         /// <exception cref="COSXML.CosException.CosClientException">CosClientException</exception>
         /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
-        public void InternalExcute(CosRequest cosRequest, CosResult cosResult, QCloudCredentialProvider credentialProvider)
+        public void InternalExcute(CosRequest cosRequest, CosResult cosResult, QCloudCredentialProvider credentialProvider, int retryIndex = 0)
         {
 
             try
@@ -127,6 +130,11 @@ namespace COSXML.Network
                     response = new CosResponse(cosResult, getObjectRequest.GetSaveFilePath(), getObjectRequest.GetLocalFileOffset(),
                         getObjectRequest.GetCosProgressCallback());
                 }
+                else if (cosRequest is GetSnapshotRequest)
+                {
+                    GetSnapshotRequest getSnapshotRequest = cosRequest as GetSnapshotRequest;
+                    response = new CosResponse(cosResult, getSnapshotRequest.GetSaveFilePath(), 0, null);
+                }
                 else
                 {
                     response = new CosResponse(cosResult, null, -1L, null);
@@ -135,17 +143,42 @@ namespace COSXML.Network
                 cosRequest.BindRequest(request);
                 CommandTask.Excute(request, response, config);
             }
-            catch (CosServerException)
+            catch (CosServerException serverException)
             {
-                throw;
+                // 服务端5xx才重试
+                if (serverException.statusCode >= 500 && retryIndex < MaxRetry)
+                {
+                    InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
+                }
+                else
+                {
+                    throw;
+                }
             }
             catch (CosClientException)
             {
-                throw;
+                // 客户端异常都重试
+                if (retryIndex < MaxRetry)
+                {
+                    InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
+                }
+                else
+                {
+                    throw;
+                }
+                
             }
             catch (Exception ex)
             {
-                throw new CosClientException((int)CosClientError.BadRequest, ex.Message, ex);
+                // 未知异常也重试
+                if (retryIndex < MaxRetry)
+                {
+                    InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
+                }
+                else
+                {
+                    throw new CosClientException((int)CosClientError.BadRequest, ex.Message, ex);
+                }
             }
 
         }
@@ -436,7 +469,7 @@ namespace COSXML.Network
                     successCallback(cosResult);
                 }
                 else
-if (faileCallback != null)
+                if (faileCallback != null)
                 {
 
                     if (ex is CosClientException)
@@ -444,7 +477,7 @@ if (faileCallback != null)
                         faileCallback(ex as CosClientException, null);
                     }
                     else
-if (ex is CosServerException)
+                    if (ex is CosServerException)
                     {
                         faileCallback(null, ex as CosServerException);
                     }

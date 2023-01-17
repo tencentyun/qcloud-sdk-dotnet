@@ -135,6 +135,50 @@ namespace COSXML.Utils
             return result;
         }
 
+        public static string GetMD5HexString(Stream inStream, long size)
+        {
+            int bufferSize = 1024 * 16;
+
+            byte[] buffer = new byte[bufferSize];
+            int readLength = 0;
+            long total = 0L;
+            byte[] data = new byte[bufferSize];
+            MD5 md5 = MD5.Create();
+            int count = (int)(size - total);
+
+            while ((readLength = inStream.Read(buffer, 0, count > buffer.Length ? buffer.Length : count)) > 0)
+            {
+                md5.TransformBlock(buffer, 0, readLength, data, 0);
+                total += readLength;
+                count = (int)(size - total);
+
+                if (count <= 0)
+                {
+                    break;
+                }
+            }
+
+            md5.TransformFinalBlock(buffer, 0, 0);
+            string result = ByteArrayToHex(md5.Hash).ToLower();
+            md5.Clear();
+
+            return result;
+        }
+
+        public static string ByteArrayToHex(byte[] barray)
+        {
+            char[] c = new char[barray.Length * 2];
+            byte b;
+            for (int i = 0; i < barray.Length; ++i)
+            {
+                b = ((byte)(barray[i] >> 4));
+                c[i * 2] = (char)(b > 9 ? b + 0x37 : b + 0x30);
+                b = ((byte)(barray[i] & 0xF));
+                c[i * 2 + 1] = (char)(b > 9 ? b + 0x37 : b + 0x30);
+            }
+            return new string(c);
+        }
+
         public static string GetBase64(string content, Encoding encoding)
         {
             byte[] result = encoding.GetBytes(content);

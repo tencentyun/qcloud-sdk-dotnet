@@ -22,7 +22,7 @@ namespace COSXMLTests
         {
             get
             {
-                return "dotnet-ut-temp-" + TimeUtils.GetCurrentTime(TimeUnit.Seconds) + "-1252246555";
+                return "dotnet-ut-temp-" + TimeUtils.GetCurrentTime(TimeUnit.Seconds) + "-" + Environment.GetEnvironmentVariable("APPID");
             }
         }
 
@@ -43,28 +43,27 @@ namespace COSXMLTests
         private string secretId;
         private string secretKey;
 
-        private QCloudServer()
+        public QCloudServer()
         {
             QLog.SetLogLevel(Level.V);
 
-            uin = "3472213910";
-            appid = "1252246555";
-            bucketVersioning = "dotnet-ut-versioning-1252246555";
-            regionForBucketVersioning = "ap-beijing";
-            bucketForObjectTest = "dotnet-ut-obj-1252246555";
-            bucketForLoggingTarget = "dotnet-ut-logging-target-1252246555";
-            region = "ap-guangzhou";
+            uin = Environment.GetEnvironmentVariable("UIN");
+            appid = Environment.GetEnvironmentVariable("APPID");
+            bucketVersioning = "dotnet-ut-versions-" + appid;
+            regionForBucketVersioning = Environment.GetEnvironmentVariable("COS_REGION");
+            bucketForObjectTest = "dotnet-ut-obj-" + appid;
+            bucketForLoggingTarget = "dotnet-ut-logging-target-" + appid;
+            region = Environment.GetEnvironmentVariable("COS_REGION");
 
-            secretId = Environment.GetEnvironmentVariable("COS_KEY");
-            secretKey = Environment.GetEnvironmentVariable("COS_SECRET");
+            secretId = Environment.GetEnvironmentVariable("SECRET_ID");
+            secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
             if (secretId == null)
             {
-                secretId = Environment.GetEnvironmentVariable("COS_KEY", EnvironmentVariableTarget.Machine);
-                secretKey = Environment.GetEnvironmentVariable("COS_SECRET", EnvironmentVariableTarget.Machine);
+                secretId = Environment.GetEnvironmentVariable("SECRET_ID", EnvironmentVariableTarget.Machine);
+                secretKey = Environment.GetEnvironmentVariable("SECERT_KEY", EnvironmentVariableTarget.Machine);
             }
 
             CosXmlConfig config = new CosXmlConfig.Builder()
-                .SetAppid(appid)
                 .SetRegion(region)
                 .SetDebugLog(true)
                 .IsHttps(true)

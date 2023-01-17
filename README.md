@@ -18,6 +18,16 @@
 dotnet add package Tencent.QCloud.Cos.Sdk
 ```
 
+如果是用于目标框架 .Net Framework 4.0 及以下版本的开发，
+
+请使用 [Releases](https://github.com/tencentyun/qcloud-sdk-dotnet/releases) 下载的COSXML-Compatible.dll文件
+
+在Visual Studio项目中选择 
+
+```
+项目 -> 添加引用 -> 浏览 -> COSXML-Compatible.dll 的方式添加C# SDK
+```
+
 您也可以在 [Releases 里面](https://github.com/tencentyun/qcloud-sdk-dotnet/releases) 手动下载我们的SDK。
 
 ## 开发文档

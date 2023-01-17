@@ -90,7 +90,16 @@ namespace COSXML.Network
 
                 if (isDownload)
                 {
-                    fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write);
+                    if (File.Exists(filePath) && new FileInfo(filePath).Length > fileOffset)
+                    {
+                        // 写脏文件了，直接 Truncate
+                        fileStream = new FileStream(filePath, FileMode.Truncate, FileAccess.Write);
+                    }
+                    else 
+                    {
+                        // 正常文件或者追加写场景，直接写入
+                        fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write);
+                    }
                     fileStream.Seek(fileOffset, SeekOrigin.Begin);
                     byte[] buffer = new byte[SEGMENT_SIZE];
                     int recvLen = 0;
@@ -118,7 +127,15 @@ namespace COSXML.Network
                     {
                         // save raw content
                         memoryStream = new MemoryStream((int)contentLength);
-                        inputStream.CopyTo(memoryStream);
+                        
+                        //inputStream.CopyTo(memoryStream);
+                        byte[] buffer = new byte[10 * 1000];
+                        int count;
+                        while ((count = inputStream.Read(buffer, 0, buffer.Length)) != 0)
+                        {
+                            memoryStream.Write(buffer, 0, count);
+                        }
+
                         rawContentBodyString = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
 
                         memoryStream.Seek(0, SeekOrigin.Begin);
@@ -173,7 +190,16 @@ namespace COSXML.Network
 
                 if (isDownload)
                 {
-                    fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write);
+                    if (File.Exists(filePath) && new FileInfo(filePath).Length > fileOffset)
+                    {
+                        // 写脏文件了，直接 Truncate
+                        fileStream = new FileStream(filePath, FileMode.Truncate, FileAccess.Write);
+                    }
+                    else 
+                    {
+                        // 正常文件或者追加写场景，直接写入
+                        fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write);
+                    }
                     fileStream.Seek(fileOffset, SeekOrigin.Begin);
                     responseBodyState.inputStream.BeginRead(responseBodyState.buffer, 0, responseBodyState.buffer.Length, AsyncStreamCallback, responseBodyState);
                 }

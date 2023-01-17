@@ -36,6 +36,11 @@ namespace COSXML.Model.Object
         private long contentLength = -1L;
 
         /// <summary>
+        /// 上传流
+        /// </summary>
+        private Stream stream;
+
+        /// <summary>
         /// 上传回调
         /// </summary>
         private COSXML.Callback.OnProgressCallback progressCallback;
@@ -82,6 +87,45 @@ namespace COSXML.Model.Object
         }
 
         /// <summary>
+        /// 流式上传
+        /// </summary>
+        /// <param name="bucket"></param>
+        /// <param name="key"></param>
+        /// <param name="stream"></param>
+        public PutObjectRequest(string bucket, string key, Stream stream) : base(bucket, key)
+        {
+            this.stream = stream;
+            this.method = CosRequestMethod.PUT;
+        }
+
+        /// <summary>
+        /// 指定 offset 的流式上传
+        /// </summary>
+        /// <param name="bucket"></param>
+        /// <param name="key"></param>
+        /// <param name="stream"></param>
+        /// <param name="offset"></param>
+        public PutObjectRequest(string bucket, string key, Stream stream, long offset) : this(bucket, key, stream)
+        {
+            this.fileOffset = offset;
+        }
+
+        /// <summary>
+        /// 指定 offset + content-length 的流式上传
+        /// </summary>
+        /// <param name="bucket"></param>
+        /// <param name="key"></param>
+        /// <param name="stream"></param>
+        /// <param name="offset"></param>
+        /// <param name="needSendLength"></param>
+        public PutObjectRequest(string bucket, string key, Stream stream, long offset, long needSendLength) : this(bucket, key, stream, offset)
+        {
+            this.contentLength = needSendLength < 0 ? -1L : needSendLength;
+        }
+
+        
+
+        /// <summary>
         /// 上传回调
         /// </summary>
         /// <param name="progressCallback"></param>
@@ -103,7 +147,7 @@ namespace COSXML.Model.Object
         public override void CheckParameters()
         {
 
-            if (srcPath == null && data == null)
+            if (srcPath == null && data == null && stream == null)
             {
                 throw new CosClientException((int)(CosClientError.InvalidArgument), "data source = null");
             }
@@ -115,6 +159,16 @@ namespace COSXML.Model.Object
                 {
                     throw new CosClientException((int)(CosClientError.InvalidArgument), "file not exist");
                 }
+            }
+
+            if (stream != null)
+            {
+                if (stream.Length <= fileOffset ||
+                    !stream.CanRead ||
+                    !stream.CanSeek)
+                    {
+                        throw new CosClientException((int)(CosClientError.InvalidArgument), "stream invalid");
+                    }
             }
 
             base.CheckParameters();
@@ -136,11 +190,28 @@ namespace COSXML.Model.Object
                 body = new FileRequestBody(srcPath, fileOffset, contentLength);
                 body.ProgressCallback = progressCallback;
             }
-            else
-if (data != null)
+            else if (data != null)
             {
                 body = new ByteRequestBody(data);
                 body.ProgressCallback = progressCallback;
+            }
+            else if (stream != null)
+            {
+                if (fileOffset < 0)
+                {
+                    fileOffset = 0L;
+                }
+                if (contentLength == -1L)
+                {
+                    contentLength = stream.Length - fileOffset;
+                }
+                if (fileOffset + contentLength > stream.Length)
+                {
+                    throw new CosException.CosClientException(
+                        (int)COSXML.Common.CosClientError.InvalidArgument, 
+                        "stream offset + contentLength greater than stream.Length");
+                }
+                body = new StreamRequestBody(stream, fileOffset, contentLength);
             }
 
             return body;

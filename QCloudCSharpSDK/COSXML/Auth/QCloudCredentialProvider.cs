@@ -51,8 +51,12 @@ namespace COSXML.Auth
 
         public DefaultQCloudCredentialProvider(string secretId, string secretKey, long keyDurationSecond)
         {
-            this.secretId = secretId;
-            this.secretKey = secretKey;
+            if (secretId == null || secretId.Length == 0)
+                throw new CosClientException((int)CosClientError.InvalidArgument, "secretId is null or length is zero");
+            if (secretKey == null || secretKey.Length == 0)
+                throw new CosClientException((int)CosClientError.InvalidArgument, "secretKey is null or length is zero");
+            this.secretId = secretId.Trim();
+            this.secretKey = secretKey.Trim();
             this.keyTimDuration = keyDurationSecond;
         }
 

@@ -16,6 +16,8 @@ namespace COSXML.Model.CI
         /// 二维码识别结果
         /// </summary>
         /// <value></value>
-        public QRRecognitionResult recognitionResult { get => _data;  }
+        public QRRecognitionResult recognitionResult { 
+            get {return _data; } 
+        }
     }
 }

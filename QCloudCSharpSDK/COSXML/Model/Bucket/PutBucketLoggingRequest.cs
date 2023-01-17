@@ -1,6 +1,7 @@
 using COSXML.Common;
 using COSXML.Model.Tag;
 using COSXML.Network;
+using COSXML.CosException;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,13 +19,19 @@ namespace COSXML.Model.Bucket
             this.bucketLoggingStatus = new BucketLoggingStatus();
         }
 
-        public void SetTarget(string targetBucket, string targetPrefix)
+        public void SetTarget(string targetBucket, string targetPrefix = "")
         {
 
-            if (targetPrefix == null && targetPrefix == null)
+            if (targetBucket == null || targetBucket == "")
             {
+                throw new CosClientException((int)CosClientError.InvalidArgument,
+                  "targetBucket is null or empty");
+            }
 
-                return;
+            // 可选参数，传 null 填入空白
+            if (targetPrefix == null)
+            {
+                targetPrefix = "";
             }
 
             if (bucketLoggingStatus.loggingEnabled == null)
@@ -32,15 +39,9 @@ namespace COSXML.Model.Bucket
                 bucketLoggingStatus.loggingEnabled = new BucketLoggingStatus.LoggingEnabled();
             }
 
-            if (targetBucket != null)
-            {
-                bucketLoggingStatus.loggingEnabled.targetBucket = targetBucket;
-            }
+            bucketLoggingStatus.loggingEnabled.targetBucket = targetBucket;
 
-            if (targetPrefix != null)
-            {
-                bucketLoggingStatus.loggingEnabled.targetPrefix = targetPrefix;
-            }
+            bucketLoggingStatus.loggingEnabled.targetPrefix = targetPrefix;
         }
 
         public override Network.RequestBody GetRequestBody()

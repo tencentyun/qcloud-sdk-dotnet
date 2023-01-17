@@ -31,7 +31,7 @@ namespace COSXML.Model.Object
             this.method = CosRequestMethod.POST;
             formStruct = new FormStruct();
             formStruct.key = key;
-            this.headers.Add(CosRequestHeaderKey.CONTENT_TYPE, "multipart/form-data; boundary=" + MultipartRequestBody.BOUNDARY);
+            this.SetHeader(CosRequestHeaderKey.CONTENT_TYPE, "multipart/form-data; boundary=" + MultipartRequestBody.BOUNDARY);
             this.needMD5 = false;
         }
 

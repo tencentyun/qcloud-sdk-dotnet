@@ -19,7 +19,7 @@ namespace COSXML.Model.Tag
             [XmlElement]
             public string Type;
 
-            [XmlElement]
+            [XmlElement("ForcedReplacement")]
             public string Replace;
         }
     }

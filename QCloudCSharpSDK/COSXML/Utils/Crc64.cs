@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace COSXML.Utils
 {
@@ -162,6 +163,35 @@ namespace COSXML.Utils
             // return combined crc.
             crc1 ^= crc2;
             return crc1;
+        }
+
+        public static bool CompareCrc64(string localFile, string crc64ecma)
+        {
+            Crc64.InitECMA();
+            String hash = String.Empty;
+
+            using (FileStream fs = File.Open(localFile, FileMode.Open))
+            {
+                byte[] buffer = new byte[2048];
+                int bytesRead;
+                ulong crc = 0;
+
+                while ((bytesRead = fs.Read(buffer, 0, buffer.Length)) > 0) 
+                {
+                    ulong partCrc = Crc64.Compute(buffer, 0, bytesRead);
+                    if (crc == 0) 
+                    {
+                        crc = partCrc;
+                    }
+                    else 
+                    {
+                        crc = Crc64.Combine(crc, partCrc, bytesRead);
+                    }
+                }
+
+                string localFileCrc64 = crc.ToString();
+                return localFileCrc64 == crc64ecma;
+            }
         }
     }
 }
