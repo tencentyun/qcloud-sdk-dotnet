@@ -54,7 +54,7 @@ namespace COSXMLTests
 
         [OneTimeSetUp]
         public void Init()
-        {   
+        {
             try
             {
                 cosXml = QCloudServer.Instance().cosXml;
@@ -79,6 +79,9 @@ namespace COSXMLTests
                 selectKey = "select_target.json";
                 appendKey = "appendableObject";
 
+                CreateBucketsIfNotExist(bucket);
+                CreateBucketsIfNotExist(QCloudServer.Instance().bucketForLoggingTarget);
+                CreateBucketsIfNotExist(QCloudServer.Instance().bucketVersioning);
                 PutObject();
                 MultiUpload();
             }
@@ -230,6 +233,33 @@ namespace COSXMLTests
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 //Assert.True(true);
+            }
+        }
+
+        public void CreateBucketsIfNotExist(string bucket)
+        {
+            try
+            {
+                HeadBucketRequest request = new HeadBucketRequest(bucket);
+                HeadBucketResult result = cosXml.HeadBucket(request);
+                Assert.AreEqual(200, result.httpCode);
+            }
+            catch (CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (CosServerException serverEx)
+            {
+                if (serverEx.statusCode == 404) {
+                    PutBucketRequest request = new PutBucketRequest(bucket);
+                    PutBucketResult result = cosXml.PutBucket(request);
+                    Assert.AreEqual(200, result.httpCode);
+                    return;
+                } else {
+                    Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                    Assert.Fail();
+                }
             }
         }
 

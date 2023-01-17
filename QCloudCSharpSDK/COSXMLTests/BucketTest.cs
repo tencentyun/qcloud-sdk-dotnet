@@ -45,7 +45,6 @@ namespace COSXMLTests
 
         private void PutBucket()
         {
-
             try
             {
                 PutBucketRequest request = new PutBucketRequest(bucket);
