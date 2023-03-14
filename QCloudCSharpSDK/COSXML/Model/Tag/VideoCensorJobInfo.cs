@@ -36,11 +36,20 @@ namespace COSXML.Model.Tag
             [XmlElement("Object")]
             public string obj;
 
+            [XmlElement("Url")]
+            public string url;
+
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Input:\n");
-                stringBuilder.Append("Object:" + obj + "\n");
-                stringBuilder.Append("}");
+                if (obj != null) {
+                    stringBuilder.Append("Object:" + obj + "\n");
+                    stringBuilder.Append("}");
+                }
+                if (url != null)  {
+                    stringBuilder.Append("Url:" + url + "\n");
+                    stringBuilder.Append("}");
+                }
                 return stringBuilder.ToString();
             }
         }
