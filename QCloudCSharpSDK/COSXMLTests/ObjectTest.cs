@@ -34,7 +34,11 @@ namespace COSXMLTests
 
         internal string copykey;
 
+        internal string bigCopyKey;
+
         internal string copySourceFilePath;
+
+        internal string bigCopySourceFilePath;
         
         internal string copyKeySmall;
 
@@ -75,8 +79,11 @@ namespace COSXMLTests
                 multiKey = "bigObject" + currentTime;
                 copykey = "copy_objecttest.txt";
                 copySourceFilePath = QCloudServer.CreateFile(copykey, 1024 * 1024 * 1);
+                bigCopyKey = "copy_objecttext_big.txt";
+                bigCopySourceFilePath = QCloudServer.CreateFile(bigCopyKey, 10 * 1024 * 1024);
                 copyKeySmall = "copy_target";
                 selectKey = "select_target.json";
+                selectFilePath = QCloudServer.CreateJsonFile(selectKey);
                 appendKey = "appendableObject";
 
                 CreateBucketsIfNotExist(bucket);
@@ -278,7 +285,7 @@ namespace COSXMLTests
                 Assert.NotNull(result.eTag);
                 Assert.True(COSXML.Utils.Crc64.CompareCrc64(smallFileSrcPath, result.crc64ecma));
 
-                //Put Copy测试的Source Object
+                //Put Copy 测试的 Source Object
                 request = new PutObjectRequest(bucket, copykey, copySourceFilePath);
                 result = cosXml.PutObject(request);
 
@@ -286,6 +293,27 @@ namespace COSXMLTests
                 Assert.AreEqual(200, result.httpCode);
                 Assert.NotNull(result.eTag);
                 Assert.True(COSXML.Utils.Crc64.CompareCrc64(copySourceFilePath, result.crc64ecma));
+
+                //Put Copy 测试的大 Source Object
+                request = new PutObjectRequest(bucket, bigCopyKey, bigCopySourceFilePath);
+                result = cosXml.PutObject(request);
+
+                Console.WriteLine(result.GetResultInfo());
+                Assert.AreEqual(200, result.httpCode);
+                Assert.NotNull(result.eTag);
+                Assert.True(COSXML.Utils.Crc64.CompareCrc64(bigCopySourceFilePath, result.crc64ecma));
+
+                request = new PutObjectRequest(bucket, copyKeySmall, copySourceFilePath);
+                result = cosXml.PutObject(request);
+
+                //Select 测试的 json 文件
+                request = new PutObjectRequest(bucket, selectKey, selectFilePath);
+                result = cosXml.PutObject(request);
+
+                Console.WriteLine(result.GetResultInfo());
+                Assert.AreEqual(200, result.httpCode);
+                Assert.NotNull(result.eTag);
+                Assert.True(COSXML.Utils.Crc64.CompareCrc64(selectFilePath, result.crc64ecma));
 
                 request = new PutObjectRequest(bucket, copyKeySmall, copySourceFilePath);
                 result = cosXml.PutObject(request);
@@ -1488,12 +1516,53 @@ namespace COSXMLTests
                 }
 
                 Thread.Sleep(500);
-            } 
+            }
             else 
             {
                 Console.WriteLine("localFileCrc64 = " + downloadTask.GetLocalFileCrc64());
                 Thread.Sleep(500);
             }
+        }
+
+        [Test()]
+        public void TestDownloadPauseAndRetry()
+        {
+            //执行请求
+            GetObjectRequest getRequest = new GetObjectRequest(bucket, multiKey, localDir, localFileName);
+            getRequest.LimitTraffic(8 * 1024 * 1024);
+
+            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(getRequest);
+            downloadTask.SetResumableDownload(true);
+
+            double progrss = 0;
+            downloadTask.progressCallback = delegate (long completed, long total)
+            {
+                progrss = completed * 100.0 / total;
+                // Console.WriteLine(String.Format("progress = {0:##.##}%", progrss));
+            };
+
+            var asyncTask = transferManager.DownloadAsync(downloadTask);
+
+            asyncTask = downloadTask.AsyncTask<COSXMLDownloadTask.DownloadTaskResult>();
+            
+            if (downloadTask.State() != TaskState.Completed && downloadTask.State() != TaskState.Failed)
+            {
+                Console.WriteLine("downloadTask.State() = " + downloadTask.State());
+                Console.WriteLine("localFileCrc64 = " + downloadTask.GetLocalFileCrc64());
+                if (60 < progrss && progrss < 65)
+                {
+                    downloadTask.Pause();
+                }
+
+                Thread.Sleep(500);
+            }
+
+            getRequest = new GetObjectRequest(bucket, multiKey, localDir, localFileName);
+            getRequest.LimitTraffic(8 * 1024 * 1024);
+
+            downloadTask = new COSXMLDownloadTask(getRequest);
+            downloadTask.SetResumableDownload(true);
+            transferManager.Download(downloadTask);
         }
 
         [Test()]
@@ -1558,7 +1627,7 @@ namespace COSXMLTests
         public async Task TestCopyTaskWithBigFile()
         {
             CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
-                    bucket, QCloudServer.Instance().region, copykey);
+                    bucket, QCloudServer.Instance().region, bigCopyKey);
 
 
             COSXMLCopyTask copyTask = new COSXMLCopyTask(bucket, multiKey, copySource);
@@ -1582,7 +1651,6 @@ namespace COSXMLTests
                     bucket, QCloudServer.Instance().region, copyKeySmall);
 
             COSXMLCopyTask copyTask = new COSXMLCopyTask(bucket, multiKey, copySource);
-
             COSXMLCopyTask.CopyTaskResult result = await transferManager.CopyAsync(copyTask);
 
             Assert.True(result.httpCode == 200);
