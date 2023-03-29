@@ -1781,6 +1781,7 @@ namespace COSXMLTests
                 request = new GetObjectRequest(bucket, commonKey, localDir, localFileName);
                 
                 downloadTask = new COSXMLDownloadTask(request);
+                downloadTask.SetEnableCRC64Check(true);
                 asyncTask = transferManager.DownloadAsync(downloadTask);
                 asyncTask.Wait();
                 
@@ -1835,7 +1836,7 @@ namespace COSXMLTests
             } catch (COSXML.CosException.CosClientException clientEx) {
 
             }
-            downloadTask.SetEnableCRC64Check(false);
+            downloadTask.SetEnableCRC64Check(true);
             downloadTask.SetSingleTaskTimeoutMs(1);
             downloadTask.SetMaxRetries(1);
         }
