@@ -1568,7 +1568,7 @@ namespace COSXMLTests
 
             var asyncTask = transferManager.UploadAsync(uploadTask);
 
-            Thread.Sleep(2000);
+            Thread.Sleep(500);
             uploadTask.Cancel();
             Thread.Sleep(500);
 
