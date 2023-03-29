@@ -130,6 +130,27 @@ namespace COSXMLTests
             }
         }
 
+        public static string CreateJsonFile(string filename)
+        {
+
+            try
+            {
+                string path = null;
+                FileStream fs = new FileStream(filename, FileMode.Create);
+                string s = "{\"Statement\":[{\"Principal\":{\"service\":\"cos.qcloud.com\"},\"Effect\":\"Allow\",\"Action\":[\"name/cos:PutObject\",\"name/cos:HeadObject\",\"name/cos:InitiateMultipartUpload\",\"name/cos:UploadPart\",\"name/cos:CompleteMultipartUpload\"],\"Resource\":[\"qcs::cos:<region>:uid/<appid>:<bucketname-appid>/*\"]}],\"version\":\"2.0\"}";
+                byte[] buffer = Encoding.Default.GetBytes(s);
+                fs.Write(buffer, 0, buffer.Length);
+                path = fs.Name;
+                fs.Close();
+
+                return path;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public static void SetRequestACLData(CosRequest request)
         {
             request.GetType().GetMethod("SetCosACL", new[] { typeof(CosACL) }).Invoke(request, new object[] { CosACL.Private });

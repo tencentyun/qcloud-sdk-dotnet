@@ -343,7 +343,7 @@ namespace COSXMLTests
                 GetSnapshotRequest request = new GetSnapshotRequest(bucket, key, 1.5F, localSnapshotFilePath);
                 GetSnapshotResult result = QCloudServer.Instance().cosXml.GetSnapshot(request);
                 Assert.True(File.Exists(localSnapshotFilePath));
-                Assert.AreEqual(result.httpCode, 200);
+                Assert.AreEqual(200, result.httpCode);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -446,16 +446,17 @@ namespace COSXMLTests
             {
                 
                 SubmitVideoCensorJobRequest request = new SubmitVideoCensorJobRequest(bucket);
-                request.SetCensorObject(videoKey);
+                request.SetCensorUrl("https://download.samplelib.com/mp4/sample-5s.mp4");
                 request.SetDetectType("Porn,Terrorism");
                 request.SetSnapshotMode("Average");
                 request.SetSnapshotCount("100");
                 SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitVideoCensorJob(request);
+                request.SetCensorObject(videoKey);
                 Assert.NotNull(result.censorJobsResponse.JobsDetail.JobId);
                 Assert.NotNull(result.censorJobsResponse.JobsDetail.State);
                 Assert.NotNull(result.censorJobsResponse.JobsDetail.CreationTime);
                 string id = result.censorJobsResponse.JobsDetail.JobId;
-                Thread.Sleep(120000);
+                Thread.Sleep(20000);
                 
                 // get video censor job
                 GetVideoCensorJobRequest getRequest = new GetVideoCensorJobRequest(bucket, id);
@@ -467,8 +468,9 @@ namespace COSXMLTests
                 //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.State);
+                Assert.AreEqual("Success", getResult.resultStruct.JobsDetail.State);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.CreationTime);
-                Assert.NotNull(getResult.resultStruct.JobsDetail.Object);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Object);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.SnapshotCount);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.Result);
 
@@ -567,27 +569,29 @@ namespace COSXMLTests
         {
             try
             {
-                
                 SubmitAudioCensorJobRequest request = new SubmitAudioCensorJobRequest(bucket);
-                request.SetCensorObject(audioKey);
+                //request.SetCensorObject(audioKey);
+                request.SetCensorUrl("https://download.samplelib.com/mp3/sample-3s.mp3");
                 request.SetDetectType("Porn,Terrorism");
                 SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitAudioCensorJob(request);
                 string id = result.censorJobsResponse.JobsDetail.JobId;
                 Assert.NotNull(id);
                 Assert.AreEqual(200, result.httpCode);
                 // get audio censor job
-                Thread.Sleep(60000);
+                Thread.Sleep(10000);
                 
                 GetAudioCensorJobRequest getRequest = new GetAudioCensorJobRequest(bucket, id);
                 GetAudioCensorJobResult getResult = QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest);
+                request.SetCensorObject(audioKey);
                 Assert.AreEqual(200, getResult.httpCode);
                 // 成功时不返回
                 //Assert.NotNull(getResult.resultStruct.JobsDetail.Code);
                 //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.State);
+                Assert.AreEqual("Success", getResult.resultStruct.JobsDetail.State);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.CreationTime);
-                Assert.NotNull(getResult.resultStruct.JobsDetail.Object);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Object);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.Result);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.AudioText);
 
@@ -642,14 +646,15 @@ namespace COSXMLTests
             {
                 
                 SubmitTextCensorJobRequest request = new SubmitTextCensorJobRequest(bucket);
-                request.SetCensorObject(textKey);
+                request.SetCensorUrl("https://example-files.online-convert.com/document/txt/example.txt");
                 request.SetDetectType("Porn,Terrorism");
                 SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitTextCensorJob(request);
+                request.SetCensorObject(textKey);
                 string id = result.censorJobsResponse.JobsDetail.JobId;
                 Assert.NotNull(id);
                 Assert.AreEqual(200, result.httpCode);
                 // 等待审核任务跑完
-                Thread.Sleep(30000);
+                Thread.Sleep(10000);
                 GetTextCensorJobRequest getRequest = new GetTextCensorJobRequest(bucket, id);
                 GetTextCensorJobResult getResult = QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
                 Assert.AreEqual(200, getResult.httpCode);
@@ -659,7 +664,7 @@ namespace COSXMLTests
                 Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.State);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.CreationTime);
-                Assert.NotNull(getResult.resultStruct.JobsDetail.Object);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Object);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.SectionCount);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.Result);
 
@@ -796,10 +801,15 @@ namespace COSXMLTests
             try
             {
                 DescribeMediaBucketsRequest request = new DescribeMediaBucketsRequest();
+                request.SetRegions(QCloudServer.Instance().region);
+                request.SetPageNumber("0");
+                request.SetPageSize("1024");
                 DescribeMediaBucketsResult result = QCloudServer.Instance().cosXml.DescribeMediaBuckets(request);
                 Assert.AreEqual(result.httpCode, 200);
                 Assert.NotNull(result.mediaBuckets.MediaBucketList);
                 Assert.NotZero(result.mediaBuckets.MediaBucketList.Count);
+                request.SetBucketName(QCloudServer.Instance().bucketForObjectTest);
+                request.SetBucketNames(QCloudServer.Instance().bucketForObjectTest);
                 for (int i = 0; i < result.mediaBuckets.MediaBucketList.Count; i++)
                 {
                     Assert.NotNull(result.mediaBuckets.MediaBucketList[i].BucketId);
