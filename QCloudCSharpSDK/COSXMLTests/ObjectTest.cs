@@ -1448,6 +1448,33 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public async Task TestUploadTaskWithBigFileNotResumable()
+        {
+            string key = multiKey;
+
+
+            PutObjectRequest request = new PutObjectRequest(bucket, key, bigFileSrcPath);
+
+            request.SetRequestHeader("Content-Type", "image/png");
+
+            COSXMLUploadTask uploadTask = new COSXMLUploadTask(request);
+            uploadTask.UseResumableUpload = false;
+
+            uploadTask.SetSrcPath(bigFileSrcPath);
+
+            uploadTask.progressCallback = delegate (long completed, long total)
+            {
+                // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+            };
+
+            COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
+
+            Assert.AreEqual(result.httpCode, 200);
+            Assert.NotNull(result.eTag);
+
+        }
+
+        [Test()]
         public async Task TestUploadTaskWithSmallFile()
         {
             string key = commonKey;
@@ -1529,7 +1556,7 @@ namespace COSXMLTests
         }
 
         [Test()]
-        public void TestUploadTaskCancelled()
+        public void TestUploadTaskCancelledAndRetry()
         {
             string key = multiKey;
 
@@ -1544,7 +1571,19 @@ namespace COSXMLTests
             Thread.Sleep(2000);
             uploadTask.Cancel();
             Thread.Sleep(500);
-            Assert.Pass();
+
+            uploadTask = new COSXMLUploadTask(bucket, key);
+
+            uploadTask.SetSrcPath(bigFileSrcPath);
+            uploadTask.MaxConcurrent = 1;
+            uploadTask.StorageClass = "Standard_IA";
+
+            asyncTask = transferManager.UploadAsync(uploadTask);
+            COSXMLUploadTask.UploadTaskResult result = asyncTask.Result;
+
+            Assert.True(result.httpCode == 200);
+            Assert.NotNull(result.eTag);
+            Assert.NotNull(result.GetResultInfo());
         }
 
         [Test()]
@@ -1606,17 +1645,16 @@ namespace COSXMLTests
 
             var asyncTask = transferManager.DownloadAsync(downloadTask);
 
-            Thread.Sleep(2000);
+            Thread.Sleep(200);
             downloadTask.Pause();
 
             Thread.Sleep(200);
             downloadTask.Resume();
             if (downloadTask.State() != TaskState.Completed)
             {
-                asyncTask.Wait(10000);
                 COSXMLDownloadTask.DownloadTaskResult result = asyncTask.Result;
 
-                Assert.AreEqual(result.httpCode, 200);
+                Assert.AreEqual(result.httpCode, 206);
                 Assert.NotNull(result.GetResultInfo());
             } 
             else 
@@ -1766,6 +1804,43 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public void TestDownloadTaskInvalidParams()
+        {
+            GetObjectRequest request = new GetObjectRequest(bucket,
+                commonKey, localDir, localFileName);
+
+            //执行请求
+            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
+
+            downloadTask.SetLocalFileOffset(1L);
+            downloadTask.SetResumableTaskFile("taskFile");
+            downloadTask.SetMaxTasks(100);
+            try {
+                downloadTask.SetMaxTasks(-1);
+                Assert.Fail();
+            } catch (COSXML.CosException.CosClientException clientEx) {
+
+            }
+            downloadTask.SetSliceSize(100);
+            try {
+                downloadTask.SetSliceSize(0);
+                Assert.Fail();
+            } catch (COSXML.CosException.CosClientException clientEx) {
+
+            }
+            downloadTask.SetDivisionSize(100);
+            try {
+                downloadTask.SetDivisionSize(0);
+                Assert.Fail();
+            } catch (COSXML.CosException.CosClientException clientEx) {
+
+            }
+            downloadTask.SetEnableCRC64Check(false);
+            downloadTask.SetSingleTaskTimeoutMs(1);
+            downloadTask.SetMaxRetries(1);
+        }
+
+        [Test()]
         public async Task TestCopyTaskWithBigFile()
         {
             CopySourceStruct copySource = new CopySourceStruct(QCloudServer.Instance().appid,
@@ -1811,8 +1886,8 @@ namespace COSXMLTests
             copyTask.CompleteOnAllPartsCopyed = false;
 
             var asyncTask = transferManager.CopyAsync(copyTask);
-
-            Thread.Sleep(2000);
+            copyTask.Pause();
+            Thread.Sleep(200);
             copyTask.Pause();
 
             Thread.Sleep(200);
@@ -1821,7 +1896,6 @@ namespace COSXMLTests
             if (copyTask.State() != TaskState.Completed)
             {
                 asyncTask = copyTask.AsyncTask<COSXMLCopyTask.CopyTaskResult>();
-                asyncTask.Wait(10000);
                 COSXMLCopyTask.CopyTaskResult result = asyncTask.Result;
 
                 Assert.True(result.httpCode == 200);
@@ -1829,7 +1903,9 @@ namespace COSXMLTests
             }
             else 
             {
-                Console.WriteLine("Copy is Completed");
+                COSXMLCopyTask.CopyTaskResult result = asyncTask.Result;
+                Assert.True(result.httpCode == 200);
+                Assert.NotNull(result.eTag);
                 Assert.Pass();
             }
         }
@@ -1844,7 +1920,7 @@ namespace COSXMLTests
 
             var asyncTask = transferManager.CopyAsync(copyTask);
 
-            Thread.Sleep(2000);
+            Thread.Sleep(200);
             copyTask.Cancel();
             Thread.Sleep(500);
             Assert.Pass();
@@ -2224,6 +2300,24 @@ namespace COSXMLTests
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 Assert.Fail();
             }
+        }
+
+        [Test()]
+        public void TestUtils() {
+            string encodedStr = DigestUtils.GetHamcSha1ToBase64("string", Encoding.UTF8, "key", Encoding.UTF8);
+            Assert.IsNotEmpty(encodedStr);
+
+            MemoryStream memoryStream = new MemoryStream();
+            StreamWriter myStreamWriter = new StreamWriter(memoryStream);
+            encodedStr = DigestUtils.GetMd5ToBase64(memoryStream);
+            Assert.IsNotEmpty(encodedStr);
+
+            encodedStr = DigestUtils.GetMD5HexString(memoryStream, 1);
+            Assert.IsNotEmpty(encodedStr);
+
+            byte[] data = new byte[] { 0x01, 0x02, 0x03 };
+            encodedStr = DigestUtils.ByteArrayToHex(data);
+            Assert.IsNotEmpty(encodedStr);
         }
 
         
