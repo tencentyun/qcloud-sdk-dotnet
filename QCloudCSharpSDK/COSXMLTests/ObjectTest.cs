@@ -234,6 +234,7 @@ namespace COSXMLTests
             }
         }
 
+        [Test()]
         public void PutObjectWithKMS()
         {
 
@@ -405,6 +406,7 @@ namespace COSXMLTests
                 FileInfo info = new FileInfo(streamUploadFilePath);
                 HeadObjectRequest headObjectRequest = new HeadObjectRequest(bucket, commonKey);
                 HeadObjectResult headObjectResult = cosXml.HeadObject(headObjectRequest);
+                headObjectRequest.SetVersionId("null");
                 Assert.AreEqual(headObjectResult.size, info.Length);
                 Assert.True(COSXML.Utils.Crc64.CompareCrc64(streamUploadFilePath, headObjectResult.crc64ecma));
             }
@@ -584,26 +586,72 @@ namespace COSXMLTests
 
             try
             {
+                PutBucketCORSRequest request = new PutBucketCORSRequest(bucket);
+
+                //设置cors
+                COSXML.Model.Tag.CORSConfiguration.CORSRule corsRule = new COSXML.Model.Tag.CORSConfiguration.CORSRule();
+
+                corsRule.id = "corsconfigure1";
+                corsRule.maxAgeSeconds = 6000;
+                corsRule.allowedOrigins = new List<string>();
+                corsRule.allowedOrigins.Add("http://cloud.tencent.com");
+
+                corsRule.allowedMethods = new List<string>();
+                corsRule.allowedMethods.Add("PUT");
+                corsRule.allowedMethods.Add("DELETE");
+                corsRule.allowedMethods.Add("POST");
+
+                corsRule.allowedHeaders = new List<string>();
+                corsRule.allowedHeaders.Add("Host");
+                corsRule.allowedHeaders.Add("Authorizaiton");
+                corsRule.allowedHeaders.Add("User-Agent");
+                corsRule.allowedHeaders.Add("Content-Type");
+                corsRule.allowedHeaders.Add("Content-Disposition");
+
+                corsRule.exposeHeaders = new List<string>();
+                corsRule.exposeHeaders.Add("x-cos-meta-x1");
+                corsRule.exposeHeaders.Add("x-cos-meta-x2");
+
+                request.SetCORSRule(corsRule);
+
+                //执行请求
+                PutBucketCORSResult result = cosXml.PutBucketCORS(request);
+
+                Assert.AreEqual(result.httpCode, 200);
+
                 string origin = "http://cloud.tencent.com";
                 string accessMthod = "PUT";
 
-                OptionObjectRequest request = new OptionObjectRequest(bucket, commonKey, origin, accessMthod);
+                OptionObjectRequest optionRequest = new OptionObjectRequest(bucket, commonKey, origin, accessMthod);
                 var header = new List<string>();
                 header.Add("Content-Type");
                 header.Add("Content-Disposition");
-                request.SetAccessControlHeaders(header);
+                optionRequest.SetAccessControlHeaders(header);
 
                 //执行请求
-                OptionObjectResult result = cosXml.OptionObject(request);
-                // Console.WriteLine(result.GetResultInfo());
-                Assert.IsNotEmpty((result.GetResultInfo()));
+                OptionObjectResult optionResult = cosXml.OptionObject(optionRequest);
+                // Console.WriteLine(optionResult.GetResultInfo());
+                Assert.IsNotEmpty((optionResult.GetResultInfo()));
 
-                Assert.AreEqual(result.httpCode, 200);
-                Assert.NotNull(result.accessControlAllowExposeHeaders);
-                Assert.NotNull(result.accessControlAllowHeaders);
-                Assert.NotNull(result.accessControlAllowMethods);
-                Assert.NotNull(result.accessControlAllowOrigin);
-                Assert.NotZero(result.accessControlMaxAge);
+                Assert.AreEqual(optionResult.httpCode, 200);
+                Assert.NotNull(optionResult.accessControlAllowExposeHeaders);
+                Assert.NotNull(optionResult.accessControlAllowHeaders);
+                Assert.NotNull(optionResult.accessControlAllowMethods);
+                Assert.NotNull(optionResult.accessControlAllowOrigin);
+                Assert.NotZero(optionResult.accessControlMaxAge);
+
+                // 错误参数测试
+                optionRequest = new OptionObjectRequest(bucket, commonKey, null, accessMthod);
+                try {
+                    optionRequest.CheckParameters();
+                    Assert.Fail();
+                } catch (COSXML.CosException.CosClientException clientEx) {}
+                optionRequest = new OptionObjectRequest(bucket, commonKey, origin, null);
+                try {
+                    optionRequest.CheckParameters();
+                    Assert.Fail();
+                } catch (COSXML.CosException.CosClientException clientEx) {}
+                
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -701,7 +749,7 @@ namespace COSXMLTests
                 ListPartsRequest listPartsRequest = new ListPartsRequest(bucket, key, uploadId);
                 listPartsRequest.SetMaxParts(1000);
                 listPartsRequest.SetEncodingType("url");
-                //执行请求
+                // 执行请求
                 ListPartsResult listPartsResult = cosXml.ListParts(listPartsRequest);
                 var parts = listPartsResult.listParts;
 
@@ -752,6 +800,28 @@ namespace COSXMLTests
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 Assert.Fail();
+            }
+        }
+
+        [Test()]
+        public void ListPartsInvalidRequestTest() {
+                          
+            ListPartsRequest listPartsRequest = new ListPartsRequest("bucket", "key", "uploadID");
+            Dictionary<int, string> partNumberAndETag = new Dictionary<int, string>();
+            partNumberAndETag[1] = "etag";
+
+            CompleteMultipartUploadRequest completeMultiUploadRequest = new CompleteMultipartUploadRequest("bucket", "key", "uploadId");
+            completeMultiUploadRequest.SetPartNumberAndETag(partNumberAndETag);
+
+            listPartsRequest.SetPartNumberMarker(1);
+            listPartsRequest.RequestURLWithSign = "string";
+            listPartsRequest.CheckParameters();
+            listPartsRequest = new ListPartsRequest("bucket", "key", null);
+            try {
+                listPartsRequest.CheckParameters();
+            } catch (COSXML.CosException.CosClientException clientEx)
+            {
+                
             }
         }
 
@@ -874,6 +944,7 @@ namespace COSXMLTests
 
                 RestoreObjectRequest request = new RestoreObjectRequest(bucket, objectKey);
                 //恢复时间
+                request.SetExpireDays(-1);
                 request.SetExpireDays(3);
                 request.SetTier(COSXML.Model.Tag.RestoreConfigure.Tier.Standard);
 
@@ -881,6 +952,8 @@ namespace COSXMLTests
                 RestoreObjectResult result = cosXml.RestoreObject(request);
 
                 Assert.True(result.IsSuccessful());
+
+                request.SetVersionId("null");;
 
                 DeleteObjectRequest deleteRequest = new DeleteObjectRequest(bucket, objectKey);
                 deleteRequest.SetVersionId("null");
@@ -1263,6 +1336,31 @@ namespace COSXMLTests
                 Assert.NotZero(selectObjectResult.stat.BytesScanned);
                 Assert.AreEqual(selectObjectResult.stat.BytesReturned, new FileInfo(outputFile).Length);
                 Assert.NotNull(selectObjectResult.stat.ToString());
+
+                request.SetExpressionType("Select * from COSObject");
+                request.SetExpression(null);
+                try {
+                    request.CheckParameters();
+                    Assert.Fail();
+                } catch (COSXML.CosException.CosClientException clientEx) {
+
+                }
+                request = new SelectObjectRequest(bucket, key);
+                request.SetInputFormat(null);
+                try {
+                    request.CheckParameters();
+                    Assert.Fail();
+                } catch (COSXML.CosException.CosClientException clientEx) {
+                    
+                }
+                request = new SelectObjectRequest(bucket, key);
+                request.SetOutputFormat(null);
+                try {
+                    request.CheckParameters();
+                    Assert.Fail();
+                } catch (COSXML.CosException.CosClientException clientEx) {
+                    
+                }
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -1355,6 +1453,11 @@ namespace COSXMLTests
             string key = commonKey;
 
             COSXMLUploadTask uploadTask = new COSXMLUploadTask(bucket, key);
+            uploadTask.UseResumableUpload = false;
+            uploadTask.progressCallback = delegate (long completed, long total)
+            {
+                // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+            };
 
             uploadTask.SetSrcPath(smallFileSrcPath);
 
@@ -2047,6 +2150,7 @@ namespace COSXMLTests
                 PutObjectTaggingRequest request = new PutObjectTaggingRequest(bucket, commonKey);
                 request.AddTag("tag1", "val1");
                 PutObjectTaggingResult result = cosXml.PutObjectTagging(request);
+                request.SetVersionId("null");
                 Assert.AreEqual(result.httpCode, 200);
                 TestGetObjectTagging();
             } catch (COSXML.CosException.CosClientException clientEx) {
