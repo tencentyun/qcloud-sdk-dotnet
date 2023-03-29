@@ -13,7 +13,7 @@ namespace COSXML.Model.Object
     /// </summary>
     public sealed class AppendObjectRequest : ObjectRequest
     {
-        private static string TAG = typeof(PutObjectRequest).FullName;
+        private static string TAG = typeof(AppendObjectRequest).FullName;
 
         /// <summary>
         /// 本地文件路径

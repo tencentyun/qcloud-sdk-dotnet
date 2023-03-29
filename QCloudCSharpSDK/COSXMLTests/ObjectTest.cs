@@ -121,6 +121,26 @@ namespace COSXMLTests
                 result = QCloudServer.Instance().cosXml.AppendObject(request);
                 Assert.AreEqual(result.httpCode, 200);
                 Assert.AreEqual(result.nextAppendPosition, 1024 * 1024 * 1 * 2);
+
+                request = new AppendObjectRequest(bucket, key, smallFileSrcPath, result.nextAppendPosition, 0L, 1024L);
+                result = QCloudServer.Instance().cosXml.AppendObject(request);
+                Assert.AreEqual(result.httpCode, 200);
+                Assert.NotNull(result.nextAppendPosition);
+
+                byte[] data = new byte[] { 0x01, 0x02, 0x03 };
+                request = new AppendObjectRequest(bucket, key, data, result.nextAppendPosition);
+                request.SetCosProgressCallback(null);
+                request.SetCosStorageClass("STANDARD");
+                request.SetCosACL("private");
+                request.LimitTraffic(1024 * 1024);
+                request.SetCosACL(CosACL.Private);
+                GrantAccount grantAccount = new GrantAccount();
+                grantAccount.AddGrantAccount("111111", "111111");
+                request.SetXCosGrantRead(grantAccount);
+                request.SetXCosReadWrite(grantAccount);
+                result = QCloudServer.Instance().cosXml.AppendObject(request);
+                Assert.AreEqual(result.httpCode, 200);
+                Assert.NotNull(result.nextAppendPosition);
             }
             catch (CosClientException clientEx)
             {
@@ -827,6 +847,7 @@ namespace COSXMLTests
                 Assert.True(result.IsSuccessful());
 
                 DeleteObjectRequest deleteRequest = new DeleteObjectRequest(bucket, objectKey);
+                deleteRequest.SetVersionId("null");
                 DeleteObjectResult deleteObjectResult = cosXml.DeleteObject(deleteRequest);
 
                 Assert.True(deleteObjectResult.IsSuccessful());
@@ -1034,6 +1055,11 @@ namespace COSXMLTests
 
                 //执行请求
                 GetObjectResult result = cosXml.GetObject(request);
+                
+                // 覆盖一些设置选项
+                request.SetLocalFileOffset(0L);
+                request.SetRange(-1L, 1024);
+                request.SetVersionId("null");
 
                 Assert.AreEqual(result.httpCode, 200);
                 Assert.NotNull(result.eTag);
@@ -1107,11 +1133,16 @@ namespace COSXMLTests
                 long contentLength = Int64.Parse(result.responseHeaders["Content-Length"][0]);
 
                 GetObjectBytesRequest getObjectBytesRequest = new GetObjectBytesRequest(bucket, commonKey);
+                getObjectBytesRequest.SetCosProgressCallback(null);
 
                 GetObjectBytesResult getObjectBytesResult = cosXml.GetObject(getObjectBytesRequest);
 
                 byte[] content = getObjectBytesResult.content;
 
+                getObjectBytesRequest.SetVersionId("null");
+                getObjectBytesRequest.SetRange(-1L, 1024);
+                getObjectBytesRequest.SetRange(1024, -1L);
+                getObjectBytesRequest.SetRange(0);
 
                 Assert.True(getObjectBytesResult.IsSuccessful());
                 Assert.AreEqual(content.Length, contentLength);
@@ -1951,10 +1982,12 @@ namespace COSXMLTests
             }
         }
 
+        [Test()]
         public void TestGetObjectTagging() {
             try {
                 GetObjectTaggingRequest request = new GetObjectTaggingRequest(bucket, commonKey);
                 GetObjectTaggingResult result = cosXml.GetObjectTagging(request);
+                request.SetVersionId("null");
                 Assert.AreEqual(result.httpCode, 200);
                 Assert.NotNull(result.tagging);
                 Assert.NotNull(result.tagging.tagSet);
@@ -1975,9 +2008,11 @@ namespace COSXMLTests
             }
         }
 
+        [Test()]
         public void TestDeleteObjectTagging() {
             try {
                 DeleteObjectTaggingRequest request = new DeleteObjectTaggingRequest(bucket, commonKey);
+                request.SetVersionId("null");
                 DeleteObjectTaggingResult result = cosXml.DeleteObjectTagging(request);
                 Assert.AreEqual(result.httpCode, 204);
                 
@@ -1995,6 +2030,7 @@ namespace COSXMLTests
             try {
                 DoesObjectExistRequest request = new DoesObjectExistRequest(bucket, commonKey);
                 bool result = cosXml.DoesObjectExist(request);
+                request.SetVersionId("null");
                 Assert.True(result);
 
                 request = new DoesObjectExistRequest(bucket, "notexist");
