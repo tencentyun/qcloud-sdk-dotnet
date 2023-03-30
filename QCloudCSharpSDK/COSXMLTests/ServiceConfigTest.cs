@@ -1,6 +1,7 @@
 using COSXML.Log;
 using COSXML.Auth;
 using COSXML.Model.Service;
+using COSXML.Model.Tag;
 using COSXML;
 using COSXML.Model.Object;
 using COSXML.Model.Bucket;
@@ -447,13 +448,13 @@ namespace COSXMLTests
 
             GetBucketLoggingRequest getBucketLoggingRequest = new GetBucketLoggingRequest("bucket");
             try {
-                cosXml.GetBucketLogging(getBucketLoggingRequest, null, null);
+                cosXml.GetBucketLoggingAsync(getBucketLoggingRequest, null, null);
             } catch (Exception)
             {
 
             }
 
-            PutBucketInventoryRequest putBucketInventoryRequest = new PutBucketInventoryRequest("bucket");
+            PutBucketInventoryRequest putBucketInventoryRequest = new PutBucketInventoryRequest("bucket", "id");
             try {
                 cosXml.PutBucketInventoryAsync(putBucketInventoryRequest, null, null);
             } catch (Exception)
@@ -500,6 +501,31 @@ namespace COSXMLTests
             {
 
             }
+
+            DeleteBucketTaggingRequest deleteBucketTaggingRequest = new DeleteBucketTaggingRequest("bucket");
+            try {
+                cosXml.DeleteBucketTaggingAsync(deleteBucketTaggingRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            PutBucketDomainRequest putBucketDomainRequest = new PutBucketDomainRequest("bucket", new DomainConfiguration());
+            try {
+                cosXml.PutBucketDomainAsync(putBucketDomainRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            GetBucketDomainRequest getBucketDomainRequest = new GetBucketDomainRequest("bucket");
+            try {
+                cosXml.GetBucketDomainAsync(getBucketDomainRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+            
             
             Assert.Pass();
 
