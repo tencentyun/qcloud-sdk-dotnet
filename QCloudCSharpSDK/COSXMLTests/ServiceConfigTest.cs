@@ -331,6 +331,176 @@ namespace COSXMLTests
 
             }
 
+            PutObjectACLRequest putObjectACLRequest = new PutObjectACLRequest("bucket", "key");
+            try {
+                cosXml.PutObjectACL(putObjectACLRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            GetObjectACLRequest getObjectACLRequest = new GetObjectACLRequest("bucket", "key");
+            try {
+                cosXml.GetObjectACL(getObjectACLRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            PutObjectTaggingRequest putObjectTaggingRequest = new PutObjectTaggingRequest("bucket", "key");
+            try {
+                cosXml.PutObjectTagging(putObjectTaggingRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            GetObjectTaggingRequest getObjectTaggingRequest = new GetObjectTaggingRequest("bucket", "key");
+            try {
+                cosXml.GetObjectTagging(getObjectTaggingRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            DeleteObjectTaggingRequest deleteObjectTaggingRequest = new DeleteObjectTaggingRequest("bucket", "key");
+            try {
+                cosXml.DeleteObjectTagging(deleteObjectTaggingRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            DeleteMultiObjectRequest deleteMultiObjectRequest = new DeleteMultiObjectRequest("bucket");
+            try {
+                cosXml.DeleteMultiObjects(deleteMultiObjectRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+            
+            OptionObjectRequest optionObjectRequest = new OptionObjectRequest("bucket", "key", null, null);
+            try {
+                cosXml.OptionObject(optionObjectRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            byte[] data = new byte[] { 0x01, 0x02, 0x03 };
+            PostObjectRequest postObjectRequest = new PostObjectRequest("bucket", "key", data);
+            try {
+                cosXml.PostObject(postObjectRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            RestoreObjectRequest restoreObjectRequest = new RestoreObjectRequest("bucket", "key");
+            try {
+                cosXml.RestoreObject(restoreObjectRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            GetObjectBytesRequest getObjectBytesRequest = new GetObjectBytesRequest("bucket", "key");
+            try {
+                cosXml.GetObject(getObjectBytesRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            PutBucketWebsiteRequest putBucketWebsiteRequest = new PutBucketWebsiteRequest("bucket");
+            try {
+                cosXml.PutBucketWebsiteAsync(putBucketWebsiteRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            GetBucketWebsiteRequest getBucketWebsiteRequest = new GetBucketWebsiteRequest("bucket");
+            try {
+                cosXml.GetBucketWebsiteAsync(getBucketWebsiteRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            
+            DeleteBucketWebsiteRequest deleteBucketWebsiteRequest = new DeleteBucketWebsiteRequest("bucket");
+            try {
+                cosXml.DeleteBucketWebsiteAsync(deleteBucketWebsiteRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            PutBucketLoggingRequest putBucketLoggingRequest = new PutBucketLoggingRequest("bucket");
+            try {
+                cosXml.PutBucketLoggingAsync(putBucketLoggingRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            GetBucketLoggingRequest getBucketLoggingRequest = new GetBucketLoggingRequest("bucket");
+            try {
+                cosXml.GetBucketLogging(getBucketLoggingRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            PutBucketInventoryRequest putBucketInventoryRequest = new PutBucketInventoryRequest("bucket");
+            try {
+                cosXml.PutBucketInventoryAsync(putBucketInventoryRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            GetBucketInventoryRequest getBucketInventoryRequest = new GetBucketInventoryRequest("bucket");
+            try {
+                cosXml.GetBucketInventoryAsync(getBucketInventoryRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            DeleteBucketInventoryRequest deleteBucketInventoryRequest = new DeleteBucketInventoryRequest("bucket");
+            try {
+                cosXml.DeleteInventoryAsync(deleteBucketInventoryRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            ListBucketInventoryRequest listBucketInventoryRequest = new ListBucketInventoryRequest("bucket");
+            try {
+                cosXml.ListBucketInventoryAsync(listBucketInventoryRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            PutBucketTaggingRequest putBucketTaggingRequest = new PutBucketTaggingRequest("bucket");
+            try {
+                cosXml.PutBucketTaggingAsync(putBucketTaggingRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+
+            GetBucketTaggingRequest getBucketTaggingRequest = new GetBucketTaggingRequest("bucket");
+            try {
+                cosXml.GetBucketTaggingAsync(getBucketTaggingRequest, null, null);
+            } catch (Exception)
+            {
+
+            }
+            
             Assert.Pass();
 
         }

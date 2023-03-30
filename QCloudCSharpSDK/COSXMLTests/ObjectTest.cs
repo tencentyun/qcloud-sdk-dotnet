@@ -2212,11 +2212,80 @@ namespace COSXMLTests
                 GetObjectResult result = QCloudServer.Instance().cosXml.GetObject(request);
                 Assert.AreEqual(result.httpCode, 200);
                 */
+                // 错误参数测试: httpMethod为空
+                preSignatureStruct.httpMethod = null;
+                try {
+                    requstUrl = QCloudServer.Instance().cosXml.GenerateSignURL(preSignatureStruct);
+                    Assert.Fail();
+                } catch (Exception) {}
+                //  错误参数测试: key为空
+                preSignatureStruct.httpMethod = "GET";
+                preSignatureStruct.key = null;
+                try {
+                    requstUrl = QCloudServer.Instance().cosXml.GenerateSignURL(preSignatureStruct);
+                    Assert.Fail();
+                } catch (Exception) {}
+                // 参数测试: https false
+                preSignatureStruct.key = "key";
+                preSignatureStruct.isHttps = false;
+                requstUrl = QCloudServer.Instance().cosXml.GenerateSignURL(preSignatureStruct);
+                Assert.IsNotEmpty(requstUrl);
+                // 错误参数测试: bucket 为空
+                preSignatureStruct.bucket = null;
+                try {
+                    requstUrl = QCloudServer.Instance().cosXml.GenerateSignURL(preSignatureStruct);
+                    Assert.Fail();
+                } catch (Exception) {}
+                // 错误参数测试: bucket后自动拼接appid
+                preSignatureStruct.bucket = "bucket";
+                requstUrl = QCloudServer.Instance().cosXml.GenerateSignURL(preSignatureStruct);
+                Assert.IsNotEmpty(requstUrl);
+                // 参数测试: host自动入签
+                preSignatureStruct.signHost = true;
+                requstUrl = QCloudServer.Instance().cosXml.GenerateSignURL(preSignatureStruct);
+                Assert.IsNotEmpty(requstUrl);
+                // 参数测试: host主动入签
+                preSignatureStruct = new PreSignatureStruct();
+                preSignatureStruct.appid = QCloudServer.Instance().appid;
+                preSignatureStruct.region = QCloudServer.Instance().region;
+                preSignatureStruct.bucket = QCloudServer.Instance().bucketForObjectTest;
+                preSignatureStruct.key = commonKey;
+                preSignatureStruct.httpMethod = "GET";
+                preSignatureStruct.signDurationSecond = 600;
+                preSignatureStruct.signHost = true;
+                preSignatureStruct.host = "cos.ap-guangzhou.myqcloud.com";
+                requstUrl = QCloudServer.Instance().cosXml.GenerateSignURL(preSignatureStruct);
+                Assert.IsNotEmpty(requstUrl);
+                
             } catch (COSXML.CosException.CosClientException clientEx) {
                 Console.WriteLine("CosClientException: " + clientEx);
                 Assert.Fail();
             } catch (COSXML.CosException.CosServerException serverEx) {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test()]
+        public void TestGetObjectUrl() {
+            try {
+                string objectUrl = QCloudServer.Instance().cosXml.GetObjectUrl("bucket", "key");
+                Assert.NotNull(objectUrl);
+            } catch (COSXML.CosException.CosClientException clientEx) {
+                Assert.Fail();
+            } catch (COSXML.CosException.CosServerException serverEx) {
+                Assert.Fail();
+            }
+        }
+
+        [Test()]
+        public void TestGenerateSign() {
+            try {
+                string requestSign = QCloudServer.Instance().cosXml.GenerateSign("GET", commonKey, null, null, 60, 60);
+                Assert.IsNotEmpty(requestSign);
+            } catch (COSXML.CosException.CosClientException clientEx) {
+                Assert.Fail();
+            } catch (COSXML.CosException.CosServerException serverEx) {
                 Assert.Fail();
             }
         }
