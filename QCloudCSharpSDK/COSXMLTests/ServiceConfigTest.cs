@@ -323,7 +323,7 @@ namespace COSXMLTests
 
             }
 
-            AppendObjectRequest appendObjectRequest = new AppendObjectRequest("bucket", "key");
+            AppendObjectRequest appendObjectRequest = new AppendObjectRequest("bucket", "key", "src_path", 0L);
             try {
                 cosXml.AppendObject(appendObjectRequest, null, null);
             } catch (Exception)
