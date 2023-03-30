@@ -530,5 +530,33 @@ namespace COSXMLTests
             Assert.Pass();
 
         }
+
+        [Test()]
+        public void QCloudCredentialTest() {
+
+            string secretId = Environment.GetEnvironmentVariable("SECRET_ID");
+            string secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
+            QCloudCredentialProvider qCloudCredentialProvider;
+            // Invalid Param for DefaultQCloudCredential
+            try {
+                qCloudCredentialProvider = new DefaultQCloudCredentialProvider(null, null, 60);
+                Assert.Fail();
+            } catch (Exception) {}
+            
+            try {
+                qCloudCredentialProvider = new DefaultQCloudCredentialProvider(secretId, null, 60);
+                Assert.Fail();
+            } catch (Exception) {}
+
+            qCloudCredentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, 60);
+            qCloudCredentialProvider.Refresh();
+
+            DefaultSessionQCloudCredentialProvider defaultSessionQCloudCredentialProvider = new DefaultSessionQCloudCredentialProvider(secretId, secretKey, 60, "token");
+            defaultSessionQCloudCredentialProvider = new DefaultSessionQCloudCredentialProvider(secretId, secretKey, 60, 60, "token");
+            defaultSessionQCloudCredentialProvider.GetQCloudCredentials();
+            defaultSessionQCloudCredentialProvider.Refresh();
+            defaultSessionQCloudCredentialProvider.IsNeedUpdateNow();
+            defaultSessionQCloudCredentialProvider.SetQCloudCredential(secretId, secretKey, "60", "token");
+        }
     }
 }
