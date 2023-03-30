@@ -5,6 +5,7 @@ using COSXML.Model.Tag;
 using COSXML;
 using COSXML.Model.Object;
 using COSXML.Model.Bucket;
+using COSXML.Network;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -557,6 +558,36 @@ namespace COSXMLTests
             defaultSessionQCloudCredentialProvider.Refresh();
             defaultSessionQCloudCredentialProvider.IsNeedUpdateNow();
             defaultSessionQCloudCredentialProvider.SetQCloudCredential(secretId, secretKey, "60", "token");
+        }
+
+        [Test()]
+        public void HttpClientConfigTest() {
+            try {
+                CosXmlConfig config = new CosXmlConfig.Builder()
+                    .SetRegion(Environment.GetEnvironmentVariable("APPID"))
+                    .SetDebugLog(true)
+                    .IsHttps(true)
+                    .SetConnectionLimit(512)
+                    .SetConnectionTimeoutMs(10 * 1000)
+                    .SetReadWriteTimeoutMs(10 * 1000)
+                    .SetProxyHost("host")
+                    .SetProxyPort(80)
+                    .SetProxyPort(80)
+                    .SetProxyUserName("user_name")
+                    .SetProxyUserPassword("passwd")
+                    .SetProxyDomain("domain")
+                    .SetHttpKeepAlive(false)
+                    .Build();
+                HttpClientConfig httpClientConfig = config.HttpConfig;
+                Assert.NotNull(httpClientConfig.ProxyPort);
+                Assert.NotNull(httpClientConfig.ProxyUserName);
+                Assert.NotNull(httpClientConfig.ProxyUserPassword);
+                Assert.NotNull(httpClientConfig.ProxyDomain);
+            } catch (Exception)
+            {
+                Assert.Fail();
+            }
+            
         }
     }
 }
