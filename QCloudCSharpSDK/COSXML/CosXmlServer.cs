@@ -754,7 +754,7 @@ namespace COSXML
                 string keyTime = null;
                 if (keyDurationSecond > 0)
                 {
-                    signTime = String.Format("{0};{1}", currentTimeSecond, currentTimeSecond + keyDurationSecond);
+                    keyTime = String.Format("{0};{1}", currentTimeSecond, currentTimeSecond + keyDurationSecond);
                 }
 
                 Dictionary<string, string> encodeQuery = null;
