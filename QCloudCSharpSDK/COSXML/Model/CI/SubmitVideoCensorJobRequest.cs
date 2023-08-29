@@ -34,6 +34,11 @@ namespace COSXML.Model.CI
             videoCencorJobInfo.input.obj = key;
         }
 
+        public void SetCensorUrl(string url)
+        {
+            videoCencorJobInfo.input.url = url;
+        }
+
         public void SetDetectType(string detectType)
         {
             videoCencorJobInfo.conf.detectType = detectType;

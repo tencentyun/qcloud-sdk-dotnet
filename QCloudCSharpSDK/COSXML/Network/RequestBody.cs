@@ -457,7 +457,7 @@ namespace COSXML.Network
 
         }
     }
-
+/*
     public class FileStreamRequestBody : RequestBody
     {
         private readonly long fileOffset;
@@ -567,7 +567,7 @@ namespace COSXML.Network
 
         }
     }
-
+*/
     public class MultipartRequestBody : RequestBody
     {
         private readonly string DASHDASH = "--";

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COSXML-Netcore", "COSXML\COSXML-Netcore.csproj", "{FC694C68-F0E3-411F-8E6C-2E9F94826016}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COSXMLTests", "COSXMLTests\COSXMLTests.csproj", "{9DC6553F-DF2A-4EC8-9790-2068ADF94CB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCOS", "NCOS\NCOS.csproj", "{06505112-4F1D-4AE5-9E8A-07D5D98B2AB3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC694C68-F0E3-411F-8E6C-2E9F94826016}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC694C68-F0E3-411F-8E6C-2E9F94826016}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC694C68-F0E3-411F-8E6C-2E9F94826016}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC694C68-F0E3-411F-8E6C-2E9F94826016}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DC6553F-DF2A-4EC8-9790-2068ADF94CB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DC6553F-DF2A-4EC8-9790-2068ADF94CB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DC6553F-DF2A-4EC8-9790-2068ADF94CB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DC6553F-DF2A-4EC8-9790-2068ADF94CB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06505112-4F1D-4AE5-9E8A-07D5D98B2AB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06505112-4F1D-4AE5-9E8A-07D5D98B2AB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06505112-4F1D-4AE5-9E8A-07D5D98B2AB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06505112-4F1D-4AE5-9E8A-07D5D98B2AB3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

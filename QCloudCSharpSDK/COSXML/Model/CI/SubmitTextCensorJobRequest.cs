@@ -33,6 +33,11 @@ namespace COSXML.Model.CI
             textCensorJobInfo.input.obj = key;
         }
 
+        public void SetCensorUrl(string url)
+        {
+            textCensorJobInfo.input.url = url;
+        }
+
         public void SetCensorContent(string content)
         {
             textCensorJobInfo.input.content = content;

@@ -45,7 +45,6 @@ namespace COSXMLTests
 
         private void PutBucket()
         {
-
             try
             {
                 PutBucketRequest request = new PutBucketRequest(bucket);
@@ -807,7 +806,7 @@ namespace COSXMLTests
                 domain.rule.Name = "www.qq.com";
                 domain.rule.Status = "ENABLED";
                 domain.rule.Type = "WEBSITE";
-                domain.rule.Replace = "";
+                domain.rule.Replace = "CNAME";
 
                 PutBucketDomainResult result = cosXml.PutBucketDomain(new PutBucketDomainRequest(bucket, domain));
                 Assert.AreEqual(result.httpCode, 200);

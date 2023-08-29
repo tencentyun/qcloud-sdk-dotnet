@@ -22,7 +22,7 @@ namespace COSXMLTests
         {
             get
             {
-                return "dotnet-ut-temp-" + TimeUtils.GetCurrentTime(TimeUnit.Seconds) + "-1251668577";
+                return "dotnet-ut-temp-" + TimeUtils.GetCurrentTime(TimeUnit.Seconds) + "-" + Environment.GetEnvironmentVariable("APPID");
             }
         }
 
@@ -47,13 +47,13 @@ namespace COSXMLTests
         {
             QLog.SetLogLevel(Level.V);
 
-            uin = "2779643970";
-            appid = "1251668577";
-            bucketVersioning = "dotnet-ut-versioning-1251668577";
-            regionForBucketVersioning = "ap-beijing";
-            bucketForObjectTest = "dotnet-ut-obj-1251668577";
-            bucketForLoggingTarget = "dotnet-ut-logging-target-1251668577";
-            region = "ap-guangzhou";
+            uin = Environment.GetEnvironmentVariable("UIN");
+            appid = Environment.GetEnvironmentVariable("APPID");
+            bucketVersioning = "dotnet-ut-versions-" + appid;
+            regionForBucketVersioning = Environment.GetEnvironmentVariable("COS_REGION");
+            bucketForObjectTest = "dotnet-ut-obj-" + appid;
+            bucketForLoggingTarget = "dotnet-ut-logging-target-" + appid;
+            region = Environment.GetEnvironmentVariable("COS_REGION");
 
             secretId = Environment.GetEnvironmentVariable("SECRET_ID");
             secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
@@ -119,6 +119,27 @@ namespace COSXMLTests
                 FileStream fs = new FileStream(filename, FileMode.Create);
 
                 fs.SetLength(size);
+                path = fs.Name;
+                fs.Close();
+
+                return path;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static string CreateJsonFile(string filename)
+        {
+
+            try
+            {
+                string path = null;
+                FileStream fs = new FileStream(filename, FileMode.Create);
+                string s = "{\"Statement\":[{\"Principal\":{\"service\":\"cos.qcloud.com\"},\"Effect\":\"Allow\",\"Action\":[\"name/cos:PutObject\",\"name/cos:HeadObject\",\"name/cos:InitiateMultipartUpload\",\"name/cos:UploadPart\",\"name/cos:CompleteMultipartUpload\"],\"Resource\":[\"qcs::cos:<region>:uid/<appid>:<bucketname-appid>/*\"]}],\"version\":\"2.0\"}";
+                byte[] buffer = Encoding.Default.GetBytes(s);
+                fs.Write(buffer, 0, buffer.Length);
                 path = fs.Name;
                 fs.Close();
 
