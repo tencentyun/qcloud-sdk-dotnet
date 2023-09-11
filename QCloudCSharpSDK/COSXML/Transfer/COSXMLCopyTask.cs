@@ -95,6 +95,10 @@ namespace COSXML.Transfer
 
             headObjectRequest = new HeadObjectRequest(copySource.bucket, copySource.key);
             headObjectRequest.Region = copySource.region;
+            if (customHeaders != null)
+            {
+                headObjectRequest.SetRequestHeaders(customHeaders);
+            }
             cosXmlServer.HeadObject(headObjectRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
@@ -156,6 +160,10 @@ namespace COSXML.Transfer
             copyObjectRequest = new CopyObjectRequest(bucket, key);
             copyObjectRequest.SetCopyMetaDataDirective(Common.CosMetaDataDirective.Copy);
             copyObjectRequest.SetCopySource(copySource);
+            if (customHeaders != null)
+            {
+                copyObjectRequest.SetRequestHeaders(customHeaders);
+            }
             cosXmlServer.CopyObject(copyObjectRequest, 
                 delegate (CosResult cosResult)
                 {
@@ -231,6 +239,10 @@ namespace COSXML.Transfer
         private void InitMultiUploadPart()
         {
             initMultiUploadRequest = new InitMultipartUploadRequest(bucket, key);
+            if (customHeaders != null)
+            {
+                initMultiUploadRequest.SetRequestHeaders(customHeaders);
+            }
             cosXmlServer.InitMultipartUpload(initMultiUploadRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
@@ -274,6 +286,10 @@ namespace COSXML.Transfer
         private void ListParts()
         {
             listPartsRequest = new ListPartsRequest(bucket, key, uploadId);
+            if (customHeaders != null)
+            {
+                listPartsRequest.SetRequestHeaders(customHeaders);
+            }
             cosXmlServer.ListParts(listPartsRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
@@ -338,6 +354,10 @@ namespace COSXML.Transfer
 
                     uploadPartCopyRequest.SetCopySource(copySource);
                     uploadPartCopyRequest.SetCopyRange(sliceStruct.sliceStart, sliceStruct.sliceEnd);
+                    if (customHeaders != null)
+                    {
+                        uploadPartCopyRequest.SetRequestHeaders(customHeaders);
+                    }
                     uploadCopyCopyRequestList.Add(uploadPartCopyRequest);
                     cosXmlServer.PartCopy(uploadPartCopyRequest, delegate (CosResult result)
                     {
@@ -490,6 +510,10 @@ namespace COSXML.Transfer
         private void CompleteMultipartUpload()
         {
             completeMultiUploadRequest = new CompleteMultipartUploadRequest(bucket, key, uploadId);
+            if (customHeaders != null)
+            {
+                completeMultiUploadRequest.SetRequestHeaders(customHeaders);
+            }
 
             foreach (SliceStruct sliceStruct in sliceList)
             {
@@ -588,6 +612,10 @@ namespace COSXML.Transfer
         private void Abort()
         {
             abortMultiUploadRequest = new AbortMultipartUploadRequest(bucket, key, uploadId);
+            if (customHeaders != null)
+            {
+                abortMultiUploadRequest.SetRequestHeaders(customHeaders);
+            }
             cosXmlServer.AbortMultiUpload(abortMultiUploadRequest, 
                 delegate (CosResult cosResult) 
                 { 
@@ -604,6 +632,10 @@ namespace COSXML.Transfer
         private void DeleteObject()
         {
             deleteObjectRequest = new DeleteObjectRequest(bucket, key);
+            if (customHeaders != null)
+            {
+                deleteObjectRequest.SetRequestHeaders(customHeaders);
+            }
             cosXmlServer.DeleteObject(deleteObjectRequest, 
                 delegate (CosResult cosResult) 
                 { 
