@@ -67,11 +67,11 @@ namespace Process
 
         public void SetEnvironmentVariable()
         {
-            Environment.SetEnvironmentVariable("UIN", "100032069732");
-            Environment.SetEnvironmentVariable("APPID", "1253960454");
+            Environment.SetEnvironmentVariable("UIN", "");
+            Environment.SetEnvironmentVariable("APPID", "");
             Environment.SetEnvironmentVariable("COS_REGION", "ap-guangzhou");
-            Environment.SetEnvironmentVariable("SECRET_ID", "AKIDUmnXzKSLzNTIrxzlIYYHjvrc9SWP1NTK");
-            Environment.SetEnvironmentVariable("SECRET_KEY", "lIemfJgnumPmtkLgndCcolRqzsVsbFeo");
+            Environment.SetEnvironmentVariable("SECRET_ID", "");
+            Environment.SetEnvironmentVariable("SECRET_KEY", "");
         }
 
     }
