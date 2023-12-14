@@ -117,6 +117,8 @@ namespace COSXML.Network
 
             try
             {
+                cosRequest.retryIndex = retryIndex;
+                
                 Request request = CreateRequest(cosRequest, credentialProvider);
                 //extern informations exchange
                 cosResult.ExternInfo(cosRequest);
@@ -204,11 +206,12 @@ namespace COSXML.Network
         //     }
         // }
 
-        public void InternalSchedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback, QCloudCredentialProvider credentialProvider)
+        public void InternalSchedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback, QCloudCredentialProvider credentialProvider, int retryIndex = 0)
         {
 
             try
             {
+                cosRequest.retryIndex = retryIndex;
                 Request request = CreateRequest(cosRequest, credentialProvider);
                 cosResult.ExternInfo(cosRequest);
                 Response response;
@@ -230,18 +233,40 @@ namespace COSXML.Network
             }
             catch (CosServerException serverException)
             {
-                //throw serverException;
-                failCallback(null, serverException);
+                if (retryIndex < MaxRetry)
+                {
+                    InternalSchedue(cosRequest, cosResult, successCallback, failCallback, credentialProvider, retryIndex+1);
+                }
+                else
+                {
+                    //throw clientException;
+                    failCallback(null, serverException);
+                }
             }
             catch (CosClientException clientException)
             {
-                //throw clientException;
-                failCallback(clientException, null);
+                if (retryIndex < MaxRetry)
+                {
+                    InternalSchedue(cosRequest, cosResult, successCallback, failCallback, credentialProvider, retryIndex+1);
+                }
+                else
+                {
+                    //throw clientException;
+                    failCallback(clientException, null);
+                }
             }
             catch (Exception ex)
             {
                 //throw new CosClientException((int)CosClientError.BAD_REQUEST, ex.Message, ex);
-                failCallback(new CosClientException((int)CosClientError.BadRequest, ex.Message, ex), null);
+                if (retryIndex < MaxRetry)
+                {
+                    InternalSchedue(cosRequest, cosResult, successCallback, failCallback, credentialProvider, retryIndex+1);
+                }
+                else
+                {
+                    //throw clientException;
+                    failCallback(new CosClientException((int)CosClientError.BadRequest, ex.Message, ex), null);
+                }
             }
         }
 
