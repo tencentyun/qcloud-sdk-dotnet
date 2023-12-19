@@ -80,9 +80,14 @@ namespace COSXML.Model.Bucket
 
                 else
                 {
+                    string domain = ".myqcloud.com";
+                    if (retryIndex >= 1)
+                    {
+                        domain = ".tencentcos.cn";
+                    }
                     hostBuilder.Append(".cos.")
                         .Append(region)
-                        .Append(".myqcloud.com");
+                        .Append(domain);
                 }
             }
 
