@@ -109,18 +109,34 @@ namespace COSXML.Model.Object
                 }
                 else
                 {
-                    string domain = ".myqcloud.com";
-                    if (retryIndex >= 1)
-                    {
-                        domain = ".tencentcos.cn";
-                    }
                     hostBuilder.Append(".cos.")
                         .Append(region)
-                        .Append(domain);
+                        .Append(".myqcloud.com");
                 }
             }
-
-            return hostBuilder.ToString();
+            
+            String hostStr = hostBuilder.ToString();
+            
+            if (userKeepDefaultDomain && !operationTimeOutRetry)
+            {
+                return hostStr;
+            }
+            
+            if (operationTimeOutRetry || changeDefaultDomain)
+            {
+                StringBuilder pattern = new StringBuilder();
+                pattern.Append(".cos.").Append(region).Append(".myqcloud.com");
+                String patternStr = pattern.ToString();
+            
+                if (hostStr.EndsWith(patternStr))
+                {
+                    StringBuilder replace = new StringBuilder();
+                    replace.Append(".cos.").Append(region).Append(".tencentcos.cn");
+                    return  hostStr.Replace(patternStr, replace.ToString());
+                }
+            }
+            
+            return hostStr;
         }
 
         public override void CheckParameters()
