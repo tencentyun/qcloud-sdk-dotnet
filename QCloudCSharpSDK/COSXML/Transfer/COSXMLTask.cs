@@ -212,8 +212,9 @@ namespace COSXML.Transfer
         public long sliceEnd;
 
         public string eTag;
-    }
 
+        public int taskStatus; //0,表示任务未开始,等待状态，1表示任务进行中，2表示任务完成
+    }
     public enum TaskState
     {
         Waiting = 0,

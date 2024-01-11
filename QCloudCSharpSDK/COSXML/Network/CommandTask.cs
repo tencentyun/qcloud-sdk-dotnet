@@ -9,6 +9,8 @@ using COSXML.Log;
 using System.Reflection;
 using System.IO;
 using System.Net.Cache;
+using COSXML.CosException;
+using COSXML.Model.Tag;
 
 
 namespace COSXML.Network
@@ -59,7 +61,7 @@ namespace COSXML.Network
                 httpWebRequest = HttpWebRequest.Create(request.RequestUrlString) as HttpWebRequest;
 
                 httpWebRequest.AllowWriteStreamBuffering = false;
-
+                
                 //bind webRequest
                 request.BindHttpWebRequest(httpWebRequest);
 
@@ -77,7 +79,6 @@ namespace COSXML.Network
             }
             catch (WebException webEx)
             {
-
                 if (webEx.Response != null && webEx.Response is HttpWebResponse)
                 {
                     //notify has been got response
@@ -149,9 +150,25 @@ namespace COSXML.Network
         private static void HandleHttpWebResponse(HttpWebResponse httpWebResponse, Response response)
         {
             HandleHttpWebResponseHeaders(response, httpWebResponse);
-
+            string requestId = httpWebResponse.GetResponseHeader("x-cos-request-id");
             //handle body
-            response.Body.HandleResponseBody(httpWebResponse.GetResponseStream());
+            if (requestId == String.Empty)
+            {
+                CosServerException cosServerException = new CosServerException((int)httpWebResponse.StatusCode, "request has error");
+                cosServerException.requestId = requestId;
+                throw cosServerException;
+            }
+            
+            try
+            {
+                response.Body.HandleResponseBody(httpWebResponse.GetResponseStream());
+            }
+            catch (Exception ex)
+            {
+                CosServerException cosServerException = new CosServerException((int)httpWebResponse.StatusCode, ex.Message);
+                cosServerException.requestId = requestId;
+                throw cosServerException;
+            }
 
             response.OnFinish(response.Code >= 200 && response.Code < 300, null);
 
@@ -312,6 +329,7 @@ namespace COSXML.Network
             {
                 if (requestState.retryIndex < MaxRetries)
                 {
+                    //重试
                     Schedue(requestState.request, requestState.response, config, requestState.retryIndex + 1);
                     return;
                 }
@@ -351,6 +369,7 @@ namespace COSXML.Network
             {
                 if (requestState.retryIndex < MaxRetries)
                 {
+                    //重试
                     Schedue(requestState.request, requestState.response, config, requestState.retryIndex + 1);
                     return;
                 }

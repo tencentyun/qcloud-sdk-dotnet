@@ -146,7 +146,7 @@ namespace COSXML.Network
             catch (CosServerException serverException)
             {
                 // webCode >= 300
-                if (retryIndex < MaxRetry)
+                if (retryIndex < MaxRetry && serverException.statusCode >= 300)
                 {
                     if (serverException.requestId == String.Empty)
                     {
@@ -180,6 +180,10 @@ namespace COSXML.Network
                     if (isOperationTimeOu)
                     {
                         cosRequest.operationTimeOutRetry = true;
+                    } 
+                    else 
+                    {
+                        cosRequest.changeDefaultDomain = true;
                     }
                     InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
                 }
@@ -238,48 +242,18 @@ namespace COSXML.Network
             }
             catch (CosServerException serverException)
             {
-                if (retryIndex < MaxRetry)
-                {
-                    if (serverException.requestId == String.Empty)
-                    {
-                        cosRequest.changeDefaultDomain = true;
-                    }
-                    InternalSchedue(cosRequest, cosResult, successCallback, failCallback, credentialProvider, retryIndex+1);
-                }
-                else
-                {
-                    //throw clientException;
-                    failCallback(null, serverException);
-                }
+                //throw clientException;
+                failCallback(null, serverException);
             }
             catch (CosClientException clientException)
             {
-                if (retryIndex < MaxRetry)
-                {
-                    InternalSchedue(cosRequest, cosResult, successCallback, failCallback, credentialProvider, retryIndex+1);
-                }
-                else
-                {
-                    //throw clientException;
-                    failCallback(clientException, null);
-                }
+                //throw clientException;
+                failCallback(clientException, null);
             }
             catch (Exception ex)
             {
                 //throw new CosClientException((int)CosClientError.BAD_REQUEST, ex.Message, ex);
-                if (retryIndex < MaxRetry)
-                {
-                    bool isOperationTimeOu = ex.ToString().Contains("The operation has timed out");
-                    if (isOperationTimeOu)
-                    {
-                        InternalSchedue(cosRequest, cosResult, successCallback, failCallback, credentialProvider, retryIndex+1);
-                    }
-                }
-                else
-                {
-                    //throw clientException;
-                    failCallback(new CosClientException((int)CosClientError.BadRequest, ex.Message, ex), null);
-                }
+                failCallback(new CosClientException((int)CosClientError.BadRequest, ex.Message, ex), null);
             }
         }
 
@@ -471,6 +445,7 @@ namespace COSXML.Network
                 
                 Headers.TryGetValue("x-cos-request-id", out values);
                 cosServerException.requestId = (values != null && values.Count > 0) ? values[0] : null;
+                
                 Headers.TryGetValue("x-cos-trace-id", out values);
                 cosServerException.traceId = (values != null && values.Count > 0) ? values[0] : null;
 
