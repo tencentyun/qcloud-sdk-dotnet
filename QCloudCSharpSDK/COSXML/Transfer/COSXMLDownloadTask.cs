@@ -357,24 +357,22 @@ namespace COSXML.Transfer
         private void MutisThreadsGetObject(long contentLength)
         {
             //将文件下载到cos-path的相对路径
-            string filePath = Path.GetDirectoryName(localFileName);
-            DirectoryInfo dirInfo = new DirectoryInfo(localDir+filePath);
+            DirectoryInfo dirInfo = new DirectoryInfo(localDir);
             if (!dirInfo.Exists)
             {
                 dirInfo.Create();
             }
             //缓存文件放在当前路径
-            string fileName = Path.GetFileName(localFileName);
             ParallelOptions options = new ParallelOptions {
                 MaxDegreeOfParallelism = maxTasks
             };
             long completeLength = 0;
             Parallel.ForEach(sliceList.Values, options, downloadedSlice =>
             {
-                string tmpFileName = localDir + "." + fileName + ".cosresumable." + downloadedSlice.partNumber;
+                string tmpFileName = "." + localFileName + ".cosresumable." + downloadedSlice.partNumber;
                 lock (this.tmpFilePaths) 
                 {
-                    this.tmpFilePaths.Add(tmpFileName); 
+                    this.tmpFilePaths.Add(localDir+tmpFileName); 
                 }
                 GetObjectRequest subGetObjectRequest = new GetObjectRequest(bucket, key, localDir, tmpFileName);
                 subGetObjectRequest.SetRange(downloadedSlice.sliceStart, downloadedSlice.sliceEnd); 
