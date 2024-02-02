@@ -87,14 +87,19 @@ namespace Process
                 }
                 catch (COSXML.CosException.CosClientException clientEx)
                 {
+                    //请求失败
                     Console.WriteLine("CosClientException: " + clientEx);
                 }
                 catch (COSXML.CosException.CosServerException serverEx)
                 {
+                    //请求失败
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
             }
 
+            /// <summary>
+            /// 初始化CosXml
+            /// </summary>
             public void InitCosXml()
             {
                 region = Environment.GetEnvironmentVariable("COS_REGION");
@@ -118,6 +123,9 @@ namespace Process
                 cosXml = new CosXmlServer(config, qCloudCredentialProvider);
             }
             
+            /// <summary>
+            /// 设置环境变量
+            /// </summary>
             public void SetEnvironmentVariable()
             {
                 Environment.SetEnvironmentVariable("COS_REGION", "");//need
