@@ -29,12 +29,10 @@ namespace Process
             //永久密钥
             string secretId = "";
             string secretKey = "";
-            string uin = "";
-            string appid = "";
             string region = "";
-            private string localPath = "";
-
-
+            private string localPath = "./";
+            string bucket = "";//need
+            
             long DurationSecond = 24 * 60 * 60;
 
             static void Main(string[] args)
@@ -47,20 +45,19 @@ namespace Process
 
             public void DoSomething()
             {
-                Dictionary<int, string> map = new Dictionary<int, string>();
-                // map[0] = "cos-access-log/2023/08/08/202308081720_4cf3c3e7-a872-4435-a82c-9b83f36f8cc8_000";
-                map[0] = "wewe/Test";
-                map[1] = "tmp.zip";
-                
+                Dictionary<string, string> map = new Dictionary<string, string>();
+                map["wewew"] = "hadn.zip";
                 foreach (var cospath in map)
                 {
-                    TransferDownloadObject( cospath.Value, "ssdsds"+cospath.Value).Wait();
+                    TransferDownloadObject( cospath.Value, cospath.Key).Wait();
                 }
             }
             
 
             /// 高级接口下载对象
-            public async Task TransferDownloadObject(string cosPathvar, string localFileNamevar)
+            /// cosPath 对象在存储桶中的位置标识符，即称对象键
+            /// localFileName 指定本地保存的文件名
+            public async Task TransferDownloadObject(string cosPath, string localFileName)
             {
                 // 初始化 TransferConfig
                 TransferConfig transferConfig = new TransferConfig();
@@ -74,9 +71,6 @@ namespace Process
                 // 初始化 TransferManager
                 TransferManager transferManager = new TransferManager(cosXml, transferConfig);
                 
-                String cosPath = "hadn.zip"; //对象在存储桶中的位置标识符，即称对象键======
-                
-                string localFileName = "wewew" ; //指定本地保存的文件名 done
                 // 下载对象
                 COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(bucket, cosPath, localPath, localFileName);
                 // 手动设置高级下载接口的并发数 (默认为5), 从5.4.26版本开始支持！
@@ -93,20 +87,16 @@ namespace Process
                 }
                 catch (COSXML.CosException.CosClientException clientEx)
                 {
-                    //请求失败
                     Console.WriteLine("CosClientException: " + clientEx);
                 }
                 catch (COSXML.CosException.CosServerException serverEx)
                 {
-                    //请求失败
                     Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 }
             }
 
             public void InitCosXml()
             {
-                uin = Environment.GetEnvironmentVariable("UIN");
-                appid = Environment.GetEnvironmentVariable("APPID");
                 region = Environment.GetEnvironmentVariable("COS_REGION");
                 secretId = Environment.GetEnvironmentVariable("SECRET_ID");
                 secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
@@ -130,11 +120,9 @@ namespace Process
             
             public void SetEnvironmentVariable()
             {
-                Environment.SetEnvironmentVariable("UIN", "");
-                Environment.SetEnvironmentVariable("APPID", "");
-                Environment.SetEnvironmentVariable("COS_REGION", "ap-guangzhou");
-                Environment.SetEnvironmentVariable("SECRET_ID", "");
-                Environment.SetEnvironmentVariable("SECRET_KEY", "");
+                Environment.SetEnvironmentVariable("COS_REGION", "");//need
+                Environment.SetEnvironmentVariable("SECRET_ID", "");//need
+                Environment.SetEnvironmentVariable("SECRET_KEY", "");//need
             }
 
         }
