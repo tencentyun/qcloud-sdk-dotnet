@@ -212,6 +212,7 @@ namespace COSXML.Model.Object
                         "stream offset + contentLength greater than stream.Length");
                 }
                 body = new StreamRequestBody(stream, fileOffset, contentLength);
+                body.ProgressCallback = progressCallback;
             }
 
             return body;
