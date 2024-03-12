@@ -345,7 +345,8 @@ namespace COSXML.Model
                 "response-content-type",
                 "response-expires",
                 "transfer-encoding",
-                "versionid"
+                "versionid",
+                "pic-operations"
             });
 
             foreach (KeyValuePair<string, string> pair in headers)
