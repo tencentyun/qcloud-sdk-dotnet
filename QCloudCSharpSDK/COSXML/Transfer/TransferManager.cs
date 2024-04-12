@@ -76,7 +76,14 @@ namespace COSXML.Transfer
             downloader.InitCosXmlServer(cosXml);
             downloader.SetSliceSize(transferConfig.SliceSizeForDownload);
             downloader.SetDivisionSize(transferConfig.DivisionForDownload);
-            downloader.Download();
+            if (transferConfig.ByNewFunc)
+            {
+                downloader.DownloadNew();
+            }
+            else
+            {
+                downloader.Download();
+            }
         }
 
         /// <summary>
@@ -139,6 +146,19 @@ namespace COSXML.Transfer
         // 10M
         private long sliceSizeForDownload = 10485760;
 
+
+        //采取那种方式下载
+        private bool byNewFunc = false;
+
+        public bool ByNewFunc
+        {
+            get
+            {
+                return byNewFunc;
+            }
+            set { byNewFunc = value; }
+        }
+        
         /// <summary>
         /// 多大的文件会自动使用分片拷贝
         /// </summary>

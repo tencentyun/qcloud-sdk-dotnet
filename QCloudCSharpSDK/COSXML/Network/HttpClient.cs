@@ -145,9 +145,13 @@ namespace COSXML.Network
             }
             catch (CosServerException serverException)
             {
-                // 服务端5xx才重试
-                if (serverException.statusCode >= 500 && retryIndex < MaxRetry)
+                // webCode >= 300
+                if (retryIndex < MaxRetry && serverException.statusCode >= 300)
                 {
+                    if (serverException.requestId == String.Empty)
+                    {
+                        cosRequest.changeDefaultDomain = true;
+                    }
                     InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
                 }
                 else
@@ -157,7 +161,7 @@ namespace COSXML.Network
             }
             catch (CosClientException)
             {
-                // 客户端异常都重试
+                // 客户端异常都重试，如本地文件path写错则报警
                 if (retryIndex < MaxRetry)
                 {
                     InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
@@ -170,9 +174,17 @@ namespace COSXML.Network
             }
             catch (Exception ex)
             {
-                // 未知异常也重试
-                if (retryIndex < MaxRetry)
+                if (retryIndex < MaxRetry)//请求超时或者其它异常
                 {
+                    bool isOperationTimeOu = ex.ToString().Contains("The operation has timed out");
+                    if (isOperationTimeOu)
+                    {
+                        cosRequest.operationTimeOutRetry = true;
+                    } 
+                    else 
+                    {
+                        cosRequest.changeDefaultDomain = true;
+                    }
                     InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
                 }
                 else
@@ -204,7 +216,7 @@ namespace COSXML.Network
         //     }
         // }
 
-        public void InternalSchedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback, QCloudCredentialProvider credentialProvider)
+        public void InternalSchedue(CosRequest cosRequest, CosResult cosResult, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback, QCloudCredentialProvider credentialProvider, int retryIndex = 0)
         {
 
             try
@@ -230,7 +242,7 @@ namespace COSXML.Network
             }
             catch (CosServerException serverException)
             {
-                //throw serverException;
+                //throw clientException;
                 failCallback(null, serverException);
             }
             catch (CosClientException clientException)
@@ -416,7 +428,6 @@ namespace COSXML.Network
                 cosResult.httpMessage = Message;
                 cosResult.responseHeaders = Headers;
                 cosResult.InternalParseResponseHeaders();
-
                 if (Code >= 300)
                 {
                     this.Body.ParseStream = PaserServerError;
@@ -431,9 +442,10 @@ namespace COSXML.Network
             {
                 CosServerException cosServerException = new CosServerException(cosResult.httpCode, cosResult.httpMessage);
                 List<string> values;
-
+                
                 Headers.TryGetValue("x-cos-request-id", out values);
                 cosServerException.requestId = (values != null && values.Count > 0) ? values[0] : null;
+                
                 Headers.TryGetValue("x-cos-trace-id", out values);
                 cosServerException.traceId = (values != null && values.Count > 0) ? values[0] : null;
 
@@ -452,7 +464,6 @@ namespace COSXML.Network
 
                     }
                 }
-
                 throw cosServerException;
             }
 

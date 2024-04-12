@@ -56,6 +56,12 @@ namespace COSXML.Model
         /// </summary>
         protected bool needMD5 = true;
 
+        public bool userKeepDefaultDomain = false;
+
+        public bool changeDefaultDomain = false;
+
+        public bool operationTimeOutRetry = false;
+
         /// <summary>
         /// 请求预签名URL
         /// </summary>
@@ -339,7 +345,8 @@ namespace COSXML.Model
                 "response-content-type",
                 "response-expires",
                 "transfer-encoding",
-                "versionid"
+                "versionid",
+                "pic-operations"
             });
 
             foreach (KeyValuePair<string, string> pair in headers)

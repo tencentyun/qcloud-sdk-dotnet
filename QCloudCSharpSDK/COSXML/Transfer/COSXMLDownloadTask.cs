@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using COSXML.Model.Object;
 using COSXML.Utils;
 using COSXML.Model;
 using System.IO;
+using System.Linq;
 using COSXML.Log;
 using COSXML.CosException;
 using System.Xml.Serialization;
 using COSXML.Common;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace COSXML.Transfer
 {
@@ -192,6 +195,21 @@ namespace COSXML.Transfer
             }
         }
 
+        //重写原来的方法，里面通过使用同步接口多线程下载
+        internal void DownloadNew()
+        {
+            //获取文件的元信息
+            headObjectRequest = new HeadObjectRequest(bucket, key);
+            CosResult cosResult = cosXmlServer.HeadObject(headObjectRequest);
+            HeadObjectResult result = cosResult as HeadObjectResult;
+            //分片
+            ComputeSliceList(result);
+            //多线程下载
+            DownloadFileBySyncGetObjectFunc(result.crc64ecma, result.size);
+        }
+        
+        
+        //流式数据进行下载
         internal void Download()
         {
             UpdateTaskState(TaskState.Waiting);
@@ -332,6 +350,163 @@ namespace COSXML.Transfer
             }
         }
 
+        /// <summary>
+        /// 多线程下载文件
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        private void MutisThreadsGetObject(long contentLength)
+        {
+            //将文件下载到cos-path的相对路径
+            DirectoryInfo dirInfo = new DirectoryInfo(localDir);
+            if (!dirInfo.Exists)
+            {
+                dirInfo.Create();
+            }
+            //缓存文件放在当前路径
+            ParallelOptions options = new ParallelOptions {
+                MaxDegreeOfParallelism = maxTasks
+            };
+            long completeLength = 0;
+            Parallel.ForEach(sliceList.Values, options, downloadedSlice =>
+            {
+                string tmpFileName = "." + localFileName + ".cosresumable." + downloadedSlice.partNumber;
+                lock (this.tmpFilePaths) 
+                {
+                    this.tmpFilePaths.Add(localDir+tmpFileName); 
+                }
+                GetObjectRequest subGetObjectRequest = new GetObjectRequest(bucket, key, localDir, tmpFileName);
+                subGetObjectRequest.SetRange(downloadedSlice.sliceStart, downloadedSlice.sliceEnd); 
+                getObjectResultToShow = cosXmlServer.GetObject(subGetObjectRequest);
+                completeLength += downloadedSlice.sliceEnd - downloadedSlice.sliceStart;
+                if (progressCallback != null && contentLength >= 0) {
+                    progressCallback(completeLength, contentLength);
+                }
+            });
+        }
+        
+        public GetObjectResult getObjectResultToShow;
+        private void DownloadFileBySyncGetObjectFunc(string crc64ecma, long contentLength)
+        {
+            try
+            {
+                //下载文件
+                MutisThreadsGetObject(contentLength);
+                //组装文件
+                MergeAllSliceAndCheckFile(crc64ecma);
+                //删除多余的隐藏的缓存文件
+                DeleteTmpFile(false);
+            }
+            catch (Exception e)
+            {
+                //销毁缓存文件，包含其中已经创建的最终文件
+                DeleteTmpFile(true);
+                throw;
+            }
+            //返回客户端信息，展示requestId等信息性
+            if (getObjectResultToShow == null)
+            {
+                getObjectResultToShow = new GetObjectResult();
+            }
+            DownloadTaskResult downloadTaskResult = new DownloadTaskResult();
+            downloadTaskResult.SetResult(getObjectResultToShow);
+            if (successCallback != null) {
+                successCallback(downloadTaskResult);
+            }
+        }
+        
+        /// <summary>
+        /// 获取当前占用系统内存大小
+        /// </summary>
+        public void getMemorySize()
+        {
+            Process currentProcess = Process.GetCurrentProcess();
+            // 获取当前进程占用的内存大小（以字节为单位）
+            long memorySize = currentProcess.WorkingSet64;
+            // 将字节转换为兆字节（MB）
+            double memorySizeInMB = (double)memorySize / (1024 * 1024);
+            Console.WriteLine("内存大小是:" + memorySizeInMB + "MB");
+        }
+
+        public void DeleteTmpFile(bool hasException)
+        {
+            List<string> tmpFileList = new List<string>(this.tmpFilePaths);
+            foreach (var inputFilePath in tmpFileList)
+            {
+                System.IO.File.Delete(inputFilePath);
+            }
+            if (hasException && File.Exists(localDir + localFileName))
+            {
+                System.IO.File.Delete(localDir + localFileName);
+            }
+        }
+
+
+        public void MergeAllSliceAndCheckFile(string crc64ecma)
+        {
+            FileMode fileMode = FileMode.OpenOrCreate;
+            FileInfo localFileInfo = new FileInfo(localDir + localFileName);
+            if (localFileInfo.Exists && localFileOffset == 0 && localFileInfo.Length != rangeEnd - rangeStart + 1)
+            {
+                fileMode = FileMode.Truncate;
+            }
+            
+            using (var outputStream = File.Open(localDir + localFileName, fileMode))
+            {
+                outputStream.Seek(localFileOffset, 0);
+                List<string> tmpFileList = new List<string>(this.tmpFilePaths);
+                
+                tmpFileList.Sort(delegate(string x, string y)
+                {
+                    int partNumber1 = int.Parse(x.Split(new string[] { "cosresumable." }, StringSplitOptions.None)[1]);
+                    int partNumber2 = int.Parse(y.Split(new string[] { "cosresumable." }, StringSplitOptions.None)[1]);
+                    return partNumber1 - partNumber2;
+                });
+                
+                // 检查文件是否皆存在
+                foreach (var inputFilePath in tmpFileList)
+                {
+                    if (!File.Exists(inputFilePath))
+                    {
+                        string msg = "local tmp file not exist, could be concurrent writing same file" + inputFilePath +
+                                     " download again";
+                        COSXML.CosException.CosClientException clientEx = new COSXML.CosException.CosClientException((int)CosClientError.InternalError, msg );
+                        throw clientEx;
+                    }
+                }
+                //开始文件合并
+                foreach (var inputFilePath in tmpFileList)
+                {
+                    using (var inputStream = File.OpenRead(inputFilePath))
+                    {
+                        FileInfo info = new FileInfo(inputFilePath);
+                        inputStream.CopyTo(outputStream);
+                    }
+                }
+                outputStream.Close();
+                
+                // 合并完成后，默认进行文件大小的检查
+                FileInfo completedFileInfo = new FileInfo(localDir + localFileName);
+                if (completedFileInfo.Length != rangeEnd - rangeStart + 1)
+                {
+                    string msg = "local File Length " + completedFileInfo.Length + " does not equals to applied download length " + (rangeEnd - rangeStart + 1) + ", try again";
+                    COSXML.CosException.CosClientException clientEx = new COSXML.CosException.CosClientException((int)CosClientError.InternalError, msg);
+                    throw clientEx;
+                }
+                
+                // 按需进行CRC64的检查
+                if (enableCrc64Check)
+                {
+                    if (!CompareCrc64(localDir + localFileName, crc64ecma))
+                    {
+                        COSXML.CosException.CosClientException clientEx = new COSXML.CosException.CosClientException
+                        ((int)CosClientError.CRC64ecmaCheckFailed, "local File Crc64 does not equals to crc64ecma on cos, try download again");
+                        throw clientEx;
+                    }
+                }
+            }
+        }
+        
+        
         // 发起多线程下载
         private void ConcurrentGetObject(string crc64ecma)
         {
