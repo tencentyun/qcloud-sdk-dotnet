@@ -315,6 +315,9 @@ namespace COSXMLTests
                 Assert.NotNull(result.eTag);
                 Assert.True(COSXML.Utils.Crc64.CompareCrc64(copySourceFilePath, result.crc64ecma));
 
+                string fileCrc = COSXML.Utils.Crc64.GetFileCrc64(copySourceFilePath);
+                Assert.AreEqual(fileCrc, result.crc64ecma);
+
                 //Put Copy 测试的大 Source Object
                 request = new PutObjectRequest(bucket, bigCopyKey, bigCopySourceFilePath);
                 result = cosXml.PutObject(request);
@@ -1603,6 +1606,30 @@ namespace COSXMLTests
 
         }
 
+        [Test()]
+        public async Task TestNewMultiDownloadTask()
+        {
+            GetObjectRequest request = new GetObjectRequest(bucket, commonKey, localDir, localFileName);
+            request.LimitTraffic(8 * 1024 * 1024);
+            //执行请求
+            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
+            
+            TransferConfig transferConfig = new TransferConfig();
+            // 手动设置开始分块上传的大小阈值为10MB，默认值为5MB
+            transferConfig.DivisionForUpload = 1 * 1024 * 1024;
+            // 手动设置分块上传中每个分块的大小为2MB，默认值为1MB
+            transferConfig.SliceSizeForUpload = 1 * 1024 * 1024;
+            
+            transferConfig.ByNewFunc = true; // 特殊
+            
+            // 初始化 TransferManager
+            TransferManager transferManagerVar = new TransferManager(cosXml, transferConfig);
+            COSXMLDownloadTask.DownloadTaskResult result = await transferManagerVar.DownloadAsync(downloadTask);
+            Assert.True(result.httpCode == 200 || result.httpCode == 206);
+            Assert.NotNull(result.eTag);
+        }
+
+        
 
         [Test()]
         public async Task TestDownloadTaskRanged()

@@ -683,6 +683,9 @@ namespace COSXML.Transfer
         {
             int count = (int)(sendContentLength / sliceSize);
 
+            if (count >= 10000) {
+                throw new CosClientException((int)CosClientError.UserCancelled, "分块传输设置的分片太小导致分片超过10000，请调大分片大小");
+            }
             sliceList = new List<SliceStruct>(count > 0 ? count : 1);
             // partNumber >= 1
             // partNumber >= 1
