@@ -22,5 +22,13 @@ namespace COSXML.Utils.Tests
         {
 
         }
+        
+
+        [Test()]
+        public void getMermSizeTest()
+        {
+            SystemUtils.getMemorySize();
+        }
     }
+    
 }
