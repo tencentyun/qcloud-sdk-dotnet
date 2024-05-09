@@ -10,6 +10,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -1519,28 +1520,37 @@ namespace COSXMLTests
         [Test()]
         public async Task TestNewSpecialMultiDownloadTask()
         {
-            GetObjectRequest request = new GetObjectRequest(bucket, multiKey, localDir, localFileName);
+            DateTime currentTime = DateTime.Now;
+            long timestamp = currentTime.Ticks;
+
+            string localFileNameTim = localFileName + timestamp;
+            GetObjectRequest request = new GetObjectRequest(bucket, multiKey, localDir, localFileNameTim);
             request.LimitTraffic(8 * 1024 * 1024);
             //执行请求
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
             TransferConfig transferConfig = new TransferConfig();
             // 手动设置开始分块上传的大小阈值为10MB，默认值为5MB
-            transferConfig.DivisionForUpload = 1 * 1024 * 1024;
+            transferConfig.DivisionForUpload = 2 * 1024 * 1024;
             // 手动设置分块上传中每个分块的大小为2MB，默认值为1MB
-            transferConfig.SliceSizeForUpload = 1 * 1024 * 1024;
+            transferConfig.SliceSizeForUpload = 2 * 1024 * 1024;
             
             transferConfig.ByNewFunc = true; // 走特殊的下载路径下载
 
+            //是否能进该判断，文件是否够大
             try
             {
-                downloadTask.SetSingleTaskTimeoutMs(3);
+                downloadTask.SetSingleTaskTimeoutMs(2);
                 TransferManager transfe = new TransferManager(cosXml, transferConfig);
-                await transfe.DownloadAsync(downloadTask); //超时删除逻辑
+                COSXMLDownloadTask.DownloadTaskResult rest = await transfe.DownloadAsync(downloadTask); //超时删除逻辑
             }
             catch (Exception e)
             {
+                Assert.True(!Directory.Exists(localDir));
+                string searchPattern = localFileNameTim;
+                string[] files = Directory.GetFiles(localDir);
+                string[] filsAr = files.Where(file => Path.GetFileName(file).Contains(searchPattern)).ToArray();
+                Assert.True(filsAr.Length == 0);
             }
-            
             
             downloadTask.SetSingleTaskTimeoutMs(3000);
             // 初始化 TransferManager
@@ -1548,12 +1558,6 @@ namespace COSXMLTests
             COSXMLDownloadTask.DownloadTaskResult result = await transferManagerVar.DownloadAsync(downloadTask);
             Assert.True(result.httpCode == 200 || result.httpCode == 206);
             Assert.NotNull(result.eTag);
-            
-            
-            
-         
-            
-            
         }
         
         [Test()]
