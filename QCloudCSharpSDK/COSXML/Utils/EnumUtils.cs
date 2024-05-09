@@ -9,13 +9,6 @@ namespace COSXML.Utils
     {
         public static string GetValue(Enum value)
         {
-
-            if (value == null)
-            {
-
-                return null;
-            }
-
             string name = value.ToString();
 
             var fieldInfo = value.GetType().GetField(name);
