@@ -15,12 +15,19 @@ namespace COSXML.Utils.Tests
             long hours = TimeUtils.GetCurrentTime(TimeUnit.Hours);
             long minutes = TimeUtils.GetCurrentTime(TimeUnit.Minutes);
             long seconds = TimeUtils.GetCurrentTime(TimeUnit.Seconds);
+            long milliseconds = TimeUtils.GetCurrentTime(TimeUnit.Milliseconds);
+            
+            
         }
 
         [Test()]
         public void GetFormatTimeTest()
         {
-
+            long time = 10;
+            TimeUtils.GetFormatTime("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", time, TimeUnit.Days);
+            TimeUtils.GetFormatTime("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", time, TimeUnit.Hours);
+            TimeUtils.GetFormatTime("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", time, TimeUnit.Minutes);
+            TimeUtils.GetFormatTime("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", time, TimeUnit.Seconds);
         }
         
 
