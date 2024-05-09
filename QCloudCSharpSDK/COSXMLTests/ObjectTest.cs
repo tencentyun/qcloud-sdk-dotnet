@@ -1189,7 +1189,21 @@ namespace COSXMLTests
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 Assert.Fail();
             }
-
+            
+            
+            //特殊路径的判断
+            try
+            {
+                string specialPath = "/././///abc/.//def//../../";
+                GetObjectRequest request = new GetObjectRequest(bucket, "", localDir, localFileName);
+                request.SetObjectKeySimplifyCheck(true);
+                GetObjectResult result = cosXml.GetObject(request);
+                Assert.Fail();//应该在上面异常退出，走到此则错误
+            }
+            catch (CosClientException clientEx)
+            {
+                ;
+            }
         }
 
         [Test()]
