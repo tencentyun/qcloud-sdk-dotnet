@@ -933,6 +933,12 @@ namespace COSXMLTests
                 Assert.Fail();
             }
         }
+        
+        
+        
+        //copy一半后，然后再将使用断点续传
+        
+        
 
         [Test()]
         public void RestoreObject()
@@ -1189,13 +1195,16 @@ namespace COSXMLTests
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 Assert.Fail();
             }
-            
-            
+        }
+
+        [Test()]
+        public void TestGetObjectMergePath()
+        {
             //特殊路径的判断
             try
             {
                 string specialPath = "/././///abc/.//def//../../";
-                GetObjectRequest request = new GetObjectRequest(bucket, "", localDir, localFileName);
+                GetObjectRequest request = new GetObjectRequest(bucket, specialPath, localDir, localFileName);
                 request.SetObjectKeySimplifyCheck(true);
                 GetObjectResult result = cosXml.GetObject(request);
                 Assert.Fail();//应该在上面异常退出，走到此则错误
@@ -1702,6 +1711,22 @@ namespace COSXMLTests
             Assert.NotNull(result.eTag);
 
         }
+        
+        [Test()]
+        public async Task TestDownloadTaskConstruct()
+        {
+            DateTime currentTime = DateTime.Now;
+            long timestamp = currentTime.Ticks;
+            //执行请求
+            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(bucket, commonKey, localDir, localFileName+timestamp);
+
+            COSXMLDownloadTask.DownloadTaskResult result = await transferManager.DownloadAsync(downloadTask);
+            Assert.True(result.GetResultInfo().Length != 0);
+            
+            Assert.True(result.httpCode == 200 || result.httpCode == 206);
+            Assert.NotNull(result.eTag);
+        }
+        
 
         
 

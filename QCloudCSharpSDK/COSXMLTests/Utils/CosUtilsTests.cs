@@ -37,8 +37,6 @@ namespace COSXML.Utils.Tests{
             QLog.Info("Test", "LogTestInfo", new Exception("Test"));
             QLog.Info("Test", "LogTestInfo");
         }
-        
-        
     }
     
     
