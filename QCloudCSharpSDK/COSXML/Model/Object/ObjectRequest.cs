@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Diagnostics;
 using System.Text;
 using COSXML.CosException;
 using COSXML.Common;
@@ -26,7 +26,15 @@ namespace COSXML.Model.Object
         /// 对象键
         /// </summary>
         protected string key;
+        
 
+        protected bool ObjectKeySimplifyCheck = true;
+
+        public void SetObjectKeySimplifyCheck(bool objectKeySimplifyCheck)
+        {
+            ObjectKeySimplifyCheck = objectKeySimplifyCheck;
+        }
+        
         public ObjectRequest(string bucket, string key)
         {
             this.bucket = bucket;

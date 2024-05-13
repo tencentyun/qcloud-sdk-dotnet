@@ -10,6 +10,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -932,6 +933,12 @@ namespace COSXMLTests
                 Assert.Fail();
             }
         }
+        
+        
+        
+        //copy一半后，然后再将使用断点续传
+        
+        
 
         [Test()]
         public void RestoreObject()
@@ -1188,7 +1195,24 @@ namespace COSXMLTests
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
                 Assert.Fail();
             }
+        }
 
+        [Test()]
+        public void TestGetObjectMergePath()
+        {
+            //特殊路径的判断
+            try
+            {
+                string specialPath = "/././///abc/.//def//../../";
+                GetObjectRequest request = new GetObjectRequest(bucket, specialPath, localDir, localFileName);
+                request.SetObjectKeySimplifyCheck(true);
+                GetObjectResult result = cosXml.GetObject(request);
+                Assert.Fail();//应该在上面异常退出，走到此则错误
+            }
+            catch (CosClientException clientEx)
+            {
+                ;
+            }
         }
 
         [Test()]
@@ -1478,6 +1502,88 @@ namespace COSXMLTests
         }
 
         [Test()]
+        public async Task TestUploadTaskWithBigFileResumable()
+        {
+            string key = multiKey;
+            
+            PutObjectRequest request = new PutObjectRequest(bucket, key, bigFileSrcPath);
+
+            request.SetRequestHeader("Content-Type", "image/png");
+
+            COSXMLUploadTask uploadTask = new COSXMLUploadTask(request);
+            
+            uploadTask.UseResumableUpload = true;
+            
+            uploadTask.SetSrcPath(bigFileSrcPath);
+            uploadTask.progressCallback = delegate (long completed, long total)
+            {
+                // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+            };
+            
+            try
+            {
+                //分片超过10000
+                TransferConfig transferConfigTest = new TransferConfig();
+                // 手动设置开始分块上传的大小阈值为10MB，默认值为5MB
+                transferConfigTest.DivisionForUpload = 1;
+                // 手动设置分块上传中每个分块的大小为2MB，默认值为1MB
+                transferConfigTest.SliceSizeForUpload = 1;
+                // 初始化 TransferManager
+                TransferManager transferM = new TransferManager(cosXml, transferConfigTest);
+                COSXMLUploadTask.UploadTaskResult rest = await transferM.UploadAsync(uploadTask);
+            } catch {
+                ;
+            }
+            
+            COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
+            Assert.AreEqual(result.httpCode, 200);
+            Assert.NotNull(result.eTag);
+        }
+        
+        [Test()]
+        public async Task TestNewSpecialMultiDownloadTask()
+        {
+            DateTime currentTime = DateTime.Now;
+            long timestamp = currentTime.Ticks;
+
+            string localFileNameTim = localFileName + timestamp;
+            GetObjectRequest request = new GetObjectRequest(bucket, multiKey, localDir, localFileNameTim);
+            request.LimitTraffic(8 * 1024 * 1024);
+            //执行请求
+            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
+            TransferConfig transferConfig = new TransferConfig();
+            // 手动设置开始分块上传的大小阈值为10MB，默认值为5MB
+            transferConfig.DivisionForUpload = 2 * 1024 * 1024;
+            // 手动设置分块上传中每个分块的大小为2MB，默认值为1MB
+            transferConfig.SliceSizeForUpload = 2 * 1024 * 1024;
+            
+            transferConfig.ByNewFunc = true; // 走特殊的下载路径下载
+
+            //是否能进该判断，文件是否够大
+            try
+            {
+                downloadTask.SetSingleTaskTimeoutMs(2);
+                TransferManager transfe = new TransferManager(cosXml, transferConfig);
+                COSXMLDownloadTask.DownloadTaskResult rest = await transfe.DownloadAsync(downloadTask); //超时删除逻辑
+            }
+            catch (Exception e)
+            {
+                Assert.True(!Directory.Exists(localDir));
+                string searchPattern = localFileNameTim;
+                string[] files = Directory.GetFiles(localDir);
+                string[] filsAr = files.Where(file => Path.GetFileName(file).Contains(searchPattern)).ToArray();
+                Assert.True(filsAr.Length == 0);
+            }
+            
+            downloadTask.SetSingleTaskTimeoutMs(3000);
+            // 初始化 TransferManager
+            TransferManager transferManagerVar = new TransferManager(cosXml, transferConfig);
+            COSXMLDownloadTask.DownloadTaskResult result = await transferManagerVar.DownloadAsync(downloadTask);
+            Assert.True(result.httpCode == 200 || result.httpCode == 206);
+            Assert.NotNull(result.eTag);
+        }
+        
+        [Test()]
         public async Task TestUploadTaskWithSmallFile()
         {
             string key = commonKey;
@@ -1605,29 +1711,22 @@ namespace COSXMLTests
             Assert.NotNull(result.eTag);
 
         }
-
+        
         [Test()]
-        public async Task TestNewMultiDownloadTask()
+        public async Task TestDownloadTaskConstruct()
         {
-            GetObjectRequest request = new GetObjectRequest(bucket, commonKey, localDir, localFileName);
-            request.LimitTraffic(8 * 1024 * 1024);
+            DateTime currentTime = DateTime.Now;
+            long timestamp = currentTime.Ticks;
             //执行请求
-            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
+            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(bucket, commonKey, localDir, localFileName+timestamp);
+
+            COSXMLDownloadTask.DownloadTaskResult result = await transferManager.DownloadAsync(downloadTask);
+            Assert.True(result.GetResultInfo().Length != 0);
             
-            TransferConfig transferConfig = new TransferConfig();
-            // 手动设置开始分块上传的大小阈值为10MB，默认值为5MB
-            transferConfig.DivisionForUpload = 1 * 1024 * 1024;
-            // 手动设置分块上传中每个分块的大小为2MB，默认值为1MB
-            transferConfig.SliceSizeForUpload = 1 * 1024 * 1024;
-            
-            transferConfig.ByNewFunc = true; // 特殊
-            
-            // 初始化 TransferManager
-            TransferManager transferManagerVar = new TransferManager(cosXml, transferConfig);
-            COSXMLDownloadTask.DownloadTaskResult result = await transferManagerVar.DownloadAsync(downloadTask);
             Assert.True(result.httpCode == 200 || result.httpCode == 206);
             Assert.NotNull(result.eTag);
         }
+        
 
         
 

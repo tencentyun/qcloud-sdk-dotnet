@@ -159,10 +159,10 @@ namespace COSXML.Network
                     throw;
                 }
             }
-            catch (CosClientException)
+            catch (CosClientException ex)
             {
                 // 客户端异常都重试，如本地文件path写错则报警
-                if (retryIndex < MaxRetry)
+                if (retryIndex < MaxRetry && ex.errorCode != (int)CosClientError.InvalidArgument)
                 {
                     InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
                 }
