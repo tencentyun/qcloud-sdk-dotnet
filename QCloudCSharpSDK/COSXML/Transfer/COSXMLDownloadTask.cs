@@ -59,12 +59,9 @@ namespace COSXML.Transfer
         public COSXMLDownloadTask(string bucket, string key, string localDir, string localFileName)
             : base(bucket, key)
         {
-            if (localDir.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString(), StringComparison.OrdinalIgnoreCase))
-            {
+            if (localDir.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString(), StringComparison.OrdinalIgnoreCase)) {
                 this.localDir = localDir;
-            }
-            else
-            {
+            } else {
                 this.localDir = localDir + System.IO.Path.DirectorySeparatorChar;
             }
             this.localFileName = localFileName;
@@ -74,12 +71,9 @@ namespace COSXML.Transfer
             : base(request.Bucket, request.Key)
         {
             this.getObjectRequest = request;
-            if (request.localDir.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString(), StringComparison.OrdinalIgnoreCase))
-            {
+            if (request.localDir.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString(), StringComparison.OrdinalIgnoreCase)) {
                 this.localDir = request.localDir;
-            }
-            else
-            {
+            } else {
                 this.localDir = request.localDir + System.IO.Path.DirectorySeparatorChar;
             }
             this.localFileName = request.localFileName;
@@ -683,14 +677,6 @@ namespace COSXML.Transfer
                 COSXML.CosException.CosClientException clientEx = new COSXML.CosException.CosClientException
                     ((int)CosClientError.InternalError, "max retries " + retries + " excceed, download fail");
                 throw clientEx;
-                if (UpdateTaskState(TaskState.Failed))
-                {
-                    if (failCallback != null)
-                    {
-                        failCallback(clientEx, null);
-                    }
-                }
-                return;
             }
             // 预期每个分块都下载完成了, 开始顺序合并
             FileMode fileMode = FileMode.OpenOrCreate;
@@ -746,11 +732,6 @@ namespace COSXML.Transfer
                             ((int)CosClientError.InternalError, "local tmp file not exist, could be concurrent writing same file"
                             + inputFilePath +" download again");
                         throw clientEx;
-                        if (failCallback != null)
-                        {
-                            failCallback(clientEx, null);
-                        }
-                        break;
                     }
                     using (var inputStream = File.OpenRead(inputFilePath))
                     {
@@ -768,14 +749,6 @@ namespace COSXML.Transfer
                         ((int)CosClientError.InternalError, "local File Length " + completedFileInfo.Length + 
                         " does not equals to applied download length " + (rangeEnd - rangeStart + 1) + ", try again");
                     throw clientEx;
-                    if (UpdateTaskState(TaskState.Failed))
-                    {
-                        if (failCallback != null)
-                        {
-                            failCallback(clientEx, null);
-                        }
-                    }
-                    return;
                 }
                 // 按需进行CRC64的检查
                 if (enableCrc64Check) {
@@ -784,14 +757,6 @@ namespace COSXML.Transfer
                         ((int)CosClientError.CRC64ecmaCheckFailed, "local File Crc64 " + 
                         " does not equals to crc64ecma on cos, try download again");
                         throw clientEx;
-                        if (UpdateTaskState(TaskState.Failed))
-                        {
-                            if (failCallback != null)
-                            {
-                                failCallback(clientEx, null);
-                            }
-                        }
-                        return;
                     }
                 }
                 if (UpdateTaskState(TaskState.Completed))
