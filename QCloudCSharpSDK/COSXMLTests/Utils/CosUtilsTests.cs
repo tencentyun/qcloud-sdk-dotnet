@@ -2,6 +2,8 @@ using System;
 using System.Collections.Concurrent;
 using COSXML.CosException;
 using COSXML.Log;
+using COSXML.Model.Tag;
+using COSXML.Transfer;
 using NUnit.Framework;
 
 
@@ -16,7 +18,7 @@ namespace COSXML.Utils.Tests{
         public void StringTest()
         {
             try {
-                StringUtils.Compare("SD", "", true);
+                StringUtils.Compare("SD", null, true);
             }
             catch (CosClientException)
             {
@@ -24,6 +26,10 @@ namespace COSXML.Utils.Tests{
             StringUtils.Compare("SD", "SD", true);
             string path = StringUtils.MergePath("/asdf/../");
             Assert.AreEqual(path ,"/");
+
+            string PathNull=null;
+            Utils.URLEncodeUtils.EncodePathOfURL(PathNull);
+            Utils.URLEncodeUtils.Decode(PathNull);
         }
 
         [Test()]
@@ -36,6 +42,14 @@ namespace COSXML.Utils.Tests{
             QLog.Warn("Test", "LogTestWarn", new Exception("Test"));
             QLog.Info("Test", "LogTestInfo", new Exception("Test"));
             QLog.Info("Test", "LogTestInfo");
+        }
+
+
+        [Test()]
+        public void ExceptionTest()
+        {
+            CosServerError serverError = new CosServerError();
+            new CosServerException(1,"test", serverError);
         }
     }
     
