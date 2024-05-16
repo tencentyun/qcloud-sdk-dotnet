@@ -1597,6 +1597,7 @@ namespace COSXMLTests
             
             //执行请求
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
+            downloadTask.SetObjectKeySimplifyCheck(true);
             TransferConfig transferConfig = new TransferConfig();
             // 手动设置开始分块上传的大小阈值为10MB，默认值为5MB
             transferConfig.DivisionForUpload = 1 * 1024 * 1024;
@@ -1995,6 +1996,7 @@ namespace COSXMLTests
                 request = new GetObjectRequest(bucket, commonKey, localDir, localFileName);
                 
                 downloadTask = new COSXMLDownloadTask(request);
+                downloadTask.SetObjectKeySimplifyCheck(true);
                 downloadTask.SetEnableCRC64Check(true);
                 asyncTask = transferManager.DownloadAsync(downloadTask);
                 asyncTask.Wait();

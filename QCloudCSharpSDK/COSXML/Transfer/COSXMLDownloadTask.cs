@@ -53,6 +53,9 @@ namespace COSXML.Transfer
         private HashSet<string> tmpFilePaths = new HashSet<string>();
         private HashSet<int> sliceToRemove = null;
 
+        //路径合并
+        private bool ObjectKeySimplifyCheck = true;
+
         // global exception
         private COSXML.CosException.CosClientException gClientExp = null;
 
@@ -79,6 +82,11 @@ namespace COSXML.Transfer
             this.localFileName = request.localFileName;
         }
 
+        public void SetObjectKeySimplifyCheck(bool objVar)
+        {
+            this.ObjectKeySimplifyCheck = objVar;
+        }
+        
         public void SetRange(long rangeStart, long rangeEnd)
         {
             this.rangeStart = rangeStart;
@@ -369,6 +377,7 @@ namespace COSXML.Transfer
                     this.tmpFilePaths.Add(localDir+tmpFileName); 
                 }
                 GetObjectRequest subGetObjectRequest = new GetObjectRequest(bucket, key, localDir, tmpFileName);
+                subGetObjectRequest.SetObjectKeySimplifyCheck(ObjectKeySimplifyCheck);
                 subGetObjectRequest.SetRange(downloadedSlice.sliceStart, downloadedSlice.sliceEnd); 
                 getObjectResultToShow = cosXmlServer.GetObject(subGetObjectRequest);
                 completeLength += downloadedSlice.sliceEnd - downloadedSlice.sliceStart;
@@ -559,6 +568,7 @@ namespace COSXML.Transfer
                     tmpFilePaths.Add(localDir + tmpFileName);
                     subGetObjectRequest.SetRange(slice.sliceStart, slice.sliceEnd);
                     getObjectRequestsList.Add(subGetObjectRequest);
+                    subGetObjectRequest.SetObjectKeySimplifyCheck(ObjectKeySimplifyCheck);
                     // 计算出来只有一个分块, 而且不是Resume或重试剩的一个, 即不走并发下载, 用GetObject的进度回调给客户端
                     if (progressCallback != null && this.sliceList.Count == 1 && sliceToRemove.Count == 0)
                     {

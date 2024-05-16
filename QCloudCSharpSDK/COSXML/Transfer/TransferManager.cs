@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using COSXML.Common;
 using COSXML.Model;
 using COSXML.CosException;
+using COSXML.Utils;
 
 
 namespace COSXML.Transfer

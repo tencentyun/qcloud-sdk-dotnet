@@ -51,6 +51,11 @@ namespace COSXML.Utils.Tests{
             CosServerError serverError = new CosServerError();
             new CosServerException(1,"test", serverError);
         }
+
+        public void CrcTest()
+        {
+            Crc64.Combine(0,0,0);
+        }
     }
     
     
