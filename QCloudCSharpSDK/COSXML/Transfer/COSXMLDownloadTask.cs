@@ -53,18 +53,18 @@ namespace COSXML.Transfer
         private HashSet<string> tmpFilePaths = new HashSet<string>();
         private HashSet<int> sliceToRemove = null;
 
+        //路径合并
+        private bool ObjectKeySimplifyCheck = true;
+
         // global exception
         private COSXML.CosException.CosClientException gClientExp = null;
 
         public COSXMLDownloadTask(string bucket, string key, string localDir, string localFileName)
             : base(bucket, key)
         {
-            if (localDir.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString(), StringComparison.OrdinalIgnoreCase))
-            {
+            if (localDir.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString(), StringComparison.OrdinalIgnoreCase)) {
                 this.localDir = localDir;
-            }
-            else
-            {
+            } else {
                 this.localDir = localDir + System.IO.Path.DirectorySeparatorChar;
             }
             this.localFileName = localFileName;
@@ -74,17 +74,19 @@ namespace COSXML.Transfer
             : base(request.Bucket, request.Key)
         {
             this.getObjectRequest = request;
-            if (request.localDir.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString(), StringComparison.OrdinalIgnoreCase))
-            {
+            if (request.localDir.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString(), StringComparison.OrdinalIgnoreCase)) {
                 this.localDir = request.localDir;
-            }
-            else
-            {
+            } else {
                 this.localDir = request.localDir + System.IO.Path.DirectorySeparatorChar;
             }
             this.localFileName = request.localFileName;
         }
 
+        public void SetObjectKeySimplifyCheck(bool objVar)
+        {
+            this.ObjectKeySimplifyCheck = objVar;
+        }
+        
         public void SetRange(long rangeStart, long rangeEnd)
         {
             this.rangeStart = rangeStart;
@@ -375,6 +377,7 @@ namespace COSXML.Transfer
                     this.tmpFilePaths.Add(localDir+tmpFileName); 
                 }
                 GetObjectRequest subGetObjectRequest = new GetObjectRequest(bucket, key, localDir, tmpFileName);
+                subGetObjectRequest.SetObjectKeySimplifyCheck(ObjectKeySimplifyCheck);
                 subGetObjectRequest.SetRange(downloadedSlice.sliceStart, downloadedSlice.sliceEnd); 
                 getObjectResultToShow = cosXmlServer.GetObject(subGetObjectRequest);
                 completeLength += downloadedSlice.sliceEnd - downloadedSlice.sliceStart;
@@ -565,6 +568,7 @@ namespace COSXML.Transfer
                     tmpFilePaths.Add(localDir + tmpFileName);
                     subGetObjectRequest.SetRange(slice.sliceStart, slice.sliceEnd);
                     getObjectRequestsList.Add(subGetObjectRequest);
+                    subGetObjectRequest.SetObjectKeySimplifyCheck(ObjectKeySimplifyCheck);
                     // 计算出来只有一个分块, 而且不是Resume或重试剩的一个, 即不走并发下载, 用GetObject的进度回调给客户端
                     if (progressCallback != null && this.sliceList.Count == 1 && sliceToRemove.Count == 0)
                     {
@@ -683,14 +687,6 @@ namespace COSXML.Transfer
                 COSXML.CosException.CosClientException clientEx = new COSXML.CosException.CosClientException
                     ((int)CosClientError.InternalError, "max retries " + retries + " excceed, download fail");
                 throw clientEx;
-                if (UpdateTaskState(TaskState.Failed))
-                {
-                    if (failCallback != null)
-                    {
-                        failCallback(clientEx, null);
-                    }
-                }
-                return;
             }
             // 预期每个分块都下载完成了, 开始顺序合并
             FileMode fileMode = FileMode.OpenOrCreate;
@@ -746,11 +742,6 @@ namespace COSXML.Transfer
                             ((int)CosClientError.InternalError, "local tmp file not exist, could be concurrent writing same file"
                             + inputFilePath +" download again");
                         throw clientEx;
-                        if (failCallback != null)
-                        {
-                            failCallback(clientEx, null);
-                        }
-                        break;
                     }
                     using (var inputStream = File.OpenRead(inputFilePath))
                     {
@@ -768,14 +759,6 @@ namespace COSXML.Transfer
                         ((int)CosClientError.InternalError, "local File Length " + completedFileInfo.Length + 
                         " does not equals to applied download length " + (rangeEnd - rangeStart + 1) + ", try again");
                     throw clientEx;
-                    if (UpdateTaskState(TaskState.Failed))
-                    {
-                        if (failCallback != null)
-                        {
-                            failCallback(clientEx, null);
-                        }
-                    }
-                    return;
                 }
                 // 按需进行CRC64的检查
                 if (enableCrc64Check) {
@@ -784,14 +767,6 @@ namespace COSXML.Transfer
                         ((int)CosClientError.CRC64ecmaCheckFailed, "local File Crc64 " + 
                         " does not equals to crc64ecma on cos, try download again");
                         throw clientEx;
-                        if (UpdateTaskState(TaskState.Failed))
-                        {
-                            if (failCallback != null)
-                            {
-                                failCallback(clientEx, null);
-                            }
-                        }
-                        return;
                     }
                 }
                 if (UpdateTaskState(TaskState.Completed))

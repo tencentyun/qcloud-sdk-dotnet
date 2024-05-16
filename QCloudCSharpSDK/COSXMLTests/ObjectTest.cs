@@ -113,6 +113,25 @@ namespace COSXMLTests
             QCloudServer.DeleteAllFile(localDir, "*.txt");
         }
 
+
+        [Test()]
+        public void TransferManagerObjectTest()
+        {
+            cosXml = QCloudServer.Instance().cosXml;
+            bucket = QCloudServer.Instance().bucketForObjectTest;
+            try {
+                TransferManager transferM = new TransferManager(null, new TransferConfig());
+            } catch(ArgumentNullException) {
+                ;
+            }
+            try {
+                TransferManager transferM = new TransferManager(cosXml, null);
+            } catch(ArgumentNullException) {
+                ;
+            }
+            
+        }
+            
         [Test()]
         public void AppendObject() 
         {
@@ -306,7 +325,6 @@ namespace COSXMLTests
                 Assert.AreEqual(200, result.httpCode);
                 Assert.NotNull(result.eTag);
                 Assert.True(COSXML.Utils.Crc64.CompareCrc64(smallFileSrcPath, result.crc64ecma));
-
                 //Put Copy 测试的 Source Object
                 request = new PutObjectRequest(bucket, copykey, copySourceFilePath);
                 result = cosXml.PutObject(request);
@@ -368,6 +386,34 @@ namespace COSXMLTests
             }
         }
 
+        public string PutObjectBigFile()
+        {        
+            bucket = QCloudServer.Instance().bucketForObjectTest;
+            PutObjectRequest request = new PutObjectRequest(bucket, bigCopyKey, bigCopySourceFilePath);
+            PutObjectResult result = cosXml.PutObject(request);
+            Console.WriteLine(result.GetResultInfo());
+            Assert.AreEqual(200, result.httpCode);
+            Assert.NotNull(result.eTag);
+            Assert.True(COSXML.Utils.Crc64.CompareCrc64(bigCopySourceFilePath, result.crc64ecma));
+            return bigCopyKey;
+        }
+
+        public string PutObjectSmallFile()
+        {
+            bucket = QCloudServer.Instance().bucketForObjectTest;
+            PutObjectRequest request = new PutObjectRequest(bucket, commonKey, smallFileSrcPath);
+            QCloudServer.SetRequestACLData(request);
+            //执行请求
+            PutObjectResult result = cosXml.PutObject(request);
+
+            Console.WriteLine(result.GetResultInfo());
+            Assert.AreEqual(200, result.httpCode);
+            Assert.NotNull(result.eTag);
+            Assert.True(COSXML.Utils.Crc64.CompareCrc64(smallFileSrcPath, result.crc64ecma));
+            return commonKey;
+        }
+        
+        
         [Test()]
         public void PutObjectBytes()
         {
@@ -1540,29 +1586,75 @@ namespace COSXMLTests
             Assert.NotNull(result.eTag);
         }
         
+        
+        //文件分片大小决定走不同的路径
         [Test()]
-        public async Task TestNewSpecialMultiDownloadTask()
+        public async Task TestNewFuncMultiDownloadTaskBigFile()
         {
-            DateTime currentTime = DateTime.Now;
-            long timestamp = currentTime.Ticks;
-
+            string cosPath = PutObjectBigFile();
+            GetObjectRequest request = new GetObjectRequest(bucket, cosPath, localDir, localFileName);
+            request.LimitTraffic(8 * 1024 * 1024);
+            
+            //执行请求
+            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
+            downloadTask.SetObjectKeySimplifyCheck(true);
+            TransferConfig transferConfig = new TransferConfig();
+            // 手动设置开始分块上传的大小阈值为10MB，默认值为5MB
+            transferConfig.DivisionForUpload = 1 * 1024 * 1024;
+            // 手动设置分块上传中每个分块的大小为2MB，默认值为1MB
+            transferConfig.SliceSizeForUpload = 1 * 1024 * 1024;
+            
+            downloadTask.progressCallback = delegate (long completed, long total) {
+                Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+            };
+            transferConfig.ByNewFunc = true; //走特殊的下载路径下载
+            
+            try
+            {
+                downloadTask.SetSingleTaskTimeoutMs(1);
+                TransferManager transfe = new TransferManager(cosXml, transferConfig);
+                COSXMLDownloadTask.DownloadTaskResult rest = await transfe.DownloadAsync(downloadTask); //超时删除逻辑
+            }
+            catch (Exception e)
+            {
+                Assert.True(!Directory.Exists(localDir));
+                string searchPattern = localFileName;
+                string[] files = Directory.GetFiles(localDir);
+                string[] filsAr = files.Where(file => Path.GetFileName(file).Contains(searchPattern)).ToArray();
+                Assert.True(filsAr.Length == 0);
+            }
+            
+            downloadTask.SetSingleTaskTimeoutMs(3000);
+            // 初始化 TransferManager
+            TransferManager transferManagerVar = new TransferManager(cosXml, transferConfig);
+            COSXMLDownloadTask.DownloadTaskResult result = await transferManagerVar.DownloadAsync(downloadTask);
+            Assert.True(result.httpCode == 200 || result.httpCode == 206);
+            Assert.NotNull(result.eTag);
+        }
+        
+        
+        [Test()]
+        public async Task TestNewFuncMultiDownloadTaskSmallFile()
+        {
+            string cosKey = PutObjectSmallFile();
+            long timestamp = TimeUtils.GetCurrentTime(TimeUnit.Milliseconds);
             string localFileNameTim = localFileName + timestamp;
-            GetObjectRequest request = new GetObjectRequest(bucket, multiKey, localDir, localFileNameTim);
+            GetObjectRequest request = new GetObjectRequest(bucket, cosKey, localDir, localFileName);
             request.LimitTraffic(8 * 1024 * 1024);
             //执行请求
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
             TransferConfig transferConfig = new TransferConfig();
             // 手动设置开始分块上传的大小阈值为10MB，默认值为5MB
-            transferConfig.DivisionForUpload = 2 * 1024 * 1024;
+            transferConfig.DivisionForUpload = 20 * 1024 * 1024;
             // 手动设置分块上传中每个分块的大小为2MB，默认值为1MB
-            transferConfig.SliceSizeForUpload = 2 * 1024 * 1024;
+            transferConfig.SliceSizeForUpload = 20 * 1024 * 1024;
             
             transferConfig.ByNewFunc = true; // 走特殊的下载路径下载
 
             //是否能进该判断，文件是否够大
             try
             {
-                downloadTask.SetSingleTaskTimeoutMs(2);
+                downloadTask.SetSingleTaskTimeoutMs(1);
                 TransferManager transfe = new TransferManager(cosXml, transferConfig);
                 COSXMLDownloadTask.DownloadTaskResult rest = await transfe.DownloadAsync(downloadTask); //超时删除逻辑
             }
@@ -1698,8 +1790,7 @@ namespace COSXMLTests
         [Test()]
         public async Task TestDownloadTask()
         {
-            GetObjectRequest request = new GetObjectRequest(bucket,
-                commonKey, localDir, localFileName);
+            GetObjectRequest request = new GetObjectRequest(bucket, commonKey, localDir, localFileName);
             request.LimitTraffic(8 * 1024 * 1024);
 
             //执行请求
@@ -1713,13 +1804,11 @@ namespace COSXMLTests
         }
         
         [Test()]
-        public async Task TestDownloadTaskConstruct()
+        public async Task TestDownloadTaskDiffTaskInit()
         {
-            DateTime currentTime = DateTime.Now;
-            long timestamp = currentTime.Ticks;
-            //执行请求
+            long timestamp = TimeUtils.GetCurrentTime(TimeUnit.Seconds);
+            //执行请求,不同的初始化方式
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(bucket, commonKey, localDir, localFileName+timestamp);
-
             COSXMLDownloadTask.DownloadTaskResult result = await transferManager.DownloadAsync(downloadTask);
             Assert.True(result.GetResultInfo().Length != 0);
             
@@ -1907,6 +1996,7 @@ namespace COSXMLTests
                 request = new GetObjectRequest(bucket, commonKey, localDir, localFileName);
                 
                 downloadTask = new COSXMLDownloadTask(request);
+                downloadTask.SetObjectKeySimplifyCheck(true);
                 downloadTask.SetEnableCRC64Check(true);
                 asyncTask = transferManager.DownloadAsync(downloadTask);
                 asyncTask.Wait();
@@ -2505,6 +2595,7 @@ namespace COSXMLTests
 
             MemoryStream memoryStream = new MemoryStream();
             StreamWriter myStreamWriter = new StreamWriter(memoryStream);
+            
             encodedStr = DigestUtils.GetMd5ToBase64(memoryStream);
             Assert.IsNotEmpty(encodedStr);
 
