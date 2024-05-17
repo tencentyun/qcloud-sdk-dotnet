@@ -381,11 +381,12 @@ namespace COSXML.Transfer
                 subGetObjectRequest.SetRange(downloadedSlice.sliceStart, downloadedSlice.sliceEnd); 
                 getObjectResultToShow = cosXmlServer.GetObject(subGetObjectRequest);
                 completeLength += downloadedSlice.sliceEnd - downloadedSlice.sliceStart;
-                if (progressCallback != null && contentLength >= 0) {
+                if (progressCallback != null && completeLength >= 0) {
                     progressCallback(completeLength, contentLength);
                 }
             });
         }
+        
         
         public GetObjectResult getObjectResultToShow;
         private void DownloadFileBySyncGetObjectFunc(string crc64ecma, long contentLength)
