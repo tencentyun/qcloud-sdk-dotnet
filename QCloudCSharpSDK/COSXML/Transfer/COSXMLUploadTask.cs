@@ -126,11 +126,7 @@ namespace COSXML.Transfer
                 lock (syncExit)
                 {
 
-                    if (isExit)
-                    {
-
-                        return;
-                    }
+                    if (isExit) return;
                 }
 
                 if (UpdateTaskState(TaskState.Failed))
@@ -172,29 +168,17 @@ namespace COSXML.Transfer
                 putObjectRequest.SetRequestHeaders(customHeaders);
             }
 
-            if (progressCallback != null)
-            {
-                putObjectRequest.SetCosProgressCallback(progressCallback);
-            }
+            if (progressCallback != null) putObjectRequest.SetCosProgressCallback(progressCallback);
 
-            if (StorageClass != null) 
-            {
-                putObjectRequest.SetCosStorageClass(StorageClass);
-            }
+            if (StorageClass != null) putObjectRequest.SetCosStorageClass(StorageClass);
 
             cosXmlServer.PutObject(putObjectRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
                 {
 
-                    if (isExit)
-                    {
-
-                        if (taskState == TaskState.Cancel)
-                        {
-                            DeleteObject();
-                        }
-
+                    if (isExit) {
+                        if (taskState == TaskState.Cancel) DeleteObject();
                         return;
                     }
                 }
@@ -214,25 +198,12 @@ namespace COSXML.Transfer
 
             },
             
-            delegate (CosClientException clientEx, CosServerException serverEx)
-            {
-                lock (syncExit)
-                {
-
-                    if (isExit)
-                    {
-
-                        return;
-                    }
+            delegate (CosClientException clientEx, CosServerException serverEx) {
+                lock (syncExit) {
+                    if (isExit) return;
                 }
-
-                if (UpdateTaskState(TaskState.Failed))
-                {
-
-                    if (failCallback != null)
-                    {
-                        failCallback(clientEx, serverEx);
-                    }
+                if (UpdateTaskState(TaskState.Failed)) {
+                    if (failCallback != null) failCallback(clientEx, serverEx);
                 }
             });
         }
@@ -294,21 +265,10 @@ namespace COSXML.Transfer
             
             delegate (CosClientException clientEx, CosServerException serverEx)
             {
-                lock (syncExit)
-                {
-
-                    if (isExit)
-                    {
-
-                        return;
-                    }
+                lock (syncExit) {
+                    if (isExit)  return; 
                 }
-
-                if (UpdateTaskState(TaskState.Failed))
-                {
-                    OnFailed(clientEx, serverEx);
-                }
-
+                if (UpdateTaskState(TaskState.Failed)) OnFailed(clientEx, serverEx);
             });
         }
 
@@ -326,52 +286,42 @@ namespace COSXML.Transfer
                     for (int i = uploads.uploads.Count - 1; i >= 0; i--)
                     {
                         var upload = uploads.uploads[i];
-                        if (upload.key != key)
-                        {
-                            continue;
-                        }
+                        if (upload.key != key) continue;
                         CheckAllUploadParts(upload.uploadID);
                         return;
                     }
-                }
-                else
-                {
+                } else {
                     InitMultiUploadPart();
                 }
             },
             delegate (CosClientException clientEx, CosServerException serverEx)
             {
-                lock (syncExit)
-                {
-
-                    if (isExit)
-                    {
-
-                        return;
-                    }
+                lock (syncExit) {
+                    if (isExit) return;
                 }
-
-                if (UpdateTaskState(TaskState.Failed))
-                {
-                    OnFailed(clientEx, serverEx);
-                }
+                if (UpdateTaskState(TaskState.Failed)) OnFailed(clientEx, serverEx);
             });
         }
 
+        public void TestCheckAllUploadParts(string upId)
+        {
+            isExit = false;
+            CheckAllUploadParts(upId);
+        }
+
+        public void TestDeleteObject()
+        {
+            DeleteObject();
+        }
+        
         private void CheckAllUploadParts(string uploadId)
         {
             bool checkSucc = true;
             listPartsRequest = new ListPartsRequest(bucket, key, uploadId);
             cosXmlServer.ListParts(listPartsRequest, delegate (CosResult cosResult)
             {
-                lock (syncExit)
-                {
-
-                    if (isExit)
-                    {
-
-                        return;
-                    }
+                lock (syncExit) {
+                    if (isExit) return;
                 }
 
                 ListPartsResult result = cosResult as ListPartsResult;
@@ -398,29 +348,20 @@ namespace COSXML.Transfer
 
                     //计算本地ETag
                     if (!CompareSliceMD5(srcPath, sliceStruct.sliceStart, sliceStruct.sliceLength, part.eTag))
-                    {
                         checkSucc = false;
-                    }
                 }
-                if (checkSucc)
-                {
+                if (checkSucc) {
                     this.uploadId = uploadId;
                     UpdateSliceNums(result);
                     OnInit();
-                }
-                else
-                {
+                } else {
                     InitMultiUploadPart();
                 }
             },
             delegate (CosClientException clientEx, CosServerException serverEx)
             {
-                lock(syncExit)
-                {
-                    if (isExit)
-                    {
-                        return;
-                    }
+                lock(syncExit) {
+                    if (isExit) return;
                 }
 
                 if (UpdateTaskState(TaskState.Failed))
@@ -453,22 +394,11 @@ namespace COSXML.Transfer
                 OnInit();
 
             },
-            delegate (CosClientException clientEx, CosServerException serverEx)
-            {
-                lock (syncExit)
-                {
-
-                    if (isExit)
-                    {
-
-                        return;
-                    }
+            delegate (CosClientException clientEx, CosServerException serverEx) {
+                lock (syncExit) {
+                    if (isExit) return;
                 }
-
-                if (UpdateTaskState(TaskState.Failed))
-                {
-                    OnFailed(clientEx, serverEx);
-                }
+                if (UpdateTaskState(TaskState.Failed))  OnFailed(clientEx, serverEx);
             });
         }
 
@@ -482,8 +412,7 @@ namespace COSXML.Transfer
             uploadPartRequestList = new List<UploadPartRequest>(size);
 
             AutoResetEvent resetEvent = new AutoResetEvent(false);
-
-
+            
             for (int i = 0; i < size; i++)
             {
 
@@ -774,6 +703,11 @@ namespace COSXML.Transfer
 
         }
 
+        public bool TestCompareSliceMD5(string localFile, long offset, long length, string crc64ecma)
+        {
+            return CompareSliceMD5(localFile, offset, length, crc64ecma);
+        }
+        
         private bool CompareSliceMD5(string localFile, long offset, long length, string crc64ecma)
         {
             Crc64.InitECMA();

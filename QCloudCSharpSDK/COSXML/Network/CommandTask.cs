@@ -154,9 +154,13 @@ namespace COSXML.Network
             //handle body
             if (requestId == String.Empty)
             {
-                CosServerException cosServerException = new CosServerException((int)httpWebResponse.StatusCode, "request has error");
-                cosServerException.requestId = requestId;
-                throw cosServerException;
+                requestId = httpWebResponse.GetResponseHeader("x-ci-request-id");
+                if (requestId == String.Empty)
+                {
+                    CosServerException cosServerException = new CosServerException((int)httpWebResponse.StatusCode, "request has error");
+                    cosServerException.requestId = requestId;
+                    throw cosServerException;
+                }
             }
             
             try

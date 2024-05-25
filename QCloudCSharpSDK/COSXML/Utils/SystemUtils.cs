@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace COSXML.Utils
 {
@@ -16,6 +17,21 @@ namespace COSXML.Utils
             // 将字节转换为兆字节（MB）
             double memorySizeInMB = (double)memorySize / (1024 * 1024);
             Console.WriteLine("内存大小是:" + memorySizeInMB + "MB");
+        }
+
+
+        public static bool DeleteFileByFileName(string fileName)
+        {
+            try
+            {
+                if (File.Exists(fileName)) {
+                    System.IO.File.Delete(fileName);
+                    return true;
+                }
+            } catch (Exception e) {
+                
+            }
+            return false;
         }
     }
 }
