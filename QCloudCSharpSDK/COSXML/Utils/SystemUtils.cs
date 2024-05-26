@@ -34,6 +34,26 @@ namespace COSXML.Utils
             return false;
         }
         
+        
+        public static string CreateFileByParam(string path, string filename, long size)
+        {
+            if (!Directory.Exists(path)) {
+                // 创建目录
+                Directory.CreateDirectory(path);
+            }
+            
+            // 检查文件是否存在
+            string filePath = Path.Combine(path, filename);
+            if (!File.Exists(filePath))
+            {
+                FileStream fs = new FileStream(filePath, FileMode.Create);
+                fs.SetLength(size);
+                path = fs.Name;
+                fs.Close();
+            }
+            return filePath;
+        }
+        
         public static void GetThrand()
         {  
             // 获取当前进程
