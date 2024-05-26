@@ -22,14 +22,9 @@ namespace COSXML.Utils
 
         public static bool DeleteFileByFileName(string fileName)
         {
-            try
-            {
-                if (File.Exists(fileName)) {
-                    System.IO.File.Delete(fileName);
-                    return true;
-                }
-            } catch (Exception e) {
-                
+            if (File.Exists(fileName)) {
+                System.IO.File.Delete(fileName);
+                return true;
             }
             return false;
         }

@@ -648,6 +648,7 @@ namespace COSXML.Transfer
 
         
          
+         
         
         // 发起多线程下载
         private void ConcurrentGetObject(string crc64ecma)
@@ -844,39 +845,8 @@ namespace COSXML.Transfer
                     if (!File.Exists(inputFilePath))
                     {
                         // check if download already completed
-                        if (File.Exists(localDir + localFileName))
-                        {
-                            FileInfo fileInfo = new FileInfo(localDir + localFileName);
-                            if (fileInfo.Length == rangeEnd - rangeStart + 1)
-                            {
-                                foreach (var tmpFile in tmpFileList)
-                                {
-                                    System.IO.File.Delete(tmpFile);
-                                }
-                                if (resumableTaskFile != null)
-                                {
-                                    System.IO.File.Delete(resumableTaskFile);
-                                }
-                                break;
-                            }
-                        }
-                        // not completed, report fatal error
-                        foreach (var tmpFile in tmpFileList)
-                        {
-                            System.IO.File.Delete(tmpFile);
-                        }
-                        if (resumableTaskFile != null)
-                        {
-                            System.IO.File.Delete(resumableTaskFile);
-                        }
-                        if (File.Exists(localDir + localFileName))
-                        {
-                            System.IO.File.Delete(localDir + localFileName);
-                        }
-                        COSXML.CosException.CosClientException clientEx = new COSXML.CosException.CosClientException
-                            ((int)CosClientError.InternalError, "local tmp file not exist, could be concurrent writing same file"
-                            + inputFilePath +" download again");
-                        throw clientEx;
+                        DeleteTmpFile(true);
+                        throw new COSXML.CosException.CosClientException((int)CosClientError.InternalError, "local tmp file not exist, could be concurrent writing same file" + inputFilePath +" download again");
                     }
                     using (var inputStream = File.OpenRead(inputFilePath))
                     {
@@ -915,25 +885,24 @@ namespace COSXML.Transfer
                         }
                     }
                     //outputStream.Close();
-                    DownloadTaskResult downloadTaskResult = new DownloadTaskResult();
-                    downloadTaskResult.SetResult(downloadResult);
-                    if (successCallback != null)
-                    {
-                        successCallback(downloadTaskResult);
-                    }
+                    DownloadTaskResultSet(downloadResult);
                     return;
                 } else {
                     // 容灾 return
-                    DownloadTaskResult downloadTaskResult = new DownloadTaskResult();
-                    downloadTaskResult.SetResult(downloadResult);
-                    //outputStream.Close();
-                    if (successCallback != null)
-                    {
-                        successCallback(downloadTaskResult);
-                    }
+                    DownloadTaskResultSet(downloadResult);
                 }
             }
             return;
+        }
+        
+        public void DownloadTaskResultSet(GetObjectResult downloadResult)
+        {
+            DownloadTaskResult downloadTaskResult = new DownloadTaskResult();
+            downloadTaskResult.SetResult(downloadResult);
+            if (successCallback != null)
+            {
+                successCallback(downloadTaskResult);
+            }
         }
 
         private void RealCancle()
