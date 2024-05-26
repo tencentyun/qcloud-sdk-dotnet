@@ -395,14 +395,9 @@ namespace COSXMLTests
                 bigCopySourceFilePath = SystemUtils.CreateFileByParam(".", bigCopyKey, 30 * 1024 * 1024);
             }
             PutObjectRequest request = new PutObjectRequest(bucket, bigCopyKey, bigCopySourceFilePath);
-            COSXMLUploadTask uploadTask = new COSXMLUploadTask(request);
-            COSXMLUploadTask.UploadTaskResult result = transferManager.UploadAsync(uploadTask).Result;
-            uploadTask.progressCallback = delegate (long completed, long total)
-            {
-                // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
-            };
-            // Console.WriteLine(result.GetResultInfo());
+            PutObjectResult result = cosXml.PutObject(request);
             Assert.AreEqual(200, result.httpCode);
+            Assert.True(COSXML.Utils.Crc64.CompareCrc64(bigCopySourceFilePath, result.crc64ecma));
             Assert.NotNull(result.eTag);
             return bigCopyKey;
         }
