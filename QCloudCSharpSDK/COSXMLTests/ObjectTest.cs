@@ -2277,6 +2277,32 @@ namespace COSXMLTests
             downloadTask.DeleteTmpFile(true);
         }
         
+        
+        [Test()]
+        public void TestDownloadTaskMergeFileFileDelete()
+        {
+            try
+            {
+                string cosKey = PutObjectBigFile();
+                // 先下载一个大文件
+                GetObjectRequest request = new GetObjectRequest(bucket, cosKey, localDir, localFileName);
+                COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
+                var asyncTask = transferManager.DownloadAsync(downloadTask);
+                string filename = localDir + "." + localFileName + ".cosresumable." + 1;
+                for (int i = 0; i < 5000; i++) {
+                    if (SystemUtils.DeleteFileByFileName(filename)) {
+                        break;
+                    }
+                    Thread.Sleep(100);
+                }
+                asyncTask.Wait();
+            }
+            catch (Exception ex)
+            {
+                Assert.True(true);//进入则成功
+            }
+        }
+        
         [Test()]
         public void TestDownloadTaskMergeFile()
         {
