@@ -370,6 +370,15 @@ namespace COSXML.Utils.Tests{
 
             }
         }
+
+
+        [Test()]
+        public void CosSystemTest()
+        {
+            SystemUtils.GetThrand();
+        }
+        
+        
         [Test()]
         public void DoesObjectExistTest()
         {

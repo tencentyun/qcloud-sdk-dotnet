@@ -33,5 +33,16 @@ namespace COSXML.Utils
             }
             return false;
         }
+        
+        public static void GetThrand()
+        {  
+            // 获取当前进程
+            Process currentProcess = Process.GetCurrentProcess();
+            // 获取当前进程的线程数量
+            int threadCount = currentProcess.Threads.Count;
+            // 输出线程数量
+            Console.WriteLine("当前进程的线程数量: " + threadCount);
+        }
+        
     }
 }

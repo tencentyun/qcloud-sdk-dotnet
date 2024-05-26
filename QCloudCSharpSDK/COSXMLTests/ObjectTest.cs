@@ -356,18 +356,18 @@ namespace COSXMLTests
                 Assert.AreEqual(200, result.httpCode);
                 Assert.NotNull(result.eTag);
                 Assert.True(COSXML.Utils.Crc64.CompareCrc64(selectFilePath, result.crc64ecma));
-
+            
                 request = new PutObjectRequest(bucket, copyKeySmall, copySourceFilePath);
                 result = cosXml.PutObject(request);
-
+            
                 Console.WriteLine(result.GetResultInfo());
                 Assert.AreEqual(200, result.httpCode);
                 Assert.NotNull(result.eTag);
                 Assert.True(COSXML.Utils.Crc64.CompareCrc64(copySourceFilePath, result.crc64ecma));
-
+            
                 request = new PutObjectRequest(bucket, copyKeySmall, copySourceFilePath);
                 result = cosXml.PutObject(request);
-
+            
                 Console.WriteLine(result.GetResultInfo());
                 Assert.AreEqual(200, result.httpCode);
                 Assert.NotNull(result.eTag);
@@ -390,7 +390,10 @@ namespace COSXMLTests
         public string PutObjectBigFile()
         {        
             bucket = QCloudServer.Instance().bucketForObjectTest;
-            bigCopySourceFilePath = QCloudServer.CreateFile(bigCopyKey, 40 * 1024 * 1024);
+            if (!File.Exists(bigCopySourceFilePath))
+            {
+                bigCopySourceFilePath = QCloudServer.CreateFile(bigCopyKey, 40 * 1024 * 1024);
+            }
             PutObjectRequest request = new PutObjectRequest(bucket, bigCopyKey, bigCopySourceFilePath);
             PutObjectResult result = cosXml.PutObject(request);
             // Console.WriteLine(result.GetResultInfo());
@@ -1614,8 +1617,11 @@ namespace COSXMLTests
         [Test()]
         public async Task TransferUploadFileCancel()
         {
-            bigFileSrcPath = QCloudServer.CreateFile("big_"+TimeUtils.GetCurrentTimeSecond()+".txt", 40*1024*1024);
-            
+            if (!File.Exists(bigFileSrcPath))
+            {
+                bigFileSrcPath = QCloudServer.CreateFile("big_"+TimeUtils.GetCurrentTimeSecond()+".txt", 40*1024*1024);
+            }
+           
             TransferConfig transferConfig = new TransferConfig();
             // 手动设置开始分块上传的大小阈值为10MB，默认值为5MB
             transferConfig.DivisionForUpload = 1 * 1024 * 1024;
@@ -1724,9 +1730,13 @@ namespace COSXMLTests
                 
             TransferManager transferM = new TransferManager(cosXml, transferConfigTest);
             Task<COSXMLUploadTask.UploadTaskResult> rest = transferM.UploadAsync(uploadTask);
-            Thread.Sleep(1300);
-            string uploadId = uploadTask.GetUploadId();
-            uploadTask.TestCheckAllUploadParts(uploadId);
+            string uploadId = "";
+            for (int i=0;i<3;i++ )
+            {
+                Thread.Sleep(400);
+                uploadId = uploadTask.GetUploadId();
+                uploadTask.TestCheckAllUploadParts(uploadId);
+            }
             uploadTask.Pause();
             uploadTask.Cancel();
             uploadTask.TestCheckAllUploadParts(uploadId);
@@ -2246,7 +2256,10 @@ namespace COSXMLTests
             transferConfig.DownloadRe = true;
             
             string filename = localDir + "/." + localFileName + ".cosresumable.1";
-            QCloudServer.CreateFile(filename, 1024);
+            if (!File.Exists(filename))
+            {
+                QCloudServer.CreateFile(filename, 1024);
+            }
             
             string cosKey = PutObjectBigFile();
             // 先下载一个大文件
@@ -2275,7 +2288,11 @@ namespace COSXMLTests
                 COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
                 
                 string filenametmp = localDir + "/." + localFileName + ".cosresumable.1";
-                QCloudServer.CreateFile(filenametmp, 1024);
+                if (!File.Exists(filenametmp)) 
+                {
+                    QCloudServer.CreateFile(filenametmp, 1024);
+                }
+                
                 
                 var asyncTask = transferManager.DownloadAsync(downloadTask);
                 // Thread.Sleep(1300);
@@ -2447,7 +2464,17 @@ namespace COSXMLTests
             transferConfig.SliceSizeForCopy = 1024 * 1024;
             uploadTask.SetUploadId(uploadId);
             transferManager.UploadAsync(uploadTask);
-            uploadTask.TestCheckAllUploadParts(uploadId);    
+            uploadTask.TestCheckAllUploadParts(uploadId);
+
+            try {
+                ListPartsRequest listPartsRequest = new ListPartsRequest(bucket, cosKey, uploadId);
+                ListPartsResult listPartsResult = cosXml.ListParts(listPartsRequest);
+                TestUpdateSliceNums(listPartsResult);
+            }
+            catch (Exception)
+            {
+                
+            }
             uploadTask.Cancel();
         }
 
