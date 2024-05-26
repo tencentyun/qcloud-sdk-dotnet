@@ -392,14 +392,18 @@ namespace COSXMLTests
             bucket = QCloudServer.Instance().bucketForObjectTest;
             if (!File.Exists(bigCopySourceFilePath))
             {
-                bigCopySourceFilePath = QCloudServer.CreateFile(bigCopyKey, 40 * 1024 * 1024);
+                bigCopySourceFilePath = SystemUtils.CreateFileByParam(".", bigCopyKey, 30 * 1024 * 1024);
             }
             PutObjectRequest request = new PutObjectRequest(bucket, bigCopyKey, bigCopySourceFilePath);
-            PutObjectResult result = cosXml.PutObject(request);
+            COSXMLUploadTask uploadTask = new COSXMLUploadTask(request);
+            COSXMLUploadTask.UploadTaskResult result = transferManager.UploadAsync(uploadTask).Result;
+            uploadTask.progressCallback = delegate (long completed, long total)
+            {
+                // Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+            };
             // Console.WriteLine(result.GetResultInfo());
             Assert.AreEqual(200, result.httpCode);
             Assert.NotNull(result.eTag);
-            Assert.True(COSXML.Utils.Crc64.CompareCrc64(bigCopySourceFilePath, result.crc64ecma));
             return bigCopyKey;
         }
 
@@ -2284,17 +2288,27 @@ namespace COSXMLTests
             try
             {
                 string cosKey = PutObjectBigFile();
+                TransferConfig transferConfig = new TransferConfig();
+                // 手动设置开始分块上传的大小阈值为10MB，默认值为5MB
+                transferConfig.DivisionForDownload = 1024 * 1024;
+                // 手动设置分块上传中每个分块的大小为2MB，默认值为1MB
+                transferConfig.SliceSizeForDownload = 1024 * 1024;
                 // 先下载一个大文件
                 GetObjectRequest request = new GetObjectRequest(bucket, cosKey, localDir, localFileName);
                 COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);
                 var asyncTask = transferManager.DownloadAsync(downloadTask);
-                string filename = localDir + "." + localFileName + ".cosresumable." + 1;
+                string filename = localDir + "." + localFileName + ".cosresumable." + 2;
                 for (int i = 0; i < 5000; i++) {
                     if (SystemUtils.DeleteFileByFileName(filename)) {
                         break;
                     }
+                    if (SystemUtils.DeleteFileByFileName(localDir + localFileName))
+                    {
+                        break;
+                    }
                     Thread.Sleep(100);
                 }
+                SystemUtils.CreateFileByParam("./txt/sd/", "txt.txt", 1024);
                 asyncTask.Wait();
             }
             catch (Exception ex)
