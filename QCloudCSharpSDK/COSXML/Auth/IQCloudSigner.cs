@@ -147,7 +147,9 @@ namespace COSXML.Auth
                 lowerKeySourceHeaders.Add(pair.Key.ToLower(), pair.Value);
             }
 
-            lowerKeySourceHeaders.Add("host", request.Host);
+            // 可能通过Request设置Host参数，供内网IP访问
+            if (!lowerKeySourceHeaders.ContainsKey("host"))
+                lowerKeySourceHeaders.Add("host", request.Host);
 
             if (headerKeysToSign.Contains("content-length"))
             {
