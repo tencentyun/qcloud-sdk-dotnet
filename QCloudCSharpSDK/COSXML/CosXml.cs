@@ -1177,6 +1177,25 @@ namespace COSXML
         SubmitCensorJobResult SubmitDocumentCensorJob(SubmitDocumentCensorJobRequest request);
 
         /// <summary>
+        /// 提交文档转码任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        SubmitDocumentProcessJobResult SubmitDocumentProcessJob(SubmitDocumentProcessJobRequest request);
+        /// <summary>
+        /// 查询指定的文档转码任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        DescribeDocProcessJobResult DescribeDocProcessJob(DescribeDocProcessJobRequest request);
+        /// <summary>
+        /// 拉取符合条件的文档转码任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        DescribeDocProcessJobsResult DescribeDocProcessJobs(DescribeDocProcessJobsRequest request);
+
+        /// <summary>
         /// 获取文档审核任务结果
         /// </summary>
         /// <param name="request"></param>

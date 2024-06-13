@@ -14,5 +14,4 @@ public class HttpUrlTest
       httpUrl.Scheme = "http";
       httpUrl.ToString();
    }
-
 }

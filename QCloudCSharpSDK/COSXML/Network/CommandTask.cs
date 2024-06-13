@@ -61,7 +61,7 @@ namespace COSXML.Network
                 httpWebRequest = HttpWebRequest.Create(request.RequestUrlString) as HttpWebRequest;
 
                 httpWebRequest.AllowWriteStreamBuffering = false;
-                
+
                 //bind webRequest
                 request.BindHttpWebRequest(httpWebRequest);
 
@@ -69,6 +69,7 @@ namespace COSXML.Network
                 HandleHttpWebRequest(httpWebRequest, request, config);
 
                 //final: get response
+
                 httpWebResponse = httpWebRequest.GetResponse() as HttpWebResponse;
 
                 //notify has been got response
@@ -96,9 +97,9 @@ namespace COSXML.Network
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //QLog.E(TAG, ex.Message, ex);
+                // QLog.E(TAG, ex.Message, ex);
                 throw;
             }
             finally

@@ -920,7 +920,7 @@ namespace COSXMLTests
                 Assert.Fail();
             }
         }
-
+        
         [Test]
         public void TestDocumentCensorJobSyncCommit()
         {
@@ -983,6 +983,69 @@ namespace COSXMLTests
                 Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.ObjectResults);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.ObjectResults.Name);
                 */
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestDocumentProcessJobSyncCommit()
+        {
+            try
+            {
+                SubmitDocumentProcessJobRequest request = new SubmitDocumentProcessJobRequest(bucket);
+                request.SetInputObject("demo.docx");
+                request.SetTag("DocProcess");
+                request.SetSrcType("docx");
+                request.SetTgtType("jpg");
+                request.SetStartPage("3");
+                request.SetEndPage("5");
+                request.SetImageParams("imageMogr2/cut/400x400");
+                request.SetQuality("90");
+                request.SetZoom("200");
+                request.SetImageDpi("100");
+                request.SetPicPagination("1");
+                request.SetOutputBucket("dotnet-ut-obj-1253960454");
+                request.SetOutputObject("kwy-test_${Number}");
+                request.SetOutputRegion("ap-guangzhou");
+                request.SetSheetId("1");
+                request.SetPaperDirection("1");
+                request.SetPaperSize("1");
+                SubmitDocumentProcessJobResult result = QCloudServer.Instance().cosXml.SubmitDocumentProcessJob(request);
+                string jobId = result.docProcessResponse.JobsDetail.JobId;
+                Assert.NotNull(jobId);
+                Assert.AreEqual(200, result.httpCode);
+
+                DescribeDocProcessJobRequest describeDocProcessJobRequest =
+                    new DescribeDocProcessJobRequest(bucket, jobId);
+                DescribeDocProcessJobResult describeDocProcessJobResult =
+                    QCloudServer.Instance().cosXml.DescribeDocProcessJob(describeDocProcessJobRequest);
+                Assert.AreEqual(200, describeDocProcessJobResult.httpCode);
+                Assert.NotNull(describeDocProcessJobResult.taskDocProcessResult.JobsDetail.Code);
+
+                DescribeDocProcessJobsRequest describeDocProcessJobsRequest = new DescribeDocProcessJobsRequest(bucket);
+                describeDocProcessJobsRequest.SetTag("DocProcess");
+                describeDocProcessJobsRequest.SetQueueId(result.docProcessResponse.JobsDetail.QueueId);
+                describeDocProcessJobsRequest.SetOrderByTime("Asc");
+                describeDocProcessJobsRequest.SetNextToken("1");
+                describeDocProcessJobsRequest.SetStates("All");
+                describeDocProcessJobsRequest.SetSize("15");
+                describeDocProcessJobsRequest.SetStartCreationTime("2024-06-12T08:20:07+0800");
+                describeDocProcessJobsRequest.SetEndCreationTime("2024-06-12T20:00:00+0800");
+
+                DescribeDocProcessJobsResult describeDocProcessJobsResult =
+                    QCloudServer.Instance().cosXml.DescribeDocProcessJobs(describeDocProcessJobsRequest);
+                Assert.AreEqual(200,describeDocProcessJobsResult.httpCode);
+                Assert.NotNull(describeDocProcessJobsResult.listDocProcessResult.JobsDetail);
+
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {

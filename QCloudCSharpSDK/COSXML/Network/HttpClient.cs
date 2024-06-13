@@ -328,8 +328,12 @@ namespace COSXML.Network
             httpUrl.Scheme = (bool)cosRequest.IsHttps ? "https" : "http";
             httpUrl.Host = cosRequest.GetHost();
             httpUrl.Path = URLEncodeUtils.EncodePathOfURL(cosRequest.RequestPath);
-            httpUrl.SetQueryParameters(cosRequest.GetRequestParamters());
 
+            httpUrl.SetQueryParameters(cosRequest.GetRequestParamters());
+            // foreach (KeyValuePair<string, string> parameter in cosRequest.GetRequestParamters())
+            // {
+                // httpUrl.AddQueryParameters(parameter.Key, URLEncodeUtils.Encode(parameter.Value));
+            // }
             return httpUrl;
         }
 
