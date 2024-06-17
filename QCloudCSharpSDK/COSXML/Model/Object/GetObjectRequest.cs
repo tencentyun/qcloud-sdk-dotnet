@@ -5,6 +5,7 @@ using System.Text;
 using COSXML.Common;
 using COSXML.CosException;
 using System.IO;
+using COSXML.Utils;
 
 namespace COSXML.Model.Object
 {
@@ -139,6 +140,14 @@ namespace COSXML.Model.Object
             if (requestUrlWithSign != null && localFileName == null)
             {
                 throw new CosClientException((int)CosClientError.InvalidArgument, "localFileName = null");
+            }
+            
+            if (ObjectKeySimplifyCheck)
+            {
+                string newPath = StringUtils.MergePath(path);
+                if (newPath == "/") {
+                    throw new CosClientException((int)CosClientError.InvalidArgument, "The Getobject Key is illegal");
+                }
             }
 
             base.CheckParameters();

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using COSXML.Common;
 using COSXML.Model;
 using COSXML.CosException;
+using COSXML.Utils;
 
 
 namespace COSXML.Transfer
@@ -82,7 +84,15 @@ namespace COSXML.Transfer
             }
             else
             {
-                downloader.Download();
+                if (transferConfig.DownloadRe)
+                {
+                    downloader.DownloadReFunc();
+                }
+                else
+                {
+                    downloader.Download();
+                }
+                
             }
         }
 
@@ -149,6 +159,7 @@ namespace COSXML.Transfer
 
         //采取那种方式下载
         private bool byNewFunc = false;
+        private bool downloadRe = false;
 
         public bool ByNewFunc
         {
@@ -157,6 +168,16 @@ namespace COSXML.Transfer
                 return byNewFunc;
             }
             set { byNewFunc = value; }
+        }
+
+       
+        public bool DownloadRe
+        {
+            get
+            {
+                return downloadRe;
+            }
+            set { downloadRe = value; }
         }
         
         /// <summary>

@@ -7,9 +7,11 @@ using COSXML.Utils;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading;
 using COSXML;
+using COSXML.Network;
 
 namespace COSXMLTests
 {
@@ -86,6 +88,21 @@ namespace COSXMLTests
             }
         }
 
+
+        // [Test()]
+        // public void NewServiceTest()
+        // {
+        //     var service = QCloudServer.Instance().NewService(QCloudServer.Instance().regionForBucketVersioning, 1);
+        //     
+        //     ListBucketVersionsRequest request = new ListBucketVersionsRequest(QCloudServer.Instance().bucketVersioning);
+        //     ListBucketVersionsResult result = service.ListBucketVersions(request);
+        //     Console.WriteLine(result.GetResultInfo());
+        //     // HttpClientConfig conf = new HttpClientConfig();
+        //
+        //     // HttpWebRequest httpWebRequest = HttpWebRequest.Create(request.RequestUrlString) as HttpWebRequest;
+        //     // CommandTask.TestSetRequestProxy(httpWebRequest, service.GetConfig());
+        // }
+        
         [Test()]
         public void ListBucketVersions()
         {

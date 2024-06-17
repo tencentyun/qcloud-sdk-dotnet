@@ -1297,7 +1297,37 @@ namespace COSXML
             request.Region = this.GetConfig().Region;
             return Execute(request, new SubmitCensorJobResult());
         }
-        
+        /// <summary>
+        /// 提交文档转码任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public SubmitDocumentProcessJobResult SubmitDocumentProcessJob(SubmitDocumentProcessJobRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new SubmitDocumentProcessJobResult());
+        }
+        /// <summary>
+        /// 查询指定的文档转码任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public DescribeDocProcessJobResult DescribeDocProcessJob(DescribeDocProcessJobRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new DescribeDocProcessJobResult());
+        }
+        /// <summary>
+        /// 拉取符合条件的文档转码任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public DescribeDocProcessJobsResult DescribeDocProcessJobs(DescribeDocProcessJobsRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new DescribeDocProcessJobsResult());
+        }
+
         /// <summary>
         /// 获取文档审核任务结果
         /// </summary>

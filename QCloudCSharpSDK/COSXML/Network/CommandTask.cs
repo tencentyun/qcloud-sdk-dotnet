@@ -61,7 +61,7 @@ namespace COSXML.Network
                 httpWebRequest = HttpWebRequest.Create(request.RequestUrlString) as HttpWebRequest;
 
                 httpWebRequest.AllowWriteStreamBuffering = false;
-                
+
                 //bind webRequest
                 request.BindHttpWebRequest(httpWebRequest);
 
@@ -69,6 +69,7 @@ namespace COSXML.Network
                 HandleHttpWebRequest(httpWebRequest, request, config);
 
                 //final: get response
+
                 httpWebResponse = httpWebRequest.GetResponse() as HttpWebResponse;
 
                 //notify has been got response
@@ -96,9 +97,9 @@ namespace COSXML.Network
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //QLog.E(TAG, ex.Message, ex);
+                // QLog.E(TAG, ex.Message, ex);
                 throw;
             }
             finally
@@ -154,9 +155,13 @@ namespace COSXML.Network
             //handle body
             if (requestId == String.Empty)
             {
-                CosServerException cosServerException = new CosServerException((int)httpWebResponse.StatusCode, "request has error");
-                cosServerException.requestId = requestId;
-                throw cosServerException;
+                requestId = httpWebResponse.GetResponseHeader("x-ci-request-id");
+                if (requestId == String.Empty)
+                {
+                    CosServerException cosServerException = new CosServerException((int)httpWebResponse.StatusCode, "request has error");
+                    cosServerException.requestId = requestId;
+                    throw cosServerException;
+                }
             }
             
             try

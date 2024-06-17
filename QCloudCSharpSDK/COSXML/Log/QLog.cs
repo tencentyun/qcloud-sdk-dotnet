@@ -27,13 +27,6 @@ namespace COSXML.Log
 
         public static void AddLogAdapter(ILog log)
         {
-
-            if (log == null)
-            {
-
-                return;
-            }
-
             foreach (ILog logImpl in logImplList)
             {
 

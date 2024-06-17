@@ -131,6 +131,7 @@ namespace COSXMLTests
         {
             CosXmlConfig config = new CosXmlConfig.Builder()
                       .SetConnectionLimit(512)
+                      .SetAllowAutoRedirect(false)
                       .Build();
 
             string secretId = Environment.GetEnvironmentVariable("SECRET_ID");
@@ -288,6 +289,11 @@ namespace COSXMLTests
             }
 
             ListBucketVersionsRequest listBucketVersionsRequest = new ListBucketVersionsRequest("bucket");
+            listBucketVersionsRequest.SetPrefix("v.");
+            listBucketVersionsRequest.SetKeyMarker("version");
+            listBucketVersionsRequest.SetVersionIdMarker("version");
+            listBucketVersionsRequest.SetMaxKeys("version");
+            
             try {
                 cosXml.ListBucketVersions(listBucketVersionsRequest, null, null);
             } catch (Exception)
@@ -374,6 +380,8 @@ namespace COSXMLTests
             }
 
             DeleteMultiObjectRequest deleteMultiObjectRequest = new DeleteMultiObjectRequest("bucket");
+            deleteMultiObjectRequest.SetDeleteKey("Test");
+            deleteMultiObjectRequest.SetDeleteKey("/data", "versionId");
             try {
                 cosXml.DeleteMultiObjects(deleteMultiObjectRequest, null, null);
             } catch (Exception)
@@ -480,6 +488,8 @@ namespace COSXMLTests
             }
 
             ListBucketInventoryRequest listBucketInventoryRequest = new ListBucketInventoryRequest("bucket");
+            listBucketInventoryRequest.SetContinuationToken("inventory");
+            
             try {
                 cosXml.ListBucketInventoryAsync(listBucketInventoryRequest, null, null);
             } catch (Exception)

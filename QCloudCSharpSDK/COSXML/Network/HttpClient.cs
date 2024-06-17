@@ -159,10 +159,10 @@ namespace COSXML.Network
                     throw;
                 }
             }
-            catch (CosClientException)
+            catch (CosClientException ex)
             {
                 // 客户端异常都重试，如本地文件path写错则报警
-                if (retryIndex < MaxRetry)
+                if (retryIndex < MaxRetry && ex.errorCode != (int)CosClientError.InvalidArgument)
                 {
                     InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
                 }
@@ -328,8 +328,12 @@ namespace COSXML.Network
             httpUrl.Scheme = (bool)cosRequest.IsHttps ? "https" : "http";
             httpUrl.Host = cosRequest.GetHost();
             httpUrl.Path = URLEncodeUtils.EncodePathOfURL(cosRequest.RequestPath);
-            httpUrl.SetQueryParameters(cosRequest.GetRequestParamters());
 
+            httpUrl.SetQueryParameters(cosRequest.GetRequestParamters());
+            // foreach (KeyValuePair<string, string> parameter in cosRequest.GetRequestParamters())
+            // {
+                // httpUrl.AddQueryParameters(parameter.Key, URLEncodeUtils.Encode(parameter.Value));
+            // }
             return httpUrl;
         }
 

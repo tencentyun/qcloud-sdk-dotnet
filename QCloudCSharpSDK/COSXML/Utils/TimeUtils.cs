@@ -9,7 +9,12 @@ namespace COSXML.Utils
     {
         // utc start time
         public static readonly DateTime UTC_START_TIME = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-       
+
+        public static long GetCurrentTimeSecond()
+        {
+            return GetCurrentTime(TimeUnit.Seconds);
+        }
+        
         public static long GetCurrentTime(TimeUnit timeUnit)
         {
             TimeSpan timeSpan = DateTime.UtcNow - UTC_START_TIME;
