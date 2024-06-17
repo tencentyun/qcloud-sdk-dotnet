@@ -212,26 +212,6 @@ namespace COSXML.Transfer
             //多线程下载
             DownloadFileBySyncGetObjectFunc(result.crc64ecma, result.size);
         }
-
-        public void DownloadReFunc()
-        {
-            headObjectRequest = new HeadObjectRequest(bucket, key);
-            CosResult cosResult = cosXmlServer.HeadObject(headObjectRequest);
-            
-            if (resumableTaskFile == null)
-            {
-                resumableTaskFile = localDir + localFileName + ".cosresumabletask";
-            }
-            HeadObjectResult resultt = cosResult as HeadObjectResult;
-            
-            ResumeDownloadInPossibleRe(resultt);
-            
-            HeadObjectResult result = cosResult as HeadObjectResult;
-            ComputeSliceList(result); //进行分片
-            
-            // concurrent download
-            ConcurrentGetObjectRe(result.crc64ecma);
-        }
         
         //流式数据进行下载
         internal void Download()
@@ -279,19 +259,6 @@ namespace COSXML.Transfer
                     if (failCallback != null) failCallback(clientEx, serverEx);
                 }
             });
-        }
-
-        
-        private void ResumeDownloadInPossibleRe(HeadObjectResult result)
-        {
-            this.resumableInfo = DownloadResumableInfo.LoadFromResumableFile(resumableTaskFile);
-            this.resumableInfo = new DownloadResumableInfo();
-            this.resumableInfo.contentLength = result.size;
-            this.resumableInfo.crc64ecma = result.crc64ecma;
-            this.resumableInfo.eTag = result.eTag;
-            this.resumableInfo.lastModified = result.lastModified;
-            this.resumableInfo.slicesDownloaded = new List<DownloadSliceStruct>();
-            resumableInfo.Persist(resumableTaskFile);
         }
                 
         // resolve resumable task file, continue in proper position
@@ -505,149 +472,6 @@ namespace COSXML.Transfer
                 }
             }
         }
-        
-        
-        // 发起多线程下载
-         private void ConcurrentGetObjectRe(string crc64ecma)
-        {
-            // 保障目标路径是存在的
-            DirectoryInfo dirInfo = new DirectoryInfo(localDir);
-            if (!dirInfo.Exists) {
-                dirInfo.Create();
-            }
-            // 控制任务数
-            AutoResetEvent resetEvent = new AutoResetEvent(false);
-            // 记录成功的分片
-            if (sliceToRemove == null)
-            {
-                sliceToRemove = new HashSet<int>();
-            }
-            // 记录子任务
-            if (getObjectRequestsList == null)
-            {
-                getObjectRequestsList = new List<GetObjectRequest>();
-            }
-            int retries = 0;
-            // 只抛出最后一条服务端回包
-            GetObjectResult downloadResult = null;
-            
-            while (sliceList.Count != 0 && retries < maxRetries)
-            {
-                retries += 1;
-                foreach (int partNumber in sliceList.Keys)
-                {
-                    DownloadSliceStruct slice;
-                    sliceList.TryGetValue(partNumber, out slice);
-                    if (activeTasks >= maxTasks) {
-                        resetEvent.WaitOne();
-                    }
-                    
-                    string tmpFileName = "." + localFileName + ".cosresumable." + slice.partNumber;
-                  
-                    FileInfo tmpFileInfo = new FileInfo(localDir + tmpFileName);
-                    
-                    //删除之前下载
-                    if (tmpFileInfo.Exists) {
-                        Utils.SystemUtils.DeleteFileByFileName(localDir + tmpFileName);
-                    }
-                    GetObjectRequest subGetObjectRequest = new GetObjectRequest(bucket, key, localDir, tmpFileName);
-                    tmpFilePaths.Add(localDir + tmpFileName);
-                    subGetObjectRequest.SetRange(slice.sliceStart, slice.sliceEnd);
-                    getObjectRequestsList.Add(subGetObjectRequest);
-                    subGetObjectRequest.SetObjectKeySimplifyCheck(ObjectKeySimplifyCheck);
-                    // 计算出来只有一个分块, 而且不是Resume或重试剩的一个, 即不走并发下载, 用GetObject的进度回调给客户端
-                    if (progressCallback != null && this.sliceList.Count == 1 && sliceToRemove.Count == 0)
-                    {
-                        subGetObjectRequest.SetCosProgressCallback(delegate(long completed, long total)
-                            {
-                                progressCallback(completed, total);
-                            }
-                        );
-                    }
-                    Interlocked.Increment(ref activeTasks);
-                    
-                    cosXmlServer.GetObject(subGetObjectRequest,
-                        delegate (CosResult result)
-                        {
-                            Interlocked.Decrement(ref activeTasks);
-                            sliceToRemove.Add(partNumber);
-                            if (progressCallback != null && this.sliceList.Count > 1) 
-                            {
-                                long completed = sliceToRemove.Count * this.sliceSize;
-                                long total = rangeEnd - rangeStart;
-                                if (completed > total)
-                                    completed = total;
-                                progressCallback(completed, total);
-                            }
-                            downloadResult = result as GetObjectResult;
-                            resetEvent.Set();
-                            if (resumable)
-                            {
-                                // flush done parts
-                                this.resumableInfo.slicesDownloaded.Add(slice);
-                                this.resumableInfo.Persist(resumableTaskFile);
-                            }
-                        }, 
-                        delegate (CosClientException clientEx, CosServerException serverEx)
-                        {
-                            Interlocked.Decrement(ref activeTasks);
-                            if (serverEx != null) throw serverEx;
-                            if (clientEx != null) throw serverEx;
-                            resetEvent.Set();
-                        }
-                    );
-                }
-                long waitTimeMs = 0;
-                int lastActiveTasks = activeTasks;
-                while (activeTasks != 0)
-                {
-                    
-                    Thread.Sleep(100);
-                    if (lastActiveTasks == activeTasks) {
-                        waitTimeMs += 100;
-                    } else {
-                        waitTimeMs = 0;
-                        lastActiveTasks = activeTasks;
-                    }
-                    
-                    if (TestEnvTag || waitTimeMs > singleTaskTimeoutMs) {
-                        foreach(GetObjectRequest subGetObjectRequest in getObjectRequestsList) {
-                            try {
-                                cosXmlServer.Cancel(subGetObjectRequest);
-                            } catch (Exception e) {
-                                ;
-                            }
-                        }
-                        getObjectRequestsList.Clear();
-                        activeTasks = 0;
-                        break;
-                    }
-                }
-                // 从下载列表中移除成功分块
-                foreach (int partNumber in sliceToRemove)
-                {
-                    sliceList.Remove(partNumber);
-                }
-            }
-            if (this.sliceList.Count != 0) 
-            {
-                if (gClientExp != null) throw gClientExp;
-                throw new CosClientException((int)CosClientError.InternalError, "max retries " + retries + " excceed, download fail");
-            }
-            // 预期每个分块都下载完成了, 开始顺序合并
-            MergeAllSliceAndCheckFile(crc64ecma);
-            DownloadTaskResult downloadTaskResult = new DownloadTaskResult();
-            downloadTaskResult.SetResult(downloadResult);
-            
-            if (successCallback != null)
-            {
-                successCallback(downloadTaskResult);
-            } 
-            DeleteTmpFile(false);
-        }
-
-        
-         
          
         
         // 发起多线程下载

@@ -84,15 +84,7 @@ namespace COSXML.Transfer
             }
             else
             {
-                if (transferConfig.DownloadRe)
-                {
-                    downloader.DownloadReFunc();
-                }
-                else
-                {
-                    downloader.Download();
-                }
-                
+                downloader.Download();
             }
         }
 
@@ -168,16 +160,6 @@ namespace COSXML.Transfer
                 return byNewFunc;
             }
             set { byNewFunc = value; }
-        }
-
-       
-        public bool DownloadRe
-        {
-            get
-            {
-                return downloadRe;
-            }
-            set { downloadRe = value; }
         }
         
         /// <summary>
