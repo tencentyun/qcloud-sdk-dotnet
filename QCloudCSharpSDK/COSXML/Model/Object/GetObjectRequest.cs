@@ -142,7 +142,8 @@ namespace COSXML.Model.Object
                 throw new CosClientException((int)CosClientError.InvalidArgument, "localFileName = null");
             }
             
-            if (ObjectKeySimplifyCheck)
+            //通过requestUrlWithSign下载时，key可以为空
+            if (ObjectKeySimplifyCheck && requestUrlWithSign == null)
             {
                 string newPath = StringUtils.MergePath(path);
                 if (newPath == "/") {

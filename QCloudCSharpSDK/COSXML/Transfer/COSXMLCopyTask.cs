@@ -224,21 +224,7 @@ namespace COSXML.Transfer
         
         public void TestListParts()
         {
-            Process currentProcess = Process.GetCurrentProcess();
-            // 获取当前进程占用的内存大小（以字节为单位）
-            long memorySize = currentProcess.WorkingSet64;
-            // 将字节转换为兆字节（MB）
-            double memorySizeInMB = (double)memorySize / (1024 * 1024);
-            Console.WriteLine("内存大小是:" + memorySizeInMB + "MB");
-            
             ListParts();
-            
-            Process currentProcess2 = Process.GetCurrentProcess();
-            // 获取当前进程占用的内存大小（以字节为单位）
-            memorySize = currentProcess.WorkingSet64;
-            // 将字节转换为兆字节（MB）
-            memorySizeInMB = (double)memorySize / (1024 * 1024);
-            Console.WriteLine("内存大小是:" + memorySizeInMB + "MB");
         }
         
         private void ListParts()

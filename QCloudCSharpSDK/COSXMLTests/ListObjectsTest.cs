@@ -87,21 +87,6 @@ namespace COSXMLTests
                 Assert.Fail();
             }
         }
-
-
-        // [Test()]
-        // public void NewServiceTest()
-        // {
-        //     var service = QCloudServer.Instance().NewService(QCloudServer.Instance().regionForBucketVersioning, 1);
-        //     
-        //     ListBucketVersionsRequest request = new ListBucketVersionsRequest(QCloudServer.Instance().bucketVersioning);
-        //     ListBucketVersionsResult result = service.ListBucketVersions(request);
-        //     Console.WriteLine(result.GetResultInfo());
-        //     // HttpClientConfig conf = new HttpClientConfig();
-        //
-        //     // HttpWebRequest httpWebRequest = HttpWebRequest.Create(request.RequestUrlString) as HttpWebRequest;
-        //     // CommandTask.TestSetRequestProxy(httpWebRequest, service.GetConfig());
-        // }
         
         [Test()]
         public void ListBucketVersions()
