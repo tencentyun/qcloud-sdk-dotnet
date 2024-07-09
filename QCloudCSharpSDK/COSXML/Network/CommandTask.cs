@@ -166,11 +166,11 @@ namespace COSXML.Network
             
             try
             {
-                if (response.Code >= 200 && response.Code < 300) 
-                {
+                // if (response.Code >= 200 && response.Code < 300) 
+                // {
                     // httpWebResponse.
                     response.Body.HandleResponseBody(httpWebResponse.GetResponseStream());
-                }
+                // }
             }
             catch (Exception ex)
             {
