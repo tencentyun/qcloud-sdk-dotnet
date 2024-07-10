@@ -69,7 +69,6 @@ namespace COSXML.Network
                 HandleHttpWebRequest(httpWebRequest, request, config);
 
                 //final: get response
-
                 httpWebResponse = httpWebRequest.GetResponse() as HttpWebResponse;
 
                 //notify has been got response
@@ -166,11 +165,10 @@ namespace COSXML.Network
             
             try
             {
-                // if (response.Code >= 200 && response.Code < 300) 
-                // {
-                    // httpWebResponse.
+                if (response.Code != 404)
+                {
                     response.Body.HandleResponseBody(httpWebResponse.GetResponseStream());
-                // }
+                }
             }
             catch (Exception ex)
             {
