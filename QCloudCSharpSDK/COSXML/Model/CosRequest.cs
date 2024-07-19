@@ -272,7 +272,18 @@ namespace COSXML.Model
             ByteRequestBody body = new ByteRequestBody(data);
             return body;
         }
-
+        
+        /// <summary>
+        /// 返回 string 格式的requestBody
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        protected Network.RequestBody GetJsonRequestBody(string content)
+        {
+            byte[] data = Encoding.UTF8.GetBytes(content);
+            ByteRequestBody body = new ByteRequestBody(data);
+            return body;
+        }
 
         /// <summary>    
         ///   check parameter for cos.

@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 
 using System.Text;
-using COSXML.Network;
 using System.IO;
 using COSXML.Transfer;
 using COSXML.Model.Object;
@@ -96,6 +94,25 @@ namespace COSXML.Model
         }
     }
 
+    /// <summary>
+    /// 处理BucketPolicy的特殊数据体
+    /// </summary>
+    public class CosDataStringResult : CosResult
+    {
+        protected  string _data;
+        internal override void ParseResponseBody(Stream inputStream, string contentType, long contentLength)
+        {
+            if (contentLength != 0)
+            {
+                using (BinaryReader binaryReader = new BinaryReader(inputStream))
+                {
+                    char[] buffer = binaryReader.ReadChars((int)contentLength);
+                    _data = new string(buffer);
+                }
+            }
+        }
+    }
+    
     public class CosDataResult<T> : CosResult
     {
         /// <summary>

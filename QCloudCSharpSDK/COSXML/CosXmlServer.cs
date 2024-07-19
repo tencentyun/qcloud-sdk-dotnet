@@ -255,7 +255,17 @@ namespace COSXML
         {
             Schedue(request, new GetBucketResult(), successCallback, failCallback);
         }
-
+        
+        public GetBucketPolicyResult GetBucketPolicy(GetBucketPolicyRequest request)
+        { 
+            return (Model.Bucket.GetBucketPolicyResult)Excute(request, new Model.Bucket.GetBucketPolicyResult());
+        }
+        
+        public PutBucketPolicyResult PutBucketPolicy(PutBucketPolicyRequest request)
+        {
+            return (Model.Bucket.PutBucketPolicyResult)Excute(request, new Model.Bucket.PutBucketPolicyResult());
+        }
+        
         public PutBucketACLResult PutBucketACL(PutBucketACLRequest request)
         {
 
