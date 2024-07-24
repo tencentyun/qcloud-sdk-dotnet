@@ -1,0 +1,50 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "COSXMLDemo/1.0.0": {
+        "dependencies": {
+          "Tencent.QCloud.Cos.Sdk": "5.4.38",
+          "COSXML": "5.4.38.0"
+        },
+        "runtime": {
+          "COSXMLDemo.dll": {}
+        }
+      },
+      "Tencent.QCloud.Cos.Sdk/5.4.38": {
+        "runtime": {
+          "COSXML.dll": {}
+        }
+      },
+      "COSXML/5.4.38.0": {
+        "runtime": {
+          "COSXML.dll": {
+            "assemblyVersion": "5.4.38.0",
+            "fileVersion": "5.4.38.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "COSXMLDemo/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Tencent.QCloud.Cos.Sdk/5.4.38": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "COSXML/5.4.38.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

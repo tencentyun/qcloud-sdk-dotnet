@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "oOyq9j9tygLmIJX0tbXL6LY8QEMsC0gnE+z6A5nuT2FY0U1pWlowMTBWZWO63nlhu10xsvSyb4JB3ZovJbXzDg==",
+  "success": true,
+  "projectFilePath": "/Users/ned/Code/dotnetSdk/cos-dotnet-sdk-v5/QCloudCSharpSDK/COSXMLDemo/COSXMLDemo.csproj",
+  "expectedPackageFiles": [
+    "/Users/ned/.nuget/packages/tencent.qcloud.cos.sdk/5.4.38/tencent.qcloud.cos.sdk.5.4.38.nupkg.sha512"
+  ],
+  "logs": []
+}
