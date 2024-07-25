@@ -8,6 +8,13 @@ namespace COSXMLDemo
     public class UploadObject {
         
       private CosXml cosXml;
+
+      private string bucket;
+      
+      public void InitParams()
+      {
+          bucket = Environment.GetEnvironmentVariable("BUCKET");
+      }
       
       // 初始化COS服务实例
       private void InitCosXml()
@@ -199,8 +206,11 @@ namespace COSXMLDemo
       public static void UploadObjectMain()
       {
           UploadObject domo = new UploadObject();
+          //demo的自定义参数
+          domo.InitParams();
           //初始化COS服务
           domo.InitCosXml();
+          
           // //表单上传
           // domo.PostObject();
           // //批量上传
