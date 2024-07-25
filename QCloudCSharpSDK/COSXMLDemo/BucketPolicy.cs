@@ -52,6 +52,8 @@ namespace COSXMLDemo
             public void PutBucketPolicy()
             {
                 PutBucketPolicyRequest request = new PutBucketPolicyRequest(bucket);
+                // string region = Environment.GetEnvironmentVariable("COS_REGION");
+                // string appId = Environment.GetEnvironmentVariable("APPID");
                 // string resource = "qcs::cos:" + region + ":uid/" + appId + ":" + bucket + "/*";
                 // string policy = "{\"Statement\":[{\"Action\":[\"name/cos:PutBucketPolicy\",\"name/cos:GetBucketPolicy\",\"name/cos:DeleteBucketPolicy\"],\"Effect\":\"Allow\",\"Principal\":{\"qcs\":[\"qcs::cam::uin/2832742109:uin/100032069732\"]},\"Resource\":[\"" + resource + "\"]}],\"Version\":\"2.0\"}";
                 string policy = @"{
