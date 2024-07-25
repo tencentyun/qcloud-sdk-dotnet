@@ -3,8 +3,8 @@
 *.user
 
 
-*/bin/
-*/obj/
+**/bin/
+**/obj/
 #folder
 QCloudCSharpSDK/COSXML/bin
 QCloudCSharpSDK/COSXML/obj
