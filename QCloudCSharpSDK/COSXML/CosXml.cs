@@ -144,6 +144,27 @@ namespace COSXML
         void DeleteBucket(DeleteBucketRequest request, COSXML.Callback.OnSuccessCallback<CosResult> successCallback, COSXML.Callback.OnFailedCallback failCallback);
 
         /// <summary>
+        /// 获取存储桶策略
+        /// </summary>
+        /// <param name="request">GetBucketRequest</param>
+        /// <returns>GetBucketPolicyResult</returns>
+        GetBucketPolicyResult GetBucketPolicy(GetBucketPolicyRequest request);
+
+        /// <summary>
+        /// 设置存储桶策略
+        /// </summary>
+        /// <param name="request">PutBucketRequest</param>
+        /// <returns>PutBucketPolicyResult</returns>
+        PutBucketPolicyResult PutBucketPolicy(PutBucketPolicyRequest request);
+        
+        /// <summary>
+        /// 删除存储桶策略
+        /// </summary>
+        /// <param name="request">DeleteBucketRequest</param>
+        /// <returns>DeleteBucketPolicyResult</returns>
+        DeleteBucketPolicyResult DeleteBucketPolicy(DeleteBucketPolicyRequest request);
+        
+        /// <summary>
         /// 设置存储桶权限
         /// </summary>
         /// <param name="request">PutBucketACLRequest</param>

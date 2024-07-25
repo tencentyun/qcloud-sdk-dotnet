@@ -75,7 +75,6 @@ namespace COSXMLTests
 
         private void DeleteBucket()
         {
-
             try
             {
                 DeleteBucketRequest request = new DeleteBucketRequest(bucket);
@@ -98,6 +97,58 @@ namespace COSXMLTests
 
         }
 
+        [Test]
+        public void TestBucketPolicy()
+        {
+            try {
+                PutBucketPolicy();
+            } catch (CosServerException) {
+            } catch (CosClientException) {
+            }
+
+            try {
+                GetBucketPolicy();
+            } catch (CosServerException) {
+            } catch (CosClientException) {
+            }
+            
+            try {
+                DeleteBucketPolicy();
+            } catch (CosServerException) {
+            } catch (CosClientException) {
+            }
+        }
+        public void PutBucketPolicy()
+        {
+            PutBucketPolicyRequest request = new PutBucketPolicyRequest(bucket);
+            string appid = QCloudServer.Instance().appid;
+            string resource = "qcs::cos:" + region + ":uid/" + appid + ":" + bucket + "/*";
+            string policy = 
+                "{\"Statement\":[{\"Action\":[\"name/cos:PutBucketPolicy\",\"name/cos:GetBucketPolicy\",\"name/cos:DeleteBucketPolicy\"],\"Effect\":\"Allow\",\"Principal\":{\"qcs\":[\"qcs::cam::uin/2832742109:uin/100032069732\"]},\"Resource\":[\"" 
+                + resource + 
+                "\"]}],\"Version\":\"2.0\"}";
+          
+            request.SetBucketPolicy(policy);
+            PutBucketPolicyResult result = cosXml.PutBucketPolicy(request);
+            Assert.True(result.IsSuccessful());
+        }
+        
+   
+        public void GetBucketPolicy()
+        {
+            GetBucketPolicyRequest  request = new GetBucketPolicyRequest(bucket);
+            GetBucketPolicyResult result = cosXml.GetBucketPolicy(request);
+            Assert.IsNotEmpty(result.Data);
+            Assert.True(result.IsSuccessful());
+        }
+        
+        public void DeleteBucketPolicy()
+        {    
+            DeleteBucketPolicyRequest  request = new DeleteBucketPolicyRequest(bucket);
+            DeleteBucketPolicyResult result = cosXml.DeleteBucketPolicy(request);
+            Assert.True(result.IsSuccessful());
+        }
+        
         [Test()]
         public void HeadBucket()
         {
