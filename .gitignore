@@ -2,6 +2,9 @@
 *.suo
 *.user
 
+
+*/bin/
+*/obj/
 #folder
 QCloudCSharpSDK/COSXML/bin
 QCloudCSharpSDK/COSXML/obj
