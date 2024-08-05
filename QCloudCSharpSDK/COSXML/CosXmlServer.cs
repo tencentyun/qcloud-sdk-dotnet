@@ -924,7 +924,7 @@ namespace COSXML
                 throw new CosClientException((int)CosClientError.InvalidArgument, ex.Message, ex);
             }
         }
-
+        
         public void Cancel(CosRequest cosRequest)
         {
 
@@ -1358,6 +1358,51 @@ namespace COSXML
         {
             request.Region = this.GetConfig().Region;
             return Execute(request, new DescribeMediaBucketsResult());
+        }
+        /// <summary>
+        /// 多文件打包压缩功能可以将您的多个文件，打包为 zip 等压缩包格式，以提交任务的方式进行多文件打包压缩，异步返回打包后的文件，该接口属于 POST 请求
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public CreateFileZipProcessJobsResult createFileZipProcessJobs(CreateFileZipProcessJobsRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new CreateFileZipProcessJobsResult());
+        }
+
+        /// <summary>
+        /// 本接口用于主动查询指定的多文件打包压缩任务结果
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public DescribeFileZipProcessJobsResult describeFileZipProcessJobs(DescribeFileZipProcessJobsRequest request)
+        {   
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new DescribeFileZipProcessJobsResult());
+        }
+        /// <summary>
+        /// 本接口用于文档转 HTML 同步预览链接
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public String createDocPreview(CreateDocPreviewRequest request)
+        {
+
+            PreSignatureStruct signatureStruct = new PreSignatureStruct();
+
+            signatureStruct.bucket = request.Bucket;
+            signatureStruct.appid = this.GetConfig().Appid;
+            signatureStruct.region =this.GetConfig().Region;
+            signatureStruct.key = request.Key;
+            signatureStruct.httpMethod = "GET";
+            signatureStruct.isHttps = true;
+            signatureStruct.signDurationSecond = request.GetSignExpired();
+            string docPreviewUrl = GenerateSignURL(signatureStruct);
+            foreach (var param in request.GetRequestParamters())
+            {
+                docPreviewUrl += "&" + param.Key + "=" + param.Value;
+            }
+            return  docPreviewUrl;
         }
 
     }
