@@ -2,9 +2,6 @@
 *.suo
 *.user
 
-
-**/bin/
-**/obj/
 #folder
 QCloudCSharpSDK/COSXML/bin
 QCloudCSharpSDK/COSXML/obj
@@ -16,3 +13,5 @@ QCloudCSharpSDK/NCOS
 QCloudCSharpSDK/.idea
 *.vs
 .vscode
+**/bin/
+**/obj/
