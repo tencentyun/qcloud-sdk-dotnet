@@ -1,7 +1,3 @@
-using COSXML.Auth;
-using COSXML.Transfer;
-using COSXML;
-using Environment = System.Environment;
 
 namespace COSXMLDemo
 {
@@ -16,9 +12,19 @@ namespace COSXMLDemo
 
             public void DoSomething()
             {
-                BucketPolicy.BucketPolicyMain();
-                DownloadObject.DownloadObjectMain();
-                UploadObject.UploadObjectMain();
+                // BucketPolicy.BucketPolicyMain();
+                // DownloadObject.DownloadObjectMain();
+                // UploadObject.UploadObjectMain();
+                // GetObjectUrlDemo.GetObjectUrlDemoMain();
+
+                // DeleteObjectModel.DeleteObjectModelMain();
+                // SelectObjectDemo.SelectObjectMain();
+
+                // ListObjectModel.ListObjectModelMain();
+                // DoesObjectExistModel.DoesObjectExistMain();
+                // HeadObjectModel.HeadObjectMain();
+                // ObjectRestoreModel.ObjectRestoreModelMain();
+                GetObjectUrlDemo.GetObjectUrlDemoMain();
             }
          
             public void SetEnvironmentVariable()
