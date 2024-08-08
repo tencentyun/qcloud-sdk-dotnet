@@ -1231,6 +1231,25 @@ namespace COSXML
         DescribeMediaBucketsResult DescribeMediaBuckets(DescribeMediaBucketsRequest request);
 
         /// <summary>
+        /// 多文件打包压缩功能可以将您的多个文件，打包为 zip 等压缩包格式，以提交任务的方式进行多文件打包压缩，异步返回打包后的文件，该接口属于 POST 请求
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        CreateFileZipProcessJobsResult createFileZipProcessJobs(CreateFileZipProcessJobsRequest request);
+
+        /// <summary>
+        /// 本接口用于主动查询指定的多文件打包压缩任务结果
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        DescribeFileZipProcessJobsResult describeFileZipProcessJobs(DescribeFileZipProcessJobsRequest request);
+        /// <summary>
+        /// 本接口用于获取文档转html url
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        String createDocPreview(CreateDocPreviewRequest request);
+        /// <summary>
         /// 取消请求
         /// </summary>
         /// <param name="cosRequest"></param>

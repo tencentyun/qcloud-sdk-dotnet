@@ -17,6 +17,8 @@ using COSXML;
 using COSXML.Auth;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace COSXMLTests
 {
@@ -34,11 +36,15 @@ namespace COSXMLTests
         private string audioKey;
         private string textKey;
         private string bucket;
+        private string appid;
+        private string region;
 
         [OneTimeSetUp]
         public void Setup()
         {
             bucket = QCloudServer.Instance().bucketForObjectTest;
+            appid = QCloudServer.Instance().appid;
+            region = QCloudServer.Instance().region;
 
             // 本地文件名，用于暂存下载的文件，以测试上传时处理接口
             localTempPhotoFilePath = TimeUtils.GetCurrentTime(TimeUnit.Seconds) + ".jpg";
@@ -158,22 +164,19 @@ namespace COSXMLTests
             try {
                 string key = photoKey;
 
-                SensitiveContentRecognitionRequest request = new SensitiveContentRecognitionRequest(bucket, key, "porn,terrorist,politics");
-
+                SensitiveContentRecognitionRequest request = new SensitiveContentRecognitionRequest(bucket, key);
+                request.SetBizType("");
+                request.SetDetectUrl("");
+                request.SetInterval("1");
+                request.SetMaxFrames("1");
+                request.SetLargeImageDetect("0");
+                request.SetDataid("");
+                request.SetAsync("0");
+                request.SetCallback("");
                 SensitiveContentRecognitionResult result = QCloudServer.Instance().cosXml.SensitiveContentRecognition(request);
-
-                // Console.WriteLine(result.GetResultInfo());
-                Assert.IsNotEmpty((result.GetResultInfo()));
 
                 Assert.True(result.httpCode == 200);
                 Assert.NotNull(result.recognitionResult);
-                Assert.NotNull(result.recognitionResult.PoliticsInfo);
-                Assert.Zero(result.recognitionResult.PoliticsInfo.Code);
-                Assert.NotNull(result.recognitionResult.PoliticsInfo.Score);
-                Assert.NotNull(result.recognitionResult.PoliticsInfo.Count);
-                Assert.NotNull(result.recognitionResult.PoliticsInfo.Msg);
-                Assert.NotNull(result.recognitionResult.PoliticsInfo.Label);
-                Assert.NotNull(result.recognitionResult.PoliticsInfo.HitFlag);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -186,30 +189,6 @@ namespace COSXMLTests
                 Assert.Fail();
             }
 
-        }
-        [Test]
-        public void SensitiveRecognitionTypeNull()
-        {
-            //对象键
-            try {
-                string key = photoKey;
-
-                SensitiveContentRecognitionRequest request = new SensitiveContentRecognitionRequest(bucket, key, null);
-
-                SensitiveContentRecognitionResult result = QCloudServer.Instance().cosXml.SensitiveContentRecognition(request);
-
-             
-            }
-            catch (COSXML.CosException.CosClientException clientEx)
-            {
-                Console.WriteLine("CosClientException: " + clientEx.Message);
-                Assert.True(clientEx.Message.Equals("type = null"));
-            }
-            catch (COSXML.CosException.CosServerException serverEx)
-            {
-                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                Assert.Fail();
-            }
         }
 
 
@@ -1092,5 +1071,127 @@ namespace COSXMLTests
                 Assert.Fail();
             }
         }
+        [Test]
+        /// 多文件打包压缩功能可以将您的多个文件，打包为 zip 等压缩包格式，以提交任务的方式进行多文件打包压缩，异步返回打包后的文件，该接口属于 POST 请求
+        public void TestCreateFileZipProcessJobs()
+        {
+            // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
+            // string bucket = "dotnet-ut-obj-1253960454"; // 注意：此操作需要 bucket 开通内容审核相关功能
+            CreateFileZipProcessJobsRequest request = new CreateFileZipProcessJobsRequest(bucket);
+            /// 表示任务的类型，多文件打��压缩默认为：FileCompress。;
+            request.SetTag("FileCompress");
+            /// 文件打包时，是否需要去除源文件已有的目录结构，有效值：0：不需要去除目录结构，打包后压缩包中的文件会保留原有的目录结构；1：需要，打包后压缩包内的文件会去除原有的目录结构，所有文件都在同一层级。例如：源文件 URL 为 https://domain/source/test.mp4，则源文件路径为 source/test.mp4，如果为 1，则 ZIP 包中该文件路径为 test.mp4；如果为0， ZIP 包中该文件路径为 source/test.mp4。;
+            request.SetFlatten("0");
+            /// 打包压缩的类型，有效值：zip、tar、tar.gz。;
+            request.SetFormat("zip");
+            /// 压缩类型，仅在Format为tar.gz或zip时有效。faster：压缩速度较快better：压缩质量较高，体积较小default：适中的压缩方式默认值为default;
+            request.SetType("better");
+            /// 压缩包密钥，传入时需先经过 base64 编码，编码后长度不能超过128。当 Format 为 zip 时生效。;
+            request.SetCompressKey("");
+            /// 支持将需要打包的文件整理成索引文件，后台将根据索引文件内提供的文件 url，打包为一个压缩包文件。索引文件需要保存在当前存储桶中，本字段需要提供索引文件的对象地址，不需要带域名，填写示例：/test/index.csv索引文件格式：仅支持 CSV 文件，一行一条 URL（仅支持本存储桶文件），如有多列字段，默认取第一列作为URL。;
+            request.SetUrlList("");
+            /// 支持对存储桶中的某个前缀进行打包，如果需要对某个目录进行打包，需要加/，例如test目录打包，则值为：test/。;
+            request.SetPrefix("");
+            /// 支持对存储桶中的多个文件进行打包，个数不能超过 1000，如需打包更多文件，请使用UrlList或Prefix参数。;
+            COSXML.Model.CI.CreateFileZipProcessJobs.KeyConfig keyConfig = new CreateFileZipProcessJobs.KeyConfig();
+            keyConfig.key = "CITestImage.png";
+            keyConfig.rename = "CITestImage.zip";
+            keyConfig.imageParams = "";
+            request.setKeyConfig(keyConfig);
+            /// 打包时如果单个文件出错，是否忽略错误继续打包。有效值为：ture：忽略错误继续打包后续的文件；false：遇到某个文件执行打包报错时，直接终止打包任务，不返回压缩包。默认值为false。;
+            request.SetIgnoreError ("true");
+            /// 透传用户信息，可打印的 ASCII 码，长度不超过1024。;
+            request.SetUserData("");
+            /// 存储桶的地域。;
+            request.SetRegion("ap-guangzhou");
+            /// 保存压缩后文件的存储桶。;
+            request.SetBucket(bucket);
+            /// 压缩后文件的文件名;
+            request.SetObjectInfo("object-name");
+            /// 任务回调格式，JSON 或 XML，默认 XML，优先级高于队列的回调格式。;
+            request.SetCallBackFormat("");
+            /// 任务回调类型，Url 或 TDMQ，默认 Url，优先级高于队列的回调类型。;
+            request.SetCallBackType("Url");
+            /// 任务回调的地址，优先级高于队列的回调地址。;
+            request.SetCallBack("");
+            /// 消息队列所属园区，目前支持园区 sh（上海）、bj（北京）、gz（广州）、cd（成都）、hk（中国香港）;
+            request.SetMqRegion("");
+            /// 消息队列使用模式，默认 Queue ：主题订阅：Topic队列服务: Queue;
+            request.SetMqMode("");
+            /// TDMQ 主题名称;
+            request.SetMqName("");
+            request.createFileZipProcessJobs.GetInfo();
+
+            CreateFileZipProcessJobsResult result = QCloudServer.Instance().cosXml.createFileZipProcessJobs(request);
+
+            Assert.AreEqual(200, result.httpCode);
+            string jobId = result.createFileZipProcessJobsResult.JobsDetail.JobId;
+            Assert.NotNull(jobId);
+
+            DescribeFileZipProcessJobsRequest describeDocProcessJobsRequest = new DescribeFileZipProcessJobsRequest(bucket,jobId);
+            DescribeFileZipProcessJobsResult describeFileZipProcessJobsResult= QCloudServer.Instance().cosXml.describeFileZipProcessJobs(describeDocProcessJobsRequest);
+
+            Assert.AreEqual(200,describeFileZipProcessJobsResult.httpCode);
+            Assert.NotNull(describeFileZipProcessJobsResult.describeFileZipProcessJobsResult.JobsDetail);
+
+        }
+
+        [Test]
+        public void TestCreateDocPreviewJob()
+        {
+            CreateDocPreviewRequest request = new CreateDocPreviewRequest(bucket,textKey);
+            request.SetSrcType("txt");
+            request.SetCopyable("1");
+            // 创建并初始化 HtmlParams 对象
+            var htmlParams = new CreateDocPreviewRequest.HtmlParams
+            {
+                CommonOptions = new CreateDocPreviewRequest.CommonOptions
+                {
+                    IsShowTopArea = true,
+                    IsShowHeader = true,
+                    Language = "zh",
+                    isBrowserViewFullscreen = true,
+                    isIframeViewFullscreen = true,
+                },
+                WordOptions = new CreateDocPreviewRequest.WordOptions
+                {
+                    isShowDocMap = false,
+                    isBestScale = false,
+                },
+                PdfOptions = new CreateDocPreviewRequest.PdfOptions
+                {
+                    isShowComment = false,
+                    isInSafeMode = false,
+                    isShowBottomStatusBar = false,
+                },
+                PptOptions = new CreateDocPreviewRequest.PptOptions
+                {
+                    isShowBottomStatusBar = false,
+                },
+                CommanBars = new CreateDocPreviewRequest.CommanBars
+                {
+                    cmbId = "",
+                    attributes = new CreateDocPreviewRequest.Attributes
+                    {
+                        visible = false,
+                        enable = false,
+                    }
+                }
+            };
+            request.SetHtmlParams(DigestUtils.GetBase64(JsonSerializer.Serialize(htmlParams), Encoding.UTF8));
+            request.SetHtmlWaterword("5pWw5o2u5LiH6LGhLeaWh+aho+mihOiniA==");
+            request.SetHtmlFillstyle("cmdiYSgxMDIsMjA0LDI1NSwwLjMp");
+            request.SetHtmlFront("Ym9sZCAyNXB4IFNlcmlm");
+            request.SetHtmlRotate("315");
+            request.SetHtmlHorizontal("50");
+            request.SetHtmlVertical("100");
+            request.SetHtmlTitle("6IW+6K6v5LqRLeaVsOaNruS4h+ixoQ==");
+            request.SetSignExpired(600);
+            String createDocPreviewUrl = QCloudServer.Instance().cosXml.createDocPreview(request);
+
+            Console.WriteLine(createDocPreviewUrl);
+
+        }
+
     }
 }
