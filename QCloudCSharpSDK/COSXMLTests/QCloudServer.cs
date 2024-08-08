@@ -65,6 +65,7 @@ namespace COSXMLTests
 
             CosXmlConfig config = new CosXmlConfig.Builder()
                 .SetRegion(region)
+                .SetAppid(appid)
                 .SetDebugLog(true)
                 .IsHttps(true)
                 .SetConnectionLimit(512)
