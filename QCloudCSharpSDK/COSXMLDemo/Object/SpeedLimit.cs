@@ -36,13 +36,13 @@ namespace COSXMLDemo
         }
         
         // 下载时对单链接限速
-        public async void DownloadObjectTrafficLimit()
+        public async Task DownloadObjectTrafficLimit()
         {
             TransferConfig transferConfig = new TransferConfig();
             // 初始化 TransferManager
             TransferManager transferManager = new TransferManager(cosXml, transferConfig);
         
-            String bucket = "examplebucket-1250000000"; //存储桶，格式：BucketName-APPID
+            // String bucket = "examplebucket-1250000000"; //存储桶，格式：BucketName-APPID
             String cosPath = "exampleobject"; //对象在存储桶中的位置标识符，即称对象键
             string localDir = System.IO.Path.GetTempPath();//本地文件夹
             string localFileName = "my-local-temp-file"; //指定本地保存的文件名
@@ -55,15 +55,15 @@ namespace COSXMLDemo
         }
         
         /// 上传时对单链接限速
-        public async void UploadObjectTrafficLimit()
+        public async Task UploadObjectTrafficLimit()
         {
             TransferConfig transferConfig = new TransferConfig();
             // 初始化 TransferManager
             TransferManager transferManager = new TransferManager(cosXml, transferConfig);
             // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-            string bucket = "examplebucket-1250000000";
-            string cosPath = "dir/exampleObject"; // 对象键
-            string srcPath = @"temp-source-file";//本地文件绝对路径
+            // string bucket = "examplebucket-1250000000";
+            string cosPath = "exampleObject"; // 对象键
+            string srcPath = @"my-local-temp-file";//本地文件绝对路径
 
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, cosPath, srcPath);
             putObjectRequest.LimitTraffic(8 * 1000 * 1000); // 限制为1MB/s
@@ -77,8 +77,8 @@ namespace COSXMLDemo
         public static void SpeedLimitModelMain()
         {
             SpeedLimitModel demo = new SpeedLimitModel();
-            demo.DownloadObjectTrafficLimit();
-            demo.UploadObjectTrafficLimit();
+            demo.DownloadObjectTrafficLimit().Wait();
+            demo.UploadObjectTrafficLimit().Wait();;
         }
     }
 }
