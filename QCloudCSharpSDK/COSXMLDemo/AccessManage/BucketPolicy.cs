@@ -34,6 +34,7 @@ namespace COSXMLDemo
             InitCosXml();
             InitParams();
         }
+        
         //获取桶的策略
         public void GetBucketPolicy()
         {

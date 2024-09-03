@@ -4,13 +4,12 @@ using COSXML.Model.Bucket;
 using COSXML.Model.Tag;
 namespace COSXMLDemo
 {
-    public class BucketLifecycleModel
+    public class BucketRefererModel
     {
-
         private CosXml cosXml;
 
         public string bucket;
-        
+
         public void InitParams()
         {
             bucket = Environment.GetEnvironmentVariable("BUCKET");
@@ -29,37 +28,35 @@ namespace COSXMLDemo
             QCloudCredentialProvider qCloudCredentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, durationSecond);
             this.cosXml = new CosXmlServer(config, qCloudCredentialProvider);
         }
-        
-        BucketLifecycleModel()
+
+        BucketRefererModel()
         {
             InitCosXml();
             InitParams();
         }
         
-        // 设置存储桶生命周期
-        public void PutBucketLifecycle()
+        // 设置存储桶防盗链
+        public void PutBucketReferer()
         {
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
                 string bucket = "examplebucket-1250000000";
-                PutBucketLifecycleRequest request = new PutBucketLifecycleRequest(bucket);
-                //设置 lifecycle
-                LifecycleConfiguration.Rule rule = new LifecycleConfiguration.Rule();
-                rule.id = "lfiecycleConfigureId";
-                rule.status = "Enabled"; //Enabled，Disabled
-
-                rule.filter = new COSXML.Model.Tag.LifecycleConfiguration.Filter();
-                rule.filter.prefix = "2/";
-
-                //指定分片过期删除操作
-                rule.abortIncompleteMultiUpload = new LifecycleConfiguration.AbortIncompleteMultiUpload();
-                rule.abortIncompleteMultiUpload.daysAfterInitiation = 2;
-
-                request.SetRule(rule);
-
+                PutBucketRefererRequest request = new PutBucketRefererRequest(bucket);
+                // 设置防盗链规则
+                RefererConfiguration configuration = new RefererConfiguration();
+                configuration.Status = "Enabled"; // 是否开启防盗链，枚举值：Enabled、Disabled
+                configuration.RefererType = "White-List"; // 防盗链类型，枚举值：Black-List、White-List
+                // 生效域名列表， 支持多个域名且为前缀匹配， 支持带端口的域名和 IP， 支持通配符*，做二级域名或多级域名的通配
+                configuration.domainList = new DomainList();
+                // 单条生效域名 例如www.qq.com/example，192.168.1.2:8080， *.qq.com
+                configuration.domainList.AddDomain("*.domain1.com");
+                configuration.domainList.AddDomain("*.domain2.com");
+                // 是否允许空 Referer 访问，枚举值：Allow、Deny，默认值为 Deny
+                configuration.EmptyReferConfiguration = "Deny";
+                request.SetRefererConfiguration(configuration);
                 //执行请求
-                PutBucketLifecycleResult result = cosXml.PutBucketLifecycle(request);
+                PutBucketRefererResult result = cosXml.PutBucketReferer(request);
                 //请求成功
                 Console.WriteLine(result.GetResultInfo());
             }
@@ -73,41 +70,26 @@ namespace COSXMLDemo
             }
         }
 
-        // 获取存储桶生命周期
-        public void GetBucketLifecycle()
+        // 获取存储桶防盗链规则
+        public void GetBucketReferer()
         {
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
                 string bucket = "examplebucket-1250000000";
-                GetBucketLifecycleRequest request = new GetBucketLifecycleRequest(bucket);
-                //执行请求
-                GetBucketLifecycleResult result = cosXml.GetBucketLifecycle(request);
-                //存储桶的生命周期配置
-                LifecycleConfiguration conf = result.lifecycleConfiguration;
-            }
-            catch (COSXML.CosException.CosClientException clientEx)
-            {
-                Console.WriteLine("CosClientException: " + clientEx);
-            }
-            catch (COSXML.CosException.CosServerException serverEx)
-            {
-                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-            }
-        }
-        
-        // 删除存储桶生命周期
-        public void DeleteBucketLifecycle()
-        {
-            try
-            {
-                // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                string bucket = "examplebucket-1250000000";
-                DeleteBucketLifecycleRequest request = new DeleteBucketLifecycleRequest(bucket);
-                //执行请求
-                DeleteBucketLifecycleResult result = cosXml.DeleteBucketLifecycle(request);
-                //请求成功
+                GetBucketRefererRequest request = new GetBucketRefererRequest(bucket);
+                // 执行请求
+                GetBucketRefererResult result = cosXml.GetBucketReferer(request);
                 Console.WriteLine(result.GetResultInfo());
+                // Status参数
+                Console.WriteLine(result.refererConfiguration.Status);
+                // Referer名单类型
+                Console.WriteLine(result.refererConfiguration.RefererType);
+                // 名单中的域名列表
+                foreach (string domain in result.refererConfiguration.domainList.domains)
+                {
+                    Console.WriteLine(domain);
+                }
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -118,16 +100,13 @@ namespace COSXMLDemo
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
             }
         }
-        
-        public static void  BucketLifecycleMain()
+
+        public static void BucketRefererMain()
         {
-            BucketLifecycleModel m = new BucketLifecycleModel();
+            BucketRefererModel m = new BucketRefererModel();
+            m.PutBucketReferer();
             
-            m.PutBucketLifecycle();
-            
-            m.GetBucketLifecycle();
-            
-            m.DeleteBucketLifecycle();
+            m.GetBucketReferer();
         }
     }
 }

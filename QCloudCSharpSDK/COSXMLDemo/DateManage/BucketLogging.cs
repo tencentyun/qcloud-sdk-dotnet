@@ -4,13 +4,13 @@ using COSXML.Model.Bucket;
 using COSXML.Model.Tag;
 namespace COSXMLDemo
 {
-    public class BucketLifecycleModel
+    public class BucketLoggingModel
     {
 
         private CosXml cosXml;
 
         public string bucket;
-        
+
         public void InitParams()
         {
             bucket = Environment.GetEnvironmentVariable("BUCKET");
@@ -29,37 +29,26 @@ namespace COSXMLDemo
             QCloudCredentialProvider qCloudCredentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, durationSecond);
             this.cosXml = new CosXmlServer(config, qCloudCredentialProvider);
         }
-        
-        BucketLifecycleModel()
+
+        BucketLoggingModel()
         {
             InitCosXml();
             InitParams();
         }
-        
-        // 设置存储桶生命周期
-        public void PutBucketLifecycle()
+
+
+        // 开启存储桶日志服务
+        public void PutBucketLogging()
         {
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
                 string bucket = "examplebucket-1250000000";
-                PutBucketLifecycleRequest request = new PutBucketLifecycleRequest(bucket);
-                //设置 lifecycle
-                LifecycleConfiguration.Rule rule = new LifecycleConfiguration.Rule();
-                rule.id = "lfiecycleConfigureId";
-                rule.status = "Enabled"; //Enabled，Disabled
-
-                rule.filter = new COSXML.Model.Tag.LifecycleConfiguration.Filter();
-                rule.filter.prefix = "2/";
-
-                //指定分片过期删除操作
-                rule.abortIncompleteMultiUpload = new LifecycleConfiguration.AbortIncompleteMultiUpload();
-                rule.abortIncompleteMultiUpload.daysAfterInitiation = 2;
-
-                request.SetRule(rule);
-
+                PutBucketLoggingRequest request = new PutBucketLoggingRequest(bucket);
+                // 设置保存日志的目标路径
+                request.SetTarget("targetbucket-1250000000", "logs/");
                 //执行请求
-                PutBucketLifecycleResult result = cosXml.PutBucketLifecycle(request);
+                PutBucketLoggingResult result = cosXml.PutBucketLogging(request);
                 //请求成功
                 Console.WriteLine(result.GetResultInfo());
             }
@@ -73,41 +62,23 @@ namespace COSXMLDemo
             }
         }
 
-        // 获取存储桶生命周期
-        public void GetBucketLifecycle()
+        // 获取存储桶日志服务
+        public void GetBucketLogging()
         {
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
                 string bucket = "examplebucket-1250000000";
-                GetBucketLifecycleRequest request = new GetBucketLifecycleRequest(bucket);
+                GetBucketLoggingRequest request = new GetBucketLoggingRequest(bucket);
                 //执行请求
-                GetBucketLifecycleResult result = cosXml.GetBucketLifecycle(request);
-                //存储桶的生命周期配置
-                LifecycleConfiguration conf = result.lifecycleConfiguration;
-            }
-            catch (COSXML.CosException.CosClientException clientEx)
-            {
-                Console.WriteLine("CosClientException: " + clientEx);
-            }
-            catch (COSXML.CosException.CosServerException serverEx)
-            {
-                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-            }
-        }
-        
-        // 删除存储桶生命周期
-        public void DeleteBucketLifecycle()
-        {
-            try
-            {
-                // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                string bucket = "examplebucket-1250000000";
-                DeleteBucketLifecycleRequest request = new DeleteBucketLifecycleRequest(bucket);
-                //执行请求
-                DeleteBucketLifecycleResult result = cosXml.DeleteBucketLifecycle(request);
+                GetBucketLoggingResult getResult = cosXml.GetBucketLogging(request);
                 //请求成功
-                Console.WriteLine(result.GetResultInfo());
+                BucketLoggingStatus status = getResult.bucketLoggingStatus;
+                if (status != null && status.loggingEnabled != null)
+                {
+                    string targetBucket = status.loggingEnabled.targetBucket;
+                    string targetPrefix = status.loggingEnabled.targetPrefix;
+                }
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -118,16 +89,13 @@ namespace COSXMLDemo
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
             }
         }
-        
-        public static void  BucketLifecycleMain()
+
+        public static void BucketLoggingMain()
         {
-            BucketLifecycleModel m = new BucketLifecycleModel();
-            
-            m.PutBucketLifecycle();
-            
-            m.GetBucketLifecycle();
-            
-            m.DeleteBucketLifecycle();
+            BucketLoggingModel e = new BucketLoggingModel();
+            e.PutBucketLogging();
+            e.GetBucketLogging();
         }
+
     }
 }

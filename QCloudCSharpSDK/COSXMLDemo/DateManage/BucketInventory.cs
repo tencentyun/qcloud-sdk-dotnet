@@ -1,16 +1,16 @@
 using COSXML;
 using COSXML.Auth;
 using COSXML.Model.Bucket;
+using COSXML.Model.Object;
 using COSXML.Model.Tag;
 namespace COSXMLDemo
 {
-    public class BucketLifecycleModel
+    public class BucketInventoryModel
     {
-
         private CosXml cosXml;
 
         public string bucket;
-        
+
         public void InitParams()
         {
             bucket = Environment.GetEnvironmentVariable("BUCKET");
@@ -29,39 +29,32 @@ namespace COSXMLDemo
             QCloudCredentialProvider qCloudCredentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, durationSecond);
             this.cosXml = new CosXmlServer(config, qCloudCredentialProvider);
         }
-        
-        BucketLifecycleModel()
+
+        BucketInventoryModel()
         {
             InitCosXml();
             InitParams();
         }
-        
-        // 设置存储桶生命周期
-        public void PutBucketLifecycle()
+
+        // 设置存储桶清单任务
+        public void PutBucketInventory()
         {
             try
             {
+                string inventoryId = "aInventoryId";
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
                 string bucket = "examplebucket-1250000000";
-                PutBucketLifecycleRequest request = new PutBucketLifecycleRequest(bucket);
-                //设置 lifecycle
-                LifecycleConfiguration.Rule rule = new LifecycleConfiguration.Rule();
-                rule.id = "lfiecycleConfigureId";
-                rule.status = "Enabled"; //Enabled，Disabled
-
-                rule.filter = new COSXML.Model.Tag.LifecycleConfiguration.Filter();
-                rule.filter.prefix = "2/";
-
-                //指定分片过期删除操作
-                rule.abortIncompleteMultiUpload = new LifecycleConfiguration.AbortIncompleteMultiUpload();
-                rule.abortIncompleteMultiUpload.daysAfterInitiation = 2;
-
-                request.SetRule(rule);
-
+                PutBucketInventoryRequest putRequest = new PutBucketInventoryRequest(bucket, inventoryId);
+                putRequest.SetDestination("CSV", "100000000001", "examplebucket-1250000000", "ap-guangzhou", "list1");
+                putRequest.IsEnable(true);
+                // 清单任务周期，枚举值：Daily、Weekly
+                putRequest.SetScheduleFrequency("Daily");
+                // 是否在清单中包含对象版本，枚举值：All、Current
+                putRequest.SetIncludedObjectVersions("All");
                 //执行请求
-                PutBucketLifecycleResult result = cosXml.PutBucketLifecycle(request);
+                PutBucketInventoryResult putResult = cosXml.PutBucketInventory(putRequest);
                 //请求成功
-                Console.WriteLine(result.GetResultInfo());
+                Console.WriteLine(putResult.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -73,18 +66,18 @@ namespace COSXMLDemo
             }
         }
 
-        // 获取存储桶生命周期
-        public void GetBucketLifecycle()
+        // 获取存储桶清单任务
+        public void GetBucketInventory()
         {
             try
             {
+                string inventoryId = "aInventoryId";
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
                 string bucket = "examplebucket-1250000000";
-                GetBucketLifecycleRequest request = new GetBucketLifecycleRequest(bucket);
-                //执行请求
-                GetBucketLifecycleResult result = cosXml.GetBucketLifecycle(request);
-                //存储桶的生命周期配置
-                LifecycleConfiguration conf = result.lifecycleConfiguration;
+                GetBucketInventoryRequest getRequest = new GetBucketInventoryRequest(bucket);
+                getRequest.SetInventoryId(inventoryId);
+                GetBucketInventoryResult getResult = cosXml.GetBucketInventory(getRequest);
+                InventoryConfiguration configuration = getResult.inventoryConfiguration;
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -95,19 +88,20 @@ namespace COSXMLDemo
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
             }
         }
-        
-        // 删除存储桶生命周期
-        public void DeleteBucketLifecycle()
+
+        // 删除存储桶清单任务
+        public void DeleteBucketInventory()
         {
             try
             {
+                string inventoryId = "aInventoryId";
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
                 string bucket = "examplebucket-1250000000";
-                DeleteBucketLifecycleRequest request = new DeleteBucketLifecycleRequest(bucket);
-                //执行请求
-                DeleteBucketLifecycleResult result = cosXml.DeleteBucketLifecycle(request);
+                DeleteBucketInventoryRequest deleteRequest = new DeleteBucketInventoryRequest(bucket);
+                deleteRequest.SetInventoryId(inventoryId);
+                DeleteBucketInventoryResult deleteResult = cosXml.DeleteBucketInventory(deleteRequest);
                 //请求成功
-                Console.WriteLine(result.GetResultInfo());
+                Console.WriteLine(deleteResult.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -118,16 +112,18 @@ namespace COSXMLDemo
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
             }
         }
-        
-        public static void  BucketLifecycleMain()
+
+
+        public static void BucketInventoryMain()
         {
-            BucketLifecycleModel m = new BucketLifecycleModel();
-            
-            m.PutBucketLifecycle();
-            
-            m.GetBucketLifecycle();
-            
-            m.DeleteBucketLifecycle();
+            BucketInventoryModel m = new BucketInventoryModel();
+
+            m.PutBucketInventory();
+
+            m.GetBucketInventory();
+
+            m.DeleteBucketInventory();
         }
+
     }
 }

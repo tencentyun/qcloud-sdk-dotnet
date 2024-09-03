@@ -1,16 +1,18 @@
 using COSXML;
 using COSXML.Auth;
+using COSXML.Common;
 using COSXML.Model.Bucket;
+using COSXML.Model.Object;
 using COSXML.Model.Tag;
 namespace COSXMLDemo
 {
-    public class BucketLifecycleModel
+    public class PutObjectACLModel
     {
 
         private CosXml cosXml;
 
         public string bucket;
-        
+
         public void InitParams()
         {
             bucket = Environment.GetEnvironmentVariable("BUCKET");
@@ -29,37 +31,29 @@ namespace COSXMLDemo
             QCloudCredentialProvider qCloudCredentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, durationSecond);
             this.cosXml = new CosXmlServer(config, qCloudCredentialProvider);
         }
-        
-        BucketLifecycleModel()
+
+        PutObjectACLModel()
         {
             InitCosXml();
             InitParams();
         }
-        
-        // 设置存储桶生命周期
-        public void PutBucketLifecycle()
+
+        // 设置存储桶 ACL
+        public void PutBucketAcl()
         {
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
                 string bucket = "examplebucket-1250000000";
-                PutBucketLifecycleRequest request = new PutBucketLifecycleRequest(bucket);
-                //设置 lifecycle
-                LifecycleConfiguration.Rule rule = new LifecycleConfiguration.Rule();
-                rule.id = "lfiecycleConfigureId";
-                rule.status = "Enabled"; //Enabled，Disabled
-
-                rule.filter = new COSXML.Model.Tag.LifecycleConfiguration.Filter();
-                rule.filter.prefix = "2/";
-
-                //指定分片过期删除操作
-                rule.abortIncompleteMultiUpload = new LifecycleConfiguration.AbortIncompleteMultiUpload();
-                rule.abortIncompleteMultiUpload.daysAfterInitiation = 2;
-
-                request.SetRule(rule);
-
+                PutBucketACLRequest request = new PutBucketACLRequest(bucket);
+                //设置私有读写权限
+                request.SetCosACL(CosACL.Private);
+                //授予1131975903账号读权限
+                COSXML.Model.Tag.GrantAccount readAccount = new COSXML.Model.Tag.GrantAccount();
+                readAccount.AddGrantAccount("1131975903", "1131975903");
+                request.SetXCosGrantRead(readAccount);
                 //执行请求
-                PutBucketLifecycleResult result = cosXml.PutBucketLifecycle(request);
+                PutBucketACLResult result = cosXml.PutBucketACL(request);
                 //请求成功
                 Console.WriteLine(result.GetResultInfo());
             }
@@ -73,18 +67,18 @@ namespace COSXMLDemo
             }
         }
 
-        // 获取存储桶生命周期
-        public void GetBucketLifecycle()
+        /// 获取存储桶 ACL
+        public void GetBucketAcl()
         {
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
                 string bucket = "examplebucket-1250000000";
-                GetBucketLifecycleRequest request = new GetBucketLifecycleRequest(bucket);
+                GetBucketACLRequest request = new GetBucketACLRequest(bucket);
                 //执行请求
-                GetBucketLifecycleResult result = cosXml.GetBucketLifecycle(request);
-                //存储桶的生命周期配置
-                LifecycleConfiguration conf = result.lifecycleConfiguration;
+                GetBucketACLResult result = cosXml.GetBucketACL(request);
+                //存储桶的 ACL 信息
+                AccessControlPolicy acl = result.accessControlPolicy;
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -95,17 +89,25 @@ namespace COSXMLDemo
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
             }
         }
-        
-        // 删除存储桶生命周期
-        public void DeleteBucketLifecycle()
+
+        // 设置对象 ACL
+        public void PutObjectAcl()
         {
+            // 因为存储桶 ACL 最多1000条，为避免 ACL 达到上限，非必须情况不建议给对象单独设置 ACL(对象默认继承 bucket 权限).
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
                 string bucket = "examplebucket-1250000000";
-                DeleteBucketLifecycleRequest request = new DeleteBucketLifecycleRequest(bucket);
+                string key = "exampleobject"; //对象键
+                PutObjectACLRequest request = new PutObjectACLRequest(bucket, key);
+                //设置私有读写权限 
+                request.SetCosACL(CosACL.Private);
+                //授予1131975903账号读权限 
+                COSXML.Model.Tag.GrantAccount readAccount = new COSXML.Model.Tag.GrantAccount();
+                readAccount.AddGrantAccount("1131975903", "1131975903");
+                request.SetXCosGrantRead(readAccount);
                 //执行请求
-                DeleteBucketLifecycleResult result = cosXml.DeleteBucketLifecycle(request);
+                PutObjectACLResult result = cosXml.PutObjectACL(request);
                 //请求成功
                 Console.WriteLine(result.GetResultInfo());
             }
@@ -118,16 +120,41 @@ namespace COSXMLDemo
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
             }
         }
-        
-        public static void  BucketLifecycleMain()
+
+        // 获取对象 ACL
+        public void GetObjectAcl()
         {
-            BucketLifecycleModel m = new BucketLifecycleModel();
-            
-            m.PutBucketLifecycle();
-            
-            m.GetBucketLifecycle();
-            
-            m.DeleteBucketLifecycle();
+            try
+            {
+                // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
+                string bucket = "examplebucket-1250000000";
+                string key = "exampleobject"; //对象键
+                GetObjectACLRequest request = new GetObjectACLRequest(bucket, key);
+                //执行请求
+                GetObjectACLResult result = cosXml.GetObjectACL(request);
+                //对象的 ACL 信息
+                AccessControlPolicy acl = result.accessControlPolicy;
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx);
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+            }
+        }
+
+
+        public static void PutObjectACLMain()
+        {
+
+            PutObjectACLModel m = new PutObjectACLModel();
+            m.PutBucketAcl();
+            m.GetBucketAcl();
+
+            m.PutObjectAcl();
+            m.GetObjectAcl();
         }
     }
 }
