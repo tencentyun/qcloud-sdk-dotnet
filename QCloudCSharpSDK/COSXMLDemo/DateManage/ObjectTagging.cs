@@ -42,7 +42,7 @@ namespace COSXMLDemo
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                string bucket = "examplebucket-1250000000";
+                // string bucket = "examplebucket-1250000000";
                 string key = "exampleobject"; //对象键
                 GetObjectTaggingRequest request = new GetObjectTaggingRequest(bucket, key);
                 // 执行请求
@@ -72,7 +72,7 @@ namespace COSXMLDemo
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                string bucket = "examplebucket-1250000000";
+                // string bucket = "examplebucket-1250000000";
                 string key = "exampleobject"; //对象键
                 DeleteObjectTaggingRequest request = new DeleteObjectTaggingRequest(bucket, key);
                 // 执行请求
@@ -95,7 +95,7 @@ namespace COSXMLDemo
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                string bucket = "examplebucket-1250000000";
+                // string bucket = "examplebucket-1250000000";
                 string key = "exampleobject"; //对象键
                 PutObjectTaggingRequest request = new PutObjectTaggingRequest(bucket, key);
                 // 增加标签键值对 

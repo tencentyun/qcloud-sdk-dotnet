@@ -76,8 +76,9 @@ namespace COSXMLDemo
                 string bucket = "examplebucket-1250000000";
                 GetBucketInventoryRequest getRequest = new GetBucketInventoryRequest(bucket);
                 getRequest.SetInventoryId(inventoryId);
-                GetBucketInventoryResult getResult = cosXml.GetBucketInventory(getRequest);
-                InventoryConfiguration configuration = getResult.inventoryConfiguration;
+                GetBucketInventoryResult result = cosXml.GetBucketInventory(getRequest);
+                InventoryConfiguration configuration = result.inventoryConfiguration;
+                Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {

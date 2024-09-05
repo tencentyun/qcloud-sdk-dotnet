@@ -48,9 +48,9 @@ namespace COSXMLDemo
                 PutBucketACLRequest request = new PutBucketACLRequest(bucket);
                 //设置私有读写权限
                 request.SetCosACL(CosACL.Private);
-                //授予1131975903账号读权限
+                //授予113197593账号读权限
                 COSXML.Model.Tag.GrantAccount readAccount = new COSXML.Model.Tag.GrantAccount();
-                readAccount.AddGrantAccount("1131975903", "1131975903");
+                readAccount.AddGrantAccount("113197593", "113197593");
                 request.SetXCosGrantRead(readAccount);
                 //执行请求
                 PutBucketACLResult result = cosXml.PutBucketACL(request);
@@ -79,6 +79,7 @@ namespace COSXMLDemo
                 GetBucketACLResult result = cosXml.GetBucketACL(request);
                 //存储桶的 ACL 信息
                 AccessControlPolicy acl = result.accessControlPolicy;
+                Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -134,6 +135,7 @@ namespace COSXMLDemo
                 GetObjectACLResult result = cosXml.GetObjectACL(request);
                 //对象的 ACL 信息
                 AccessControlPolicy acl = result.accessControlPolicy;
+                Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {

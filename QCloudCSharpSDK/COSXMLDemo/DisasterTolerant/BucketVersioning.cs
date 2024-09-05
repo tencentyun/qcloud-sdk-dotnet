@@ -69,6 +69,7 @@ namespace COSXMLDemo.DisasterTolerant
                 GetBucketVersioningResult result = cosXml.GetBucketVersioning(request);
                 // 存储桶的生命周期配置
                 VersioningConfiguration conf = result.versioningConfiguration;
+                Console.WriteLine(conf.GetInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -80,12 +81,11 @@ namespace COSXMLDemo.DisasterTolerant
             }
         }
         
-        public static void BucketVersioningModelMain()
+        public static void BucketVersioningMain()
         {
             BucketVersioningModel m = new BucketVersioningModel();
             m.PutBucketVersioning();
             m.GetBucketVersioning();
         }
-
     }
 }

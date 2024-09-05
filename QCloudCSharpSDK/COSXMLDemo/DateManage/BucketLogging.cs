@@ -36,7 +36,6 @@ namespace COSXMLDemo
             InitParams();
         }
 
-
         // 开启存储桶日志服务
         public void PutBucketLogging()
         {
@@ -68,17 +67,18 @@ namespace COSXMLDemo
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                string bucket = "examplebucket-1250000000";
+                // string bucket = "examplebucket-1250000000";
                 GetBucketLoggingRequest request = new GetBucketLoggingRequest(bucket);
                 //执行请求
-                GetBucketLoggingResult getResult = cosXml.GetBucketLogging(request);
+                GetBucketLoggingResult result = cosXml.GetBucketLogging(request);
                 //请求成功
-                BucketLoggingStatus status = getResult.bucketLoggingStatus;
+                BucketLoggingStatus status = result.bucketLoggingStatus;
                 if (status != null && status.loggingEnabled != null)
                 {
                     string targetBucket = status.loggingEnabled.targetBucket;
                     string targetPrefix = status.loggingEnabled.targetPrefix;
                 }
+                Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {

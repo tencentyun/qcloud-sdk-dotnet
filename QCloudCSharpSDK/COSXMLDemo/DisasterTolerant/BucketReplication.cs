@@ -28,6 +28,12 @@ namespace COSXMLDemo.DisasterTolerant
             QCloudCredentialProvider qCloudCredentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, durationSecond);
             this.cosXml = new CosXmlServer(config, qCloudCredentialProvider);
         }
+
+        BucketReplicationModel()
+        {
+            InitCosXml();
+            InitParams();
+        }
         
         // 设置存储桶跨地域复制规则
         public void PutBucketReplication()
@@ -46,11 +52,9 @@ namespace COSXMLDemo.DisasterTolerant
             ruleStruct.region = "ap-beijing"; //目标存储桶地域信息
             ruleStruct.bucket = "destinationbucket-1250000000"; //格式：BucketName-APPID
             ruleStruct.prefix = "34"; //前缀匹配策略
-            List<PutBucketReplicationRequest.RuleStruct> ruleStructs =
-                new List<PutBucketReplicationRequest.RuleStruct>();
+            List<PutBucketReplicationRequest.RuleStruct> ruleStructs = new List<PutBucketReplicationRequest.RuleStruct>();
             ruleStructs.Add(ruleStruct);
             request.SetReplicationConfiguration(ownerUin, subUin, ruleStructs);
-
             try
             {
                 PutBucketReplicationResult result = cosXml.PutBucketReplication(request);
@@ -77,6 +81,8 @@ namespace COSXMLDemo.DisasterTolerant
                 GetBucketReplicationResult result = cosXml.GetBucketReplication(request);
                 // 存储桶的跨区域复制配置
                 ReplicationConfiguration conf = result.replicationConfiguration;
+                
+                Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {

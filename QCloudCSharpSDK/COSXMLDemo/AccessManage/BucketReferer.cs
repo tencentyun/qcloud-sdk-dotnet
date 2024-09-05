@@ -41,7 +41,7 @@ namespace COSXMLDemo
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                string bucket = "examplebucket-1250000000";
+                // string bucket = "examplebucket-1250000000";
                 PutBucketRefererRequest request = new PutBucketRefererRequest(bucket);
                 // 设置防盗链规则
                 RefererConfiguration configuration = new RefererConfiguration();
@@ -76,20 +76,12 @@ namespace COSXMLDemo
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                string bucket = "examplebucket-1250000000";
+                // string bucket = "examplebucket-1250000000";
                 GetBucketRefererRequest request = new GetBucketRefererRequest(bucket);
                 // 执行请求
                 GetBucketRefererResult result = cosXml.GetBucketReferer(request);
-                Console.WriteLine(result.GetResultInfo());
                 // Status参数
-                Console.WriteLine(result.refererConfiguration.Status);
-                // Referer名单类型
-                Console.WriteLine(result.refererConfiguration.RefererType);
-                // 名单中的域名列表
-                foreach (string domain in result.refererConfiguration.domainList.domains)
-                {
-                    Console.WriteLine(domain);
-                }
+                Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -105,7 +97,6 @@ namespace COSXMLDemo
         {
             BucketRefererModel m = new BucketRefererModel();
             m.PutBucketReferer();
-            
             m.GetBucketReferer();
         }
     }

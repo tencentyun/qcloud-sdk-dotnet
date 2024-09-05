@@ -26,7 +26,10 @@ namespace COSXML.Model.Tag
 
             stringBuilder.Append("Status:").Append(Status).Append("\n");
             stringBuilder.Append("RefererType:").Append(RefererType).Append("\n");
-            stringBuilder.Append(domainList.ToString());
+            if (domainList != null) 
+            { 
+                stringBuilder.Append(domainList.GetInfo());
+            }
             if(EmptyReferConfiguration == null)
             {
                 stringBuilder.Append("EmptyReferConfiguration:").Append(EmptyReferConfiguration).Append("\n");

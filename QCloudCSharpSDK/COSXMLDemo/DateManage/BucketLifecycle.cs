@@ -85,6 +85,10 @@ namespace COSXMLDemo
                 GetBucketLifecycleResult result = cosXml.GetBucketLifecycle(request);
                 //存储桶的生命周期配置
                 LifecycleConfiguration conf = result.lifecycleConfiguration;
+                if (result.httpCode == 200) {
+                    Console.WriteLine(conf.GetInfo());
+                }
+                Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
