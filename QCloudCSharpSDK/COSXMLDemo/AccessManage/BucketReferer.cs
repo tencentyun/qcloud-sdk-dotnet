@@ -41,7 +41,7 @@ namespace COSXMLDemo
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                // string bucket = "examplebucket-1250000000";
+                string bucket = "examplebucket-1250000000";
                 PutBucketRefererRequest request = new PutBucketRefererRequest(bucket);
                 // 设置防盗链规则
                 RefererConfiguration configuration = new RefererConfiguration();
@@ -76,7 +76,7 @@ namespace COSXMLDemo
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                // string bucket = "examplebucket-1250000000";
+                string bucket = "examplebucket-1250000000";
                 GetBucketRefererRequest request = new GetBucketRefererRequest(bucket);
                 // 执行请求
                 GetBucketRefererResult result = cosXml.GetBucketReferer(request);
