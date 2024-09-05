@@ -1,4 +1,5 @@
 
+using COSXMLDemo.DisasterTolerant;
 namespace COSXMLDemo
 {
      public class Process
@@ -24,17 +25,35 @@ namespace COSXMLDemo
                 // DoesObjectExistModel.DoesObjectExistMain();
                 // HeadObjectModel.HeadObjectMain();
                 // ObjectRestoreModel.ObjectRestoreModelMain();
-                GetObjectUrlDemo.GetObjectUrlDemoMain();
+                // GetObjectUrlDemo.GetObjectUrlDemoMain();
+                
+                // CreateBucketModel.CreateBucketModelMain();//
+                // DeleteBucketModel.DeleteObjectModelMain();//
+                // DoesBucketExistModel.DoesBucketExistModelMain();//
+                // HeadBucketModel.HeadBucketModelMain();//
+                // ListBucketModel.ListBucketModelMain();//
+                // BucketPolicyModel.BucketPolicyMain();
+                
+                // BucketVersioningModel.BucketVersioningMain();//
+                // BucketLifecycleModel.BucketLifecycleMain();
+                // BucketReplicationModel.BucketReplicationMain();
+                // BucketLoggingModel.BucketLoggingMain();
+                
+                ObjectTaggingModel.ObjectTaggingMain();
+                BucketInventoryModel.BucketInventoryMain();
+                BucketDomainModel.BucketDomainMain();
+                PutObjectACLModel.PutObjectACLMain();//
+                BucketRefererModel.BucketRefererMain();//
             }
          
             public void SetEnvironmentVariable()
             {
-                Environment.SetEnvironmentVariable("BUCKET", "");
                 Environment.SetEnvironmentVariable("UIN", "");
                 Environment.SetEnvironmentVariable("APPID", "");
                 Environment.SetEnvironmentVariable("COS_REGION", "");
                 Environment.SetEnvironmentVariable("SECRET_ID", "");
                 Environment.SetEnvironmentVariable("SECRET_KEY", "");
+                Environment.SetEnvironmentVariable("BUCKET", "");
             }
 
         }
