@@ -41,16 +41,18 @@ namespace COSXMLDemo
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                string bucket = "examplebucket-1250000000";
+                string bucket = "examplebucket-version-1250000000";
                 ListBucketVersionsRequest request = new ListBucketVersionsRequest(bucket);
                 //执行请求
                 ListBucketVersionsResult result = cosXml.ListBucketVersions(request);
                 //bucket的相关信息
                 ListBucketVersions info = result.listBucketVersions;
-
+                //请求结果状态
+                Console.WriteLine(result.GetResultInfo());
                 List<ListBucketVersions.Version> objects = info.objectVersionList;
                 List<ListBucketVersions.CommonPrefixes> prefixes = info.commonPrefixesList;
-
+                //返回信息
+                Console.WriteLine(info);
                 if (info.isTruncated)
                 {
                     // 数据被截断，记录下数据下标
@@ -76,17 +78,17 @@ namespace COSXMLDemo
             try
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                string bucket = "examplebucket-1250000000";
+                string bucket = "examplebucket-version-1250000000";
                 ListBucketVersionsRequest request = new ListBucketVersionsRequest(bucket);
-
                 // 上一页的数据结束下标
                 request.SetKeyMarker(this.keyMarker);
                 request.SetVersionIdMarker(this.versionIdMarker);
-
                 //执行请求
                 ListBucketVersionsResult result = cosXml.ListBucketVersions(request);
+                //请求结果状态
+                Console.WriteLine(result.GetResultInfo());
                 ListBucketVersions info = result.listBucketVersions;
-
+                Console.WriteLine(info.GetInfo());
                 if (info.isTruncated)
                 {
                     // 数据被截断，记录下数据下标
@@ -118,7 +120,7 @@ namespace COSXMLDemo
                 //执行请求
                 GetBucketResult result = cosXml.GetBucket(request);
                 //bucket的相关信息
-                ListBucket info = result.listBucket;
+                COSXML.Model.Tag.ListBucket info = result.listBucket;
                 if (info.isTruncated)
                 {
                     // 数据被截断，记录下数据下标
@@ -149,7 +151,7 @@ namespace COSXMLDemo
                 //执行请求
                 GetBucketResult result = cosXml.GetBucket(request);
                 //bucket的相关信息
-                ListBucket info = result.listBucket;
+                COSXML.Model.Tag.ListBucket info = result.listBucket;
                 Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
@@ -176,11 +178,11 @@ namespace COSXMLDemo
                 //执行请求
                 GetBucketResult result = cosXml.GetBucket(request);
                 //bucket的相关信息
-                ListBucket info = result.listBucket;
+                COSXML.Model.Tag.ListBucket info = result.listBucket;
                 // 对象列表
-                List<ListBucket.Contents> objects = info.contentsList;
+                List<COSXML.Model.Tag.ListBucket.Contents> objects = info.contentsList;
                 // 子目录列表
-                List<ListBucket.CommonPrefixes> subDirs = info.commonPrefixesList;
+                List<COSXML.Model.Tag.ListBucket.CommonPrefixes> subDirs = info.commonPrefixesList;
                 Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
@@ -200,7 +202,8 @@ namespace COSXMLDemo
             // demo.GetBucketFirstPage();
             // demo.GetBucketNextPage();
             // demo.GetBucketWithDelimiter();
-            
+            demo.ListObjectsVersioning();
+            demo.ListObjectsVersioningNextPage();
         }
 
     }

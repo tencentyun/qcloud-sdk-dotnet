@@ -51,22 +51,18 @@ namespace COSXMLDemo
             
             // 初始化 TransferManager
             TransferManager transferManager = new TransferManager(cosXml, transferConfig);
-
             // String bucket = "examplebucket-1250000000"; //存储桶，格式：BucketName-APPID
             String cosPath = "exampleobject"; //对象在存储桶中的位置标识符，即称对象键
             string localDir = Path.GetTempPath();//本地文件夹
             string localFileName = "my-local-temp-file"; //指定本地保存的文件名
             // 下载对象
-            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(bucket, cosPath,
-                localDir, localFileName);
-
+            COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(bucket, cosPath, localDir, localFileName);
             // 手动设置高级下载接口的并发数 (默认为5), 从5.4.26版本开始支持！
             // downloadTask.SetMaxTasks(10);
-            downloadTask.progressCallback = delegate (long completed, long total)
+            downloadTask.progressCallback = delegate(long completed, long total)
             {
                 Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
             };
-            
             try {
                 COSXMLDownloadTask.DownloadTaskResult result = await transferManager.DownloadAsync(downloadTask);
                 Console.WriteLine(result.GetResultInfo());
@@ -82,7 +78,7 @@ namespace COSXMLDemo
         }
         
         //限速下载
-        public async void LimitSpeedDownload()
+        public async Task LimitSpeedDownload()
         {
             TransferConfig transferConfig = new TransferConfig(); 
             // 初始化 TransferManager
@@ -144,8 +140,7 @@ namespace COSXMLDemo
                 // 下载对象
                 string cosPath = "exampleobject" + i; //对象在存储桶中的位置标识符，即称对象键
                 string localFileName = "my-local-temp-file"; //指定本地保存的文件名
-                COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(bucket, cosPath, 
-                    localDir, localFileName); 
+                COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(bucket, cosPath, localDir, localFileName); 
                 transferManager.DownloadAsync(downloadTask).Wait();
             }
         }
@@ -168,9 +163,9 @@ namespace COSXMLDemo
                 listRequest.SetMarker(nextMarker);
                 //执行列出对象请求
                 GetBucketResult listResult = cosXml.GetBucket(listRequest);
-                ListBucket info = listResult.listBucket;
+                COSXML.Model.Tag.ListBucket info = listResult.listBucket;
                 // 对象列表
-                List<ListBucket.Contents> objects = info.contentsList;
+                List<COSXML.Model.Tag.ListBucket.Contents> objects = info.contentsList;
                 // 下一页的下标
                 nextMarker = info.nextMarker;
                 //对象列表

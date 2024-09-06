@@ -112,9 +112,9 @@ namespace COSXMLDemo
                     listRequest.SetMarker(nextMarker);
                     //执行列出对象请求
                     GetBucketResult listResult = cosXml.GetBucket(listRequest);
-                    ListBucket info = listResult.listBucket;
+                    COSXML.Model.Tag.ListBucket info = listResult.listBucket;
                     // 对象列表
-                    List<ListBucket.Contents> objects = info.contentsList;
+                    List<COSXML.Model.Tag.ListBucket.Contents> objects = info.contentsList;
                     // 下一页的下标
                     nextMarker = info.nextMarker;
 

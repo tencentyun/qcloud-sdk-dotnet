@@ -222,22 +222,23 @@ namespace COSXMLDemo
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
             }
         }
-
+        
+        
         //移动对象
-        public async void MoveObject()
+        public async Task MoveObject()
         {
             TransferConfig transferConfig = new TransferConfig();
             // 初始化 TransferManager
             TransferManager transferManager = new TransferManager(cosXml, transferConfig);
             
             string sourceAppid = "1250000000"; //账号 appid
-            string sourceBucket = "sourcebucket-1250000000"; //"源对象所在的存储桶
-            string sourceRegion = "COS_REGION"; //源对象的存储桶所在的地域
-            string sourceKey = "sourceObject"; //源对象键
+            string sourceBucket = "examplebucket-1250000000"; //"源对象所在的存储桶
+            string sourceRegion = "ap-guangzhou"; //源对象的存储桶所在的地域
+            string sourceKey = "data.json"; //源对象键
             //构造源对象属性
             CopySourceStruct copySource = new CopySourceStruct(sourceAppid, sourceBucket, sourceRegion, sourceKey);
-            string bucket = "examplebucket-1250000000"; //目标存储桶，格式：BucketName-APPID
-            string key = "exampleobject"; //目标对象的对象键
+            string bucket = "examplebucket2-1250000000"; //目标存储桶，格式：BucketName-APPID
+            string key = "dir/data.json"; //目标对象的对象键
 
             COSXMLCopyTask copyTask = new COSXMLCopyTask(bucket, key, copySource);
             try {
@@ -429,9 +430,10 @@ namespace COSXMLDemo
         }
 
 
-        public void CopyObjectModelMain()
+        public static void CopyObjectModelMain()
         {
-            
+            CopyObjectModel demo = new CopyObjectModel();
+            demo.MoveObject().Wait();
         }
     }
 }
