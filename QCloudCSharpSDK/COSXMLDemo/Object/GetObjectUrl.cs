@@ -139,7 +139,8 @@ namespace COSXMLDemo
             {
                 // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
                 string bucket = "examplebucket-1250000000";
-                string key = "object"; //对象键
+                string key = "exampleobject"; //对象键
+
                 // 生成链接（默认域名访问）
                 String url = cosXml.GetObjectUrl(bucket, key);
                 Console.WriteLine("Object Url is: " + url);
@@ -262,7 +263,7 @@ namespace COSXMLDemo
             // // 获取预签名上传链接
             // demo.GetPreSignUploadUrl();
             // 获取无签名访问链接
-            demo.GetObjectUrl(); //done
+            // demo.GetObjectUrl(); //done
             // 生成预签名 URL，并在签名中携带 Host
             // demo.GetPreSignUrlWithHost();
             // // 生成预签名URL，并在签名中携带请求参数

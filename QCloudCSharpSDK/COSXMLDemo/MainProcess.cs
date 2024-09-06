@@ -1,5 +1,3 @@
-
-using COSXMLDemo.DisasterTolerant;
 namespace COSXMLDemo
 {
      public class Process
