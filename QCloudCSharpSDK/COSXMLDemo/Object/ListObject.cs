@@ -120,7 +120,7 @@ namespace COSXMLDemo
                 //执行请求
                 GetBucketResult result = cosXml.GetBucket(request);
                 //bucket的相关信息
-                ListBucket info = result.listBucket;
+                COSXML.Model.Tag.ListBucket info = result.listBucket;
                 if (info.isTruncated)
                 {
                     // 数据被截断，记录下数据下标
@@ -151,7 +151,7 @@ namespace COSXMLDemo
                 //执行请求
                 GetBucketResult result = cosXml.GetBucket(request);
                 //bucket的相关信息
-                ListBucket info = result.listBucket;
+                COSXML.Model.Tag.ListBucket info = result.listBucket;
                 Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
@@ -178,11 +178,11 @@ namespace COSXMLDemo
                 //执行请求
                 GetBucketResult result = cosXml.GetBucket(request);
                 //bucket的相关信息
-                ListBucket info = result.listBucket;
+                COSXML.Model.Tag.ListBucket info = result.listBucket;
                 // 对象列表
-                List<ListBucket.Contents> objects = info.contentsList;
+                List<COSXML.Model.Tag.ListBucket.Contents> objects = info.contentsList;
                 // 子目录列表
-                List<ListBucket.CommonPrefixes> subDirs = info.commonPrefixesList;
+                List<COSXML.Model.Tag.ListBucket.CommonPrefixes> subDirs = info.commonPrefixesList;
                 Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
