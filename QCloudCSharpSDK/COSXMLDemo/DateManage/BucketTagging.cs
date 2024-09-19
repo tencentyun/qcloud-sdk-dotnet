@@ -77,8 +77,14 @@ namespace COSXMLDemo
                 //执行请求
                 GetBucketTaggingResult result = cosXml.GetBucketTagging(request);
                 //请求成功
-                Tagging tagging = result.tagging;
-                Console.WriteLine(tagging);
+                if (result.tagging != null)
+                {
+                    foreach (var tag in result.tagging.tagSet.tags)
+                    {
+                        Console.WriteLine("key {0} value {1}", tag.key, tag.value);
+                    }
+                }
+                Console.WriteLine(result.GetResultInfo());
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {

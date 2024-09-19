@@ -1,5 +1,5 @@
+using System;
 
-using COSXMLDemo.DisasterTolerant;
 namespace COSXMLDemo
 {
      public class Process
@@ -13,7 +13,8 @@ namespace COSXMLDemo
 
             public void DoSomething()
             {
-                // BucketPolicy.BucketPolicyMain();
+                
+                // BucketPolicyModel.BucketPolicyMain();
                 // DownloadObject.DownloadObjectMain();
                 // UploadObject.UploadObjectMain();
                 // GetObjectUrlDemo.GetObjectUrlDemoMain();
@@ -26,24 +27,26 @@ namespace COSXMLDemo
                 // HeadObjectModel.HeadObjectMain();
                 // ObjectRestoreModel.ObjectRestoreModelMain();
                 // GetObjectUrlDemo.GetObjectUrlDemoMain();
-                
+
                 // CreateBucketModel.CreateBucketModelMain();//
                 // DeleteBucketModel.DeleteObjectModelMain();//
                 // DoesBucketExistModel.DoesBucketExistModelMain();//
                 // HeadBucketModel.HeadBucketModelMain();//
                 // ListBucketModel.ListBucketModelMain();//
                 // BucketPolicyModel.BucketPolicyMain();
-                
+
                 // BucketVersioningModel.BucketVersioningMain();//
                 // BucketLifecycleModel.BucketLifecycleMain();
                 // BucketReplicationModel.BucketReplicationMain();
                 // BucketLoggingModel.BucketLoggingMain();
-                
-                ObjectTaggingModel.ObjectTaggingMain();
-                BucketInventoryModel.BucketInventoryMain();
-                BucketDomainModel.BucketDomainMain();
-                PutObjectACLModel.PutObjectACLMain();//
-                BucketRefererModel.BucketRefererMain();//
+
+                BucketTaggingModel.BucketTaggingMain();
+                // ObjectTaggingModel.ObjectTaggingMain();
+                // BucketInventoryModel.BucketInventoryMain();
+                // BucketDomainModel.BucketDomainMain();
+                // PutObjectACLModel.PutObjectACLMain();//
+                // BucketRefererModel.BucketRefererMain();//
+
             }
          
             public void SetEnvironmentVariable()
