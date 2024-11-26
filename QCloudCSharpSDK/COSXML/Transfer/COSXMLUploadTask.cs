@@ -280,6 +280,10 @@ namespace COSXML.Transfer
         {
             listMultiUploadsRequest = new ListMultiUploadsRequest(bucket);
             listMultiUploadsRequest.SetPrefix(key);
+            if (customHeaders != null)
+            {
+                listMultiUploadsRequest.SetRequestHeaders(customHeaders);
+            }
             cosXmlServer.ListMultiUploads(listMultiUploadsRequest, delegate (CosResult cosResult)
             {
                 // 取最新符合条件的uploadId
@@ -322,6 +326,10 @@ namespace COSXML.Transfer
         {
             bool checkSucc = true;
             listPartsRequest = new ListPartsRequest(bucket, key, uploadId);
+            if (customHeaders != null)
+            {
+                listPartsRequest.SetRequestHeaders(customHeaders);
+            }
             cosXmlServer.ListParts(listPartsRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit) {
@@ -378,6 +386,10 @@ namespace COSXML.Transfer
         private void ListMultiParts()
         {
             listPartsRequest = new ListPartsRequest(bucket, key, uploadId);
+            if (customHeaders != null)
+            {
+                listPartsRequest.SetRequestHeaders(customHeaders);
+            }
             cosXmlServer.ListParts(listPartsRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
@@ -441,6 +453,11 @@ namespace COSXML.Transfer
                 {
                     UploadPartRequest uploadPartRequest = new UploadPartRequest(bucket, key, sliceStruct.partNumber, uploadId, srcPath,
                         sliceStruct.sliceStart, sliceStruct.sliceLength);
+
+                    if (customHeaders != null)
+                    {
+                        uploadPartRequest.SetRequestHeaders(customHeaders);
+                    }
 
                     if (customHeaders != null && customHeaders.ContainsKey(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT))
                     {
@@ -571,6 +588,11 @@ namespace COSXML.Transfer
                 // partNumberEtag 有序的
                 // partNumberEtag 有序的
                 completeMultiUploadRequest.SetPartNumberAndETag(sliceStruct.partNumber, sliceStruct.eTag);
+            }
+
+            if (customHeaders != null)
+            {
+                completeMultiUploadRequest.SetRequestHeaders(customHeaders);
             }
 
             cosXmlServer.CompleteMultiUpload(completeMultiUploadRequest, delegate (CosResult result)
@@ -779,6 +801,10 @@ namespace COSXML.Transfer
         private void Abort()
         {
             abortMultiUploadRequest = new AbortMultipartUploadRequest(bucket, key, uploadId);
+            if (customHeaders != null)
+            {
+                abortMultiUploadRequest.SetRequestHeaders(customHeaders);
+            }
             cosXmlServer.AbortMultiUpload(abortMultiUploadRequest, 
                 delegate (CosResult cosResult) 
                 { 
@@ -796,6 +822,10 @@ namespace COSXML.Transfer
         private void DeleteObject()
         {
             deleteObjectRequest = new DeleteObjectRequest(bucket, key);
+            if (customHeaders != null)
+            {
+                deleteObjectRequest.SetRequestHeaders(customHeaders);
+            }
             cosXmlServer.DeleteObject(deleteObjectRequest, 
                 delegate (CosResult cosResult) 
                 { 
