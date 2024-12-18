@@ -1,3 +1,5 @@
+using System;
+
 namespace COSXMLDemo
 {
      public class Process
@@ -10,10 +12,10 @@ namespace COSXMLDemo
             }
 
             public void DoSomething()
-            {
-                // BucketPolicy.BucketPolicyMain();
+            {      
+                // BucketPolicyModel.BucketPolicyMain();
                 // DownloadObject.DownloadObjectMain();
-                // UploadObject.UploadObjectMain();
+                UploadObject.UploadObjectMain();
                 // GetObjectUrlDemo.GetObjectUrlDemoMain();
 
                 // DeleteObjectModel.DeleteObjectModelMain();
@@ -24,24 +26,26 @@ namespace COSXMLDemo
                 // HeadObjectModel.HeadObjectMain();
                 // ObjectRestoreModel.ObjectRestoreModelMain();
                 // GetObjectUrlDemo.GetObjectUrlDemoMain();
-                
+
                 // CreateBucketModel.CreateBucketModelMain();//
                 // DeleteBucketModel.DeleteObjectModelMain();//
                 // DoesBucketExistModel.DoesBucketExistModelMain();//
                 // HeadBucketModel.HeadBucketModelMain();//
                 // ListBucketModel.ListBucketModelMain();//
                 // BucketPolicyModel.BucketPolicyMain();
-                
+
                 // BucketVersioningModel.BucketVersioningMain();//
                 // BucketLifecycleModel.BucketLifecycleMain();
                 // BucketReplicationModel.BucketReplicationMain();
                 // BucketLoggingModel.BucketLoggingMain();
-                
-                ObjectTaggingModel.ObjectTaggingMain();
-                BucketInventoryModel.BucketInventoryMain();
-                BucketDomainModel.BucketDomainMain();
-                PutObjectACLModel.PutObjectACLMain();//
-                BucketRefererModel.BucketRefererMain();//
+
+                // BucketTaggingModel.BucketTaggingMain();
+                // ObjectTaggingModel.ObjectTaggingMain();
+                // BucketInventoryModel.BucketInventoryMain();
+                // BucketDomainModel.BucketDomainMain();
+                // PutObjectACLModel.PutObjectACLMain();//
+                // BucketRefererModel.BucketRefererMain();//
+                // BucketWebsiteModel.BucketWebsiteMain();
             }
          
             public void SetEnvironmentVariable()

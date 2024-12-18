@@ -157,6 +157,11 @@ namespace COSXML
                         "region cannot be empty"
                     );
                 }
+                if (region.Contains("@"))
+                {
+                    throw new CosException.CosClientException((int)COSXML.Common.CosClientError.InvalidArgument,
+                        "region中不能包含特殊字符@");
+                }
                 this.region = region;
 
                 return this;
