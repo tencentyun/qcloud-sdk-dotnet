@@ -16,3 +16,5 @@ QCloudCSharpSDK/NCOS
 QCloudCSharpSDK/.idea
 *.vs
 .vscode
+**/bin/
+**/obj/
