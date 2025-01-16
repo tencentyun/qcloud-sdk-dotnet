@@ -45,4 +45,17 @@ namespace COSXML.Model.Tag
             Bulk
         }
     }
+    
+    [XmlRoot("RestoreRequest")]
+    public sealed class RestoreConfigureNoDays
+    {
+        /// <summary>
+        /// 归档存储工作参数配置
+        /// <see href="CASJobParameters"/>
+        /// </summary>
+        [XmlElement("CASJobParameters")]
+        public RestoreConfigure.CASJobParameters casJobParameters;
+    }
+    
+    
 }

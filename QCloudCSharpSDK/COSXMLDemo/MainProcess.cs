@@ -13,7 +13,10 @@ namespace COSXMLDemo
 
             public void DoSomething()
             {
-    
+                // BucketPolicyModel.BucketPolicyMain();
+                // DownloadObject.DownloadObjectMain();
+                // UploadObject.UploadObjectMain();
+
                 // BucketPolicyModel.BucketPolicyMain();
                 // DownloadObject.DownloadObjectMain();
                 UploadObject.UploadObjectMain();
@@ -40,13 +43,16 @@ namespace COSXMLDemo
                 // BucketReplicationModel.BucketReplicationMain();
                 // BucketLoggingModel.BucketLoggingMain();
 
+
                 // BucketTaggingModel.BucketTaggingMain();
+
 
                 // ObjectTaggingModel.ObjectTaggingMain();
                 // BucketInventoryModel.BucketInventoryMain();
                 // BucketDomainModel.BucketDomainMain();
                 // PutObjectACLModel.PutObjectACLMain();//
                 // BucketRefererModel.BucketRefererMain();//
+
                 // BucketWebsiteModel.BucketWebsiteMain();
 
             }
