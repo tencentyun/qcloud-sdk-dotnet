@@ -1071,8 +1071,13 @@ namespace COSXMLTests
                 cosXml.PutObject(putRequest);
 
                 RestoreObjectRequest request = new RestoreObjectRequest(bucket, objectKey);
-                //恢复时间
-                request.SetExpireDays(-1);
+                //恢复时间,时间参数在1-365内
+                try {
+                    request.SetExpireDays(-1); }
+                catch (COSXML.CosException.CosClientException clientEx) {
+                    Assert.True(true);
+                }
+                
                 request.SetExpireDays(3);
                 request.SetTier(COSXML.Model.Tag.RestoreConfigure.Tier.Standard);
 
@@ -1100,6 +1105,44 @@ namespace COSXMLTests
                 Assert.Fail();
             }
         }
+        
+        
+        [Test()]
+        public void RestoreObjectNoDaysParam()
+        {
+            
+            
+            string objectKey = "archive_object";
+            try
+            {
+                byte[] data = File.ReadAllBytes(smallFileSrcPath);
+                PutObjectRequest putRequest = new PutObjectRequest(bucket, objectKey, data);
+                putRequest.SetCosStorageClass("DEEP_ARCHIVE");
+                cosXml.PutObject(putRequest);
+                RestoreObjectRequest request = new RestoreObjectRequest(bucket, objectKey);
+                request.SetTier(COSXML.Model.Tag.RestoreConfigure.Tier.Standard);
+
+                //执行请求,该请求不设置Days参数
+                RestoreObjectResult result = cosXml.RestoreObject(request);
+                Assert.True(result.IsSuccessful());
+                request.SetVersionId("null");
+                DeleteObjectRequest deleteRequest = new DeleteObjectRequest(bucket, objectKey);
+                deleteRequest.SetVersionId("null");
+                DeleteObjectResult deleteObjectResult = cosXml.DeleteObject(deleteRequest);
+                Assert.True(deleteObjectResult.IsSuccessful());
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+        
 
         [Test()]
         public void PostObject()
