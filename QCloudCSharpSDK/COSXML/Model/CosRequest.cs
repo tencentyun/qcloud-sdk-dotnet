@@ -362,7 +362,7 @@ namespace COSXML.Model
 
             foreach (KeyValuePair<string, string> pair in headers)
             {
-                if (pair.Key.StartsWith("x-cos-"))
+                if (pair.Key.StartsWith("x-cos-") || pair.Key.StartsWith("x-ci-"))
                 {
                     cosXmlSignSourceProvider.AddHeaderKey(pair.Key.ToLower());
                 }

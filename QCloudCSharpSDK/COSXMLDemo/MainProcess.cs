@@ -12,7 +12,8 @@ namespace COSXMLDemo
             }
 
             public void DoSomething()
-            {      
+            {
+    
                 // BucketPolicyModel.BucketPolicyMain();
                 // DownloadObject.DownloadObjectMain();
                 UploadObject.UploadObjectMain();
@@ -40,12 +41,14 @@ namespace COSXMLDemo
                 // BucketLoggingModel.BucketLoggingMain();
 
                 // BucketTaggingModel.BucketTaggingMain();
+
                 // ObjectTaggingModel.ObjectTaggingMain();
                 // BucketInventoryModel.BucketInventoryMain();
                 // BucketDomainModel.BucketDomainMain();
                 // PutObjectACLModel.PutObjectACLMain();//
                 // BucketRefererModel.BucketRefererMain();//
                 // BucketWebsiteModel.BucketWebsiteMain();
+
             }
          
             public void SetEnvironmentVariable()
