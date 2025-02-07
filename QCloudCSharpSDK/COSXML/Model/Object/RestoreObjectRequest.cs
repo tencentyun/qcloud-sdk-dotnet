@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using COSXML.Model.Tag;
 using COSXML.Common;
+using COSXML.CosException;
 using COSXML.Network;
 
 namespace COSXML.Model.Object
@@ -27,6 +28,7 @@ namespace COSXML.Model.Object
             this.queryParameters.Add("restore", null);
             restoreConfigure = new RestoreConfigure();
             restoreConfigure.casJobParameters = new RestoreConfigure.CASJobParameters();
+            restoreConfigure.days = 0;
         }
 
         /// <summary>
@@ -35,12 +37,10 @@ namespace COSXML.Model.Object
         /// <param name="days"></param>
         public void SetExpireDays(int days)
         {
-
-            if (days < 0)
+            if (days <= 0)
             {
-                days = 0;
+                throw new CosClientException(-1, "param 'Days' ranges from 1-365, Some storage types do not need call SetExpireDays function to set Days param");
             }
-
             restoreConfigure.days = days;
         }
 
@@ -65,6 +65,12 @@ namespace COSXML.Model.Object
 
         public override Network.RequestBody GetRequestBody()
         {
+            if (restoreConfigure.days == 0)
+            {
+                RestoreConfigureNoDays restoreConfigureNoDays = new RestoreConfigureNoDays();
+                restoreConfigureNoDays.casJobParameters = restoreConfigure.casJobParameters;
+                return GetXmlRequestBody(restoreConfigureNoDays);
+            }
             return GetXmlRequestBody(restoreConfigure);
         }
     }

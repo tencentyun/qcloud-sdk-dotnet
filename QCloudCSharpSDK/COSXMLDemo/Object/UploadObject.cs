@@ -1,6 +1,7 @@
 using COSXML.Auth;
 using COSXML.Transfer;
 using COSXML;
+using COSXML.Model.Bucket;
 using COSXML.Model.Object;
 
 namespace COSXMLDemo
@@ -9,6 +10,7 @@ namespace COSXMLDemo
         
       private CosXml cosXml;
 
+      // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
       private string bucket;
       
       public void InitParams()
@@ -19,6 +21,7 @@ namespace COSXMLDemo
       // 初始化COS服务实例
       private void InitCosXml()
       {
+          //从Environment.GetEnvironmentVariable中设置变量，用户也可也直接赋值变量，如： string region = "ap-guagnzhou";
           string region = Environment.GetEnvironmentVariable("COS_REGION"); 
           CosXmlConfig config = new CosXmlConfig.Builder()
               .SetRegion(region) // 设置默认的地域, COS 地域的简称请参照 https://cloud.tencent.com/document/product/436/6224
@@ -28,6 +31,14 @@ namespace COSXMLDemo
           long durationSecond = 600; //每次请求签名有效时长，单位为秒
           QCloudCredentialProvider qCloudCredentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, durationSecond); 
           this.cosXml = new CosXmlServer(config, qCloudCredentialProvider);
+      }
+      
+      UploadObject()
+      {
+          //demo的自定义参数
+          InitParams();
+          //初始化COS服务
+          InitCosXml();
       }
       
       // 高级接口上传文件
@@ -203,26 +214,218 @@ namespace COSXMLDemo
           }
       }
       
+      //分块上传
+      public class UploadPartObject : UploadObject
+      {
+          public string uploadId;
+
+          public Dictionary<int, string> eTag;
+          
+          public string key;
+          
+          //初始化分块上传
+          public void InitiateMultipartUpload()
+          {
+              try
+              {
+                  string bucket = "examplebucket-1250000000";
+                  string key = "exampleobject"; //对象键
+                  InitMultipartUploadRequest request = new InitMultipartUploadRequest(bucket, key);
+                  //执行请求
+                  InitMultipartUploadResult result = cosXml.InitMultipartUpload(request);
+                  //请求成功
+                  this.uploadId = result.initMultipartUpload.uploadId; //用于后续分块上传的 uploadId
+                  Console.WriteLine(result.GetResultInfo());
+              }
+              catch (COSXML.CosException.CosClientException clientEx)
+              {
+                  //请求失败
+                  Console.WriteLine("CosClientException: " + clientEx);
+              }
+              catch (COSXML.CosException.CosServerException serverEx)
+              {
+                  //请求失败
+                  Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+              }
+          }
+
+          //上传分块，需要对于文件按照分块大小进行分块并做序号
+          public void UploadPart()
+          {
+              try
+              {
+                  // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
+                  string bucket = "examplebucket-1250000000";
+                  string key = "exampleobject"; //对象键
+                  string uploadId = "exampleUploadId"; //初始化分块上传返回的uploadId
+                  int partNumber = 1; //分块编号，必须从1开始递增
+                  string srcPath = @"temp-source-file";//本地文件绝对路径
+                  UploadPartRequest request = new UploadPartRequest(bucket, key, partNumber, 
+                      uploadId, srcPath, 0, -1);
+                  //设置进度回调
+                  request.SetCosProgressCallback(delegate (long completed, long total)
+                  {
+                      Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+                  });
+                  //执行请求
+                  UploadPartResult result = cosXml.UploadPart(request);
+                  //请求成功
+                  //获取返回分块的eTag,用于后续CompleteMultiUploads
+                  eTag[partNumber] = result.eTag;
+                  Console.WriteLine(result.GetResultInfo());
+              }
+              catch (COSXML.CosException.CosClientException clientEx)
+              {
+                  //请求失败
+                  Console.WriteLine("CosClientException: " + clientEx);
+              }
+              catch (COSXML.CosException.CosServerException serverEx)
+              {
+                  //请求失败
+                  Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+              }
+          }
+          
+          //查询正在进行的分块上传任务
+          public void ListMultipartUploads()
+          {
+              try
+              {
+                  // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
+                  string bucket = "examplebucket-1250000000";
+                  ListMultiUploadsRequest request = new ListMultiUploadsRequest(bucket);
+                  //执行请求
+                  ListMultiUploadsResult result = cosXml.ListMultiUploads(request);
+                  //请求成功
+                  Console.WriteLine(result.GetResultInfo());
+              }
+              catch (COSXML.CosException.CosClientException clientEx)
+              {
+                  //请求失败
+                  Console.WriteLine("CosClientException: " + clientEx);
+              }
+              catch (COSXML.CosException.CosServerException serverEx)
+              {
+                  //请求失败
+                  Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+              }
+          }
+
+          //查询已上传的分块
+          public void ListParts()
+          {
+              try
+              {
+                  // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
+                  string bucket = "examplebucket-1250000000";
+                  string key = "exampleobject"; //对象键
+                  string uploadId = "exampleUploadId"; //初始化分块上传返回的uploadId
+                  ListPartsRequest request = new ListPartsRequest(bucket, key, uploadId);
+                  //执行请求
+                  ListPartsResult result = cosXml.ListParts(request);
+                  //请求成功
+                  //列举已上传的分块
+                  List<COSXML.Model.Tag.ListParts.Part> alreadyUploadParts = result.listParts.parts;
+                  Console.WriteLine(result.GetResultInfo());
+              }
+              catch (COSXML.CosException.CosClientException clientEx)
+              {
+                  //请求失败
+                  Console.WriteLine("CosClientException: " + clientEx);
+              }
+              catch (COSXML.CosException.CosServerException serverEx)
+              {
+                  //请求失败
+                  Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+              }
+          }
+          
+          //完成分块上传
+          public void CompleteMultipartUpload()
+          {
+              try
+              {
+                  // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
+                  string bucket = "examplebucket-1250000000";
+                  string key = "exampleobject"; //对象键
+                  string uploadId = "exampleUploadId"; //初始化分块上传返回的uploadId
+                  CompleteMultipartUploadRequest request = new CompleteMultipartUploadRequest(bucket, 
+                      key, uploadId);
+                  //设置已上传的parts,必须有序，按照partNumber递增
+                  foreach (int index in eTag.Keys)
+                  {
+                      request.SetPartNumberAndETag(index, eTag[index]);
+                  }
+                  
+                  //执行请求
+                  CompleteMultipartUploadResult result = cosXml.CompleteMultiUpload(request);
+                  //请求成功
+                  Console.WriteLine(result.GetResultInfo());
+              }
+              catch (COSXML.CosException.CosClientException clientEx)
+              {
+                  Console.WriteLine("CosClientException: " + clientEx);
+              }
+              catch (COSXML.CosException.CosServerException serverEx)
+              {
+                  Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+              }
+          }
+          
+          //终止分块上传
+          public void AbortMultipartUpload()
+          {
+              try
+              {
+                  // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
+                  string bucket = "examplebucket-1250000000";
+                  string key = "exampleobject"; //对象键
+                  string uploadId = "exampleUploadId"; //初始化分块上传返回的uploadId
+                  AbortMultipartUploadRequest request = new AbortMultipartUploadRequest(bucket, key, uploadId);
+                  //执行请求
+                  AbortMultipartUploadResult result = cosXml.AbortMultiUpload(request);
+                  //请求成功
+                  Console.WriteLine(result.GetResultInfo());
+              }
+              catch (COSXML.CosException.CosClientException clientEx)
+              {
+                  Console.WriteLine("CosClientException: " + clientEx);
+              }
+              catch (COSXML.CosException.CosServerException serverEx)
+              {
+                  Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+              }
+          }
+      }
+
+      public void UploadPartObjectFunc()
+      {
+          UploadPartObject demo = new UploadPartObject();
+          
+          demo.InitiateMultipartUpload();
+          demo.UploadPart();
+          demo.ListMultipartUploads();
+          demo.ListParts();
+          demo.CompleteMultipartUpload();
+          demo.AbortMultipartUpload();
+      }
+      
       public static void UploadObjectMain()
       {
           UploadObject domo = new UploadObject();
-          //demo的自定义参数
-          domo.InitParams();
-          //初始化COS服务
-          domo.InitCosXml();
           
-          // //表单上传
-          // domo.PostObject();
-          // //批量上传
-          // domo.BatchUpload();
-          // //创建文件夹
-          // domo.CreateDir();
-          // //上传文件
-          // domo.PutObject();
-          // //高级上传
-          // domo.TransferUploadFile().Wait();
-          // //流上传
-          // domo.PutObjectStream();
+          //表单上传
+          domo.PostObject();
+          //批量上传
+          domo.BatchUpload();
+          //创建文件夹
+          domo.CreateDir();
+          //上传文件
+          domo.PutObject();
+          //高级上传
+          domo.TransferUploadFile().Wait();
+          //流上传
+          domo.PutObjectStream();
           //字节流上传
           domo.UploadBytes();
       }
