@@ -46,7 +46,6 @@ namespace COSXMLDemo
                 RestoreObjectRequest request = new RestoreObjectRequest(bucket, key);
                 //恢复时间
                 request.SetExpireDays(3); //https://cloud.tencent.com/document/product/436/12633
-                request.SetExpireDays(3);
                 request.SetTier(COSXML.Model.Tag.RestoreConfigure.Tier.Bulk);
                 //执行请求
                 RestoreObjectResult result = cosXml.RestoreObject(request);

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using COSXML.Model;
 using COSXML.CosException;
 using COSXML.Model.Object;
@@ -8,7 +7,6 @@ using System.IO;
 using COSXML.Common;
 using COSXML.Utils;
 using COSXML.Model.Tag;
-using COSXML.Log;
 using COSXML.Model.Bucket;
 using System.Threading;
 
@@ -44,7 +42,7 @@ namespace COSXML.Transfer
 
         private string uploadId;
 
-        private Dictionary<UploadPartRequest, long> uploadPartRequestMap;
+        private Dictionary<long, long> uploadPartRequestMap;
 
         private List<UploadPartRequest> uploadPartRequestList;
 
@@ -412,7 +410,7 @@ namespace COSXML.Transfer
             int size = sliceList.Count;
 
             sliceCount = size;
-            uploadPartRequestMap = new Dictionary<UploadPartRequest, long>(size);
+            uploadPartRequestMap = new Dictionary<long, long>(size);
             uploadPartRequestList = new List<UploadPartRequest>(size);
 
             AutoResetEvent resetEvent = new AutoResetEvent(false);
@@ -455,16 +453,16 @@ namespace COSXML.Transfer
                         {
                             lock (syncProgress)
                             {
-                                long dataLen = hasReceiveDataLength + completed - uploadPartRequestMap[uploadPartRequest];
+                                long dataLen = hasReceiveDataLength + completed - uploadPartRequestMap[sliceStruct.partNumber];
 
                                 UpdateProgress(dataLen, sendContentLength, false);
                                 hasReceiveDataLength = dataLen;
-                                uploadPartRequestMap[uploadPartRequest] = completed;
+                                uploadPartRequestMap[sliceStruct.partNumber] = completed;
                             }
                         }
                     );
 
-                    uploadPartRequestMap.Add(uploadPartRequest, 0);
+                    uploadPartRequestMap.Add(sliceStruct.partNumber, 0);
                     uploadPartRequestList.Add(uploadPartRequest);
 
 
@@ -483,6 +481,10 @@ namespace COSXML.Transfer
                             if (sliceCount == 0)
                             {
                                 OnPart();
+                            }
+                            if (uploadPartRequest != null && uploadPartRequestList.Contains(uploadPartRequest)) 
+                            {
+                                uploadPartRequestList.Remove(uploadPartRequest);
                             }
                         }
 
