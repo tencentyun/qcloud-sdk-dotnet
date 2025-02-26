@@ -299,8 +299,16 @@ namespace COSXML.Network
             }
 
             request.Body = cosRequest.GetRequestBody();
+
+            if (request.Body != null)
+            {
+                request.AddHeader(CosRequestHeaderKey.CONTENT_LENGTH, request.Body.ContentLength.ToString());
+            }
+            else
+            {
+                request.AddHeader(CosRequestHeaderKey.CONTENT_LENGTH, "0");
+            }
             
-            request.AddHeader(CosRequestHeaderKey.CONTENT_LENGTH, request.Body.ContentLength.ToString());
             
             // cacluate md5
             if (CheckNeedMd5(request, cosRequest.IsNeedMD5) && request.Body != null)
