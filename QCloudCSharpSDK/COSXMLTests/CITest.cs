@@ -980,7 +980,7 @@ namespace COSXMLTests
         {
             try
             {
-                SubmitDocumentProcessJobRequest request = new SubmitDocumentProcessJobRequest(bucket);
+                CreateDocProcessJobsRequest request = new CreateDocProcessJobsRequest(bucket);
                 request.SetInputObject("demo.docx");
                 request.SetTag("DocProcess");
                 request.SetSrcType("docx");
@@ -998,7 +998,7 @@ namespace COSXMLTests
                 request.SetSheetId("1");
                 request.SetPaperDirection("1");
                 request.SetPaperSize("1");
-                SubmitDocumentProcessJobResult result = QCloudServer.Instance().cosXml.SubmitDocumentProcessJob(request);
+                CreateDocProcessJobsResult result = QCloudServer.Instance().cosXml.CreateDocProcessJobs(request);
                 string jobId = result.docProcessResponse.JobsDetail.JobId;
                 Assert.NotNull(jobId);
                 Assert.AreEqual(200, result.httpCode);
