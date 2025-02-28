@@ -26,10 +26,11 @@ namespace COSXMLTests
         [OneTimeSetUp]
         public void Setup()
         {
+            Console.WriteLine("start BucketTest");
             cosXml = QCloudServer.Instance().cosXml;
             bucket = QCloudServer.Instance().bucketForBucketTest;
             region = QCloudServer.Instance().region;
-
+            
             PutBucket();
             Thread.Sleep(100);
         }

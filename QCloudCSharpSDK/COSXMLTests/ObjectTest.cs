@@ -60,6 +60,8 @@ namespace COSXMLTests
         [OneTimeSetUp]
         public void Init()
         {
+            Console.WriteLine("start ObjectTest");
+            
             try
             {
                 cosXml = QCloudServer.Instance().cosXml;
