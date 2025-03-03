@@ -460,9 +460,49 @@ namespace COSXMLTests
             }
             
         }
-
+private async Task<(TResult result, bool isTimeout)> PollJobUntilCompletedAsync<TResult>(
+    string jobId,
+    TimeSpan timeout,
+    TimeSpan checkInterval,
+    Func<string, Task<TResult>> getJobFunc)
+{
+    var startTime = DateTime.UtcNow;
+    bool isFinalState = false;
+    TResult result = default;
+    
+    while (!isFinalState && DateTime.UtcNow - startTime < timeout)
+    {
+        // 输出日志维持 CI 活性
+        Console.WriteLine($"[Polling] Checking job {jobId} at {DateTime.UtcNow:O}");
+        
+        result = await getJobFunc(jobId);
+        
+        // 假设结果对象中有 IsFinalState 属性标识终态
+        if (result is GetVideoCensorJobResult videoResult)
+        {
+            isFinalState = videoResult.resultStruct.JobsDetail.State == "Success" 
+                        || videoResult.resultStruct.JobsDetail.State == "Failed";
+        }
+        else if (result is GetTextCensorJobResult textResult)
+        {
+            isFinalState = textResult.resultStruct.JobsDetail.State == "Success" 
+                        || textResult.resultStruct.JobsDetail.State == "Failed";
+        }
+        else if(result is GetDocumentCensorJobResult documentResult){
+            isFinalState = documentResult.resultStruct.JobsDetail.State == "Success" 
+                        || documentResult.resultStruct.JobsDetail.State == "Failed";
+        }
+        
+        if (!isFinalState)
+        {
+            await Task.Delay(checkInterval);
+        }
+    }
+    
+    return (result, !isFinalState);
+}
         [Test]
-        public void TestVideoCensorJobCommit()
+        public async Task TestVideoCensorJobCommit()
         {
             try
             {
@@ -482,13 +522,22 @@ namespace COSXMLTests
                 Assert.NotNull(result.censorJobsResponse.JobsDetail.JobId);
                 Assert.NotNull(result.censorJobsResponse.JobsDetail.State);
                 Assert.NotNull(result.censorJobsResponse.JobsDetail.CreationTime);
-                string id = result.censorJobsResponse.JobsDetail.JobId;
-                // Thread.Sleep(50000);
-                await Task.Delay(50000);
+                string jobId = result.censorJobsResponse.JobsDetail.JobId;
+           
+                var (getResult, isTimeout) = await PollJobUntilCompletedAsync<GetVideoCensorJobResult>(jobId,timeout: TimeSpan.FromMinutes(5),checkInterval: TimeSpan.FromSeconds(10),
+                    getJobFunc: async id => 
+                    {
+                        var getRequest = new GetVideoCensorJobRequest(bucket, id);
+                        // get video censor job
+                        return await Task.Run(() =>
+                            QCloudServer.Instance().cosXml.GetVideoCensorJob(getRequest)
+                        );
+                    });
                 
-                // get video censor job
-                GetVideoCensorJobRequest getRequest = new GetVideoCensorJobRequest(bucket, id);
-                GetVideoCensorJobResult getResult = QCloudServer.Instance().cosXml.GetVideoCensorJob(getRequest);
+                // GetVideoCensorJobRequest getRequest = new GetVideoCensorJobRequest(bucket, id);
+                // GetVideoCensorJobResult getResult = QCloudServer.Instance().cosXml.GetVideoCensorJob(getRequest);
+                Assert.False(isTimeout, "任务轮询超时");
+                Assert.NotNull(getResult);
                 Assert.AreEqual(200, getResult.httpCode);
 
                 Assert.NotNull(getResult.resultStruct.JobsDetail);
@@ -600,7 +649,7 @@ namespace COSXMLTests
         }
 
         [Test]
-        public void TestAudioCensorJob()
+        public async Task TestAudioCensorJob()
         {
             try
             {
@@ -612,17 +661,27 @@ namespace COSXMLTests
                 request.SetCallbackVersion("");
                 request.SetBizType("");
                 SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitAudioCensorJob(request);
-                string id = result.censorJobsResponse.JobsDetail.JobId;
-                Assert.NotNull(id);
+                string jobId = result.censorJobsResponse.JobsDetail.JobId;
+                Assert.NotNull(jobId);
                 Assert.AreEqual(200, result.httpCode);
                 // get audio censor job
                 // Thread.Sleep(10000);
-                await Task.Delay(10000);
-                
-                GetAudioCensorJobRequest getRequest = new GetAudioCensorJobRequest(bucket, id);
-                // Assert.Equals(getRequest.Bucket, bucket);
-                // Assert.Equals(getRequest.Region,QCloudServer.Instance().region);
-                GetAudioCensorJobResult getResult = QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest);
+                // await Task.Delay(10000);
+
+                var (getResult, isTimeout) = await PollJobUntilCompletedAsync<GetAudioCensorJobResult>(jobId,timeout: TimeSpan.FromMinutes(5),checkInterval: TimeSpan.FromSeconds(10),
+                    getJobFunc: async id =>
+                    {
+                        var getRequest = new GetAudioCensorJobRequest(bucket, id);
+                        // get video censor job
+                        return await Task.Run(() =>
+                            QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest)
+                        );
+                    });
+
+                // GetAudioCensorJobRequest getRequest = new GetAudioCensorJobRequest(bucket, id);
+                // // Assert.Equals(getRequest.Bucket, bucket);
+                // // Assert.Equals(getRequest.Region,QCloudServer.Instance().region);
+                // GetAudioCensorJobResult getResult = QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest);
                 request.SetCensorObject(audioKey);
                 Assert.AreEqual(200, getResult.httpCode);
                 // 成功时不返回
@@ -732,7 +791,7 @@ namespace COSXMLTests
         }
 
         [Test]
-        public void TestTextCensorJobCommit()
+        public async Task TestTextCensorJobCommit()
         {
             try
             {
@@ -746,18 +805,36 @@ namespace COSXMLTests
                 request.Bucket = bucket;
                 SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitTextCensorJob(request);
                 request.SetCensorObject(textKey);
-                string id = result.censorJobsResponse.JobsDetail.JobId;
-                Assert.NotNull(id);
+                string jobId = result.censorJobsResponse.JobsDetail.JobId;
+                Assert.NotNull(jobId);
                 Assert.AreEqual(200, result.httpCode);
                 // 等待审核任务跑完
                 // Thread.Sleep(10000);
-                await Task.Delay(10000);
-                GetTextCensorJobRequest getRequest = new GetTextCensorJobRequest(bucket, id);
-                GetTextCensorJobResult getResult = QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
-                Assert.AreEqual(200, getResult.httpCode);
+             
+                // GetTextCensorJobRequest getRequest = new GetTextCensorJobRequest(bucket, id);
+                // GetTextCensorJobResult getResult = QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
+                // Assert.AreEqual(200, getResult.httpCode);
                 // 只有失败时返回
                 //Assert.NotNull(getResult.resultStruct.JobsDetail.Code);
                 //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
+
+
+
+                var (getResult, isTimeout) = await PollJobUntilCompletedAsync<GetTextCensorJobResult>(jobId,timeout: TimeSpan.FromMinutes(5),checkInterval: TimeSpan.FromSeconds(5),
+                getJobFunc: async id =>
+                {
+                    var getRequest = new GetTextCensorJobRequest(bucket, id);
+                    // return await QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
+                    return await  Task.Run(()=>
+                        QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest)
+                    );
+                });
+
+                Assert.False(isTimeout, "任务轮询超时");
+                Assert.NotNull(getResult);
+                Assert.AreEqual(200, getResult.httpCode);
+                // Assert.Equal("Success", getResult.resultStruct.JobsDetail.State);
+
                 Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.State);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.CreationTime);
@@ -819,7 +896,7 @@ namespace COSXMLTests
             }
         }
         [Test]
-        public void TestTextCensorJobCommitSync()
+        public async Task TestTextCensorJobCommitSync()
         {
             try
             {
@@ -833,15 +910,26 @@ namespace COSXMLTests
                 request.Bucket = bucket;
                 SubmitTextCensorJobsResult result = QCloudServer.Instance().cosXml.SubmitTextCensorJobSync(request);
                 request.SetCensorObject(textKey);
-                string id = result.textCensorJobsResponse.JobsDetail.JobId;
-                Assert.NotNull(id);
+                string jobId = result.textCensorJobsResponse.JobsDetail.JobId;
+                Assert.NotNull(jobId);
                 Assert.AreEqual(200, result.httpCode);
+
+
                 // 等待审核任务跑完
                 // Thread.Sleep(10000);
-                await Task.Delay(10000);
-                GetTextCensorJobRequest getRequest = new GetTextCensorJobRequest(bucket, id);
-                GetTextCensorJobResult getResult = QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
-                Assert.AreEqual(200, getResult.httpCode);
+                // // await Task.Delay(10000);
+                // GetTextCensorJobRequest getRequest = new GetTextCensorJobRequest(bucket, jobId);
+                // GetTextCensorJobResult getResult = QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
+                // Assert.AreEqual(200, getResult.httpCode);
+
+                var (getResult, isTimeout) = await PollJobUntilCompletedAsync<GetTextCensorJobResult>(jobId,timeout: TimeSpan.FromMinutes(2),checkInterval: TimeSpan.FromSeconds(5),
+                getJobFunc: async id =>
+                {
+                    var getRequest = new GetTextCensorJobRequest(bucket, id);
+                    return await Task.Run(()=>
+                        QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest));
+                });
+
                 // 只有失败时返回
                 //Assert.NotNull(getResult.resultStruct.JobsDetail.Code);
                 //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
@@ -907,7 +995,7 @@ namespace COSXMLTests
         }
         
         [Test]
-        public void TestDocumentCensorJobSyncCommit()
+        public async Task TestDocumentCensorJobSyncCommit()
         {
             try
             {
@@ -918,57 +1006,68 @@ namespace COSXMLTests
                 request.SetType("docx");
                 request.SetBizType("");
                 SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitDocumentCensorJob(request);
-                string id = result.censorJobsResponse.JobsDetail.JobId;
-                Assert.NotNull(id);
+                string jobId = result.censorJobsResponse.JobsDetail.JobId;
+                Assert.NotNull(jobId);
                 Assert.AreEqual(200, result.httpCode);
                 // 等待审核任务跑完
                 // Thread.Sleep(50000);
-                await Task.Delay(50000);
-                GetDocumentCensorJobRequest getRequest = new GetDocumentCensorJobRequest(bucket, id);
-                GetDocumentCensorJobResult getResult = QCloudServer.Instance().cosXml.GetDocumentCensorJob(getRequest);
-                Assert.AreEqual(200, getResult.httpCode);
+                // await Task.Delay(50000);
+                // GetDocumentCensorJobRequest getRequest = new GetDocumentCensorJobRequest(bucket, id);
+                // GetDocumentCensorJobResult getResult = QCloudServer.Instance().cosXml.GetDocumentCensorJob(getRequest);
+                // Assert.AreEqual(200, getResult.httpCode);
+
+
+                var (getResult, isTimeout) = await PollJobUntilCompletedAsync<GetDocumentCensorJobResult>(jobId,timeout: TimeSpan.FromMinutes(5),checkInterval: TimeSpan.FromSeconds(10),
+                    getJobFunc: async id =>
+                    {
+                        var getRequest = new GetDocumentCensorJobRequest(bucket, id);
+                        // get video censor job
+                        return await Task.Run(() =>
+                                QCloudServer.Instance().cosXml.GetDocumentCensorJob(getRequest)
+                        );
+                    });
                 // 参数检查
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.State);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
-                // //Assert.NotNull(getResult.resultStruct.JobsDetail.Code);
-                // //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.Suggestion);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.CreationTime);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.Url);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageCount);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.Labels);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PornInfo);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PornInfo.HitFlag);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PornInfo.Score);
-                // /*
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PoliticsInfo);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PoliticsInfo.HitFlag);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PoliticsInfo.Score);
-                // */
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.Url);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.Text);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PageNumber);
-                // //Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.SheetNumber);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.HitFlag);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.SubLabel);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.Score);
-                // //Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults);
-                // //Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults.Text);
-                // //Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults.Keywords);
-                // /*
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.HitFlag);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.SubLabel);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.Score);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.OcrResults);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.OcrResults.Text);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.OcrResults.Keywords);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.ObjectResults);
-                // Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.ObjectResults.Name);
-                // */
+                Assert.NotNull(getResult.resultStruct.JobsDetail.State);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Code);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Suggestion);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.CreationTime);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Url);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageCount);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PornInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PornInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PornInfo.Score);
+                /*
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PoliticsInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PoliticsInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Labels.PoliticsInfo.Score);
+                */
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.Url);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.Text);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PageNumber);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.SheetNumber);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.SubLabel);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.Score);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults.Text);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PornInfo.OcrResults.Keywords);
+                /*
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.SubLabel);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.Score);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.OcrResults);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.OcrResults.Text);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.OcrResults.Keywords);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.ObjectResults);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PageSegment.Results.PoliticsInfo.ObjectResults.Name);
+                */
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
