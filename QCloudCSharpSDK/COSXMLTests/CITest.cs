@@ -13,6 +13,7 @@ using System.Text;
 using System.IO;
 using System.Threading;
 using System.Reflection;
+using System.Threading.Tasks;
 using COSXML;
 using COSXML.Auth;
 using Newtonsoft.Json;
