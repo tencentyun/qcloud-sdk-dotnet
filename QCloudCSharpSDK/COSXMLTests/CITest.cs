@@ -42,6 +42,7 @@ namespace COSXMLTests
         [OneTimeSetUp]
         public void Setup()
         {
+            Console.WriteLine("start CITest");
             bucket = QCloudServer.Instance().bucketForObjectTest;
             appid = QCloudServer.Instance().appid;
             region = QCloudServer.Instance().region;

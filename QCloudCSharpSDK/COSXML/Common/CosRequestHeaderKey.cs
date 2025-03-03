@@ -76,6 +76,8 @@ namespace COSXML.Common
         public const string MAX_PARTS = "max-parts";
 
         public const string CONTENT_MD5 = "Content-MD5";
+        
+        public const string CONTENT_LENGTH = "content-length";
 
         public const string RESPONSE_CONTENT_TYPE = "response-content-type";
 
