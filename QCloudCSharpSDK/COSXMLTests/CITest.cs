@@ -482,7 +482,8 @@ namespace COSXMLTests
                 Assert.NotNull(result.censorJobsResponse.JobsDetail.State);
                 Assert.NotNull(result.censorJobsResponse.JobsDetail.CreationTime);
                 string id = result.censorJobsResponse.JobsDetail.JobId;
-                Thread.Sleep(50000);
+                // Thread.Sleep(50000);
+                await Task.Delay(50000);
                 
                 // get video censor job
                 GetVideoCensorJobRequest getRequest = new GetVideoCensorJobRequest(bucket, id);
@@ -614,7 +615,8 @@ namespace COSXMLTests
                 Assert.NotNull(id);
                 Assert.AreEqual(200, result.httpCode);
                 // get audio censor job
-                Thread.Sleep(10000);
+                // Thread.Sleep(10000);
+                await Task.Delay(10000);
                 
                 GetAudioCensorJobRequest getRequest = new GetAudioCensorJobRequest(bucket, id);
                 // Assert.Equals(getRequest.Bucket, bucket);
@@ -747,7 +749,8 @@ namespace COSXMLTests
                 Assert.NotNull(id);
                 Assert.AreEqual(200, result.httpCode);
                 // 等待审核任务跑完
-                Thread.Sleep(10000);
+                // Thread.Sleep(10000);
+                await Task.Delay(10000);
                 GetTextCensorJobRequest getRequest = new GetTextCensorJobRequest(bucket, id);
                 GetTextCensorJobResult getResult = QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
                 Assert.AreEqual(200, getResult.httpCode);
@@ -833,7 +836,8 @@ namespace COSXMLTests
                 Assert.NotNull(id);
                 Assert.AreEqual(200, result.httpCode);
                 // 等待审核任务跑完
-                Thread.Sleep(10000);
+                // Thread.Sleep(10000);
+                await Task.Delay(10000);
                 GetTextCensorJobRequest getRequest = new GetTextCensorJobRequest(bucket, id);
                 GetTextCensorJobResult getResult = QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
                 Assert.AreEqual(200, getResult.httpCode);
@@ -917,7 +921,8 @@ namespace COSXMLTests
                 Assert.NotNull(id);
                 Assert.AreEqual(200, result.httpCode);
                 // 等待审核任务跑完
-                Thread.Sleep(50000);
+                // Thread.Sleep(50000);
+                await Task.Delay(50000);
                 GetDocumentCensorJobRequest getRequest = new GetDocumentCensorJobRequest(bucket, id);
                 GetDocumentCensorJobResult getResult = QCloudServer.Instance().cosXml.GetDocumentCensorJob(getRequest);
                 Assert.AreEqual(200, getResult.httpCode);
