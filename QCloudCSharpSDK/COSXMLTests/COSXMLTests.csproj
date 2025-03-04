@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6</TargetFramework>
     <IsPackable>false</IsPackable>
+    <TestTimeout>00:45:00</TestTimeout>
   </PropertyGroup>
   
   <ItemGroup>

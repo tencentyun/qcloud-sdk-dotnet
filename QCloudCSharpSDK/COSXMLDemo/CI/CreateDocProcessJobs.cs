@@ -1,19 +1,13 @@
 using COSXML;
 using COSXML.Auth;
-using COSXML.Model.Object;
+using COSXML.Model.CI;
 
 namespace COSXMLDemo
 {
-    public class ObjectRestoreModel
+    public class CreateDocProcessJobsModel
     {
+        
         public CosXml cosXml;
-        // 初始化COS服务实例
-        public string bucket;
-
-        public void InitParams()
-        {
-            bucket = Environment.GetEnvironmentVariable("BUCKET");
-        }
         
         // 初始化COS服务实例
         private void InitCosXml()
@@ -29,28 +23,38 @@ namespace COSXMLDemo
             this.cosXml = new CosXmlServer(config, qCloudCredentialProvider);
         }
 
-        ObjectRestoreModel()
+        CreateDocProcessJobsModel()
         {
             InitCosXml();
-            InitParams();
         }
         
-        // 恢复归档对象
-        public void RestoreObject()
+        public void CreateDocProcessJobs()
         {
             try
             {
-                // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                string bucket = "examplebucket-1250000000";
-                string key = "exampleObject"; //对象键
-                RestoreObjectRequest request = new RestoreObjectRequest(bucket, key);
-                //恢复时间
-                request.SetExpireDays(3); //https://cloud.tencent.com/document/product/436/12633
-                request.SetTier(COSXML.Model.Tag.RestoreConfigure.Tier.Bulk);
-                //执行请求
-                RestoreObjectResult result = cosXml.RestoreObject(request);
-                //请求成功
-                Console.WriteLine(result.GetResultInfo());
+                string bucket = "bucketname-APPID";
+                string textKey = "";
+
+                CreateDocProcessJobsRequest request = new CreateDocProcessJobsRequest(bucket);
+                request.SetInputObject("demo.docx");
+                request.SetTag("DocProcess");
+                request.SetSrcType("docx");
+                request.SetTgtType("jpg");
+                request.SetStartPage("3");
+                request.SetEndPage("5");
+                request.SetImageParams("imageMogr2/cut/400x400");
+                request.SetQuality("90");
+                request.SetZoom("200");
+                request.SetImageDpi("100");
+                request.SetPicPagination("1");
+                request.SetOutputBucket("");
+                request.SetOutputObject("");
+                request.SetOutputRegion("");
+                request.SetSheetId("1");
+                request.SetPaperDirection("1");
+                request.SetPaperSize("1");
+                CreateDocProcessJobsResult createDocProcessJobsResult = cosXml.CreateDocProcessJobs(request);
+                Console.WriteLine(createDocProcessJobsResult.docProcessResponse.JobsDetail.JobId);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -61,14 +65,11 @@ namespace COSXMLDemo
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
             }
         }
-
-
-        public static void ObjectRestoreModelMain()
+        
+        public static void CreateDocProcessJobsModelMain()
         {
-            ObjectRestoreModel demo = new ObjectRestoreModel();
-            demo.RestoreObject();
+            CreateDocProcessJobsModel m = new CreateDocProcessJobsModel();
+            m.CreateDocProcessJobs();
         }
-
     }
 }
-

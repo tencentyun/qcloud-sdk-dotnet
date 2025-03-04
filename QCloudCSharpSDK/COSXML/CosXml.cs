@@ -1202,7 +1202,16 @@ namespace COSXML
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
+        [Obsolete]
         SubmitDocumentProcessJobResult SubmitDocumentProcessJob(SubmitDocumentProcessJobRequest request);
+
+        /// <summary>
+        /// 提交文档转码任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        CreateDocProcessJobsResult CreateDocProcessJobs(CreateDocProcessJobsRequest request);
+
         /// <summary>
         /// 查询指定的文档转码任务
         /// </summary>
