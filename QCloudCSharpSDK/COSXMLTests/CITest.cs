@@ -1237,6 +1237,47 @@ namespace COSXMLTests
         }
 
         [Test]
+        public void TestDocumentProcessJobSubmit()
+        {
+            try
+            {
+                SubmitDocumentProcessJobRequest request = new SubmitDocumentProcessJobRequest(bucket);
+                request.SetInputObject("demo.docx");
+                request.SetTag("DocProcess");
+                request.SetSrcType("docx");
+                request.SetTgtType("jpg");
+                request.SetStartPage("3");
+                request.SetEndPage("5");
+                request.SetImageParams("imageMogr2/cut/400x400");
+                request.SetQuality("90");
+                request.SetZoom("200");
+                request.SetImageDpi("100");
+                request.SetPicPagination("1");
+                request.SetOutputBucket("dotnet-ut-obj-1253960454");
+                request.SetOutputObject("kwy-test_${Number}");
+                request.SetOutputRegion("ap-guangzhou");
+                request.SetSheetId("1");
+                request.SetPaperDirection("1");
+                request.SetPaperSize("1");
+                SubmitDocumentProcessJobResult result = QCloudServer.Instance().cosXml.SubmitDocumentProcessJob(request);
+                string jobId = result.docProcessResponse.JobsDetail.JobId;
+                Assert.NotNull(jobId);
+                Assert.AreEqual(200, result.httpCode);
+
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test]
         public void TestDescribeMediaBuckets()
         {
             try
