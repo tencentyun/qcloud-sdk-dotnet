@@ -60,8 +60,6 @@ namespace COSXMLTests
         [OneTimeSetUp]
         public void Init()
         {
-            Console.WriteLine("start ObjectTest");
-            
             try
             {
                 cosXml = QCloudServer.Instance().cosXml;
@@ -172,13 +170,12 @@ namespace COSXMLTests
             }
             catch (CosClientException clientEx)
             {
-                Console.WriteLine("CosClientException: " + clientEx.errorCode);
-                // Assert.Fail();
+                Assert.Fail();
             }
             catch (CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                // Assert.Fail();
+                Assert.Fail();
             }
         }
 
@@ -767,7 +764,8 @@ namespace COSXMLTests
                     UploadPartRequest uploadPartRequest = new UploadPartRequest(bucket, coskey, partNumber, uploadId, localfile, sliceSize * (partNumber - 1), sliceSize);
                     //设置进度回调
                     uploadPartRequest.SetCosProgressCallback(
-                        delegate (long completed, long total) {
+                        delegate (long completed, long total)
+                        {
                         }
                     );
                     //执行请求
@@ -777,7 +775,7 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosClientException clientEx)
             {
                 Console.WriteLine("CosClientException: " + clientEx.StackTrace);
-                // Assert.Fail();
+                Assert.Fail();
             }
             catch (COSXML.CosException.CosServerException serverEx)
             {
@@ -1112,6 +1110,8 @@ namespace COSXMLTests
         [Test()]
         public void RestoreObjectNoDaysParam()
         {
+            
+            
             string objectKey = "archive_object";
             try
             {
@@ -1139,7 +1139,7 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                // Assert.Fail();
+                Assert.Fail();
             }
         }
         
@@ -1177,7 +1177,7 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                // Assert.Fail();
+                Assert.Fail();
             }
         }
 
@@ -1213,7 +1213,7 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                // Assert.Fail();
+                Assert.Fail();
             }
         }
 
@@ -2038,16 +2038,7 @@ namespace COSXMLTests
             var asyncTask = transferManager.DownloadAsync(downloadTask);
 
             Thread.Sleep(200);
-
-            try
-            {
-                downloadTask.Pause();
-            }
-            catch (Exception ex)
-            {
-                
-            }
-            
+            downloadTask.Pause();
 
             Thread.Sleep(200);
             downloadTask.Resume();
@@ -2280,7 +2271,8 @@ namespace COSXMLTests
                 //Assert.AreEqual(200, result.httpCode);
                 // 检查文件长度，是否覆盖写
                 long smallLength = new FileInfo(localFileName).Length;
-                // Assert.True(smallLength != bigLength);
+                
+                Assert.True(smallLength < bigLength);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -2372,32 +2364,30 @@ namespace COSXMLTests
         [Test()]
         public async Task TestUploadTaskWithCheckSlice()
         {
-   
-            try {
-                string cosKey = PutObjectBigFile();
-                string uploadId = "";
-                uploadId = GetMultiUploadId(cosKey, bigCopySourceFilePath);
-                COSXMLUploadTask uploadTask = new COSXMLUploadTask(bucket, cosKey);
-                uploadTask.SetSrcPath(bigCopySourceFilePath);
+            string cosKey = PutObjectBigFile();
+            string uploadId = "";
+            uploadId = GetMultiUploadId(cosKey, bigCopySourceFilePath);
+            COSXMLUploadTask uploadTask = new COSXMLUploadTask(bucket, cosKey);
+            uploadTask.SetSrcPath(bigCopySourceFilePath);
             
-                TransferConfig transferConfig = new TransferConfig();
-                // 手动设置高级下载接口的分块阈值为 20MB(默认为20MB), 从5.4.26版本开始支持！
-                transferConfig.DdivisionForCopy = 1024 * 1024;
-                // 手动设置高级下载接口的分块大小为 10MB(默认为5MB),不建议此处设置过小的分块值,可能导致频繁重试或下载速度不合预期
-                transferConfig.SliceSizeForCopy = 1024 * 1024;
-                uploadTask.SetUploadId(uploadId);
-                transferManager.UploadAsync(uploadTask);
-                uploadTask.TestCheckAllUploadParts(uploadId);
+            TransferConfig transferConfig = new TransferConfig();
+            // 手动设置高级下载接口的分块阈值为 20MB(默认为20MB), 从5.4.26版本开始支持！
+            transferConfig.DdivisionForCopy = 1024 * 1024;
+            // 手动设置高级下载接口的分块大小为 10MB(默认为5MB),不建议此处设置过小的分块值,可能导致频繁重试或下载速度不合预期
+            transferConfig.SliceSizeForCopy = 1024 * 1024;
+            uploadTask.SetUploadId(uploadId);
+            transferManager.UploadAsync(uploadTask);
+            uploadTask.TestCheckAllUploadParts(uploadId);
+            try {
                 ListPartsRequest listPartsRequest = new ListPartsRequest(bucket, cosKey, uploadId);
                 ListPartsResult listPartsResult = cosXml.ListParts(listPartsRequest);
                 TestUpdateSliceNums(listPartsResult);
-                uploadTask.Cancel();
             }
             catch (Exception)
             {
                 
             }
-           
+            uploadTask.Cancel();
         }
 
         [Test()]
@@ -2566,9 +2556,11 @@ namespace COSXMLTests
             try
             {
                 long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
-                PostObjectRequest request = new PostObjectRequest(bucket, commonKey, smallFileSrcPath);
-                
-                request.LimitTraffic(8 * 1000);
+                PostObjectRequest request = new PostObjectRequest(bucket,
+                    commonKey, smallFileSrcPath);
+
+
+                request.LimitTraffic(8 * 1000 * 1024);
                 //执行请求
                 PostObjectResult result = cosXml.PostObject(request);
                 long costTime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() - now;
@@ -2583,7 +2575,7 @@ namespace COSXMLTests
             catch (COSXML.CosException.CosServerException serverEx)
             {
                 Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-                // Assert.Fail();
+                Assert.Fail();
             }
         }
 
@@ -2916,7 +2908,7 @@ namespace COSXMLTests
                 Assert.AreEqual(result.httpCode, 200);
                 Assert.NotNull(result.tagging);
                 Assert.NotNull(result.tagging.tagSet);
-                // Assert.NotZero(result.tagging.tagSet.tags.Count);
+                Assert.NotZero(result.tagging.tagSet.tags.Count);
                 for (int i=0; i<result.tagging.tagSet.tags.Count; i++) {
                     Assert.NotNull(result.tagging.tagSet.tags[i]);
                     Assert.NotNull(result.tagging.tagSet.tags[i].key);

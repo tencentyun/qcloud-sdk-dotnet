@@ -17,3 +17,5 @@ QCloudCSharpSDK/.idea
 *.vs
 .vscode
 **/.DS_Store
+**/bin/
+**/obj/
