@@ -500,6 +500,14 @@ namespace COSXMLTests
                         Console.WriteLine($"任务完成，最终状态: {documentResult.resultStruct.JobsDetail.State}");
                         return (lastResult, false);
                     }
+                }else if (lastResult is GetAudioCensorJobResult audioCensorJobResult)
+                {
+                    if (audioCensorJobResult.resultStruct.JobsDetail.State == "Success"
+                        || audioCensorJobResult.resultStruct.JobsDetail.State == "Failed")
+                    {
+                        Console.WriteLine($"任务完成，最终状态: {audioCensorJobResult.resultStruct.JobsDetail.State}");
+                        return (lastResult, false);
+                    }
                 }
 
                 Console.WriteLine("等待 {checkInterval.TotalSeconds} 秒后重试...");
@@ -673,110 +681,110 @@ namespace COSXMLTests
             }
         }
 
-        // [Test]
-        // public async Task TestAudioCensorJob()
-        // {
-        //     try
-        //     {
-        //         SubmitAudioCensorJobRequest request = new SubmitAudioCensorJobRequest(bucket);
-        //         //request.SetCensorObject(audioKey);
-        //         request.SetCensorUrl("https://download.samplelib.com/mp3/sample-3s.mp3");
-        //         request.SetDetectType("Porn,Terrorism");
-        //         request.SetCallback("");
-        //         request.SetCallbackVersion("");
-        //         request.SetBizType("");
-        //         SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitAudioCensorJob(request);
-        //         string jobId = result.censorJobsResponse.JobsDetail.JobId;
-        //         Assert.NotNull(jobId);
-        //         Assert.AreEqual(200, result.httpCode);
-        //         // get audio censor job
-        //         // Thread.Sleep(10000);
-        //         // await Task.Delay(10000);
-        //
-        //         var (getResult, isTimeout) = await PollJobUntilCompletedAsync<GetAudioCensorJobResult>(jobId,timeout: TimeSpan.FromMinutes(5),checkInterval: TimeSpan.FromSeconds(10),
-        //             getJobFunc: async id =>
-        //             {
-        //                 try
-        //                 {
-        //                     return await Task.Run(() =>
-        //                     {
-        //                         Console.WriteLine($"[{DateTime.Now}] 开始查询任务状态，JobId={id}");
-        //                         var getRequest = new GetAudioCensorJobRequest(bucket, id);
-        //                         return QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest);
-        //                     }).ConfigureAwait(false); // 避免同步上下文死锁
-        //                 }
-        //                 catch (Exception ex)
-        //                 {
-        //                     Console.WriteLine($"[{DateTime.Now}] 请求异常: {ex.Message}");
-        //                     throw;
-        //                 }
-        //                 // var getRequest = new GetAudioCensorJobRequest(bucket, id);
-        //                 // // get video censor job
-        //                 // return await Task.Run(() =>
-        //                 //     QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest)
-        //                 // );
-        //             });
-        //
-        //         // GetAudioCensorJobRequest getRequest = new GetAudioCensorJobRequest(bucket, id);
-        //         // // Assert.Equals(getRequest.Bucket, bucket);
-        //         // // Assert.Equals(getRequest.Region,QCloudServer.Instance().region);
-        //         // GetAudioCensorJobResult getResult = QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest);
-        //         request.SetCensorObject(audioKey);
-        //         Assert.AreEqual(200, getResult.httpCode);
-        //         // 成功时不返回
-        //         //Assert.NotNull(getResult.resultStruct.JobsDetail.Code);
-        //         //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.State);
-        //         Assert.AreEqual("Success", getResult.resultStruct.JobsDetail.State);
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.CreationTime);
-        //         //Assert.NotNull(getResult.resultStruct.JobsDetail.Object);
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.Result);
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.AudioText);
-        //
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo);
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo.HitFlag);
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo.Score);
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo.Label);
-        //
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo);
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.HitFlag);
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.Score);
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.Label);
-        //
-        //         Assert.NotNull(getResult.resultStruct.JobsDetail.Section);
-        //
-        //         Assert.NotZero(getResult.resultStruct.JobsDetail.Section.Count);
-        //         for(int i = 0; i < getResult.resultStruct.JobsDetail.Section.Count; i++)
-        //         {
-        //             Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].Url);
-        //             Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].OffsetTime);
-        //             Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].Duration);
-        //             Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].Text);
-        //             Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo);
-        //             Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo.HitFlag);
-        //             Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo.Score);
-        //             // 没有命中关键词时不返回
-        //             //Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo.Keywords);
-        //             Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo);
-        //             Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo.HitFlag);
-        //             Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo.Score);
-        //             // 没有命中关键词时不返回
-        //             //Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo.Keywords);
-        //         }
-        //
-        //     }
-        //     catch (COSXML.CosException.CosClientException clientEx)
-        //     {
-        //         Console.WriteLine("CosClientException: " + clientEx.Message);
-        //         Assert.Fail();
-        //     }
-        //     catch (COSXML.CosException.CosServerException serverEx)
-        //     {
-        //         Console.WriteLine("CosServerException: " + serverEx.GetInfo());
-        //         Assert.Fail();
-        //     }
-        // }
+        [Test]
+        public async Task TestAudioCensorJob()
+        {
+            try
+            {
+                SubmitAudioCensorJobRequest request = new SubmitAudioCensorJobRequest(bucket);
+                //request.SetCensorObject(audioKey);
+                request.SetCensorUrl("https://download.samplelib.com/mp3/sample-3s.mp3");
+                request.SetDetectType("Porn,Terrorism");
+                request.SetCallback("");
+                request.SetCallbackVersion("");
+                request.SetBizType("");
+                SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitAudioCensorJob(request);
+                string jobId = result.censorJobsResponse.JobsDetail.JobId;
+                Console.WriteLine($"[{DateTime.Now}],，JobId={jobId}");
+                Assert.NotNull(jobId);
+                Assert.AreEqual(200, result.httpCode);
+                // get audio censor job
+                // Thread.Sleep(10000);
+                // await Task.Delay(10000);
+
+                var (getResult, isTimeout) = await PollJobUntilCompletedAsync<GetAudioCensorJobResult>(jobId,timeout: TimeSpan.FromMinutes(10),checkInterval: TimeSpan.FromSeconds(15),
+                    getJobFunc: async id =>
+                    {
+                        try
+                        {
+                            return await Task.Run(() =>
+                            {
+                                Console.WriteLine($"[{DateTime.Now}] 开始查询任务状态，JobId={id}");
+                                var getRequest = new GetAudioCensorJobRequest(bucket, id);
+                                return QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest);
+                            }).ConfigureAwait(false); // 避免同步上下文死锁
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"[{DateTime.Now}] 请求异常: {ex.Message}");
+                            throw;
+                        }
+                        // var getRequest = new GetAudioCensorJobRequest(bucket, id);
+                        // // get video censor job
+                        // return await Task.Run(() =>
+                        //     QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest)
+                        // );
+                    });
+                // GetAudioCensorJobRequest getRequest = new GetAudioCensorJobRequest(bucket, id);
+                // // Assert.Equals(getRequest.Bucket, bucket);
+                // // Assert.Equals(getRequest.Region,QCloudServer.Instance().region);
+                // GetAudioCensorJobResult getResult = QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest);
+                request.SetCensorObject(audioKey);
+                Assert.AreEqual(200, getResult.httpCode);
+                // 成功时不返回
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Code);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.State);
+                Assert.AreEqual("Success", getResult.resultStruct.JobsDetail.State);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.CreationTime);
+                //Assert.NotNull(getResult.resultStruct.JobsDetail.Object);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Result);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.AudioText);
+
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo.Score);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.PornInfo.Label);
+
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.HitFlag);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.Score);
+                Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.Label);
+
+                Assert.NotNull(getResult.resultStruct.JobsDetail.Section);
+
+                Assert.NotZero(getResult.resultStruct.JobsDetail.Section.Count);
+                for(int i = 0; i < getResult.resultStruct.JobsDetail.Section.Count; i++)
+                {
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].Url);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].OffsetTime);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].Duration);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].Text);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo.HitFlag);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo.Score);
+                    // 没有命中关键词时不返回
+                    //Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].PornInfo.Keywords);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo.HitFlag);
+                    Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo.Score);
+                    // 没有命中关键词时不返回
+                    //Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo.Keywords);
+                }
+
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
 
         [Test]
         public void CIRequestTest()
