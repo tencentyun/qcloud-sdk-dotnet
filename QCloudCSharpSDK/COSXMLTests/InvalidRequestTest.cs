@@ -30,6 +30,7 @@ namespace COSXMLTests
         [OneTimeSetUp]
         public void Setup()
         {
+            Console.WriteLine("start InvalidRequestTest");
             notExistBucket = "not-exist-bucket-suwjsdjwujehdfkd-" + QCloudServer.Instance().appid;
             cosXml = QCloudServer.Instance().cosXml;
             var config = new TransferConfig();

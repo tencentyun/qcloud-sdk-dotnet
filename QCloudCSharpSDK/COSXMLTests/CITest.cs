@@ -12,7 +12,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Reflection;
+// using System.Threading.Tasks;
 using COSXML;
 using COSXML.Auth;
 using Newtonsoft.Json;
@@ -42,6 +44,7 @@ namespace COSXMLTests
         [OneTimeSetUp]
         public void Setup()
         {
+            Console.WriteLine("start CITest");
             bucket = QCloudServer.Instance().bucketForObjectTest;
             appid = QCloudServer.Instance().appid;
             region = QCloudServer.Instance().region;
@@ -458,9 +461,64 @@ namespace COSXMLTests
             }
             
         }
+        public async Task<(TResult result, bool isTimeout)> PollJobUntilCompletedAsync<TResult>(
+            string jobId,
+            TimeSpan timeout,
+            TimeSpan checkInterval,
+            Func<string, Task<TResult>> getJobFunc)
+        {
+            var startTime = DateTime.UtcNow;
+            TResult lastResult = default;
 
+            while (DateTime.UtcNow - startTime < timeout)
+            {
+                lastResult = await getJobFunc(jobId).ConfigureAwait(false);
+
+                // 假设结果对象中有 IsFinalState 属性标识终态
+                if (lastResult is GetVideoCensorJobResult videoResult)
+                {
+                    if (videoResult.resultStruct.JobsDetail.State == "Success"
+                        || videoResult.resultStruct.JobsDetail.State == "Failed")
+                    {
+                        Console.WriteLine($"任务完成，最终状态: {videoResult.resultStruct.JobsDetail.State}");
+                        return (lastResult, false);
+                    }
+                }
+                else if (lastResult is GetTextCensorJobResult textResult)
+                {
+                    if (textResult.resultStruct.JobsDetail.State == "Success"
+                        || textResult.resultStruct.JobsDetail.State == "Failed")
+                    {
+                        Console.WriteLine($"任务完成，最终状态: {textResult.resultStruct.JobsDetail.State}");
+                        return (lastResult, false);
+                    }
+                }
+                else if(lastResult is GetDocumentCensorJobResult documentResult){
+                    if (documentResult.resultStruct.JobsDetail.State == "Success"
+                        || documentResult.resultStruct.JobsDetail.State == "Failed")
+                    {
+                        Console.WriteLine($"任务完成，最终状态: {documentResult.resultStruct.JobsDetail.State}");
+                        return (lastResult, false);
+                    }
+                }else if (lastResult is GetAudioCensorJobResult audioCensorJobResult)
+                {
+                    if (audioCensorJobResult.resultStruct.JobsDetail.State == "Success"
+                        || audioCensorJobResult.resultStruct.JobsDetail.State == "Failed")
+                    {
+                        Console.WriteLine($"任务完成，最终状态: {audioCensorJobResult.resultStruct.JobsDetail.State}");
+                        return (lastResult, false);
+                    }
+                }
+
+                Console.WriteLine("等待 {checkInterval.TotalSeconds} 秒后重试...");
+                await Task.Delay(checkInterval).ConfigureAwait(false);
+            }
+
+            Console.WriteLine("轮询超时！");
+            return (lastResult, true);
+        }
         [Test]
-        public void TestVideoCensorJobCommit()
+        public async Task TestVideoCensorJobCommit()
         {
             try
             {
@@ -480,12 +538,39 @@ namespace COSXMLTests
                 Assert.NotNull(result.censorJobsResponse.JobsDetail.JobId);
                 Assert.NotNull(result.censorJobsResponse.JobsDetail.State);
                 Assert.NotNull(result.censorJobsResponse.JobsDetail.CreationTime);
-                string id = result.censorJobsResponse.JobsDetail.JobId;
-                Thread.Sleep(20000);
+                string jobId = result.censorJobsResponse.JobsDetail.JobId;
+           
+                var (getResult, isTimeout) = await PollJobUntilCompletedAsync<GetVideoCensorJobResult>(jobId,timeout: TimeSpan.FromMinutes(10),checkInterval: TimeSpan.FromSeconds(15),
+                    getJobFunc: async id =>
+                    {
+                        try
+                        {
+                            // Console.WriteLine($"[{DateTime.Now}] 开始查询任务状态，JobId={id}");
+                            // var getRequest = new GetVideoCensorJobRequest(bucket, id);
+                            // // get video censor job
+                            // // var response =
+                            // return await Task.Run(() =>
+                            //     QCloudServer.Instance().cosXml.GetVideoCensorJob(getRequest)
+                            // );
+                            return await Task.Run(() =>
+                            {
+                                Console.WriteLine($"[{DateTime.Now}] 开始查询任务状态，JobId={id}");
+                                var getRequest = new GetVideoCensorJobRequest(bucket, id);
+                                return QCloudServer.Instance().cosXml.GetVideoCensorJob(getRequest);
+                            }).ConfigureAwait(false); // 避免同步上下文死锁
+
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"[{DateTime.Now}] 请求异常: {ex.Message}");
+                            throw;
+                        }
+                    });
                 
-                // get video censor job
-                GetVideoCensorJobRequest getRequest = new GetVideoCensorJobRequest(bucket, id);
-                GetVideoCensorJobResult getResult = QCloudServer.Instance().cosXml.GetVideoCensorJob(getRequest);
+                // GetVideoCensorJobRequest getRequest = new GetVideoCensorJobRequest(bucket, id);
+                // GetVideoCensorJobResult getResult = QCloudServer.Instance().cosXml.GetVideoCensorJob(getRequest);
+                Assert.False(isTimeout, "任务轮询超时");
+                Assert.NotNull(getResult);
                 Assert.AreEqual(200, getResult.httpCode);
 
                 Assert.NotNull(getResult.resultStruct.JobsDetail);
@@ -597,7 +682,7 @@ namespace COSXMLTests
         }
 
         [Test]
-        public void TestAudioCensorJob()
+        public async Task TestAudioCensorJob()
         {
             try
             {
@@ -609,16 +694,41 @@ namespace COSXMLTests
                 request.SetCallbackVersion("");
                 request.SetBizType("");
                 SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitAudioCensorJob(request);
-                string id = result.censorJobsResponse.JobsDetail.JobId;
-                Assert.NotNull(id);
+                string jobId = result.censorJobsResponse.JobsDetail.JobId;
+                Console.WriteLine($"[{DateTime.Now}],，JobId={jobId}");
+                Assert.NotNull(jobId);
                 Assert.AreEqual(200, result.httpCode);
                 // get audio censor job
-                Thread.Sleep(10000);
-                
-                GetAudioCensorJobRequest getRequest = new GetAudioCensorJobRequest(bucket, id);
-                // Assert.Equals(getRequest.Bucket, bucket);
-                // Assert.Equals(getRequest.Region,QCloudServer.Instance().region);
-                GetAudioCensorJobResult getResult = QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest);
+                // Thread.Sleep(10000);
+                // await Task.Delay(10000);
+
+                var (getResult, isTimeout) = await PollJobUntilCompletedAsync<GetAudioCensorJobResult>(jobId,timeout: TimeSpan.FromMinutes(10),checkInterval: TimeSpan.FromSeconds(15),
+                    getJobFunc: async id =>
+                    {
+                        try
+                        {
+                            return await Task.Run(() =>
+                            {
+                                Console.WriteLine($"[{DateTime.Now}] 开始查询任务状态，JobId={id}");
+                                var getRequest = new GetAudioCensorJobRequest(bucket, id);
+                                return QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest);
+                            }).ConfigureAwait(false); // 避免同步上下文死锁
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"[{DateTime.Now}] 请求异常: {ex.Message}");
+                            throw;
+                        }
+                        // var getRequest = new GetAudioCensorJobRequest(bucket, id);
+                        // // get video censor job
+                        // return await Task.Run(() =>
+                        //     QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest)
+                        // );
+                    });
+                // GetAudioCensorJobRequest getRequest = new GetAudioCensorJobRequest(bucket, id);
+                // // Assert.Equals(getRequest.Bucket, bucket);
+                // // Assert.Equals(getRequest.Region,QCloudServer.Instance().region);
+                // GetAudioCensorJobResult getResult = QCloudServer.Instance().cosXml.GetAudioCensorJob(getRequest);
                 request.SetCensorObject(audioKey);
                 Assert.AreEqual(200, getResult.httpCode);
                 // 成功时不返回
@@ -641,9 +751,9 @@ namespace COSXMLTests
                 Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.HitFlag);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.Score);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.TerrorismInfo.Label);
-             
+
                 Assert.NotNull(getResult.resultStruct.JobsDetail.Section);
-                
+
                 Assert.NotZero(getResult.resultStruct.JobsDetail.Section.Count);
                 for(int i = 0; i < getResult.resultStruct.JobsDetail.Section.Count; i++)
                 {
@@ -662,7 +772,7 @@ namespace COSXMLTests
                     // 没有命中关键词时不返回
                     //Assert.NotNull(getResult.resultStruct.JobsDetail.Section[i].TerrorismInfo.Keywords);
                 }
-                
+
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -728,7 +838,7 @@ namespace COSXMLTests
         }
 
         [Test]
-        public void TestTextCensorJobCommit()
+        public async Task TestTextCensorJobCommit()
         {
             try
             {
@@ -742,17 +852,51 @@ namespace COSXMLTests
                 request.Bucket = bucket;
                 SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitTextCensorJob(request);
                 request.SetCensorObject(textKey);
-                string id = result.censorJobsResponse.JobsDetail.JobId;
-                Assert.NotNull(id);
+                string jobId = result.censorJobsResponse.JobsDetail.JobId;
+                Assert.NotNull(jobId);
                 Assert.AreEqual(200, result.httpCode);
                 // 等待审核任务跑完
-                Thread.Sleep(10000);
-                GetTextCensorJobRequest getRequest = new GetTextCensorJobRequest(bucket, id);
-                GetTextCensorJobResult getResult = QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
-                Assert.AreEqual(200, getResult.httpCode);
+                // Thread.Sleep(10000);
+             
+                // GetTextCensorJobRequest getRequest = new GetTextCensorJobRequest(bucket, id);
+                // GetTextCensorJobResult getResult = QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
+                // Assert.AreEqual(200, getResult.httpCode);
                 // 只有失败时返回
                 //Assert.NotNull(getResult.resultStruct.JobsDetail.Code);
                 //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
+
+
+
+                var (getResult, isTimeout) = await PollJobUntilCompletedAsync<GetTextCensorJobResult>(jobId,timeout: TimeSpan.FromMinutes(5),checkInterval: TimeSpan.FromSeconds(5),
+                getJobFunc: async id =>
+                {
+                    try
+                    {
+                        return await Task.Run(() =>
+                        {
+                            Console.WriteLine($"[{DateTime.Now}] 开始查询任务状态，JobId={id}");
+                            var getRequest = new GetTextCensorJobRequest(bucket, id);
+                            return QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
+                        }).ConfigureAwait(false); // 避免同步上下文死锁
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"[{DateTime.Now}] 请求异常: {ex.Message}");
+                        throw;
+                    }
+
+                    // var getRequest = new GetTextCensorJobRequest(bucket, id);
+                    // // return await QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
+                    // return await  Task.Run(()=>
+                    //     QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest)
+                    // );
+                });
+
+                Assert.False(isTimeout, "任务轮询超时");
+                Assert.NotNull(getResult);
+                Assert.AreEqual(200, getResult.httpCode);
+                // Assert.Equal("Success", getResult.resultStruct.JobsDetail.State);
+
                 Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.State);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.CreationTime);
@@ -814,7 +958,7 @@ namespace COSXMLTests
             }
         }
         [Test]
-        public void TestTextCensorJobCommitSync()
+        public async Task TestTextCensorJobCommitSync()
         {
             try
             {
@@ -828,14 +972,41 @@ namespace COSXMLTests
                 request.Bucket = bucket;
                 SubmitTextCensorJobsResult result = QCloudServer.Instance().cosXml.SubmitTextCensorJobSync(request);
                 request.SetCensorObject(textKey);
-                string id = result.textCensorJobsResponse.JobsDetail.JobId;
-                Assert.NotNull(id);
+                string jobId = result.textCensorJobsResponse.JobsDetail.JobId;
+                Assert.NotNull(jobId);
                 Assert.AreEqual(200, result.httpCode);
+
+
                 // 等待审核任务跑完
-                Thread.Sleep(10000);
-                GetTextCensorJobRequest getRequest = new GetTextCensorJobRequest(bucket, id);
-                GetTextCensorJobResult getResult = QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
-                Assert.AreEqual(200, getResult.httpCode);
+                // Thread.Sleep(10000);
+                // // await Task.Delay(10000);
+                // GetTextCensorJobRequest getRequest = new GetTextCensorJobRequest(bucket, jobId);
+                // GetTextCensorJobResult getResult = QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
+                // Assert.AreEqual(200, getResult.httpCode);
+
+                var (getResult, isTimeout) = await PollJobUntilCompletedAsync<GetTextCensorJobResult>(jobId,timeout: TimeSpan.FromMinutes(2),checkInterval: TimeSpan.FromSeconds(5),
+                getJobFunc: async id =>
+                {
+                    try
+                    {
+                        return await Task.Run(() =>
+                        {
+                            Console.WriteLine($"[{DateTime.Now}] 开始查询任务状态，JobId={id}");
+                            var getRequest = new GetTextCensorJobRequest(bucket, id);
+                            return QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest);
+                        }).ConfigureAwait(false); // 避免同步上下文死锁
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"[{DateTime.Now}] 请求异常: {ex.Message}");
+                        throw;
+                    }
+
+                    // var getRequest = new GetTextCensorJobRequest(bucket, id);
+                    // return await Task.Run(()=>
+                    //     QCloudServer.Instance().cosXml.GetTextCensorJob(getRequest));
+                });
+
                 // 只有失败时返回
                 //Assert.NotNull(getResult.resultStruct.JobsDetail.Code);
                 //Assert.NotNull(getResult.resultStruct.JobsDetail.Message);
@@ -901,7 +1072,7 @@ namespace COSXMLTests
         }
         
         [Test]
-        public void TestDocumentCensorJobSyncCommit()
+        public async Task TestDocumentCensorJobSyncCommit()
         {
             try
             {
@@ -912,14 +1083,41 @@ namespace COSXMLTests
                 request.SetType("docx");
                 request.SetBizType("");
                 SubmitCensorJobResult result = QCloudServer.Instance().cosXml.SubmitDocumentCensorJob(request);
-                string id = result.censorJobsResponse.JobsDetail.JobId;
-                Assert.NotNull(id);
+                string jobId = result.censorJobsResponse.JobsDetail.JobId;
+                Assert.NotNull(jobId);
                 Assert.AreEqual(200, result.httpCode);
                 // 等待审核任务跑完
-                Thread.Sleep(50000);
-                GetDocumentCensorJobRequest getRequest = new GetDocumentCensorJobRequest(bucket, id);
-                GetDocumentCensorJobResult getResult = QCloudServer.Instance().cosXml.GetDocumentCensorJob(getRequest);
-                Assert.AreEqual(200, getResult.httpCode);
+                // Thread.Sleep(50000);
+                // await Task.Delay(50000);
+                // GetDocumentCensorJobRequest getRequest = new GetDocumentCensorJobRequest(bucket, id);
+                // GetDocumentCensorJobResult getResult = QCloudServer.Instance().cosXml.GetDocumentCensorJob(getRequest);
+                // Assert.AreEqual(200, getResult.httpCode);
+
+
+                var (getResult, isTimeout) = await PollJobUntilCompletedAsync<GetDocumentCensorJobResult>(jobId,timeout: TimeSpan.FromMinutes(5),checkInterval: TimeSpan.FromSeconds(10),
+                    getJobFunc: async id =>
+                    {
+                        try
+                        {
+                            return await Task.Run(() =>
+                            {
+                                Console.WriteLine($"[{DateTime.Now}] 开始查询任务状态，JobId={id}");
+                                var getRequest = new GetDocumentCensorJobRequest(bucket, id);
+                                return QCloudServer.Instance().cosXml.GetDocumentCensorJob(getRequest);
+                            }).ConfigureAwait(false); // 避免同步上下文死锁
+                        }
+                        catch(Exception ex)
+                        {
+                            Console.WriteLine($"[{DateTime.Now}] 请求异常: {ex.Message}");
+                            throw;
+                        }
+
+                        // var getRequest = new GetDocumentCensorJobRequest(bucket, id);
+                        // // get video censor job
+                        // return await Task.Run(() =>
+                        //         QCloudServer.Instance().cosXml.GetDocumentCensorJob(getRequest)
+                        // );
+                    });
                 // 参数检查
                 Assert.NotNull(getResult.resultStruct.JobsDetail.State);
                 Assert.NotNull(getResult.resultStruct.JobsDetail.JobId);
@@ -980,7 +1178,7 @@ namespace COSXMLTests
         {
             try
             {
-                SubmitDocumentProcessJobRequest request = new SubmitDocumentProcessJobRequest(bucket);
+                CreateDocProcessJobsRequest request = new CreateDocProcessJobsRequest(bucket);
                 request.SetInputObject("demo.docx");
                 request.SetTag("DocProcess");
                 request.SetSrcType("docx");
@@ -998,7 +1196,7 @@ namespace COSXMLTests
                 request.SetSheetId("1");
                 request.SetPaperDirection("1");
                 request.SetPaperSize("1");
-                SubmitDocumentProcessJobResult result = QCloudServer.Instance().cosXml.SubmitDocumentProcessJob(request);
+                CreateDocProcessJobsResult result = QCloudServer.Instance().cosXml.CreateDocProcessJobs(request);
                 string jobId = result.docProcessResponse.JobsDetail.JobId;
                 Assert.NotNull(jobId);
                 Assert.AreEqual(200, result.httpCode);
@@ -1024,6 +1222,47 @@ namespace COSXMLTests
                     QCloudServer.Instance().cosXml.DescribeDocProcessJobs(describeDocProcessJobsRequest);
                 Assert.AreEqual(200,describeDocProcessJobsResult.httpCode);
                 Assert.NotNull(describeDocProcessJobsResult.listDocProcessResult.JobsDetail);
+
+            }
+            catch (COSXML.CosException.CosClientException clientEx)
+            {
+                Console.WriteLine("CosClientException: " + clientEx.Message);
+                Assert.Fail();
+            }
+            catch (COSXML.CosException.CosServerException serverEx)
+            {
+                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                Assert.Fail();
+            }
+        }
+
+        [Test]
+        public void TestDocumentProcessJobSubmit()
+        {
+            try
+            {
+                SubmitDocumentProcessJobRequest request = new SubmitDocumentProcessJobRequest(bucket);
+                request.SetInputObject("demo.docx");
+                request.SetTag("DocProcess");
+                request.SetSrcType("docx");
+                request.SetTgtType("jpg");
+                request.SetStartPage("3");
+                request.SetEndPage("5");
+                request.SetImageParams("imageMogr2/cut/400x400");
+                request.SetQuality("90");
+                request.SetZoom("200");
+                request.SetImageDpi("100");
+                request.SetPicPagination("1");
+                request.SetOutputBucket("dotnet-ut-obj-1253960454");
+                request.SetOutputObject("kwy-test_${Number}");
+                request.SetOutputRegion("ap-guangzhou");
+                request.SetSheetId("1");
+                request.SetPaperDirection("1");
+                request.SetPaperSize("1");
+                SubmitDocumentProcessJobResult result = QCloudServer.Instance().cosXml.SubmitDocumentProcessJob(request);
+                string jobId = result.docProcessResponse.JobsDetail.JobId;
+                Assert.NotNull(jobId);
+                Assert.AreEqual(200, result.httpCode);
 
             }
             catch (COSXML.CosException.CosClientException clientEx)

@@ -4,7 +4,7 @@ using COSXML.Model.CI;
 
 namespace COSXMLDemo
 {
-    public class SubmitDocumentProcessJobModel
+    public class CreateDocProcessJobsModel
     {
         
         public CosXml cosXml;
@@ -23,19 +23,19 @@ namespace COSXMLDemo
             this.cosXml = new CosXmlServer(config, qCloudCredentialProvider);
         }
 
-        SubmitDocumentProcessJobModel()
+        CreateDocProcessJobsModel()
         {
             InitCosXml();
         }
         
-        public void SubmitDocumentProcessJob()
+        public void CreateDocProcessJobs()
         {
             try
             {
                 string bucket = "bucketname-APPID";
                 string textKey = "";
 
-                SubmitDocumentProcessJobRequest request = new SubmitDocumentProcessJobRequest(bucket);
+                CreateDocProcessJobsRequest request = new CreateDocProcessJobsRequest(bucket);
                 request.SetInputObject("demo.docx");
                 request.SetTag("DocProcess");
                 request.SetSrcType("docx");
@@ -53,8 +53,8 @@ namespace COSXMLDemo
                 request.SetSheetId("1");
                 request.SetPaperDirection("1");
                 request.SetPaperSize("1");
-                SubmitDocumentProcessJobResult submitDocumentProcessJobResult = cosXml.SubmitDocumentProcessJob(request);
-                Console.WriteLine(submitDocumentProcessJobResult.docProcessResponse.JobsDetail.JobId);
+                CreateDocProcessJobsResult createDocProcessJobsResult = cosXml.CreateDocProcessJobs(request);
+                Console.WriteLine(createDocProcessJobsResult.docProcessResponse.JobsDetail.JobId);
             }
             catch (COSXML.CosException.CosClientException clientEx)
             {
@@ -66,10 +66,10 @@ namespace COSXMLDemo
             }
         }
         
-        public static void SubmitDocumentProcessJobModelMain()
+        public static void CreateDocProcessJobsModelMain()
         {
-            SubmitDocumentProcessJobModel m = new SubmitDocumentProcessJobModel();
-            m.SubmitDocumentProcessJob();
+            CreateDocProcessJobsModel m = new CreateDocProcessJobsModel();
+            m.CreateDocProcessJobs();
         }
     }
 }

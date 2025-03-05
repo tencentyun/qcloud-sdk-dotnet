@@ -1312,6 +1312,17 @@ namespace COSXML
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
+        public CreateDocProcessJobsResult CreateDocProcessJobs(CreateDocProcessJobsRequest request)
+        {
+            request.Region = this.GetConfig().Region;
+            return Execute(request, new CreateDocProcessJobsResult());
+        }
+        /// <summary>
+        /// 提交文档转码任务
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [Obsolete]
         public SubmitDocumentProcessJobResult SubmitDocumentProcessJob(SubmitDocumentProcessJobRequest request)
         {
             request.Region = this.GetConfig().Region;
