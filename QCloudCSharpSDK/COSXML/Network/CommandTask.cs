@@ -135,7 +135,7 @@ namespace COSXML.Network
             //setp5: send request content: body
             if (request.Body != null)
             {
-                // httpWebRequest.ContentLength = request.Body.ContentLength;
+                httpWebRequest.ContentLength = request.Body.ContentLength;
                 request.Body.OnWrite(httpWebRequest.GetRequestStream());
             }
             //print request start log
@@ -429,7 +429,7 @@ namespace COSXML.Network
                 ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationCertificate);
             }
             //初始化长度
-            // httpWebRequest.ContentLength = 0L;
+            httpWebRequest.ContentLength = 0L;
         }
 
         /// <summary>
