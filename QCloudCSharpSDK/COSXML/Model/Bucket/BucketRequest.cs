@@ -88,12 +88,7 @@ namespace COSXML.Model.Bucket
             
             String hostStr = hostBuilder.ToString();
             
-            if (userKeepDefaultDomain && !operationTimeOutRetry)
-            {
-                return hostStr;
-            }
-            
-            if (operationTimeOutRetry || changeDefaultDomain)
+            if (RetryKeepDefaultDomain && RetryUseBackupDomain)
             {
                 StringBuilder pattern = new StringBuilder();
                 pattern.Append(".cos.").Append(region).Append(".myqcloud.com");

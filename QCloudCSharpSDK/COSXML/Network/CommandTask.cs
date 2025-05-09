@@ -162,6 +162,13 @@ namespace COSXML.Network
                     throw cosServerException;
                 }
             }
+
+            if (response.Code >= 500)
+            {
+                CosServerException cosServerException = new CosServerException((int)httpWebResponse.StatusCode, "request has error");
+                cosServerException.requestId = requestId;
+                throw cosServerException;
+            }
             
             try
             {

@@ -114,15 +114,14 @@ namespace COSXML.Network
         /// <exception cref="COSXML.CosException.CosServerException">CosServerException</exception>
         public void InternalExcute(CosRequest cosRequest, CosResult cosResult, QCloudCredentialProvider credentialProvider, int retryIndex = 0)
         {
-
+            Request request = new Request();
+            Response response;
             try
             {
-                Request request = CreateRequest(cosRequest, credentialProvider);
+                request = CreateRequest(cosRequest, credentialProvider);
                 //extern informations exchange
                 cosResult.ExternInfo(cosRequest);
-
-                Response response;
-
+                
                 if (cosRequest is GetObjectRequest)
                 {
                     GetObjectRequest getObjectRequest = cosRequest as GetObjectRequest;
@@ -142,16 +141,28 @@ namespace COSXML.Network
 
                 cosRequest.BindRequest(request);
                 CommandTask.Excute(request, response, config);
+                cosResult.retryTimes = retryIndex;
             }
             catch (CosServerException serverException)
             {
-                // webCode >= 300
-                if (retryIndex < MaxRetry && serverException.statusCode >= 300)
+                // 状态码为301/302/307时，满足域名切换条件（域名匹配myqcloud.com & 响应不含cos requestid & 开启域名切换开关）时，进行3次重试；其余不重试
+                if (retryIndex < MaxRetry && 
+                    (serverException.statusCode == 301 || serverException.statusCode == 302 || serverException.statusCode == 307))
                 {
-                    if (serverException.requestId == String.Empty)
+                    if (request.Host.Contains("myqcloud.com") && serverException.requestId == String.Empty)
                     {
-                        cosRequest.changeDefaultDomain = true;
+                        cosRequest.RetryUseBackupDomain = true;
                     }
+                    cosRequest.SetRequestHeader("x-cos-sdk-retry", "true");
+                    InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
+                }
+                else if (retryIndex < MaxRetry && serverException.statusCode >= 500)
+                {
+                    if (retryIndex == MaxRetry - 1)
+                    {
+                        cosRequest.RetryUseBackupDomain = true;
+                    }
+                    cosRequest.SetRequestHeader("x-cos-sdk-retry", "true");
                     InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
                 }
                 else
@@ -159,38 +170,13 @@ namespace COSXML.Network
                     throw;
                 }
             }
-            catch (CosClientException ex)
+            catch (CosClientException ex)//4xx不重试
             {
-                // 客户端异常都重试，如本地文件path写错则报警
-                if (retryIndex < MaxRetry && ex.errorCode != (int)CosClientError.InvalidArgument)
-                {
-                    InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
-                }
-                else
-                {
-                    throw;
-                }
-                
+                throw;
             }
             catch (Exception ex)
             {
-                if (retryIndex < MaxRetry)//请求超时或者其它异常
-                {
-                    bool isOperationTimeOu = ex.ToString().Contains("The operation has timed out");
-                    if (isOperationTimeOu)
-                    {
-                        cosRequest.operationTimeOutRetry = true;
-                    } 
-                    else 
-                    {
-                        cosRequest.changeDefaultDomain = true;
-                    }
-                    InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
-                }
-                else
-                {
-                    throw new CosClientException((int)CosClientError.BadRequest, ex.Message, ex);
-                }
+                throw new CosClientException((int)CosClientError.BadRequest, ex.Message, ex);
             }
 
         }
