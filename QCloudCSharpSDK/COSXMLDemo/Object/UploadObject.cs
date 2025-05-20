@@ -56,8 +56,8 @@ namespace COSXMLDemo
           
           // 存储桶名称，此处填入格式必须为 BucketName-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
           // String bucket = "examplebucket-1250000000"; 
-          String srcPath = "/Users/ned/Code/dotnetSdk/cos-dotnet-sdk-v5/QCloudCSharpSDK/COSXMLDemo/zz.pdf"; //对象在存储桶中的位置标识符，即称对象键
-          String cosPath = "temp-source-file";//本地文件绝对路径  
+          String srcPath = "temp-source-file"; //对象在存储桶中的位置标识符，即称对象键
+          String cosPath = "dir/";//本地文件绝对路径  
           
           // 上传对象
           COSXMLUploadTask uploadTask = new COSXMLUploadTask(bucket, cosPath);
@@ -479,7 +479,7 @@ namespace COSXMLDemo
       {
           UploadObject domo = new UploadObject();
 
-          // domo.UploadPartObjectFunc("", "pp");
+          // domo.UploadPartObjectFunc("dir/", "exampleObject");
           // //表单上传
           // domo.PostObject();
           // //批量上传
