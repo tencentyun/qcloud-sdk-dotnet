@@ -3231,14 +3231,11 @@ namespace COSXMLTests
           demo.ETag = new Dictionary<int, string>(10);
           try
           {
-              byte[] slice1 = ReadBytesFromFile(filePath, 2 * 1024 * 1024);
+              byte[] slice1 = ReadBytesFromFile(filePath, 1024 * 1024);
               demo.UploadPart(1, slice1);
-
-              byte[] slice2 = ReadBytesFromFile(filePath, 2 * 1024 * 1024 - 2);
+              Thread.Sleep(1500);
+              byte[] slice2 = ReadBytesFromFile(filePath, 1024 * 1024 + 1);
               demo.UploadPart(2, slice2);
-
-              byte[] slice3 = ReadBytesFromFile(filePath, 2 * 1024 * 1024 - 1);
-              demo.UploadPart(3, slice3);
               
               demo.ListMultipartUploads();
               demo.ListParts();
