@@ -56,12 +56,12 @@ namespace COSXML.Model
         /// </summary>
         protected bool needMD5 = true;
 
-        public bool userKeepDefaultDomain = false;
+        //用户主动设置保持原来的域名请求
+        public bool RetryKeepDefaultDomain = false;
 
-        public bool changeDefaultDomain = false;
-
-        public bool operationTimeOutRetry = false;
-
+        //条件下决策重试是否使用备用域名
+        public bool RetryUseBackupDomain = false;
+        
         /// <summary>
         /// 请求预签名URL
         /// </summary>

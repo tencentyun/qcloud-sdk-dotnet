@@ -11,6 +11,7 @@ namespace COSXML.Model
     {
         public string Key { get; protected set; }
 
+        public int retryTimes;
         /// <summary>
         /// http code
         /// </summary>

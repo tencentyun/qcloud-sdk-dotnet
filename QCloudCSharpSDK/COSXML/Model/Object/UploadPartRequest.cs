@@ -48,6 +48,10 @@ namespace COSXML.Model.Object
         /// </summary>
         private COSXML.Callback.OnProgressCallback progressCallback;
 
+        /// <summary>
+        /// 上传分块
+        /// </summary>
+        private byte[] data;
 
         private UploadPartRequest(string bucket, string key, int partNumber, string uploadId)
             : base(bucket, key)
@@ -84,6 +88,21 @@ namespace COSXML.Model.Object
         {
             SetRequestHeader(CosRequestHeaderKey.X_COS_TRAFFIC_LIMIT, rate.ToString());
         }
+        
+        /// <summary>
+        /// 上传data数据
+        /// </summary>
+        /// <param name="bucket"></param>
+        /// <param name="key"></param>
+        /// <param name="partNumber"></param>
+        /// <param name="uploadId"></param>
+        /// <param name="data"></param>
+        public UploadPartRequest(string bucket, string key, int partNumber, string uploadId, byte[] data)
+            : this(bucket, key, partNumber, uploadId)
+        {
+            this.data = data;
+        }
+        
 
         /// <summary>
         /// 设置回调
@@ -97,7 +116,7 @@ namespace COSXML.Model.Object
         public override void CheckParameters()
         {
 
-            if (srcPath == null)
+            if (srcPath == null && data == null)
             {
                 throw new CosClientException((int)(CosClientError.InvalidArgument), "data source = null");
             }
@@ -166,6 +185,11 @@ namespace COSXML.Model.Object
                 }
 
                 body = new FileRequestBody(srcPath, fileOffset, contentLength);
+                body.ProgressCallback = progressCallback;
+            }
+            else if (data != null)
+            {
+                body = new ByteRequestBody(data);
                 body.ProgressCallback = progressCallback;
             }
 
