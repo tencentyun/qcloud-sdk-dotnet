@@ -124,7 +124,7 @@ namespace COSXML.Transfer
                         break;
                     case TaskState.Cancel:
 
-                        if (taskState != TaskState.Completed || taskState != TaskState.Cancel)
+                        if (taskState != TaskState.Completed && taskState != TaskState.Cancel)
                         {
                             taskState = newTaskState;
                             result = true;
