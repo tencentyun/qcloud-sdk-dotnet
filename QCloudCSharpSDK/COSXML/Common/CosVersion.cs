@@ -9,7 +9,7 @@ namespace COSXML.Common
 {
     public sealed class CosVersion
     {
-        private static string SDKVersion = "5.4.44.0";
+        private static string SDKVersion = "5.4.46.0";
         // 主版本号：第一个数字，产品改动较大，可能无法向后兼容（要看具体项目）
         // 子版本号：第二个数字，增加了新功能，向后兼容 
         // 修正版本号：第三个数字，修复BUG 或优化代码，一般没有添加新功能，向后兼容

@@ -124,12 +124,8 @@ namespace COSXML.Model.Object
             
             String hostStr = hostBuilder.ToString();
             
-            if (userKeepDefaultDomain && !operationTimeOutRetry)
-            {
-                return hostStr;
-            }
-            
-            if (operationTimeOutRetry || changeDefaultDomain)
+            //用户保持原域名 和 条件判断重试使用备用域名
+            if (RetryKeepDefaultDomain && RetryUseBackupDomain)
             {
                 StringBuilder pattern = new StringBuilder();
                 pattern.Append(".cos.").Append(region).Append(".myqcloud.com");
