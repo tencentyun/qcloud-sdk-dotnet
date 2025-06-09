@@ -138,6 +138,10 @@ namespace COSXML.Network
                 httpWebRequest.ContentLength = request.Body.ContentLength;
                 request.Body.OnWrite(httpWebRequest.GetRequestStream());
             }
+            else
+            {
+                httpWebRequest.ContentLength = 0L;
+            }
             //print request start log
             PrintReqeustInfo(httpWebRequest);
         }

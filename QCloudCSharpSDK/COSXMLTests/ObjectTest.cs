@@ -1973,6 +1973,7 @@ namespace COSXMLTests
         {
             GetObjectRequest request = new GetObjectRequest(bucket, commonKey, localDir, localFileName);
             request.LimitTraffic(8 * 1024 * 1024);
+            request.MaxRetry = 2;
 
             //执行请求
             COSXMLDownloadTask downloadTask = new COSXMLDownloadTask(request);

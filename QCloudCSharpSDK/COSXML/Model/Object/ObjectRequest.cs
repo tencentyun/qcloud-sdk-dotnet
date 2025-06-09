@@ -94,7 +94,12 @@ namespace COSXML.Model.Object
         public override string GetHost()
         {
             StringBuilder hostBuilder = new StringBuilder();
-
+            if (!String.IsNullOrEmpty(serviceConfig.retryHost) && !RetryKeepDefaultDomain && RetryUseBackupDomain)
+            {
+                hostBuilder.Append(serviceConfig.retryHost);
+                return hostBuilder.ToString();
+            }
+            
             if (!String.IsNullOrEmpty(serviceConfig.host))
             {
                 hostBuilder.Append(serviceConfig.host);
@@ -125,7 +130,7 @@ namespace COSXML.Model.Object
             String hostStr = hostBuilder.ToString();
             
             //用户保持原域名 和 条件判断重试使用备用域名
-            if (RetryKeepDefaultDomain && RetryUseBackupDomain)
+            if (!RetryKeepDefaultDomain && RetryUseBackupDomain)
             {
                 StringBuilder pattern = new StringBuilder();
                 pattern.Append(".cos.").Append(region).Append(".myqcloud.com");

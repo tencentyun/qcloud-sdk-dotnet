@@ -42,9 +42,6 @@ namespace COSXML.Utils.Tests{
             }
 
             req.RequestUrlString = "test-url";
-            HttpClient httpClient = HttpClient.GetInstance();
-            var maxRetry = httpClient.MaxRetry = 5;
-            Assert.AreEqual(5, maxRetry);
             // CosXmlConfig.Builder cosXmlConfig = new CosXmlConfig();
             try
             {
