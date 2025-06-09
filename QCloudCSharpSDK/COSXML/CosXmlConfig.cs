@@ -28,6 +28,8 @@ namespace COSXML
         /// </summary>
         /// <value></value>
         public string host { get; private set; }
+        
+        public string retryHost;
 
         private CosXmlConfig(Builder builder)
         {
@@ -38,6 +40,7 @@ namespace COSXML
             this.isDebug = builder.isDebug;
             this.endpointSuffix = builder.endpointSuffix;
             this.host = builder.host;
+            this.retryHost = builder.retryHost;
         }
 
         /// <summary>
@@ -119,6 +122,8 @@ namespace COSXML
 
             internal string host;
 
+            internal string retryHost;
+            
             /// <summary>
             /// 初始化一个构造器
             /// </summary>
@@ -136,6 +141,12 @@ namespace COSXML
             {
                 this.appid = appid;
 
+                return this;
+            }
+            
+            public Builder SetRetryHost(string host)
+            {
+                this.retryHost = host;
                 return this;
             }
 

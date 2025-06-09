@@ -34,8 +34,7 @@ namespace COSXML.Network
         private static Object syncInstance = new Object();
 
         private const int MAX_ACTIVIE_TASKS = 5;
-
-        public int MaxRetry { private get; set;} = 3;
+        
 
         private volatile int activieTasks = 0;
 
@@ -146,7 +145,7 @@ namespace COSXML.Network
             catch (CosServerException serverException)
             {
                 // 状态码为301/302/307时，满足域名切换条件（域名匹配myqcloud.com & 响应不含cos requestid & 开启域名切换开关）时，进行3次重试；其余不重试
-                if (retryIndex < MaxRetry && 
+                if (retryIndex < cosRequest.MaxRetry && 
                     (serverException.statusCode == 301 || serverException.statusCode == 302 || serverException.statusCode == 307))
                 {
                     if (request.Host.Contains("myqcloud.com") && serverException.requestId == String.Empty)
@@ -156,9 +155,9 @@ namespace COSXML.Network
                     cosRequest.SetRequestHeader("x-cos-sdk-retry", "true");
                     InternalExcute(cosRequest, cosResult, credentialProvider, retryIndex + 1);
                 }
-                else if (retryIndex < MaxRetry && serverException.statusCode >= 500)
+                else if (retryIndex < cosRequest.MaxRetry && serverException.statusCode >= 500)
                 {
-                    if (retryIndex == MaxRetry - 1)
+                    if (retryIndex == cosRequest.MaxRetry - 1 || !cosRequest.RetryKeepDefaultDomain)//最后一次切换域名
                     {
                         cosRequest.RetryUseBackupDomain = true;
                     }

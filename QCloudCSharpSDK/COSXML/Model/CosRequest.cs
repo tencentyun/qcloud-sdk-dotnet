@@ -82,6 +82,9 @@ namespace COSXML.Model
             set { isHttps = value; }
         }
 
+        
+        public int MaxRetry = 3;
+        
         /// <summary>
         /// http method
         /// </summary>
