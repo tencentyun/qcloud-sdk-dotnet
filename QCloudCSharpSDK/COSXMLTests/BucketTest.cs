@@ -49,6 +49,7 @@ namespace COSXMLTests
             try
             {
                 PutBucketRequest request = new PutBucketRequest(bucket);
+                request.AddNotSignFields("content-length");
                 QCloudServer.SetRequestACLData(request);
 
                 //执行请求
@@ -156,6 +157,7 @@ namespace COSXMLTests
             try
             {
                 HeadBucketRequest request = new HeadBucketRequest(bucket);
+                request.AddNotSignFields("host");
 
                 //执行请求
                 HeadBucketResult result = cosXml.HeadBucket(request);

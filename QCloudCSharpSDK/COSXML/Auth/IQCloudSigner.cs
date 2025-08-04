@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using COSXML.Network;
 using COSXML.Common;
-using COSXML.Log;
 using COSXML.Utils;
 
 namespace COSXML.Auth
@@ -37,6 +36,8 @@ namespace COSXML.Auth
         private string parameterList;
 
         public OnGetSign onGetSign;
+
+        public Dictionary<string, bool> notSignFields;
 
         public CosXmlSignSourceProvider()
         {
@@ -183,7 +184,7 @@ namespace COSXML.Auth
 
             string path = URLEncodeUtils.Decode(request.Url.Path);
 
-            return GenerateSource(request.Method, path, lowerKeySourceParameters, lowerKeySourceHeaders);
+            return GenerateSource(request.Method, path, lowerKeySourceParameters, lowerKeySourceHeaders, request.notSignFields);
         }
 
         /// <summary>
@@ -194,7 +195,7 @@ namespace COSXML.Auth
         /// <param name="queryParameters"></param>
         /// <param name="headers"></param>
         /// <returns></returns>
-        public string GenerateSource(string method, string path, Dictionary<string, string> queryParameters, Dictionary<string, string> headers)
+        public string GenerateSource(string method, string path, Dictionary<string, string> queryParameters, Dictionary<string, string> headers, Dictionary<string, bool> notSignFields)
         {
             StringBuilder formatString = new StringBuilder();
 
@@ -206,7 +207,7 @@ namespace COSXML.Auth
             formatString.Append(path).Append('\n');
 
             //check header and parameter in request
-            string headerResult = CheckHeaders(headers);
+            string headerResult = CheckHeaders(headers, notSignFields);
             string parameterResult = CheckParameters(queryParameters);
 
 
@@ -236,7 +237,7 @@ namespace COSXML.Auth
             return stringToSign.ToString();
         }
 
-        public string CheckHeaders(Dictionary<string, string> sourceHeaders)
+        public string CheckHeaders(Dictionary<string, string> sourceHeaders, Dictionary<string, bool> notSignFields)
         {
 
             if (sourceHeaders == null)
@@ -249,9 +250,21 @@ namespace COSXML.Auth
             List<String> keys = new List<String>(headerKeysToSign);
 
             LowerAndSort(keys);
+            
+            List<String> newKeys = new List<String>();
+            if (notSignFields != null)
+            {
+                foreach (string key in keys)
+                {
+                    if (!notSignFields.ContainsKey(key))
+                    {
+                        newKeys.Add(key);
+                    }
+                }
+            }
 
             //计算结果
-            string[] result = Calculate(keys, sourceHeaders, true);
+            string[] result = Calculate(newKeys, sourceHeaders, true);
 
             if (result != null)
             {
@@ -409,7 +422,6 @@ namespace COSXML.Auth
             string signature = DigestUtils.GetHamcSha1ToHexString(cosXmlSourceProvider.Source(request), Encoding.UTF8, qcloudCredentials.SignKey, Encoding.UTF8);
             StringBuilder signBuilder = new StringBuilder();
 
-
             signBuilder.Append(CosAuthConstants.Q_SIGN_ALGORITHM).Append('=').Append(CosAuthConstants.SHA1).Append('&')
                 .Append(CosAuthConstants.Q_AK).Append('=').Append(qcloudCredentials.SecretId).Append('&')
                 .Append(CosAuthConstants.Q_SIGN_TIME).Append('=').Append(signTime).Append('&')
@@ -473,7 +485,7 @@ namespace COSXML.Auth
                 }
             }
 
-            string signature = DigestUtils.GetHamcSha1ToHexString(cosXmlSourceProvider.GenerateSource(method, path, queryParameters, headers), Encoding.UTF8,
+            string signature = DigestUtils.GetHamcSha1ToHexString(cosXmlSourceProvider.GenerateSource(method, path, queryParameters, headers, new Dictionary<string, bool>()), Encoding.UTF8,
                 qcloudCredentials.SignKey, Encoding.UTF8);
 
             StringBuilder signBuilder = new StringBuilder();

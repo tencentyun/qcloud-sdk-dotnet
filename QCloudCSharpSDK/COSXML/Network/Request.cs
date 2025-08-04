@@ -32,6 +32,8 @@ namespace COSXML.Network
         private string urlString;
 
         private HttpWebRequest realeHttpRequest;
+        
+        public Dictionary<string, bool> notSignFields;
 
         public Request()
         {

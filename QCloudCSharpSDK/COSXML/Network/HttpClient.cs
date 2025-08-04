@@ -247,7 +247,7 @@ namespace COSXML.Network
             cosRequest.CheckParameters();
             string requestUrlWithSign = cosRequest.RequestURLWithSign;
             Request request = new Request();
-
+            request.notSignFields = cosRequest.notSignFields;
             request.Method = cosRequest.Method;
 
             if (requestUrlWithSign != null)

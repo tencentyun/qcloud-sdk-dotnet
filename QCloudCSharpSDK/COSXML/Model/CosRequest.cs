@@ -21,6 +21,13 @@ namespace COSXML.Model
         /// </summary>
         protected bool? isHttps = null;
 
+        public Dictionary<string, bool> notSignFields = new Dictionary<string, bool>();
+        
+        public void AddNotSignFields(string key)
+        {
+            notSignFields.Add(key, true);
+        }
+        
         /// <summary>
         /// cos api 请求对应的 http method.
         /// </summary>
