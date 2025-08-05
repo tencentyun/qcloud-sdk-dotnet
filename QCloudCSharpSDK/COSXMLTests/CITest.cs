@@ -165,15 +165,14 @@ namespace COSXMLTests
         {
             //对象键
             try {
-                string key = photoKey;
-                // string key = "";
+                string key = "";
                 SensitiveContentRecognitionRequest request = new SensitiveContentRecognitionRequest(bucket, key);
-                request.SetBizType("");
+                // request.SetBizType("");
                 request.SetDetectUrl("");
                 request.SetInterval("1");
                 request.SetMaxFrames("1");
                 request.SetLargeImageDetect("0");
-                request.SetDataid("");
+                request.SetDataId("dataidtest");
                 request.SetAsync("0");
                 request.SetCallback("");
                 SensitiveContentRecognitionResult result = QCloudServer.Instance().cosXml.SensitiveContentRecognition(request);
@@ -530,7 +529,7 @@ namespace COSXMLTests
                 request.SetSnapshotCount("5");
                 request.SetCallback("http://127.0.0.1/index.html");
                 request.SetCallbackVersion("Simple");
-                request.SetDataid("");
+                request.SetDataId("");
                 request.SetBizType("");
                 request.SetDetectContent(0);
                 request.SetSnapshotTimeInterval("5");
