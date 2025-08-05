@@ -39,6 +39,9 @@ namespace COSXML.Model.Tag
             [XmlElement("Url")]
             public string url;
 
+            [XmlElement("DataId")]
+            public string dataId;
+
             public string GetInfo()
             {
                 StringBuilder stringBuilder = new StringBuilder("{Input:\n");
@@ -48,6 +51,11 @@ namespace COSXML.Model.Tag
                 }
                 if (url != null)  {
                     stringBuilder.Append("Url:" + url + "\n");
+                    stringBuilder.Append("}");
+                }
+                if (dataId != null)
+                {
+                    stringBuilder.Append("DataId:" + dataId + "\n");
                     stringBuilder.Append("}");
                 }
                 return stringBuilder.ToString();

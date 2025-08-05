@@ -167,7 +167,7 @@ namespace COSXML.Model.Object
             // {
             //     throw new CosClientException((int)CosClientError.INVALID_ARGUMENT, "region is null");
             // }
-            if (path == null || path.Length < 1)
+            if (isCheckPathEmpty & (path == null || path.Length < 1))
             {
                 throw new CosClientException((int)CosClientError.InvalidArgument, "cosPath(null or empty)is invalid");
             }

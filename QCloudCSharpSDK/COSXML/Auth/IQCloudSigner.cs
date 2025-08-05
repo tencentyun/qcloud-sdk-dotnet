@@ -182,6 +182,10 @@ namespace COSXML.Auth
                 lowerKeySourceParameters.Add(pair.Key.ToLower(), pair.Value);
             }
 
+            if (string.IsNullOrEmpty(request.Url.Path)){
+                request.Url.Path = "/";
+            }
+
             string path = URLEncodeUtils.Decode(request.Url.Path);
 
             return GenerateSource(request.Method, path, lowerKeySourceParameters, lowerKeySourceHeaders, request.notSignFields);

@@ -38,6 +38,8 @@ namespace COSXML.Model
         /// </summary>
         protected string path;
 
+        protected bool isCheckPathEmpty = true;
+        
         /// <summary>
         /// http 请求url中 query 部分.
         /// </summary>
