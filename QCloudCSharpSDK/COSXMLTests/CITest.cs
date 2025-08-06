@@ -165,7 +165,8 @@ namespace COSXMLTests
         {
             //对象键
             try {
-                string key = "";
+                // string key = "";
+                string key = photoKey;
                 SensitiveContentRecognitionRequest request = new SensitiveContentRecognitionRequest(bucket, key);
                 // request.SetBizType("");
                 // request.SetDetectUrl("");
