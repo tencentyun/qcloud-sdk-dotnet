@@ -168,13 +168,13 @@ namespace COSXMLTests
                 string key = "";
                 SensitiveContentRecognitionRequest request = new SensitiveContentRecognitionRequest(bucket, key);
                 // request.SetBizType("");
-                request.SetDetectUrl("");
+                // request.SetDetectUrl("");
                 request.SetInterval("1");
                 request.SetMaxFrames("1");
                 request.SetLargeImageDetect("0");
                 request.SetDataId("dataidtest");
                 request.SetAsync("0");
-                request.SetCallback("");
+                // request.SetCallback("");
                 SensitiveContentRecognitionResult result = QCloudServer.Instance().cosXml.SensitiveContentRecognition(request);
 
                 Assert.True(result.httpCode == 200);
