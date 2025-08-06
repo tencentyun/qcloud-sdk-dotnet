@@ -33,6 +33,11 @@ namespace COSXML.Model.CI
         {
             videoCencorJobInfo.input.obj = key;
         }
+        
+        public void SetDataId(string dataId)
+        {
+            videoCencorJobInfo.input.dataId = dataId;
+        }
 
         public void SetCensorUrl(string url)
         {

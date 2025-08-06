@@ -17,41 +17,58 @@ namespace COSXML.Model.CI
     public sealed class SensitiveContentRecognitionRequest : ObjectRequest
     {
         public SensitiveContentRecognitionRequest(string bucket, string key)
-            : base(bucket,key){
-
+            : base(bucket,key)
+        {
+            this.isCheckPathEmpty = false;
             this.method = CosRequestMethod.GET;
             this.queryParameters.Add("ci-process", "sensitive-content-recognition");
         }
         public void SetBizType(string bizType){
-            this.queryParameters.Add("biz-type", bizType);
+            if(bizType != null){
+                SetQueryParameter("biz-type", bizType);
+            }
         }
 
         public void SetDetectUrl(string detectUrl){
-            this.queryParameters.Add("detect-url", detectUrl);
+            if(detectUrl != null){
+                SetQueryParameter("detect-url", detectUrl);
+            }
         }
 
         public void SetInterval(string interval){
-            this.queryParameters.Add("interval", interval);
+            if(interval != null){
+                SetQueryParameter("interval", interval);
+            }
         }
 
         public void SetMaxFrames(string maxFrames){
-            this.queryParameters.Add("max-frames", maxFrames);
+            if(maxFrames != null){
+                SetQueryParameter("max-frames", maxFrames);
+            }
         }
 
         public void SetLargeImageDetect(string largeImageDetect){
-            this.queryParameters.Add("large-image-detect", largeImageDetect);
+            if(largeImageDetect != null){
+                SetQueryParameter("large-image-detect", largeImageDetect);
+            }
         }
 
-        public void SetDataid(string dataid){
-            this.queryParameters.Add("dataid", dataid);
+        public void SetDataId(string dataId){
+            if(dataId != null){
+                SetQueryParameter("dataid", dataId);
+            } 
         }
 
         public void SetAsync(string async){
-            this.queryParameters.Add("async", async);
+            if(async != null){
+                SetQueryParameter("async", async);
+            }
         }
 
         public void SetCallback(string callback){
-            this.queryParameters.Add("callback", callback);
+            if(callback != null){
+                SetQueryParameter("callback", callback);
+            }
         }
     }
 }
