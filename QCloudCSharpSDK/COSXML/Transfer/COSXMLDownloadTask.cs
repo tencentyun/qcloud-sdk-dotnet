@@ -83,6 +83,7 @@ namespace COSXML.Transfer
                 this.localDir = request.localDir + System.IO.Path.DirectorySeparatorChar;
             }
             this.localFileName = request.localFileName;
+            SetHeaders(request.GetRequestHeaders());
         }
 
         public void SetObjectKeySimplifyCheck(bool objVar)
@@ -219,7 +220,10 @@ namespace COSXML.Transfer
             UpdateTaskState(TaskState.Waiting);
             //对象是否存在
             headObjectRequest = new HeadObjectRequest(bucket, key);
-
+            if (customHeaders != null)
+            {
+                headObjectRequest.SetRequestHeaders(customHeaders);
+            }
             cosXmlServer.HeadObject(headObjectRequest, delegate (CosResult cosResult)
             {
                 lock (syncExit)
@@ -538,6 +542,10 @@ namespace COSXML.Transfer
                     GetObjectRequest subGetObjectRequest = new GetObjectRequest(bucket, key, localDir, tmpFileName);
                     tmpFilePaths.Add(localDir + tmpFileName);
                     subGetObjectRequest.SetRange(slice.sliceStart, slice.sliceEnd);
+                    if (customHeaders != null)
+                    {
+                        subGetObjectRequest.SetRequestHeaders(customHeaders);
+                    }
                     getObjectRequestsList.Add(subGetObjectRequest);
                     subGetObjectRequest.SetObjectKeySimplifyCheck(ObjectKeySimplifyCheck);
                     // 计算出来只有一个分块, 而且不是Resume或重试剩的一个, 即不走并发下载, 用GetObject的进度回调给客户端
