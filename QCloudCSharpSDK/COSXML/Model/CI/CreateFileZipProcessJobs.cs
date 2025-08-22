@@ -12,7 +12,8 @@ namespace COSXML.Model.CI
     /// <see href="https://cloud.tencent.com/document/product/460/83091"/>
     /// </summary>
     [XmlRoot("Request")]
-    public sealed class CreateFileZipProcessJobs {
+    public sealed class CreateFileZipProcessJobs
+    {
 
         /// 表示任务的类型，多文件打包压缩默认为：FileCompress。
         [XmlElement("Tag")]
@@ -50,7 +51,8 @@ namespace COSXML.Model.CI
             stringBuilder.Append("}");
             return stringBuilder.ToString();
         }
-        public sealed class CreateFileZipProcessJobsOperation {
+        public sealed class CreateFileZipProcessJobsOperation
+        {
 
             /// 指定文件打包压缩的处理规则。
             [XmlElement("FileCompressConfig")]
@@ -75,7 +77,8 @@ namespace COSXML.Model.CI
             }
         }
 
-        public sealed class CallBackMqConfig {
+        public sealed class CallBackMqConfig
+        {
 
             /// 消息队列所属园区，目前支持园区 sh（上海）、bj（北京）、gz（广州）、cd（成都）、hk（中国香港）
             [XmlElement("MqRegion")]
@@ -100,7 +103,8 @@ namespace COSXML.Model.CI
             }
         }
 
-        public sealed class CreateFileZipProcessJobsOutput {
+        public sealed class CreateFileZipProcessJobsOutput
+        {
 
             /// 存储桶的地域。
             [XmlElement("Region")]
@@ -125,7 +129,8 @@ namespace COSXML.Model.CI
             }
         }
 
-        public sealed class FileCompressConfig {
+        public sealed class FileCompressConfig
+        {
 
             /// 文件打包时，是否需要去除源文件已有的目录结构，有效值：0：不需要去除目录结构，打包后压缩包中的文件会保留原有的目录结构；1：需要，打包后压缩包内的文件会去除原有的目录结构，所有文件都在同一层级。例如：源文件 URL 为 https://domain/source/test.mp4，则源文件路径为 source/test.mp4，如果为 1，则 ZIP 包中该文件路径为 test.mp4；如果为0， ZIP 包中该文件路径为 source/test.mp4。
             [XmlElement("Flatten")]
@@ -152,8 +157,8 @@ namespace COSXML.Model.CI
             public string prefix;
 
             /// 打包时如果单个文件出错，是否忽略错误继续打包。有效值为：ture：忽略错误继续打包后续的文件；false：遇到某个文件执行打包报错时，直接终止打包任务，不返回压缩包。默认值为false。
-            [XmlElement("IgnoreError ")]
-            public string ignoreError ;
+            [XmlElement("IgnoreError")]
+            public string ignoreError;
 
             /// 支持对存储桶中的文件进行打包，可填写多个，个数不能超过 1000，如需打包更多文件，请使用 UrlList 或 Prefix 参数。
             [XmlElement("KeyConfig")]
@@ -168,7 +173,7 @@ namespace COSXML.Model.CI
                 if (compressKey != null) stringBuilder.Append(compressKey.ToString()).Append("\n");
                 if (urlList != null) stringBuilder.Append(urlList.ToString()).Append("\n");
                 if (prefix != null) stringBuilder.Append(prefix.ToString()).Append("\n");
-                if (ignoreError  != null) stringBuilder.Append(ignoreError.ToString()).Append("\n");
+                if (ignoreError != null) stringBuilder.Append(ignoreError.ToString()).Append("\n");
                 if (keyConfig != null)
                 {
                     foreach (var config in keyConfig)
@@ -181,7 +186,8 @@ namespace COSXML.Model.CI
             }
         }
 
-        public sealed class KeyConfig {
+        public sealed class KeyConfig
+        {
 
             /// 存储桶中的包含路径的完整文件名称，请使用 UrlList 或 Prefix 参数。
             [XmlElement("Key")]
