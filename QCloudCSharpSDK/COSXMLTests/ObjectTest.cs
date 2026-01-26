@@ -190,6 +190,7 @@ namespace COSXMLTests
                 string key = "objectWithAES256";
 
                 PutObjectRequest request = new PutObjectRequest(bucket, key, smallFileSrcPath);
+                request.AddNotSignFields("host");
 
 
                 request.SetCosServerSideEncryption();
@@ -289,6 +290,7 @@ namespace COSXMLTests
             {
                 HeadBucketRequest request = new HeadBucketRequest(bucket);
                 HeadBucketResult result = cosXml.HeadBucket(request);
+                request.AddNotSignFields("host");
                 Assert.AreEqual(200, result.httpCode);
             }
             catch (CosClientException clientEx)
@@ -426,6 +428,7 @@ namespace COSXMLTests
                 byte[] data = File.ReadAllBytes(smallFileSrcPath);
 
                 PutObjectRequest request = new PutObjectRequest(bucket, commonKey, data);
+                request.AddNotSignFields("host");
 
                 //执行请求
                 PutObjectResult result = cosXml.PutObject(request);
@@ -1155,6 +1158,7 @@ namespace COSXMLTests
                     // Console.WriteLine(String.Format("progress = {0} / {1} : {2:##.##}%", completed, total, completed * 100.0 / total));
                 });
 
+                request.AddNotSignFields("host");
                 //设置policy
                 request.SetPolicy(null);
                 request.SetCacheControl("no-cache");

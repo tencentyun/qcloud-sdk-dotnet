@@ -47,7 +47,7 @@ namespace COSXML.Transfer
         private List<GetObjectRequest> getObjectRequestsList;
 
         // resumable info
-        private string resumableTaskFile = null;
+        private string resumableTaskFile = null; //分片任务文件
         private DownloadResumableInfo resumableInfo = null;
         private bool resumable = false;
         private HashSet<string> tmpFilePaths = new HashSet<string>();
@@ -247,7 +247,6 @@ namespace COSXML.Transfer
                     // concurrent download
                     ConcurrentGetObject(result.crc64ecma);
                 }
-
             },
             
             delegate (CosClientException clientEx, CosServerException serverEx)
@@ -272,9 +271,9 @@ namespace COSXML.Transfer
                     this.resumableInfo.lastModified == result.lastModified && 
                     this.resumableInfo.contentLength == result.size)
                 {
-                    // load parts downloaded
                     if (this.resumableInfo.slicesDownloaded != null) {
                         // process downloaded parts
+                        bool canResumable = true;
                         foreach (DownloadSliceStruct downloadedSlice in resumableInfo.slicesDownloaded) {
                             // remove from current queue
                             DownloadSliceStruct calculatedSlice;
@@ -286,24 +285,36 @@ namespace COSXML.Transfer
                                 this.sliceToRemove.Add(downloadedSlice.partNumber);
                             }
                             // add to merging list
-                            this.tmpFilePaths.Add(localDir + "." + localFileName + ".cosresumable." + downloadedSlice.partNumber);
+                            string tmpLocalFile = localDir + "." + localFileName + ".cosresumable." + downloadedSlice.partNumber;
+                            this.tmpFilePaths.Add(tmpLocalFile);
+                            
+                            //判断文件是否存在
+                            FileInfo tmpFileInfo = new FileInfo(tmpLocalFile);
+                            if (!tmpFileInfo.Exists) 
+                            {
+                                canResumable = false;
+                            }
                         }
-                    }
-                    else {
-                        this.resumableInfo.slicesDownloaded = new List<DownloadSliceStruct>();
+                        if (canResumable)
+                        {
+                            return;
+                        }
+                        
+                        //如果有脏文件则删除所有的脏数据后则重新进行文件的下载
+                        DeleteTmpFile(false);
+                        this.sliceToRemove = new HashSet<int>();
+                        this.tmpFilePaths = new HashSet<string>();
                     }
                 }
             }
-            else
-            {
-                this.resumableInfo = new DownloadResumableInfo();
-                this.resumableInfo.contentLength = result.size;
-                this.resumableInfo.crc64ecma = result.crc64ecma;
-                this.resumableInfo.eTag = result.eTag;
-                this.resumableInfo.lastModified = result.lastModified;
-                this.resumableInfo.slicesDownloaded = new List<DownloadSliceStruct>();
-                resumableInfo.Persist(resumableTaskFile);
-            }
+            
+            this.resumableInfo = new DownloadResumableInfo();
+            this.resumableInfo.contentLength = result.size;
+            this.resumableInfo.crc64ecma = result.crc64ecma;
+            this.resumableInfo.eTag = result.eTag;
+            this.resumableInfo.lastModified = result.lastModified;
+            this.resumableInfo.slicesDownloaded = new List<DownloadSliceStruct>();
+            resumableInfo.Persist(resumableTaskFile);
         }
 
         private bool CompareCrc64(string localFile, string crc64ecma)
@@ -522,6 +533,8 @@ namespace COSXML.Transfer
                             return;
                         }
                     }
+                    
+                    //分片单文件的下载
                     string tmpFileName = "." + localFileName + ".cosresumable." + slice.partNumber;
                     /*
                         以下几种场景需要清理临时文件
@@ -575,7 +588,7 @@ namespace COSXML.Transfer
                             {
                                 // flush done parts
                                 this.resumableInfo.slicesDownloaded.Add(slice);
-                                this.resumableInfo.Persist(resumableTaskFile);
+                                this.resumableInfo.Persist(resumableTaskFile);//将分片数据持久化到文件中
                             }
                         }, 
                         delegate (CosClientException clientEx, CosServerException serverEx)
@@ -588,11 +601,6 @@ namespace COSXML.Transfer
                             // 对服务端返回的4xx, 不重试, 直接抛异常
                             if (serverEx != null && serverEx.statusCode < 500) {
                                 throw serverEx;
-                                if (failCallback != null)
-                                {
-                                    failCallback(null, serverEx);
-                                }
-                                return;
                             }
                             // 对客户端异常, 全部都重试
                             if (clientEx != null) gClientExp = clientEx;
@@ -643,16 +651,19 @@ namespace COSXML.Transfer
                     sliceList.Remove(partNumber);
                 }
             }
+            
             if (this.sliceList.Count != 0) 
             {
                 if (gClientExp != null) throw gClientExp;
                 throw new CosClientException((int)CosClientError.InternalError, "max retries " + retries + " excceed, download fail");
             }
+            
             // 预期每个分块都下载完成了, 开始顺序合并
             FileMode fileMode = FileMode.OpenOrCreate;
             FileInfo localFileInfo = new FileInfo(localDir + localFileName);
             if (localFileInfo.Exists && localFileOffset == 0 && localFileInfo.Length != rangeEnd - rangeStart + 1)
                 fileMode = FileMode.Truncate;
+            
             using (var outputStream = File.Open(localDir + localFileName, fileMode))
             {
                 outputStream.Seek(localFileOffset, 0);
@@ -670,8 +681,19 @@ namespace COSXML.Transfer
                     {
                         // check if download already completed
                         DeleteTmpFile(true);
-                        throw new COSXML.CosException.CosClientException((int)CosClientError.InternalError, "local tmp file not exist, could be concurrent writing same file" + inputFilePath +" download again");
+                        if (resumableTaskFile != null)
+                        {
+                            FileInfo info = new FileInfo(resumableTaskFile);
+                            if (info.Exists) 
+                            {
+                                info.Delete();
+                            }
+                        }
+                        //不能同时下载相同文件
+                        throw new COSXML.CosException.CosClientException((int)CosClientError.InternalError, 
+                            "local tmp file not exist, could be concurrent writing same file" + inputFilePath +" download again");
                     }
+                    
                     using (var inputStream = File.OpenRead(inputFilePath))
                     {
                         FileInfo info = new FileInfo(inputFilePath);
@@ -696,10 +718,12 @@ namespace COSXML.Transfer
                 }
                 if (UpdateTaskState(TaskState.Completed))
                 {
+                    //删除分片文件
                     var dir = new DirectoryInfo(localDir);
                     foreach (var file in dir.EnumerateFiles("." + localFileName + ".cosresumable.*")) {
                         file.Delete();
                     }
+                    //删除了分片任务文件
                     if (resumableTaskFile != null)
                     {
                         FileInfo info = new FileInfo(resumableTaskFile);
@@ -708,15 +732,9 @@ namespace COSXML.Transfer
                             info.Delete();
                         }
                     }
-                    //outputStream.Close();
-                    DownloadTaskResultSet(downloadResult);
-                    return;
-                } else {
-                    // 容灾 return
-                    DownloadTaskResultSet(downloadResult);
-                }
+                } 
             }
-            return;
+            DownloadTaskResultSet(downloadResult);
         }
         
         public void DownloadTaskResultSet(GetObjectResult downloadResult)

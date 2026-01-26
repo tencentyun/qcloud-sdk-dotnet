@@ -152,7 +152,7 @@ namespace COSXML.Model.CI
             public string prefix;
 
             /// 打包时如果单个文件出错，是否忽略错误继续打包。有效值为：ture：忽略错误继续打包后续的文件；false：遇到某个文件执行打包报错时，直接终止打包任务，不返回压缩包。默认值为false。
-            [XmlElement("IgnoreError ")]
+            [XmlElement("IgnoreError")]
             public string ignoreError ;
 
             /// 支持对存储桶中的文件进行打包，可填写多个，个数不能超过 1000，如需打包更多文件，请使用 UrlList 或 Prefix 参数。
