@@ -2,6 +2,7 @@
 *.suo
 *.user
 
+mydir/
 
 **/bin/
 **/obj/
