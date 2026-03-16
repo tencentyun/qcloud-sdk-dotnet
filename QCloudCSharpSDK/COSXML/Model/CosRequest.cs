@@ -87,7 +87,7 @@ namespace COSXML.Model
             {
                 return isHttps;
             }
-            
+
             set { isHttps = value; }
         }
 
@@ -115,7 +115,7 @@ namespace COSXML.Model
             {
                 return path;
             }
-            
+
             private set { }
         }
 
@@ -157,26 +157,21 @@ namespace COSXML.Model
         /// <param name="isNeedUrlEncode"></param>
         public void SetQueryParameter(string key, string value, bool isNeedUrlEncode)
         {
-
-            try
+            if (value == null)
             {
+                value = "";
+            }
 
-                if (value == null)
-                {
-                    value = "";
-                }
-
-                if (isNeedUrlEncode)
-                {
-                    value = URLEncodeUtils.Encode(value);
-                }
-
+            if (isNeedUrlEncode)
+            {
+                value = URLEncodeUtils.Encode(value);
+            }
+            if (!queryParameters.ContainsKey(key))
+            {
                 queryParameters.Add(key, value);
             }
-            catch (ArgumentException)
+            else
             {
-                // cover the current value
-                // cover the current value
                 queryParameters[key] = value;
             }
         }
@@ -212,26 +207,21 @@ namespace COSXML.Model
         /// <param name="isNeedUrlEncode"></param>
         public void SetRequestHeader(string key, string value, bool isNeedUrlEncode)
         {
-
-            try
+            if (value == null)
             {
+                value = "";
+            }
 
-                if (value == null)
-                {
-                    value = "";
-                }
-
-                if (isNeedUrlEncode)
-                {
-                    value = URLEncodeUtils.Encode(value);
-                }
-
+            if (isNeedUrlEncode)
+            {
+                value = URLEncodeUtils.Encode(value);
+            }
+            if (!headers.ContainsKey(key))
+            {
                 headers.Add(key, value);
             }
-            catch (ArgumentException)
+            else
             {
-                // cover the current value
-                // cover the current value
                 headers[key] = value;
             }
         }
@@ -344,7 +334,7 @@ namespace COSXML.Model
         public virtual CosXmlSignSourceProvider GetSignSourceProvider()
         {
             // 默认签署的头部跟参数
-            cosXmlSignSourceProvider.AddHeaderKeys(new List<string>() 
+            cosXmlSignSourceProvider.AddHeaderKeys(new List<string>()
             {
                 "cache-control",
                 "content-disposition",
